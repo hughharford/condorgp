@@ -34,7 +34,23 @@ class Cell:
         if Cell.__celllist == None:
             Cell.__celllist = []
         return Cell.__celllist
+
+
     # TODO: witness function
+
+
+    # static method to remove a single cell
+    @staticmethod
+    def removecell(cellreftoremove=''):
+        if cellreftoremove:
+            print('will remove cell with reference number: ' + cellreftoremove)
+        else:
+            # assume the first cell [0]
+            cell_list = Cell.getcelllist()
+            cellforremoval = cell_list[-1]
+            print('cellforremoval: ' + cellforremoval.cellref)
+            cell_list.pop()
+            print('if there was no error, the last cell has been popped')
 
     @staticmethod
     def showcelllist():
@@ -51,7 +67,7 @@ class Cell:
     def getcelltypes(cls):
         return Cell.CELL_TYPES
 
-    # instance methods
+    # instance method
     def setcellref(self, newref):
         self.cellref = newref
 
@@ -66,6 +82,9 @@ def main():
 
     Cell.showcelllist()
 
+    Cell.removecell()
+
+    Cell.showcelllist()
 
 
 if __name__ == '__main__': main()

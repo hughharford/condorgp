@@ -54,15 +54,13 @@ Scenario Outline: Remove cells
 @given(parsers.cfparse('the existing nest has "{initial:Number}" cells', extra_types=EXTRA_TYPES), target_fixture='cells')
 @given('the existing nest has "<initial>" cells', target_fixture='cells')
 def cells_remove(initial):
-    # for i in range(12):
-    #      Cell(f'dummy_ref1 {i}','PROTOTYPE')
     assert len(Cell.getcelllist()) == initial
 
 @when(parsers.cfparse('"{some:Number}" cells are removed', extra_types=EXTRA_TYPES))
 @when('"<some>"  cells are removed')
 def when_somecellsareremoved(some):
     for i in range(some):
-        Cell(f'dummy_ref1 {i}','PROTOTYPE')
+        pass # Cell.removecell()
 
 @then(parsers.cfparse('the nest now contains "{total:Number}" cells', extra_types=EXTRA_TYPES))
 @then('the nest now contains "<total>" cells')
