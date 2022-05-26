@@ -1,11 +1,9 @@
-# @condor_cells
 Feature: Condor cells run as required
   As a condorGP instance,
   I want to run cells according to their intended operation,
   So that they operate as living cells.
 
 
-  # @add
   Scenario Outline: Add cells
     Given the nest has "<initial>" cells
     When "<some>" cells are added to the nest
@@ -26,3 +24,14 @@ Feature: Condor cells run as required
       | initial | some | total |
       | 12      | 8    | 4     |
       | 4       | 4    | 0     |
+
+  # @cellidchange
+  # Scenario: Cell id change
+  #   Given a pre-created cell with <initial_id>
+  #   When the cell id is changed to <text_to_change_to>
+  #   Then the new cell id is <intended_id>
+
+  #   Examples:
+  #     | initial_id | text_to_change_to | intended_id  |
+  #     | id_one     | new_id_1          | new_id_1     |
+  #     | id_two     | new_id_2          | new_id_2     |

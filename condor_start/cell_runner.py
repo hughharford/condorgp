@@ -13,7 +13,7 @@ class Cell:
     # class property to hold list of Cells
     __celllist = None
 
-    def __init__(self, newref, newcelltype):
+    def __init__(self, newref=888, newcelltype="PROTOTYPE"):
         self.cellref = newref
         if (not newcelltype in Cell.CELL_TYPES):
             raise ValueError(f'{newcelltype} is not a valid cell type')
