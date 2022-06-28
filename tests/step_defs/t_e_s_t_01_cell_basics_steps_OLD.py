@@ -1,6 +1,6 @@
 from pytest_bdd import scenarios, parsers, given, when, then
 
-from condor_start.cell_runner import cell_runner
+from condor_start.cell import cell_runner
 
 
 EXTRA_TYPES = {

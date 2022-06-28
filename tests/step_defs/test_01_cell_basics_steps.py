@@ -1,6 +1,6 @@
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condor_start.cell_runner import Cell
+from condor_start.cell import Cell
 
 EXTRA_TYPES = {
     'Number': int,
@@ -28,7 +28,7 @@ Scenario Outline: Add cells
 @given(parsers.cfparse('the nest has "{initial:Number}" cells', extra_types=EXTRA_TYPES), target_fixture='cells')
 @given('the next has "<initial>" cells', target_fixture='cells')
 def cells_add(initial):
-    assert len(Cell.getcelllist()) == initial
+    assert len(Cell.get_cell_list()) == initial
 
 @when(parsers.cfparse('"{some:Number}" cells are added to the nest', extra_types=EXTRA_TYPES))
 @when('"<some>"  cells are added to the nest')
@@ -39,7 +39,7 @@ def when_somecellsarecreated(some):
 @then(parsers.cfparse('the nest contains "{total:Number}" cells', extra_types=EXTRA_TYPES))
 @then('the nest contains "<total>" cells')
 def then_the_cell_list_is_incremented(total):
-    assert len(Cell.getcelllist()) == total
+    assert len(Cell.get_cell_list()) == total
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             REMOVE CELLS
@@ -54,19 +54,19 @@ Scenario Outline: Remove cells
 @given(parsers.cfparse('the existing nest has "{initial:Number}" cells', extra_types=EXTRA_TYPES), target_fixture='cells')
 @given('the existing nest has "<initial>" cells', target_fixture='cells')
 def cells_remove(initial):
-    assert len(Cell.getcelllist()) == initial
+    assert len(Cell.get_cell_list()) == initial
 
 @when(parsers.cfparse('"{some:Number}" cells are removed', extra_types=EXTRA_TYPES))
 @when('"<some>"  cells are removed')
 def when_somecellsareremoved(some):
     for i in range(some):
         pass
-        Cell.removecell()
+        Cell.remove_cell()
 
 @then(parsers.cfparse('the nest now contains "{total:Number}" cells', extra_types=EXTRA_TYPES))
 @then('the nest now contains "<total>" cells')
 def then_thecelllistisdecremented(total):
-    assert len(Cell.getcelllist()) == total
+    assert len(Cell.get_cell_list()) == total
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
