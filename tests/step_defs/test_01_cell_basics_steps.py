@@ -38,7 +38,7 @@ def when_somecellsarecreated(some):
 
 @then(parsers.cfparse('the nest contains "{total:Number}" cells', extra_types=EXTRA_TYPES))
 @then('the nest contains "<total>" cells')
-def then_thecelllistisincremented(total):
+def then_the_cell_list_is_incremented(total):
     assert len(Cell.getcelllist()) == total
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -60,7 +60,8 @@ def cells_remove(initial):
 @when('"<some>"  cells are removed')
 def when_somecellsareremoved(some):
     for i in range(some):
-        pass # Cell.removecell()
+        pass
+        Cell.removecell()
 
 @then(parsers.cfparse('the nest now contains "{total:Number}" cells', extra_types=EXTRA_TYPES))
 @then('the nest now contains "<total>" cells')

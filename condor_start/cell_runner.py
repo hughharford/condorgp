@@ -11,7 +11,7 @@ class Cell:
 
 
     # class property to hold list of Cells
-    __celllist = None
+    __cell_list = None
 
     def __init__(self, newref=888, newcelltype="PROTOTYPE"):
         self.cellref = newref
@@ -31,9 +31,9 @@ class Cell:
     # static method to retrieve single list of Cells
     @staticmethod
     def getcelllist():
-        if Cell.__celllist == None:
-            Cell.__celllist = []
-        return Cell.__celllist
+        if Cell.__cell_list == None:
+            Cell.__cell_list = []
+        return Cell.__cell_list
 
 
     # TODO: witness function
@@ -55,10 +55,10 @@ class Cell:
     @staticmethod
     def showcelllist():
         # see the cells
-        if (not Cell.__celllist):
+        if (not Cell.__cell_list):
             raise AttributeError('no cells found')
         else:
-            for c in Cell.__celllist:
+            for c in Cell.__cell_list:
                 print('Cell ref:', c.cellref, c)
 
 
