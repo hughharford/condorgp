@@ -10,8 +10,10 @@ check_code:
 black:
 	@black scripts/* condorgp/*.py
 
+
+# tests/*.py
 test:
-	@coverage run -m pytest tests/*.py
+	@coverage run -m pytest
 	@coverage report -m --omit="${VIRTUAL_ENV}/lib/python*"
 
 ftest:

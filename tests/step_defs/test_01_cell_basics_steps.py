@@ -1,6 +1,6 @@
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condor_start.cell import Cell
+from condorgp.cell import Cell
 
 EXTRA_TYPES = {
     'Number': int,
