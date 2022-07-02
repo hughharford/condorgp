@@ -1,0 +1,245 @@
+#
+#   LEAN Foundation Docker Container 20200428
+#   Cross platform deployment for multiple brokerages
+#   Intended to be used in conjunction with Dockerfile. This is just the foundation common OS+Dependencies required.
+#
+
+# Use base system for cleaning up wayward processes
+FROM phusion/baseimage:0.9.22
+
+MAINTAINER QuantConnect <contact@quantconnect.com>
+
+# Use baseimage-docker's init system.
+CMD ["/sbin/my_init"]
+
+# Have to add env TZ=UTC. See https://github.com/dotnet/coreclr/issues/602
+RUN env TZ=UTC
+
+# Install OS Packages:
+# Misc tools for running Python.NET and IB inside a headless container.
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test && apt-get update
+RUN apt-get install -y git bzip2 clang cmake curl unzip wget python3-pip python-opengl zlib1g-dev && \
+    apt-get install -y xvfb libxrender1 libxtst6 libxi6 libglib2.0-dev libopenmpi-dev libstdc++6 openmpi-bin && \
+# Install R
+    apt-get install -y r-base pandoc libcurl4-openssl-dev
+
+# Java for running IB inside container:
+RUN apt-get install -y openjdk-8-jdk openjdk-8-jre
+
+# Install IB Gateway: Installs to ~/Jts
+RUN wget http://cdn.quantconnect.com/interactive/ibgateway-latest-standalone-linux-x64-v974.4g.sh && \
+    chmod 777 ibgateway-latest-standalone-linux-x64-v974.4g.sh && \
+    ./ibgateway-latest-standalone-linux-x64-v974.4g.sh -q && \
+    wget -O ~/Jts/jts.ini http://cdn.quantconnect.com/interactive/ibgateway-latest-standalone-linux-x64-v974.4g.jts.ini && \
+    rm ibgateway-latest-standalone-linux-x64-v974.4g.sh
+
+# Mono C# for LEAN:
+# From https://github.com/mono/docker/blob/master/
+RUN apt-get update && rm -rf /var/lib/apt/lists/*
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+RUN echo "deb http://download.mono-project.com/repo/ubuntu stable-xenial/snapshots/5.12.0.226 main" > /etc/apt/sources.list.d/mono-xamarin.list && \
+    apt-get update && apt-get install -y binutils mono-complete ca-certificates-mono mono-vbnc nuget referenceassemblies-pcl && \
+    apt-get install -y fsharp && rm -rf /var/lib/apt/lists/* /tmp/*
+
+# Install miniconda
+ENV CONDA="Miniconda3-4.5.12-Linux-x86_64.sh"
+ENV PATH="/opt/miniconda3/bin:${PATH}"
+RUN wget https://cdn.quantconnect.com/miniconda/${CONDA} && \
+    bash ${CONDA} -b -p /opt/miniconda3 && rm -rf ${CONDA} && \
+    ln -s /opt/miniconda3/lib/libpython3.6m.so /usr/lib/libpython3.6m.so
+
+# Install supported third party python packages
+# Updates conda and pip
+RUN conda update -y conda pip
+
+# Updates pip
+RUN pip install --upgrade pip
+
+# Sets python version to 3.6.8
+RUN conda install -y python=3.6.8
+RUN conda clean -y --all
+
+# Install essencial packages
+RUN conda install -y                \
+    cython=0.29.15                  \
+    numpy=1.18.1                    \
+    pandas=0.25.3                   \
+    wrapt=1.12.1
+
+# Install non-math packages
+RUN conda install -y                \
+    astropy=4.0.1.post1             \
+    beautifulsoup4=4.9.0            \
+    blaze=0.11.3                    \
+    dill=0.3.1.1                    \
+    jsonschema=3.2.0                \
+    lxml=4.5.0                      \
+    msgpack-python=1.0.0            \
+    numba=0.46                      \
+    setuptools-git=1.2              \
+    xarray=0.15.1 
+
+RUN conda install -y -c plotly      \
+    plotly=4.6.0
+
+RUN conda install -y -c conda-forge \
+    jupyterlab=2.1.0
+
+# Install TensorFlow 1.15.2
+RUN pip install tensorflow==1.15.2
+
+# Install math/ML packages
+RUN conda install -y                \
+    docutils=0.14                   \ 
+    cvxopt=1.2.0                    \
+    gensim=3.8.0                    \
+    keras=2.3.1                     \
+    lightgbm=2.3.0                  \
+    nltk=3.4.5                      \
+    pomegranate=0.11.1              \
+    tensorflow-base=1.15.0          \
+    python-graphviz=0.8.4
+
+# Install requirement for fbprophet
+RUN pip install cmdstanpy==0.4
+
+# Install math/ML from conda-forge
+RUN conda install -y -c conda-forge \
+    copulae=0.3.1                   \ 
+    featuretools=0.13.4             \
+    fbprophet=0.6                   \
+    pulp=1.6.8                      \
+    pymc3=3.8                       \
+    rauth=0.7.3                     \
+    scikit-learn=0.21.3             \
+    scikit-multiflow=0.4.1          \
+    scikit-optimize=0.7.4           \
+    theano=1.0.4                    \    
+    tsfresh=0.15.1                  \
+    tslearn=0.3.1                   \
+    tweepy=3.8.0                    \
+    pywavelets=1.1.1                \
+    umap-learn=0.4.1
+
+# Install math/ML from pytorch
+RUN conda install -y -c pytorch     \
+    pytorch=1.5.0                   \
+    torchvision=0.6.0
+
+# Install math/ML from fastai
+RUN conda install -y -c fastai      \
+    nvidia-ml-py3=7.352.0           \
+    fastai=1.0.60
+
+RUN conda clean -y --all
+
+# Install from PIP I
+RUN pip install arch==4.14          \
+    copulalib==1.1.0                \
+    copulas==0.3.0                  \
+    creme==0.5.1                    \
+    cufflinks==0.17.3               \
+    gym==0.17.1                     \
+    ipywidgets==7.5.1
+
+# Install from PIP II
+RUN pip install deap==1.3.1         \
+    cvxpy==1.1.0a3                  \
+    mlfinlab==0.9.3                 \
+    pykalman==0.9.5                 \
+    pyportfolioopt==1.1.0           \
+    pyramid-arima==0.9.0            \
+    pyro-ppl==1.3.1                 \
+    riskparityportfolio==0.1.6
+
+# Install from PIP III
+RUN pip install sklearn==0.0        \
+    stable-baselines==2.10.0        \
+    statistics==1.0.3.5             \
+    statsmodels==0.11.1             \
+    tensorforce==0.5.4              \
+    QuantLib-Python==1.18           \
+    xgboost==1.0.2                  \
+    dtw-python==1.0.5
+
+# Install from PIP IV
+RUN pip install cntk==2.7           \
+    mxnet==1.6                      \
+    gluonts==0.4.3                  \
+    gplearn==0.4.1                  \
+    jax==0.1.64                     \
+    jaxlib==0.1.45                  \
+    keras-rl==0.4.2                 \
+    pennylane==0.8.1
+
+# Install Google Neural Tangents after JAX
+RUN pip install neural-tangents==0.2.1
+
+RUN pip install --upgrade mplfinance==0.12.3a3
+RUN pip install --upgrade hmmlearn==0.2.3
+RUN python -m nltk.downloader -d /usr/share/nltk_data punkt
+RUN python -m nltk.downloader -d /usr/share/nltk_data vader_lexicon
+
+# Install TA-lib for python
+RUN wget http://cdn.quantconnect.com/ta-lib/ta-lib-0.4.0-src.tar.gz && \
+    tar -zxvf ta-lib-0.4.0-src.tar.gz && cd ta-lib && \
+    ./configure --prefix=/usr && make && make install && \
+    pip install TA-lib && cd .. && rm -irf ta-lib
+
+# Install DX Analytics
+RUN wget https://cdn.quantconnect.com/dx/dx-master-9fab393.zip && \
+    unzip -q dx-master-9fab393 && cd dx-master && \
+    python setup.py install && cd .. && rm -irf dx-master
+
+# Install py-earth
+RUN wget https://cdn.quantconnect.com/py-earth/py-earth-master-b209d19.zip && \
+    unzip -q py-earth-master-b209d19.zip && cd py-earth-master && \
+    python setup.py install && cd .. && rm -irf py-earth-master
+
+# Install fastText
+RUN wget https://cdn.quantconnect.com/fastText/fastText-master-6d7c77c.zip && \
+    unzip -q fastText-master-6d7c77c.zip && cd fastText-master && \
+    python setup.py install && cd .. && rm -irf fastText-master
+
+# Update ODO
+RUN conda remove --force-remove -y odo
+RUN wget https://cdn.quantconnect.com/odo/odo-master-9fce669.zip && \ 
+    unzip -q odo-master-9fce669.zip && cd odo-master && \
+    python setup.py install && cd .. && rm -irf odo-master
+
+# Install Auto-KS
+RUN wget https://cdn.quantconnect.com/auto_ks/auto_ks-master-b39e8f3.zip && \ 
+    unzip -q auto_ks-master-b39e8f3.zip && cd auto_ks-master && \
+    python setup.py install && cd .. && rm -irf auto_ks-master
+
+# Install Pyrb
+RUN wget https://cdn.quantconnect.com/pyrb/pyrb-master-d02b56a.zip && \ 
+    unzip -q pyrb-master-d02b56a.zip && cd pyrb-master && \
+    python setup.py install && cd .. && rm -irf pyrb-master
+
+# Install SSM
+RUN wget https://cdn.quantconnect.com/ssm/ssm-master-34b50d4.zip && \ 
+    unzip -q ssm-master-34b50d4.zip && cd ssm-master && \
+    python setup.py install && cd .. && rm -irf ssm-master
+
+# Install Tigramite
+RUN wget https://cdn.quantconnect.com/tigramite/tigramite-master-eee4809.zip && \ 
+    unzip -q tigramite-master-eee4809.zip && cd tigramite-master && \
+    python setup.py install && cd .. && rm -irf tigramite-master
+
+# Install H2O
+RUN wget https://cdn.quantconnect.com/h2o/h2o-3.30.0.1.zip && \
+    unzip -q h2o-3.30.0.1.zip && \
+    pip install h2o-3.30.0.1/python/h2o-3.30.0.1-py2.py3-none-any.whl && \
+    rm -irf h2o-3.30.0.1
+
+# Delete temporary zip files
+RUN rm -irf *.zip *.gz
+
+# Remove black-listed packages
+RUN pip uninstall -y s3transfer
+RUN conda remove --force-remove -y s3transfer
+RUN conda clean -y --all
+
+# List all packages
+RUN conda list
