@@ -13,6 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+## HSTH notes:
+#
+# getting the results folder to be leanQC/results would be ideal.
+# this .sh file needs to be run from ../../QuantConnect/Lean
+
 full_path=$(realpath $0)
 current_dir=$(dirname $full_path)
 default_image=quantconnect/lean:foundation
