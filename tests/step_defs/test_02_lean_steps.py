@@ -1,38 +1,61 @@
-
-
-import docker
-from docker.utils import kwargs_from_env
-import subprocess
 import os
 import sys
+from datetime import datetime
 
+from pytest_bdd import scenarios, given, when, then, parsers
 
-def run_bash():
-    # subprocess.run(["bash","leanQC/run_docker.sh"]) # needs sudo
-    os.system("sh leanQC/run_docker.sh") # doesn't need sudo
+from condorgp.utils import run_bash
+from condorgp.params import lean_dict
 
+EXTRA_TYPES = {
+    'Number': int,
+    'String': str,
+}
 
-def check_docker_image(service: str, tag: str) -> bool:
-    """Checks whether the given image for :service: with :tag: exists.
+CONVERTERS = {
+    'initial': int,
+    'some': int,
+    'total': int,
+}
 
-    :raises: ValueError if more than one docker image with :tag: found.
-    :returns: True if there is exactly one matching image found.
+scenarios('../features/02_lean.feature')
 
-    note: adapted from https://www.programcreek.com/python/?CodeExample=check+docker
-    """
-    docker_client = docker.from_env()
-    docker_tag = service + ":" + tag
-    images = docker_client.images.list()
-    # image['RepoTags'] may be None
-    # Fixed upstream but only in docker-py 2.
-    # https://github.com/docker/docker-py/issues/1401
-    print(images)
-    result = [image for image in images if docker_tag in (image["RepoTags"] or [])]
-    if len(result) > 1:
-        raise ValueError(
-            f"More than one docker image found with tag {docker_tag}\n{result}"
-        )
-    return len(result) == 1
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#             Lean runs and outputs results
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""
+Scenario: Basic Lean run
+    Given lean:latest docker image
+    And run_docker.sh file
+    When run_docker.sh is run
+    Then leanQC/results files are updated
+"""
 
-if __name__ == "__main__":
+@given('lean:latest docker image')
+def docker_image_exists():
+    pass # assumes local lean:latest image extant
+
+@given('run_docker.sh file')
+def run_docker_shell_file_exists():
+    sh_file_path = 'leanQC/run_docker.sh'
+    assert os.path.exists(sh_file_path)
+
+@when('run_docker.sh is run')
+def call_run_docker():
     run_bash()
+    pass
+
+@then('leanQC/results files are updated')
+def results_files_are_updated():
+    results_path = lean_dict['LEAN_RESULTS_FOLDER']
+    results_files = [results_path + '/' + x for x in os.listdir(results_path)]
+    assert len(results_files) > 1
+    assert check_recent_mod(results_files)
+
+def check_recent_mod(input_file_paths):
+    dt = datetime.now()
+    now = datetime.timestamp(dt)
+    diff = 1000*lean_dict['REASONABLE_FITNESS_SECS']
+    for file_path in input_file_paths:
+        if (now - diff) > os.path.getmtime(file_path): return False
+    return True

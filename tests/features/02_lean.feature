@@ -1,4 +1,4 @@
-Feature: Lean
+Feature: Lean runs and outputs results
   As a fitness function,
   I want to use Lean in a container,
   So that I can run endless fitness tests.

@@ -362,3 +362,1215 @@ STATISTICS:: OrderListHash ad2216297c759d8e5aef48ff065f8919
 2022-07-05T11:02:48.7731130Z TRACE:: LeanEngineSystemHandlers.Dispose(): Disposed of system handlers.
 2022-07-05T11:02:48.7733389Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): start...
 2022-07-05T11:02:48.7755961Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): Disposed of algorithm handlers.
+2022-07-05T13:54:11.6583167Z TRACE:: Config.Get(): Configuration key not found. Key: data-directory - Using default value: ../../../Data/
+2022-07-05T13:54:11.6592154Z TRACE:: Config.Get(): Configuration key not found. Key: version-id - Using default value: 
+2022-07-05T13:54:11.6593331Z TRACE:: Config.Get(): Configuration key not found. Key: cache-location - Using default value: /Data
+2022-07-05T13:54:11.6595624Z TRACE:: Engine.Main(): LEAN ALGORITHMIC TRADING ENGINE v2.5.0.0 Mode: DEBUG (64bit) Host: ef4c44644728
+2022-07-05T13:54:11.6685412Z TRACE:: Engine.Main(): Started 1:54 PM
+2022-07-05T13:54:11.6771939Z TRACE:: Config.Get(): Configuration key not found. Key: lean-manager-type - Using default value: LocalLeanManager
+2022-07-05T13:54:11.6972728Z TRACE:: JobQueue.NextJob(): Selected QuantConnect.Algorithm.CSharp.dll
+2022-07-05T13:54:11.7164948Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-capacity - Using default value: 120
+2022-07-05T13:54:11.7172385Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-time-interval-minutes - Using default value: 1440
+2022-07-05T13:54:11.7174533Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-refill-amount - Using default value: 18
+2022-07-05T13:54:11.7182110Z TRACE:: Config.GetValue(): storage-limit-mb - Using default value: 5
+2022-07-05T13:54:11.7184294Z TRACE:: Config.GetValue(): storage-file-count - Using default value: 100
+2022-07-05T13:54:11.7184870Z TRACE:: Config.GetValue(): storage-permissions - Using default value: 3
+2022-07-05T13:54:11.7185509Z TRACE:: Config.Get(): Configuration key not found. Key: algorithm-id - Using default value: BasicTemplateFrameworkAlgorithm
+2022-07-05T13:54:11.7224643Z TRACE:: Config.GetValue(): job-project-id - Using default value: 0
+2022-07-05T13:54:11.7236094Z TRACE:: Config.Get(): Configuration key not found. Key: data-permission-manager - Using default value: DataPermissionManager
+2022-07-05T13:54:11.7359136Z TRACE:: Config.Get(): Configuration key not found. Key: object-store-root - Using default value: ./storage
+2022-07-05T13:54:11.7407521Z TRACE:: AlgorithmManager.CreateTokenBucket(): Initializing LeakyBucket: Capacity: 120 RefillAmount: 18 TimeInterval: 1440
+2022-07-05T13:54:11.7439397Z TRACE:: Config.GetValue(): algorithm-manager-time-loop-maximum - Using default value: 20
+2022-07-05T13:54:11.7601947Z TRACE:: TextSubscriptionDataSourceReader.SetCacheSize(): Setting cache size to 71582788 items
+2022-07-05T13:54:12.3077487Z TRACE:: Config.GetValue(): algorithm-creation-timeout - Using default value: 90
+2022-07-05T13:54:12.3125539Z TRACE:: Loader.TryCreateILAlgorithm(): Loading only the algorithm assembly
+2022-07-05T13:54:12.3445438Z TRACE:: Config.GetValue(): api-data-update-period - Using default value: 1
+2022-07-05T13:54:12.4610669Z TRACE:: Loader.TryCreateILAlgorithm(): Loaded BasicTemplateFrameworkAlgorithm
+2022-07-05T13:54:12.4917789Z TRACE:: LocalObjectStore.Initialize(): Storage Root: /Lean/Launcher/bin/Debug/storage/BasicTemplateFrameworkAlgorithm. StorageFileCount 100. StorageLimitMB 5
+2022-07-05T13:54:12.5314037Z TRACE:: BacktestingSetupHandler.Setup(): Setting up job: UID: 0, PID: 0, Version: 2.5.0.0, Source: WebIDE
+2022-07-05T13:54:12.5360733Z TRACE:: Config.Get(): Configuration key not found. Key: security-data-feeds - Using default value: 
+2022-07-05T13:54:12.7570674Z TRACE:: BaseSetupHandler.SetupCurrencyConversions():
+Symbol      Quantity    Conversion = Value in USD
+USD: $      100000.00 @       1.00 = $100000.0
+-------------------------------------------------
+CashBook Total Value:                $100000.0
+
+2022-07-05T13:54:12.7599152Z TRACE:: SetUp Backtesting: User: 0 ProjectId: 0 AlgoId: BasicTemplateFrameworkAlgorithm
+2022-07-05T13:54:12.7606936Z TRACE:: Dates: Start: 10/07/2013 End: 10/11/2013 Cash: ¤100,000.00 MaximumRuntime: 100.00:00:00 MaxOrders: 2147483647
+2022-07-05T13:54:12.7658456Z TRACE:: BacktestingResultHandler(): Sample Period Set: 04.00
+2022-07-05T13:54:12.7758802Z TRACE:: Config.GetValue(): forward-console-messages - Using default value: True
+2022-07-05T13:54:12.7781742Z TRACE:: JOB HANDLERS: 
+2022-07-05T13:54:12.7782328Z TRACE::          DataFeed:     QuantConnect.Lean.Engine.DataFeeds.FileSystemDataFeed
+2022-07-05T13:54:12.7782506Z TRACE::          Setup:        QuantConnect.Lean.Engine.Setup.BacktestingSetupHandler
+2022-07-05T13:54:12.7782661Z TRACE::          RealTime:     QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler
+2022-07-05T13:54:12.7782816Z TRACE::          Results:      QuantConnect.Lean.Engine.Results.BacktestingResultHandler
+2022-07-05T13:54:12.7782949Z TRACE::          Transactions: QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler
+2022-07-05T13:54:12.7783100Z TRACE::          Alpha:        QuantConnect.Lean.Engine.Alphas.DefaultAlphaHandler
+2022-07-05T13:54:12.7783426Z TRACE::          ObjectStore:  QuantConnect.Lean.Engine.Storage.LocalObjectStore
+2022-07-05T13:54:12.7783762Z TRACE::          History Provider:     QuantConnect.Lean.Engine.HistoricalData.HistoryProviderManager
+2022-07-05T13:54:12.8346370Z TRACE:: Debug: Launching analysis for BasicTemplateFrameworkAlgorithm with LEAN Engine v2.5.0.0
+2022-07-05T13:54:12.8771399Z TRACE:: Event Name "Daily Sampling", scheduled to run.
+2022-07-05T13:54:12.8788387Z TRACE:: AlgorithmManager.Run(): Begin DataStream - Start: 10/7/2013 12:00:00 AM Stop: 10/11/2013 11:59:59 PM Time: 10/7/2013 12:00:00 AM Warmup: False
+2022-07-05T13:54:12.9911072Z TRACE:: Config.GetValue(): data-feed-max-work-weight - Using default value: 400
+2022-07-05T13:54:12.9914024Z TRACE:: Config.GetValue(): data-feed-workers-count - Using default value: 4
+2022-07-05T13:54:12.9915417Z TRACE:: WeightedWorkScheduler(): will use 4 workers and MaxWorkWeight is 400
+2022-07-05T13:54:13.0473062Z TRACE:: Config.GetValue(): show-missing-data-logs - Using default value: False
+2022-07-05T13:54:13.1687776Z TRACE:: UniverseSelection.AddPendingInternalDataFeeds(): Adding internal benchmark data feed SPY,#0,SPY,Hour,TradeBar,Trade,Adjusted,OpenInterest,Internal
+2022-07-05T13:54:13.7365139Z TRACE:: Debug: Purchased Stock: SPY
+2022-07-05T13:54:13.9886134Z TRACE:: Synchronizer.GetEnumerator(): Exited thread.
+2022-07-05T13:54:13.9889237Z TRACE:: AlgorithmManager.Run(): Firing On End Of Algorithm...
+2022-07-05T13:54:13.9894389Z TRACE:: Engine.Run(): Exiting Algorithm Manager
+2022-07-05T13:54:13.9942810Z TRACE:: FileSystemDataFeed.Exit(): Start. Setting cancellation token...
+2022-07-05T13:54:13.9963437Z TRACE:: FileSystemDataFeed.Exit(): Exit Finished.
+2022-07-05T13:54:13.9968678Z TRACE:: DefaultAlphaHandler.Exit(): Exiting...
+2022-07-05T13:54:14.0413793Z TRACE:: Debug: Algorithm Id:(BasicTemplateFrameworkAlgorithm) completed in 1.21 seconds at 3k data points per second. Processing total of 3,943 data points.
+2022-07-05T13:54:14.0505857Z TRACE:: DefaultAlphaHandler.Exit(): Ended
+2022-07-05T13:54:14.0509385Z TRACE:: BacktestingResultHandler.Exit(): starting...
+2022-07-05T13:54:14.0511063Z TRACE:: BacktestingResultHandler.Exit(): Saving logs...
+2022-07-05T13:54:14.0522729Z TRACE:: Debug: Your log was successfully created and can be retrieved from: /Results/BasicTemplateFrameworkAlgorithm-log.txt
+2022-07-05T13:54:14.0523095Z TRACE:: BacktestingResultHandler.Run(): Ending Thread...
+2022-07-05T13:54:14.0525975Z TRACE:: StopSafely(): waiting for 'Result Thread' thread to stop...
+2022-07-05T13:54:14.2658687Z TRACE:: 
+STATISTICS:: Total Trades 3
+STATISTICS:: Average Win 0%
+STATISTICS:: Average Loss -1.01%
+STATISTICS:: Compounding Annual Return 261.134%
+STATISTICS:: Drawdown 2.200%
+STATISTICS:: Expectancy -1
+STATISTICS:: Net Profit 1.655%
+STATISTICS:: Sharpe Ratio 8.505
+STATISTICS:: Probabilistic Sharpe Ratio 66.840%
+STATISTICS:: Loss Rate 100%
+STATISTICS:: Win Rate 0%
+STATISTICS:: Profit-Loss Ratio 0
+STATISTICS:: Alpha -0.091
+STATISTICS:: Beta 1.006
+STATISTICS:: Annual Standard Deviation 0.224
+STATISTICS:: Annual Variance 0.05
+STATISTICS:: Information Ratio -33.445
+STATISTICS:: Tracking Error 0.002
+STATISTICS:: Treynor Ratio 1.893
+STATISTICS:: Total Fees $10.32
+STATISTICS:: Estimated Strategy Capacity $27000000.00
+STATISTICS:: Lowest Capacity Asset SPY R735QTJ8XC9X
+STATISTICS:: Fitness Score 0.747
+STATISTICS:: Kelly Criterion Estimate 38.796
+STATISTICS:: Kelly Criterion Probability Value 0.228
+STATISTICS:: Sortino Ratio 79228162514264337593543950335
+STATISTICS:: Return Over Maximum Drawdown 85.095
+STATISTICS:: Portfolio Turnover 0.747
+STATISTICS:: Total Insights Generated 100
+STATISTICS:: Total Insights Closed 99
+STATISTICS:: Total Insights Analysis Completed 99
+STATISTICS:: Long Insight Count 100
+STATISTICS:: Short Insight Count 0
+STATISTICS:: Long/Short Ratio 100%
+STATISTICS:: Estimated Monthly Alpha Value $135639.1761
+STATISTICS:: Total Accumulated Estimated Alpha Value $21852.9784
+STATISTICS:: Mean Population Estimated Insight Value $220.7372
+STATISTICS:: Mean Population Direction 53.5354%
+STATISTICS:: Mean Population Magnitude 53.5354%
+STATISTICS:: Rolling Averaged Population Direction 58.2788%
+STATISTICS:: Rolling Averaged Population Magnitude 58.2788%
+STATISTICS:: OrderListHash ad2216297c759d8e5aef48ff065f8919
+2022-07-05T13:54:14.2660628Z TRACE:: BacktestingResultHandler.SendAnalysisResult(): Processed final packet
+2022-07-05T13:54:14.2668529Z TRACE:: Engine.Run(): Disconnecting from brokerage...
+2022-07-05T13:54:14.2671095Z TRACE:: Engine.Run(): Disposing of setup handler...
+2022-07-05T13:54:14.2673506Z TRACE:: Engine.Main(): Analysis Completed and Results Posted.
+2022-07-05T13:54:14.2686965Z TRACE:: Config.GetValue(): close-automatically - Using default value: False
+2022-07-05T13:54:14.2692885Z TRACE:: Engine.Main(): Packet removed from queue: BasicTemplateFrameworkAlgorithm
+2022-07-05T13:54:14.2696239Z TRACE:: LeanEngineSystemHandlers.Dispose(): start...
+2022-07-05T13:54:14.2699512Z TRACE:: LeanEngineSystemHandlers.Dispose(): Disposed of system handlers.
+2022-07-05T13:54:14.2702193Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): start...
+2022-07-05T13:54:14.2711569Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): Disposed of algorithm handlers.
+2022-07-05T14:59:04.5718882Z TRACE:: Config.Get(): Configuration key not found. Key: data-directory - Using default value: ../../../Data/
+2022-07-05T14:59:04.5724589Z TRACE:: Config.Get(): Configuration key not found. Key: version-id - Using default value: 
+2022-07-05T14:59:04.5725668Z TRACE:: Config.Get(): Configuration key not found. Key: cache-location - Using default value: /Data
+2022-07-05T14:59:04.5727593Z TRACE:: Engine.Main(): LEAN ALGORITHMIC TRADING ENGINE v2.5.0.0 Mode: DEBUG (64bit) Host: d9dbbdb5bab8
+2022-07-05T14:59:04.5755504Z TRACE:: Engine.Main(): Started 2:59 PM
+2022-07-05T14:59:04.5776739Z TRACE:: Config.Get(): Configuration key not found. Key: lean-manager-type - Using default value: LocalLeanManager
+2022-07-05T14:59:04.5894599Z TRACE:: JobQueue.NextJob(): Selected QuantConnect.Algorithm.CSharp.dll
+2022-07-05T14:59:04.6005087Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-capacity - Using default value: 120
+2022-07-05T14:59:04.6005697Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-time-interval-minutes - Using default value: 1440
+2022-07-05T14:59:04.6005896Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-refill-amount - Using default value: 18
+2022-07-05T14:59:04.6006895Z TRACE:: Config.GetValue(): storage-limit-mb - Using default value: 5
+2022-07-05T14:59:04.6007202Z TRACE:: Config.GetValue(): storage-file-count - Using default value: 100
+2022-07-05T14:59:04.6007408Z TRACE:: Config.GetValue(): storage-permissions - Using default value: 3
+2022-07-05T14:59:04.6007610Z TRACE:: Config.Get(): Configuration key not found. Key: algorithm-id - Using default value: BasicTemplateFrameworkAlgorithm
+2022-07-05T14:59:04.6022989Z TRACE:: Config.GetValue(): job-project-id - Using default value: 0
+2022-07-05T14:59:04.6030416Z TRACE:: Config.Get(): Configuration key not found. Key: data-permission-manager - Using default value: DataPermissionManager
+2022-07-05T14:59:04.6085640Z TRACE:: Config.Get(): Configuration key not found. Key: object-store-root - Using default value: ./storage
+2022-07-05T14:59:04.6105761Z TRACE:: AlgorithmManager.CreateTokenBucket(): Initializing LeakyBucket: Capacity: 120 RefillAmount: 18 TimeInterval: 1440
+2022-07-05T14:59:04.6127296Z TRACE:: Config.GetValue(): algorithm-manager-time-loop-maximum - Using default value: 20
+2022-07-05T14:59:04.6192927Z TRACE:: TextSubscriptionDataSourceReader.SetCacheSize(): Setting cache size to 71582788 items
+2022-07-05T14:59:04.9661190Z TRACE:: Config.GetValue(): algorithm-creation-timeout - Using default value: 90
+2022-07-05T14:59:04.9687175Z TRACE:: Loader.TryCreateILAlgorithm(): Loading only the algorithm assembly
+2022-07-05T14:59:04.9859293Z TRACE:: Config.GetValue(): api-data-update-period - Using default value: 1
+2022-07-05T14:59:05.0580137Z TRACE:: Loader.TryCreateILAlgorithm(): Loaded BasicTemplateFrameworkAlgorithm
+2022-07-05T14:59:05.0704012Z TRACE:: LocalObjectStore.Initialize(): Storage Root: /Lean/Launcher/bin/Debug/storage/BasicTemplateFrameworkAlgorithm. StorageFileCount 100. StorageLimitMB 5
+2022-07-05T14:59:05.0829078Z TRACE:: BacktestingSetupHandler.Setup(): Setting up job: UID: 0, PID: 0, Version: 2.5.0.0, Source: WebIDE
+2022-07-05T14:59:05.0858349Z TRACE:: Config.Get(): Configuration key not found. Key: security-data-feeds - Using default value: 
+2022-07-05T14:59:05.1921884Z TRACE:: BaseSetupHandler.SetupCurrencyConversions():
+Symbol      Quantity    Conversion = Value in USD
+USD: $      100000.00 @       1.00 = $100000.0
+-------------------------------------------------
+CashBook Total Value:                $100000.0
+
+2022-07-05T14:59:05.1944782Z TRACE:: SetUp Backtesting: User: 0 ProjectId: 0 AlgoId: BasicTemplateFrameworkAlgorithm
+2022-07-05T14:59:05.1950112Z TRACE:: Dates: Start: 10/07/2013 End: 10/11/2013 Cash: ¤100,000.00 MaximumRuntime: 100.00:00:00 MaxOrders: 2147483647
+2022-07-05T14:59:05.1964311Z TRACE:: BacktestingResultHandler(): Sample Period Set: 04.00
+2022-07-05T14:59:05.1985348Z TRACE:: Config.GetValue(): forward-console-messages - Using default value: True
+2022-07-05T14:59:05.1999681Z TRACE:: JOB HANDLERS: 
+2022-07-05T14:59:05.2000162Z TRACE::          DataFeed:     QuantConnect.Lean.Engine.DataFeeds.FileSystemDataFeed
+2022-07-05T14:59:05.2000384Z TRACE::          Setup:        QuantConnect.Lean.Engine.Setup.BacktestingSetupHandler
+2022-07-05T14:59:05.2000556Z TRACE::          RealTime:     QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler
+2022-07-05T14:59:05.2001377Z TRACE::          Results:      QuantConnect.Lean.Engine.Results.BacktestingResultHandler
+2022-07-05T14:59:05.2002275Z TRACE::          Transactions: QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler
+2022-07-05T14:59:05.2002841Z TRACE::          Alpha:        QuantConnect.Lean.Engine.Alphas.DefaultAlphaHandler
+2022-07-05T14:59:05.2003714Z TRACE::          ObjectStore:  QuantConnect.Lean.Engine.Storage.LocalObjectStore
+2022-07-05T14:59:05.2004157Z TRACE::          History Provider:     QuantConnect.Lean.Engine.HistoricalData.HistoryProviderManager
+2022-07-05T14:59:05.2260856Z TRACE:: Event Name "Daily Sampling", scheduled to run.
+2022-07-05T14:59:05.2267911Z TRACE:: AlgorithmManager.Run(): Begin DataStream - Start: 10/7/2013 12:00:00 AM Stop: 10/11/2013 11:59:59 PM Time: 10/7/2013 12:00:00 AM Warmup: False
+2022-07-05T14:59:05.2435356Z TRACE:: Debug: Launching analysis for BasicTemplateFrameworkAlgorithm with LEAN Engine v2.5.0.0
+2022-07-05T14:59:05.2737318Z TRACE:: Config.GetValue(): data-feed-max-work-weight - Using default value: 400
+2022-07-05T14:59:05.2739465Z TRACE:: Config.GetValue(): data-feed-workers-count - Using default value: 4
+2022-07-05T14:59:05.2740021Z TRACE:: WeightedWorkScheduler(): will use 4 workers and MaxWorkWeight is 400
+2022-07-05T14:59:05.2990142Z TRACE:: Config.GetValue(): show-missing-data-logs - Using default value: False
+2022-07-05T14:59:05.3696749Z TRACE:: UniverseSelection.AddPendingInternalDataFeeds(): Adding internal benchmark data feed SPY,#0,SPY,Hour,TradeBar,Trade,Adjusted,OpenInterest,Internal
+2022-07-05T14:59:05.6943541Z TRACE:: Debug: Purchased Stock: SPY
+2022-07-05T14:59:05.8391281Z TRACE:: Synchronizer.GetEnumerator(): Exited thread.
+2022-07-05T14:59:05.8395232Z TRACE:: AlgorithmManager.Run(): Firing On End Of Algorithm...
+2022-07-05T14:59:05.8399421Z TRACE:: Engine.Run(): Exiting Algorithm Manager
+2022-07-05T14:59:05.8430741Z TRACE:: FileSystemDataFeed.Exit(): Start. Setting cancellation token...
+2022-07-05T14:59:05.8445095Z TRACE:: FileSystemDataFeed.Exit(): Exit Finished.
+2022-07-05T14:59:05.8447241Z TRACE:: DefaultAlphaHandler.Exit(): Exiting...
+2022-07-05T14:59:05.8447333Z TRACE:: Debug: Algorithm Id:(BasicTemplateFrameworkAlgorithm) completed in 0.64 seconds at 6k data points per second. Processing total of 3,943 data points.
+2022-07-05T14:59:05.8726991Z TRACE:: DefaultAlphaHandler.Exit(): Ended
+2022-07-05T14:59:05.8730380Z TRACE:: BacktestingResultHandler.Exit(): starting...
+2022-07-05T14:59:05.8732481Z TRACE:: BacktestingResultHandler.Exit(): Saving logs...
+2022-07-05T14:59:05.8742328Z TRACE:: Debug: Your log was successfully created and can be retrieved from: /Results/BasicTemplateFrameworkAlgorithm-log.txt
+2022-07-05T14:59:05.8742783Z TRACE:: BacktestingResultHandler.Run(): Ending Thread...
+2022-07-05T14:59:05.8745390Z TRACE:: StopSafely(): waiting for 'Result Thread' thread to stop...
+2022-07-05T14:59:06.0161311Z TRACE:: 
+STATISTICS:: Total Trades 3
+STATISTICS:: Average Win 0%
+STATISTICS:: Average Loss -1.01%
+STATISTICS:: Compounding Annual Return 261.134%
+STATISTICS:: Drawdown 2.200%
+STATISTICS:: Expectancy -1
+STATISTICS:: Net Profit 1.655%
+STATISTICS:: Sharpe Ratio 8.505
+STATISTICS:: Probabilistic Sharpe Ratio 66.840%
+STATISTICS:: Loss Rate 100%
+STATISTICS:: Win Rate 0%
+STATISTICS:: Profit-Loss Ratio 0
+STATISTICS:: Alpha -0.091
+STATISTICS:: Beta 1.006
+STATISTICS:: Annual Standard Deviation 0.224
+STATISTICS:: Annual Variance 0.05
+STATISTICS:: Information Ratio -33.445
+STATISTICS:: Tracking Error 0.002
+STATISTICS:: Treynor Ratio 1.893
+STATISTICS:: Total Fees $10.32
+STATISTICS:: Estimated Strategy Capacity $27000000.00
+STATISTICS:: Lowest Capacity Asset SPY R735QTJ8XC9X
+STATISTICS:: Fitness Score 0.747
+STATISTICS:: Kelly Criterion Estimate 38.796
+STATISTICS:: Kelly Criterion Probability Value 0.228
+STATISTICS:: Sortino Ratio 79228162514264337593543950335
+STATISTICS:: Return Over Maximum Drawdown 85.095
+STATISTICS:: Portfolio Turnover 0.747
+STATISTICS:: Total Insights Generated 100
+STATISTICS:: Total Insights Closed 99
+STATISTICS:: Total Insights Analysis Completed 99
+STATISTICS:: Long Insight Count 100
+STATISTICS:: Short Insight Count 0
+STATISTICS:: Long/Short Ratio 100%
+STATISTICS:: Estimated Monthly Alpha Value $135639.1761
+STATISTICS:: Total Accumulated Estimated Alpha Value $21852.9784
+STATISTICS:: Mean Population Estimated Insight Value $220.7372
+STATISTICS:: Mean Population Direction 53.5354%
+STATISTICS:: Mean Population Magnitude 53.5354%
+STATISTICS:: Rolling Averaged Population Direction 58.2788%
+STATISTICS:: Rolling Averaged Population Magnitude 58.2788%
+STATISTICS:: OrderListHash ad2216297c759d8e5aef48ff065f8919
+2022-07-05T14:59:06.0161971Z TRACE:: BacktestingResultHandler.SendAnalysisResult(): Processed final packet
+2022-07-05T14:59:06.0166395Z TRACE:: Engine.Run(): Disconnecting from brokerage...
+2022-07-05T14:59:06.0167555Z TRACE:: Engine.Run(): Disposing of setup handler...
+2022-07-05T14:59:06.0168192Z TRACE:: Engine.Main(): Analysis Completed and Results Posted.
+2022-07-05T14:59:06.0175665Z TRACE:: Config.GetValue(): close-automatically - Using default value: False
+2022-07-05T14:59:06.0178928Z TRACE:: Engine.Main(): Packet removed from queue: BasicTemplateFrameworkAlgorithm
+2022-07-05T14:59:06.0180376Z TRACE:: LeanEngineSystemHandlers.Dispose(): start...
+2022-07-05T14:59:06.0181686Z TRACE:: LeanEngineSystemHandlers.Dispose(): Disposed of system handlers.
+2022-07-05T14:59:06.0182809Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): start...
+2022-07-05T14:59:06.0189082Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): Disposed of algorithm handlers.
+2022-07-05T15:16:14.6470486Z TRACE:: Config.Get(): Configuration key not found. Key: data-directory - Using default value: ../../../Data/
+2022-07-05T15:16:14.6477627Z TRACE:: Config.Get(): Configuration key not found. Key: version-id - Using default value: 
+2022-07-05T15:16:14.6478485Z TRACE:: Config.Get(): Configuration key not found. Key: cache-location - Using default value: /Data
+2022-07-05T15:16:14.6480380Z TRACE:: Engine.Main(): LEAN ALGORITHMIC TRADING ENGINE v2.5.0.0 Mode: DEBUG (64bit) Host: db6f1940d336
+2022-07-05T15:16:14.6516233Z TRACE:: Engine.Main(): Started 3:16 PM
+2022-07-05T15:16:14.6538561Z TRACE:: Config.Get(): Configuration key not found. Key: lean-manager-type - Using default value: LocalLeanManager
+2022-07-05T15:16:14.6662768Z TRACE:: JobQueue.NextJob(): Selected QuantConnect.Algorithm.CSharp.dll
+2022-07-05T15:16:14.6773055Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-capacity - Using default value: 120
+2022-07-05T15:16:14.6773681Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-time-interval-minutes - Using default value: 1440
+2022-07-05T15:16:14.6774014Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-refill-amount - Using default value: 18
+2022-07-05T15:16:14.6775072Z TRACE:: Config.GetValue(): storage-limit-mb - Using default value: 5
+2022-07-05T15:16:14.6775358Z TRACE:: Config.GetValue(): storage-file-count - Using default value: 100
+2022-07-05T15:16:14.6775753Z TRACE:: Config.GetValue(): storage-permissions - Using default value: 3
+2022-07-05T15:16:14.6775991Z TRACE:: Config.Get(): Configuration key not found. Key: algorithm-id - Using default value: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:14.6791400Z TRACE:: Config.GetValue(): job-project-id - Using default value: 0
+2022-07-05T15:16:14.6798550Z TRACE:: Config.Get(): Configuration key not found. Key: data-permission-manager - Using default value: DataPermissionManager
+2022-07-05T15:16:14.6852575Z TRACE:: Config.Get(): Configuration key not found. Key: object-store-root - Using default value: ./storage
+2022-07-05T15:16:14.6871846Z TRACE:: AlgorithmManager.CreateTokenBucket(): Initializing LeakyBucket: Capacity: 120 RefillAmount: 18 TimeInterval: 1440
+2022-07-05T15:16:14.6887240Z TRACE:: Config.GetValue(): algorithm-manager-time-loop-maximum - Using default value: 20
+2022-07-05T15:16:14.6953861Z TRACE:: TextSubscriptionDataSourceReader.SetCacheSize(): Setting cache size to 71582788 items
+2022-07-05T15:16:14.9823487Z TRACE:: Config.GetValue(): algorithm-creation-timeout - Using default value: 90
+2022-07-05T15:16:14.9849395Z TRACE:: Loader.TryCreateILAlgorithm(): Loading only the algorithm assembly
+2022-07-05T15:16:15.0014286Z TRACE:: Config.GetValue(): api-data-update-period - Using default value: 1
+2022-07-05T15:16:15.0733231Z TRACE:: Loader.TryCreateILAlgorithm(): Loaded BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:15.0871291Z TRACE:: LocalObjectStore.Initialize(): Storage Root: /Lean/Launcher/bin/Debug/storage/BasicTemplateFrameworkAlgorithm. StorageFileCount 100. StorageLimitMB 5
+2022-07-05T15:16:15.1008493Z TRACE:: BacktestingSetupHandler.Setup(): Setting up job: UID: 0, PID: 0, Version: 2.5.0.0, Source: WebIDE
+2022-07-05T15:16:15.1051830Z TRACE:: Config.Get(): Configuration key not found. Key: security-data-feeds - Using default value: 
+2022-07-05T15:16:15.2281694Z TRACE:: BaseSetupHandler.SetupCurrencyConversions():
+Symbol      Quantity    Conversion = Value in USD
+USD: $      100000.00 @       1.00 = $100000.0
+-------------------------------------------------
+CashBook Total Value:                $100000.0
+
+2022-07-05T15:16:15.2311355Z TRACE:: SetUp Backtesting: User: 0 ProjectId: 0 AlgoId: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:15.2318411Z TRACE:: Dates: Start: 10/07/2013 End: 10/11/2013 Cash: ¤100,000.00 MaximumRuntime: 100.00:00:00 MaxOrders: 2147483647
+2022-07-05T15:16:15.2339115Z TRACE:: BacktestingResultHandler(): Sample Period Set: 04.00
+2022-07-05T15:16:15.2374174Z TRACE:: Config.GetValue(): forward-console-messages - Using default value: True
+2022-07-05T15:16:15.2399054Z TRACE:: JOB HANDLERS: 
+2022-07-05T15:16:15.2401248Z TRACE::          DataFeed:     QuantConnect.Lean.Engine.DataFeeds.FileSystemDataFeed
+2022-07-05T15:16:15.2402908Z TRACE::          Setup:        QuantConnect.Lean.Engine.Setup.BacktestingSetupHandler
+2022-07-05T15:16:15.2404747Z TRACE::          RealTime:     QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler
+2022-07-05T15:16:15.2405156Z TRACE::          Results:      QuantConnect.Lean.Engine.Results.BacktestingResultHandler
+2022-07-05T15:16:15.2405338Z TRACE::          Transactions: QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler
+2022-07-05T15:16:15.2406236Z TRACE::          Alpha:        QuantConnect.Lean.Engine.Alphas.DefaultAlphaHandler
+2022-07-05T15:16:15.2406656Z TRACE::          ObjectStore:  QuantConnect.Lean.Engine.Storage.LocalObjectStore
+2022-07-05T15:16:15.2407627Z TRACE::          History Provider:     QuantConnect.Lean.Engine.HistoricalData.HistoryProviderManager
+2022-07-05T15:16:15.2715327Z TRACE:: Event Name "Daily Sampling", scheduled to run.
+2022-07-05T15:16:15.2724025Z TRACE:: Debug: Launching analysis for BasicTemplateFrameworkAlgorithm with LEAN Engine v2.5.0.0
+2022-07-05T15:16:15.2725377Z TRACE:: AlgorithmManager.Run(): Begin DataStream - Start: 10/7/2013 12:00:00 AM Stop: 10/11/2013 11:59:59 PM Time: 10/7/2013 12:00:00 AM Warmup: False
+2022-07-05T15:16:15.3256440Z TRACE:: Config.GetValue(): data-feed-max-work-weight - Using default value: 400
+2022-07-05T15:16:15.3257882Z TRACE:: Config.GetValue(): data-feed-workers-count - Using default value: 4
+2022-07-05T15:16:15.3258303Z TRACE:: WeightedWorkScheduler(): will use 4 workers and MaxWorkWeight is 400
+2022-07-05T15:16:15.3479710Z TRACE:: Config.GetValue(): show-missing-data-logs - Using default value: False
+2022-07-05T15:16:15.4249307Z TRACE:: UniverseSelection.AddPendingInternalDataFeeds(): Adding internal benchmark data feed SPY,#0,SPY,Hour,TradeBar,Trade,Adjusted,OpenInterest,Internal
+2022-07-05T15:16:15.7246428Z TRACE:: Debug: Purchased Stock: SPY
+2022-07-05T15:16:15.8517116Z TRACE:: Synchronizer.GetEnumerator(): Exited thread.
+2022-07-05T15:16:15.8520730Z TRACE:: AlgorithmManager.Run(): Firing On End Of Algorithm...
+2022-07-05T15:16:15.8524608Z TRACE:: Engine.Run(): Exiting Algorithm Manager
+2022-07-05T15:16:15.8563243Z TRACE:: FileSystemDataFeed.Exit(): Start. Setting cancellation token...
+2022-07-05T15:16:15.8580586Z TRACE:: FileSystemDataFeed.Exit(): Exit Finished.
+2022-07-05T15:16:15.8582958Z TRACE:: DefaultAlphaHandler.Exit(): Exiting...
+2022-07-05T15:16:15.8750348Z TRACE:: Debug: Algorithm Id:(BasicTemplateFrameworkAlgorithm) completed in 0.61 seconds at 6k data points per second. Processing total of 3,943 data points.
+2022-07-05T15:16:15.8855861Z TRACE:: DefaultAlphaHandler.Exit(): Ended
+2022-07-05T15:16:15.8858463Z TRACE:: BacktestingResultHandler.Exit(): starting...
+2022-07-05T15:16:15.8859772Z TRACE:: BacktestingResultHandler.Exit(): Saving logs...
+2022-07-05T15:16:15.8867399Z TRACE:: Debug: Your log was successfully created and can be retrieved from: /Results/BasicTemplateFrameworkAlgorithm-log.txt
+2022-07-05T15:16:15.8867819Z TRACE:: BacktestingResultHandler.Run(): Ending Thread...
+2022-07-05T15:16:15.8872130Z TRACE:: StopSafely(): waiting for 'Result Thread' thread to stop...
+2022-07-05T15:16:16.0135071Z TRACE:: 
+STATISTICS:: Total Trades 3
+STATISTICS:: Average Win 0%
+STATISTICS:: Average Loss -1.01%
+STATISTICS:: Compounding Annual Return 261.134%
+STATISTICS:: Drawdown 2.200%
+STATISTICS:: Expectancy -1
+STATISTICS:: Net Profit 1.655%
+STATISTICS:: Sharpe Ratio 8.505
+STATISTICS:: Probabilistic Sharpe Ratio 66.840%
+STATISTICS:: Loss Rate 100%
+STATISTICS:: Win Rate 0%
+STATISTICS:: Profit-Loss Ratio 0
+STATISTICS:: Alpha -0.091
+STATISTICS:: Beta 1.006
+STATISTICS:: Annual Standard Deviation 0.224
+STATISTICS:: Annual Variance 0.05
+STATISTICS:: Information Ratio -33.445
+STATISTICS:: Tracking Error 0.002
+STATISTICS:: Treynor Ratio 1.893
+STATISTICS:: Total Fees $10.32
+STATISTICS:: Estimated Strategy Capacity $27000000.00
+STATISTICS:: Lowest Capacity Asset SPY R735QTJ8XC9X
+STATISTICS:: Fitness Score 0.747
+STATISTICS:: Kelly Criterion Estimate 38.796
+STATISTICS:: Kelly Criterion Probability Value 0.228
+STATISTICS:: Sortino Ratio 79228162514264337593543950335
+STATISTICS:: Return Over Maximum Drawdown 85.095
+STATISTICS:: Portfolio Turnover 0.747
+STATISTICS:: Total Insights Generated 100
+STATISTICS:: Total Insights Closed 99
+STATISTICS:: Total Insights Analysis Completed 99
+STATISTICS:: Long Insight Count 100
+STATISTICS:: Short Insight Count 0
+STATISTICS:: Long/Short Ratio 100%
+STATISTICS:: Estimated Monthly Alpha Value $135639.1761
+STATISTICS:: Total Accumulated Estimated Alpha Value $21852.9784
+STATISTICS:: Mean Population Estimated Insight Value $220.7372
+STATISTICS:: Mean Population Direction 53.5354%
+STATISTICS:: Mean Population Magnitude 53.5354%
+STATISTICS:: Rolling Averaged Population Direction 58.2788%
+STATISTICS:: Rolling Averaged Population Magnitude 58.2788%
+STATISTICS:: OrderListHash ad2216297c759d8e5aef48ff065f8919
+2022-07-05T15:16:16.0135593Z TRACE:: BacktestingResultHandler.SendAnalysisResult(): Processed final packet
+2022-07-05T15:16:16.0139258Z TRACE:: Engine.Run(): Disconnecting from brokerage...
+2022-07-05T15:16:16.0140215Z TRACE:: Engine.Run(): Disposing of setup handler...
+2022-07-05T15:16:16.0140811Z TRACE:: Engine.Main(): Analysis Completed and Results Posted.
+2022-07-05T15:16:16.0147056Z TRACE:: Config.GetValue(): close-automatically - Using default value: False
+2022-07-05T15:16:16.0150123Z TRACE:: Engine.Main(): Packet removed from queue: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:16.0151585Z TRACE:: LeanEngineSystemHandlers.Dispose(): start...
+2022-07-05T15:16:16.0153183Z TRACE:: LeanEngineSystemHandlers.Dispose(): Disposed of system handlers.
+2022-07-05T15:16:16.0154432Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): start...
+2022-07-05T15:16:16.0160529Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): Disposed of algorithm handlers.
+2022-07-05T15:16:24.4059595Z TRACE:: Config.Get(): Configuration key not found. Key: data-directory - Using default value: ../../../Data/
+2022-07-05T15:16:24.4065384Z TRACE:: Config.Get(): Configuration key not found. Key: version-id - Using default value: 
+2022-07-05T15:16:24.4067079Z TRACE:: Config.Get(): Configuration key not found. Key: cache-location - Using default value: /Data
+2022-07-05T15:16:24.4069399Z TRACE:: Engine.Main(): LEAN ALGORITHMIC TRADING ENGINE v2.5.0.0 Mode: DEBUG (64bit) Host: 425cde332a9b
+2022-07-05T15:16:24.4098150Z TRACE:: Engine.Main(): Started 3:16 PM
+2022-07-05T15:16:24.4119490Z TRACE:: Config.Get(): Configuration key not found. Key: lean-manager-type - Using default value: LocalLeanManager
+2022-07-05T15:16:24.4239874Z TRACE:: JobQueue.NextJob(): Selected QuantConnect.Algorithm.CSharp.dll
+2022-07-05T15:16:24.4366919Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-capacity - Using default value: 120
+2022-07-05T15:16:24.4367781Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-time-interval-minutes - Using default value: 1440
+2022-07-05T15:16:24.4368181Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-refill-amount - Using default value: 18
+2022-07-05T15:16:24.4369544Z TRACE:: Config.GetValue(): storage-limit-mb - Using default value: 5
+2022-07-05T15:16:24.4369939Z TRACE:: Config.GetValue(): storage-file-count - Using default value: 100
+2022-07-05T15:16:24.4370383Z TRACE:: Config.GetValue(): storage-permissions - Using default value: 3
+2022-07-05T15:16:24.4370808Z TRACE:: Config.Get(): Configuration key not found. Key: algorithm-id - Using default value: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:24.4386611Z TRACE:: Config.GetValue(): job-project-id - Using default value: 0
+2022-07-05T15:16:24.4394460Z TRACE:: Config.Get(): Configuration key not found. Key: data-permission-manager - Using default value: DataPermissionManager
+2022-07-05T15:16:24.4448817Z TRACE:: Config.Get(): Configuration key not found. Key: object-store-root - Using default value: ./storage
+2022-07-05T15:16:24.4470335Z TRACE:: AlgorithmManager.CreateTokenBucket(): Initializing LeakyBucket: Capacity: 120 RefillAmount: 18 TimeInterval: 1440
+2022-07-05T15:16:24.4484663Z TRACE:: Config.GetValue(): algorithm-manager-time-loop-maximum - Using default value: 20
+2022-07-05T15:16:24.4545642Z TRACE:: TextSubscriptionDataSourceReader.SetCacheSize(): Setting cache size to 71582788 items
+2022-07-05T15:16:24.6974633Z TRACE:: Config.GetValue(): algorithm-creation-timeout - Using default value: 90
+2022-07-05T15:16:24.6999006Z TRACE:: Loader.TryCreateILAlgorithm(): Loading only the algorithm assembly
+2022-07-05T15:16:24.7162817Z TRACE:: Config.GetValue(): api-data-update-period - Using default value: 1
+2022-07-05T15:16:24.7808730Z TRACE:: Loader.TryCreateILAlgorithm(): Loaded BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:24.7922654Z TRACE:: LocalObjectStore.Initialize(): Storage Root: /Lean/Launcher/bin/Debug/storage/BasicTemplateFrameworkAlgorithm. StorageFileCount 100. StorageLimitMB 5
+2022-07-05T15:16:24.8044568Z TRACE:: BacktestingSetupHandler.Setup(): Setting up job: UID: 0, PID: 0, Version: 2.5.0.0, Source: WebIDE
+2022-07-05T15:16:24.8071458Z TRACE:: Config.Get(): Configuration key not found. Key: security-data-feeds - Using default value: 
+2022-07-05T15:16:24.9285200Z TRACE:: BaseSetupHandler.SetupCurrencyConversions():
+Symbol      Quantity    Conversion = Value in USD
+USD: $      100000.00 @       1.00 = $100000.0
+-------------------------------------------------
+CashBook Total Value:                $100000.0
+
+2022-07-05T15:16:24.9308857Z TRACE:: SetUp Backtesting: User: 0 ProjectId: 0 AlgoId: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:24.9314074Z TRACE:: Dates: Start: 10/07/2013 End: 10/11/2013 Cash: ¤100,000.00 MaximumRuntime: 100.00:00:00 MaxOrders: 2147483647
+2022-07-05T15:16:24.9327128Z TRACE:: BacktestingResultHandler(): Sample Period Set: 04.00
+2022-07-05T15:16:24.9346794Z TRACE:: Config.GetValue(): forward-console-messages - Using default value: True
+2022-07-05T15:16:24.9360401Z TRACE:: JOB HANDLERS: 
+2022-07-05T15:16:24.9361389Z TRACE::          DataFeed:     QuantConnect.Lean.Engine.DataFeeds.FileSystemDataFeed
+2022-07-05T15:16:24.9362275Z TRACE::          Setup:        QuantConnect.Lean.Engine.Setup.BacktestingSetupHandler
+2022-07-05T15:16:24.9362823Z TRACE::          RealTime:     QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler
+2022-07-05T15:16:24.9363548Z TRACE::          Results:      QuantConnect.Lean.Engine.Results.BacktestingResultHandler
+2022-07-05T15:16:24.9364084Z TRACE::          Transactions: QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler
+2022-07-05T15:16:24.9364676Z TRACE::          Alpha:        QuantConnect.Lean.Engine.Alphas.DefaultAlphaHandler
+2022-07-05T15:16:24.9365117Z TRACE::          ObjectStore:  QuantConnect.Lean.Engine.Storage.LocalObjectStore
+2022-07-05T15:16:24.9365777Z TRACE::          History Provider:     QuantConnect.Lean.Engine.HistoricalData.HistoryProviderManager
+2022-07-05T15:16:24.9602647Z TRACE:: Event Name "Daily Sampling", scheduled to run.
+2022-07-05T15:16:24.9608624Z TRACE:: AlgorithmManager.Run(): Begin DataStream - Start: 10/7/2013 12:00:00 AM Stop: 10/11/2013 11:59:59 PM Time: 10/7/2013 12:00:00 AM Warmup: False
+2022-07-05T15:16:24.9785971Z TRACE:: Debug: Launching analysis for BasicTemplateFrameworkAlgorithm with LEAN Engine v2.5.0.0
+2022-07-05T15:16:25.0110910Z TRACE:: Config.GetValue(): data-feed-max-work-weight - Using default value: 400
+2022-07-05T15:16:25.0113427Z TRACE:: Config.GetValue(): data-feed-workers-count - Using default value: 4
+2022-07-05T15:16:25.0114339Z TRACE:: WeightedWorkScheduler(): will use 4 workers and MaxWorkWeight is 400
+2022-07-05T15:16:25.0352988Z TRACE:: Config.GetValue(): show-missing-data-logs - Using default value: False
+2022-07-05T15:16:25.1042394Z TRACE:: UniverseSelection.AddPendingInternalDataFeeds(): Adding internal benchmark data feed SPY,#0,SPY,Hour,TradeBar,Trade,Adjusted,OpenInterest,Internal
+2022-07-05T15:16:25.4294397Z TRACE:: Debug: Purchased Stock: SPY
+2022-07-05T15:16:25.5662981Z TRACE:: Synchronizer.GetEnumerator(): Exited thread.
+2022-07-05T15:16:25.5666102Z TRACE:: AlgorithmManager.Run(): Firing On End Of Algorithm...
+2022-07-05T15:16:25.5670319Z TRACE:: Engine.Run(): Exiting Algorithm Manager
+2022-07-05T15:16:25.5708450Z TRACE:: FileSystemDataFeed.Exit(): Start. Setting cancellation token...
+2022-07-05T15:16:25.5725960Z TRACE:: FileSystemDataFeed.Exit(): Exit Finished.
+2022-07-05T15:16:25.5728256Z TRACE:: DefaultAlphaHandler.Exit(): Exiting...
+2022-07-05T15:16:25.5800798Z TRACE:: Debug: Algorithm Id:(BasicTemplateFrameworkAlgorithm) completed in 0.63 seconds at 6k data points per second. Processing total of 3,943 data points.
+2022-07-05T15:16:25.6091453Z TRACE:: DefaultAlphaHandler.Exit(): Ended
+2022-07-05T15:16:25.6099025Z TRACE:: BacktestingResultHandler.Exit(): starting...
+2022-07-05T15:16:25.6101957Z TRACE:: BacktestingResultHandler.Exit(): Saving logs...
+2022-07-05T15:16:25.6117691Z TRACE:: StopSafely(): waiting for 'Result Thread' thread to stop...
+2022-07-05T15:16:25.6127540Z TRACE:: Debug: Your log was successfully created and can be retrieved from: /Results/BasicTemplateFrameworkAlgorithm-log.txt
+2022-07-05T15:16:25.6128472Z TRACE:: BacktestingResultHandler.Run(): Ending Thread...
+2022-07-05T15:16:25.8039080Z TRACE:: 
+STATISTICS:: Total Trades 3
+STATISTICS:: Average Win 0%
+STATISTICS:: Average Loss -1.01%
+STATISTICS:: Compounding Annual Return 261.134%
+STATISTICS:: Drawdown 2.200%
+STATISTICS:: Expectancy -1
+STATISTICS:: Net Profit 1.655%
+STATISTICS:: Sharpe Ratio 8.505
+STATISTICS:: Probabilistic Sharpe Ratio 66.840%
+STATISTICS:: Loss Rate 100%
+STATISTICS:: Win Rate 0%
+STATISTICS:: Profit-Loss Ratio 0
+STATISTICS:: Alpha -0.091
+STATISTICS:: Beta 1.006
+STATISTICS:: Annual Standard Deviation 0.224
+STATISTICS:: Annual Variance 0.05
+STATISTICS:: Information Ratio -33.445
+STATISTICS:: Tracking Error 0.002
+STATISTICS:: Treynor Ratio 1.893
+STATISTICS:: Total Fees $10.32
+STATISTICS:: Estimated Strategy Capacity $27000000.00
+STATISTICS:: Lowest Capacity Asset SPY R735QTJ8XC9X
+STATISTICS:: Fitness Score 0.747
+STATISTICS:: Kelly Criterion Estimate 38.796
+STATISTICS:: Kelly Criterion Probability Value 0.228
+STATISTICS:: Sortino Ratio 79228162514264337593543950335
+STATISTICS:: Return Over Maximum Drawdown 85.095
+STATISTICS:: Portfolio Turnover 0.747
+STATISTICS:: Total Insights Generated 100
+STATISTICS:: Total Insights Closed 99
+STATISTICS:: Total Insights Analysis Completed 99
+STATISTICS:: Long Insight Count 100
+STATISTICS:: Short Insight Count 0
+STATISTICS:: Long/Short Ratio 100%
+STATISTICS:: Estimated Monthly Alpha Value $135639.1761
+STATISTICS:: Total Accumulated Estimated Alpha Value $21852.9784
+STATISTICS:: Mean Population Estimated Insight Value $220.7372
+STATISTICS:: Mean Population Direction 53.5354%
+STATISTICS:: Mean Population Magnitude 53.5354%
+STATISTICS:: Rolling Averaged Population Direction 58.2788%
+STATISTICS:: Rolling Averaged Population Magnitude 58.2788%
+STATISTICS:: OrderListHash ad2216297c759d8e5aef48ff065f8919
+2022-07-05T15:16:25.8039708Z TRACE:: BacktestingResultHandler.SendAnalysisResult(): Processed final packet
+2022-07-05T15:16:25.8043601Z TRACE:: Engine.Run(): Disconnecting from brokerage...
+2022-07-05T15:16:25.8044500Z TRACE:: Engine.Run(): Disposing of setup handler...
+2022-07-05T15:16:25.8044999Z TRACE:: Engine.Main(): Analysis Completed and Results Posted.
+2022-07-05T15:16:25.8053637Z TRACE:: Config.GetValue(): close-automatically - Using default value: False
+2022-07-05T15:16:25.8056944Z TRACE:: Engine.Main(): Packet removed from queue: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:25.8058400Z TRACE:: LeanEngineSystemHandlers.Dispose(): start...
+2022-07-05T15:16:25.8059699Z TRACE:: LeanEngineSystemHandlers.Dispose(): Disposed of system handlers.
+2022-07-05T15:16:25.8060882Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): start...
+2022-07-05T15:16:25.8068894Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): Disposed of algorithm handlers.
+2022-07-05T15:16:44.5444597Z TRACE:: Config.Get(): Configuration key not found. Key: data-directory - Using default value: ../../../Data/
+2022-07-05T15:16:44.5451232Z TRACE:: Config.Get(): Configuration key not found. Key: version-id - Using default value: 
+2022-07-05T15:16:44.5452233Z TRACE:: Config.Get(): Configuration key not found. Key: cache-location - Using default value: /Data
+2022-07-05T15:16:44.5454073Z TRACE:: Engine.Main(): LEAN ALGORITHMIC TRADING ENGINE v2.5.0.0 Mode: DEBUG (64bit) Host: e54bbafc8c0e
+2022-07-05T15:16:44.5484054Z TRACE:: Engine.Main(): Started 3:16 PM
+2022-07-05T15:16:44.5504102Z TRACE:: Config.Get(): Configuration key not found. Key: lean-manager-type - Using default value: LocalLeanManager
+2022-07-05T15:16:44.5618260Z TRACE:: JobQueue.NextJob(): Selected QuantConnect.Algorithm.CSharp.dll
+2022-07-05T15:16:44.5725299Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-capacity - Using default value: 120
+2022-07-05T15:16:44.5725867Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-time-interval-minutes - Using default value: 1440
+2022-07-05T15:16:44.5726294Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-refill-amount - Using default value: 18
+2022-07-05T15:16:44.5727442Z TRACE:: Config.GetValue(): storage-limit-mb - Using default value: 5
+2022-07-05T15:16:44.5727691Z TRACE:: Config.GetValue(): storage-file-count - Using default value: 100
+2022-07-05T15:16:44.5727965Z TRACE:: Config.GetValue(): storage-permissions - Using default value: 3
+2022-07-05T15:16:44.5728168Z TRACE:: Config.Get(): Configuration key not found. Key: algorithm-id - Using default value: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:44.5743319Z TRACE:: Config.GetValue(): job-project-id - Using default value: 0
+2022-07-05T15:16:44.5750294Z TRACE:: Config.Get(): Configuration key not found. Key: data-permission-manager - Using default value: DataPermissionManager
+2022-07-05T15:16:44.5835855Z TRACE:: Config.Get(): Configuration key not found. Key: object-store-root - Using default value: ./storage
+2022-07-05T15:16:44.5865935Z TRACE:: AlgorithmManager.CreateTokenBucket(): Initializing LeakyBucket: Capacity: 120 RefillAmount: 18 TimeInterval: 1440
+2022-07-05T15:16:44.5884693Z TRACE:: Config.GetValue(): algorithm-manager-time-loop-maximum - Using default value: 20
+2022-07-05T15:16:44.5974739Z TRACE:: TextSubscriptionDataSourceReader.SetCacheSize(): Setting cache size to 71582788 items
+2022-07-05T15:16:44.9587141Z TRACE:: Config.GetValue(): algorithm-creation-timeout - Using default value: 90
+2022-07-05T15:16:44.9614473Z TRACE:: Loader.TryCreateILAlgorithm(): Loading only the algorithm assembly
+2022-07-05T15:16:44.9844934Z TRACE:: Config.GetValue(): api-data-update-period - Using default value: 1
+2022-07-05T15:16:45.0523291Z TRACE:: Loader.TryCreateILAlgorithm(): Loaded BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:45.0639792Z TRACE:: LocalObjectStore.Initialize(): Storage Root: /Lean/Launcher/bin/Debug/storage/BasicTemplateFrameworkAlgorithm. StorageFileCount 100. StorageLimitMB 5
+2022-07-05T15:16:45.0753080Z TRACE:: BacktestingSetupHandler.Setup(): Setting up job: UID: 0, PID: 0, Version: 2.5.0.0, Source: WebIDE
+2022-07-05T15:16:45.0784816Z TRACE:: Config.Get(): Configuration key not found. Key: security-data-feeds - Using default value: 
+2022-07-05T15:16:45.1799468Z TRACE:: BaseSetupHandler.SetupCurrencyConversions():
+Symbol      Quantity    Conversion = Value in USD
+USD: $      100000.00 @       1.00 = $100000.0
+-------------------------------------------------
+CashBook Total Value:                $100000.0
+
+2022-07-05T15:16:45.1819423Z TRACE:: SetUp Backtesting: User: 0 ProjectId: 0 AlgoId: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:45.1823790Z TRACE:: Dates: Start: 10/07/2013 End: 10/11/2013 Cash: ¤100,000.00 MaximumRuntime: 100.00:00:00 MaxOrders: 2147483647
+2022-07-05T15:16:45.1837052Z TRACE:: BacktestingResultHandler(): Sample Period Set: 04.00
+2022-07-05T15:16:45.1859353Z TRACE:: Config.GetValue(): forward-console-messages - Using default value: True
+2022-07-05T15:16:45.1873069Z TRACE:: JOB HANDLERS: 
+2022-07-05T15:16:45.1873522Z TRACE::          DataFeed:     QuantConnect.Lean.Engine.DataFeeds.FileSystemDataFeed
+2022-07-05T15:16:45.1873721Z TRACE::          Setup:        QuantConnect.Lean.Engine.Setup.BacktestingSetupHandler
+2022-07-05T15:16:45.1873885Z TRACE::          RealTime:     QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler
+2022-07-05T15:16:45.1874005Z TRACE::          Results:      QuantConnect.Lean.Engine.Results.BacktestingResultHandler
+2022-07-05T15:16:45.1874139Z TRACE::          Transactions: QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler
+2022-07-05T15:16:45.1874250Z TRACE::          Alpha:        QuantConnect.Lean.Engine.Alphas.DefaultAlphaHandler
+2022-07-05T15:16:45.1874346Z TRACE::          ObjectStore:  QuantConnect.Lean.Engine.Storage.LocalObjectStore
+2022-07-05T15:16:45.1874603Z TRACE::          History Provider:     QuantConnect.Lean.Engine.HistoricalData.HistoryProviderManager
+2022-07-05T15:16:45.2120039Z TRACE:: Event Name "Daily Sampling", scheduled to run.
+2022-07-05T15:16:45.2129043Z TRACE:: AlgorithmManager.Run(): Begin DataStream - Start: 10/7/2013 12:00:00 AM Stop: 10/11/2013 11:59:59 PM Time: 10/7/2013 12:00:00 AM Warmup: False
+2022-07-05T15:16:45.2455859Z TRACE:: Debug: Launching analysis for BasicTemplateFrameworkAlgorithm with LEAN Engine v2.5.0.0
+2022-07-05T15:16:45.2653538Z TRACE:: Config.GetValue(): data-feed-max-work-weight - Using default value: 400
+2022-07-05T15:16:45.2655523Z TRACE:: Config.GetValue(): data-feed-workers-count - Using default value: 4
+2022-07-05T15:16:45.2655776Z TRACE:: WeightedWorkScheduler(): will use 4 workers and MaxWorkWeight is 400
+2022-07-05T15:16:45.2902626Z TRACE:: Config.GetValue(): show-missing-data-logs - Using default value: False
+2022-07-05T15:16:45.3524987Z TRACE:: UniverseSelection.AddPendingInternalDataFeeds(): Adding internal benchmark data feed SPY,#0,SPY,Hour,TradeBar,Trade,Adjusted,OpenInterest,Internal
+2022-07-05T15:16:45.6465934Z TRACE:: Debug: Purchased Stock: SPY
+2022-07-05T15:16:45.7708049Z TRACE:: Synchronizer.GetEnumerator(): Exited thread.
+2022-07-05T15:16:45.7710959Z TRACE:: AlgorithmManager.Run(): Firing On End Of Algorithm...
+2022-07-05T15:16:45.7715075Z TRACE:: Engine.Run(): Exiting Algorithm Manager
+2022-07-05T15:16:45.7745890Z TRACE:: FileSystemDataFeed.Exit(): Start. Setting cancellation token...
+2022-07-05T15:16:45.7759014Z TRACE:: FileSystemDataFeed.Exit(): Exit Finished.
+2022-07-05T15:16:45.7761128Z TRACE:: DefaultAlphaHandler.Exit(): Exiting...
+2022-07-05T15:16:45.7968840Z TRACE:: Debug: Algorithm Id:(BasicTemplateFrameworkAlgorithm) completed in 0.58 seconds at 7k data points per second. Processing total of 3,943 data points.
+2022-07-05T15:16:45.8051192Z TRACE:: DefaultAlphaHandler.Exit(): Ended
+2022-07-05T15:16:45.8054368Z TRACE:: BacktestingResultHandler.Exit(): starting...
+2022-07-05T15:16:45.8055785Z TRACE:: BacktestingResultHandler.Exit(): Saving logs...
+2022-07-05T15:16:45.8065146Z TRACE:: Debug: Your log was successfully created and can be retrieved from: /Results/BasicTemplateFrameworkAlgorithm-log.txt
+2022-07-05T15:16:45.8066564Z TRACE:: BacktestingResultHandler.Run(): Ending Thread...
+2022-07-05T15:16:45.8068476Z TRACE:: StopSafely(): waiting for 'Result Thread' thread to stop...
+2022-07-05T15:16:45.9381583Z TRACE:: 
+STATISTICS:: Total Trades 3
+STATISTICS:: Average Win 0%
+STATISTICS:: Average Loss -1.01%
+STATISTICS:: Compounding Annual Return 261.134%
+STATISTICS:: Drawdown 2.200%
+STATISTICS:: Expectancy -1
+STATISTICS:: Net Profit 1.655%
+STATISTICS:: Sharpe Ratio 8.505
+STATISTICS:: Probabilistic Sharpe Ratio 66.840%
+STATISTICS:: Loss Rate 100%
+STATISTICS:: Win Rate 0%
+STATISTICS:: Profit-Loss Ratio 0
+STATISTICS:: Alpha -0.091
+STATISTICS:: Beta 1.006
+STATISTICS:: Annual Standard Deviation 0.224
+STATISTICS:: Annual Variance 0.05
+STATISTICS:: Information Ratio -33.445
+STATISTICS:: Tracking Error 0.002
+STATISTICS:: Treynor Ratio 1.893
+STATISTICS:: Total Fees $10.32
+STATISTICS:: Estimated Strategy Capacity $27000000.00
+STATISTICS:: Lowest Capacity Asset SPY R735QTJ8XC9X
+STATISTICS:: Fitness Score 0.747
+STATISTICS:: Kelly Criterion Estimate 38.796
+STATISTICS:: Kelly Criterion Probability Value 0.228
+STATISTICS:: Sortino Ratio 79228162514264337593543950335
+STATISTICS:: Return Over Maximum Drawdown 85.095
+STATISTICS:: Portfolio Turnover 0.747
+STATISTICS:: Total Insights Generated 100
+STATISTICS:: Total Insights Closed 99
+STATISTICS:: Total Insights Analysis Completed 99
+STATISTICS:: Long Insight Count 100
+STATISTICS:: Short Insight Count 0
+STATISTICS:: Long/Short Ratio 100%
+STATISTICS:: Estimated Monthly Alpha Value $135639.1761
+STATISTICS:: Total Accumulated Estimated Alpha Value $21852.9784
+STATISTICS:: Mean Population Estimated Insight Value $220.7372
+STATISTICS:: Mean Population Direction 53.5354%
+STATISTICS:: Mean Population Magnitude 53.5354%
+STATISTICS:: Rolling Averaged Population Direction 58.2788%
+STATISTICS:: Rolling Averaged Population Magnitude 58.2788%
+STATISTICS:: OrderListHash ad2216297c759d8e5aef48ff065f8919
+2022-07-05T15:16:45.9382164Z TRACE:: BacktestingResultHandler.SendAnalysisResult(): Processed final packet
+2022-07-05T15:16:45.9385886Z TRACE:: Engine.Run(): Disconnecting from brokerage...
+2022-07-05T15:16:45.9386873Z TRACE:: Engine.Run(): Disposing of setup handler...
+2022-07-05T15:16:45.9387462Z TRACE:: Engine.Main(): Analysis Completed and Results Posted.
+2022-07-05T15:16:45.9394135Z TRACE:: Config.GetValue(): close-automatically - Using default value: False
+2022-07-05T15:16:45.9397239Z TRACE:: Engine.Main(): Packet removed from queue: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:16:45.9398866Z TRACE:: LeanEngineSystemHandlers.Dispose(): start...
+2022-07-05T15:16:45.9400298Z TRACE:: LeanEngineSystemHandlers.Dispose(): Disposed of system handlers.
+2022-07-05T15:16:45.9401432Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): start...
+2022-07-05T15:16:45.9407696Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): Disposed of algorithm handlers.
+2022-07-05T15:17:00.7966564Z TRACE:: Config.Get(): Configuration key not found. Key: data-directory - Using default value: ../../../Data/
+2022-07-05T15:17:00.7973198Z TRACE:: Config.Get(): Configuration key not found. Key: version-id - Using default value: 
+2022-07-05T15:17:00.7974716Z TRACE:: Config.Get(): Configuration key not found. Key: cache-location - Using default value: /Data
+2022-07-05T15:17:00.7977496Z TRACE:: Engine.Main(): LEAN ALGORITHMIC TRADING ENGINE v2.5.0.0 Mode: DEBUG (64bit) Host: 19c55048072b
+2022-07-05T15:17:00.8007220Z TRACE:: Engine.Main(): Started 3:17 PM
+2022-07-05T15:17:00.8026320Z TRACE:: Config.Get(): Configuration key not found. Key: lean-manager-type - Using default value: LocalLeanManager
+2022-07-05T15:17:00.8154586Z TRACE:: JobQueue.NextJob(): Selected QuantConnect.Algorithm.CSharp.dll
+2022-07-05T15:17:00.8266294Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-capacity - Using default value: 120
+2022-07-05T15:17:00.8267386Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-time-interval-minutes - Using default value: 1440
+2022-07-05T15:17:00.8267835Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-refill-amount - Using default value: 18
+2022-07-05T15:17:00.8268704Z TRACE:: Config.GetValue(): storage-limit-mb - Using default value: 5
+2022-07-05T15:17:00.8269106Z TRACE:: Config.GetValue(): storage-file-count - Using default value: 100
+2022-07-05T15:17:00.8269375Z TRACE:: Config.GetValue(): storage-permissions - Using default value: 3
+2022-07-05T15:17:00.8269608Z TRACE:: Config.Get(): Configuration key not found. Key: algorithm-id - Using default value: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:00.8286379Z TRACE:: Config.GetValue(): job-project-id - Using default value: 0
+2022-07-05T15:17:00.8293544Z TRACE:: Config.Get(): Configuration key not found. Key: data-permission-manager - Using default value: DataPermissionManager
+2022-07-05T15:17:00.8352176Z TRACE:: Config.Get(): Configuration key not found. Key: object-store-root - Using default value: ./storage
+2022-07-05T15:17:00.8391804Z TRACE:: AlgorithmManager.CreateTokenBucket(): Initializing LeakyBucket: Capacity: 120 RefillAmount: 18 TimeInterval: 1440
+2022-07-05T15:17:00.8410711Z TRACE:: Config.GetValue(): algorithm-manager-time-loop-maximum - Using default value: 20
+2022-07-05T15:17:00.8491455Z TRACE:: TextSubscriptionDataSourceReader.SetCacheSize(): Setting cache size to 71582788 items
+2022-07-05T15:17:01.1157315Z TRACE:: Config.GetValue(): algorithm-creation-timeout - Using default value: 90
+2022-07-05T15:17:01.1189022Z TRACE:: Loader.TryCreateILAlgorithm(): Loading only the algorithm assembly
+2022-07-05T15:17:01.1627641Z TRACE:: Config.GetValue(): api-data-update-period - Using default value: 1
+2022-07-05T15:17:01.2927425Z TRACE:: Loader.TryCreateILAlgorithm(): Loaded BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:01.3057077Z TRACE:: LocalObjectStore.Initialize(): Storage Root: /Lean/Launcher/bin/Debug/storage/BasicTemplateFrameworkAlgorithm. StorageFileCount 100. StorageLimitMB 5
+2022-07-05T15:17:01.3183983Z TRACE:: BacktestingSetupHandler.Setup(): Setting up job: UID: 0, PID: 0, Version: 2.5.0.0, Source: WebIDE
+2022-07-05T15:17:01.3213890Z TRACE:: Config.Get(): Configuration key not found. Key: security-data-feeds - Using default value: 
+2022-07-05T15:17:01.4556891Z TRACE:: BaseSetupHandler.SetupCurrencyConversions():
+Symbol      Quantity    Conversion = Value in USD
+USD: $      100000.00 @       1.00 = $100000.0
+-------------------------------------------------
+CashBook Total Value:                $100000.0
+
+2022-07-05T15:17:01.4587198Z TRACE:: SetUp Backtesting: User: 0 ProjectId: 0 AlgoId: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:01.4595409Z TRACE:: Dates: Start: 10/07/2013 End: 10/11/2013 Cash: ¤100,000.00 MaximumRuntime: 100.00:00:00 MaxOrders: 2147483647
+2022-07-05T15:17:01.4619573Z TRACE:: BacktestingResultHandler(): Sample Period Set: 04.00
+2022-07-05T15:17:01.4655642Z TRACE:: Config.GetValue(): forward-console-messages - Using default value: True
+2022-07-05T15:17:01.4679713Z TRACE:: JOB HANDLERS: 
+2022-07-05T15:17:01.4681844Z TRACE::          DataFeed:     QuantConnect.Lean.Engine.DataFeeds.FileSystemDataFeed
+2022-07-05T15:17:01.4683577Z TRACE::          Setup:        QuantConnect.Lean.Engine.Setup.BacktestingSetupHandler
+2022-07-05T15:17:01.4685188Z TRACE::          RealTime:     QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler
+2022-07-05T15:17:01.4685750Z TRACE::          Results:      QuantConnect.Lean.Engine.Results.BacktestingResultHandler
+2022-07-05T15:17:01.4686965Z TRACE::          Transactions: QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler
+2022-07-05T15:17:01.4687946Z TRACE::          Alpha:        QuantConnect.Lean.Engine.Alphas.DefaultAlphaHandler
+2022-07-05T15:17:01.4689077Z TRACE::          ObjectStore:  QuantConnect.Lean.Engine.Storage.LocalObjectStore
+2022-07-05T15:17:01.4691467Z TRACE::          History Provider:     QuantConnect.Lean.Engine.HistoricalData.HistoryProviderManager
+2022-07-05T15:17:01.5026307Z TRACE:: Event Name "Daily Sampling", scheduled to run.
+2022-07-05T15:17:01.5033536Z TRACE:: AlgorithmManager.Run(): Begin DataStream - Start: 10/7/2013 12:00:00 AM Stop: 10/11/2013 11:59:59 PM Time: 10/7/2013 12:00:00 AM Warmup: False
+2022-07-05T15:17:01.5302950Z TRACE:: Debug: Launching analysis for BasicTemplateFrameworkAlgorithm with LEAN Engine v2.5.0.0
+2022-07-05T15:17:01.5597763Z TRACE:: Config.GetValue(): data-feed-max-work-weight - Using default value: 400
+2022-07-05T15:17:01.5599608Z TRACE:: Config.GetValue(): data-feed-workers-count - Using default value: 4
+2022-07-05T15:17:01.5599850Z TRACE:: WeightedWorkScheduler(): will use 4 workers and MaxWorkWeight is 400
+2022-07-05T15:17:01.5871483Z TRACE:: Config.GetValue(): show-missing-data-logs - Using default value: False
+2022-07-05T15:17:01.6554508Z TRACE:: UniverseSelection.AddPendingInternalDataFeeds(): Adding internal benchmark data feed SPY,#0,SPY,Hour,TradeBar,Trade,Adjusted,OpenInterest,Internal
+2022-07-05T15:17:01.9814573Z TRACE:: Debug: Purchased Stock: SPY
+2022-07-05T15:17:02.1133718Z TRACE:: Synchronizer.GetEnumerator(): Exited thread.
+2022-07-05T15:17:02.1137322Z TRACE:: AlgorithmManager.Run(): Firing On End Of Algorithm...
+2022-07-05T15:17:02.1141972Z TRACE:: Engine.Run(): Exiting Algorithm Manager
+2022-07-05T15:17:02.1171739Z TRACE:: FileSystemDataFeed.Exit(): Start. Setting cancellation token...
+2022-07-05T15:17:02.1185089Z TRACE:: FileSystemDataFeed.Exit(): Exit Finished.
+2022-07-05T15:17:02.1187303Z TRACE:: DefaultAlphaHandler.Exit(): Exiting...
+2022-07-05T15:17:02.1317325Z TRACE:: Debug: Algorithm Id:(BasicTemplateFrameworkAlgorithm) completed in 0.65 seconds at 6k data points per second. Processing total of 3,943 data points.
+2022-07-05T15:17:02.1464738Z TRACE:: DefaultAlphaHandler.Exit(): Ended
+2022-07-05T15:17:02.1467695Z TRACE:: BacktestingResultHandler.Exit(): starting...
+2022-07-05T15:17:02.1469193Z TRACE:: BacktestingResultHandler.Exit(): Saving logs...
+2022-07-05T15:17:02.1483401Z TRACE:: StopSafely(): waiting for 'Result Thread' thread to stop...
+2022-07-05T15:17:02.1484864Z TRACE:: Debug: Your log was successfully created and can be retrieved from: /Results/BasicTemplateFrameworkAlgorithm-log.txt
+2022-07-05T15:17:02.1485401Z TRACE:: BacktestingResultHandler.Run(): Ending Thread...
+2022-07-05T15:17:02.2741944Z TRACE:: 
+STATISTICS:: Total Trades 3
+STATISTICS:: Average Win 0%
+STATISTICS:: Average Loss -1.01%
+STATISTICS:: Compounding Annual Return 261.134%
+STATISTICS:: Drawdown 2.200%
+STATISTICS:: Expectancy -1
+STATISTICS:: Net Profit 1.655%
+STATISTICS:: Sharpe Ratio 8.505
+STATISTICS:: Probabilistic Sharpe Ratio 66.840%
+STATISTICS:: Loss Rate 100%
+STATISTICS:: Win Rate 0%
+STATISTICS:: Profit-Loss Ratio 0
+STATISTICS:: Alpha -0.091
+STATISTICS:: Beta 1.006
+STATISTICS:: Annual Standard Deviation 0.224
+STATISTICS:: Annual Variance 0.05
+STATISTICS:: Information Ratio -33.445
+STATISTICS:: Tracking Error 0.002
+STATISTICS:: Treynor Ratio 1.893
+STATISTICS:: Total Fees $10.32
+STATISTICS:: Estimated Strategy Capacity $27000000.00
+STATISTICS:: Lowest Capacity Asset SPY R735QTJ8XC9X
+STATISTICS:: Fitness Score 0.747
+STATISTICS:: Kelly Criterion Estimate 38.796
+STATISTICS:: Kelly Criterion Probability Value 0.228
+STATISTICS:: Sortino Ratio 79228162514264337593543950335
+STATISTICS:: Return Over Maximum Drawdown 85.095
+STATISTICS:: Portfolio Turnover 0.747
+STATISTICS:: Total Insights Generated 100
+STATISTICS:: Total Insights Closed 99
+STATISTICS:: Total Insights Analysis Completed 99
+STATISTICS:: Long Insight Count 100
+STATISTICS:: Short Insight Count 0
+STATISTICS:: Long/Short Ratio 100%
+STATISTICS:: Estimated Monthly Alpha Value $135639.1761
+STATISTICS:: Total Accumulated Estimated Alpha Value $21852.9784
+STATISTICS:: Mean Population Estimated Insight Value $220.7372
+STATISTICS:: Mean Population Direction 53.5354%
+STATISTICS:: Mean Population Magnitude 53.5354%
+STATISTICS:: Rolling Averaged Population Direction 58.2788%
+STATISTICS:: Rolling Averaged Population Magnitude 58.2788%
+STATISTICS:: OrderListHash ad2216297c759d8e5aef48ff065f8919
+2022-07-05T15:17:02.2742758Z TRACE:: BacktestingResultHandler.SendAnalysisResult(): Processed final packet
+2022-07-05T15:17:02.2747318Z TRACE:: Engine.Run(): Disconnecting from brokerage...
+2022-07-05T15:17:02.2748559Z TRACE:: Engine.Run(): Disposing of setup handler...
+2022-07-05T15:17:02.2749480Z TRACE:: Engine.Main(): Analysis Completed and Results Posted.
+2022-07-05T15:17:02.2756971Z TRACE:: Config.GetValue(): close-automatically - Using default value: False
+2022-07-05T15:17:02.2759719Z TRACE:: Engine.Main(): Packet removed from queue: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:02.2761178Z TRACE:: LeanEngineSystemHandlers.Dispose(): start...
+2022-07-05T15:17:02.2762512Z TRACE:: LeanEngineSystemHandlers.Dispose(): Disposed of system handlers.
+2022-07-05T15:17:02.2763628Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): start...
+2022-07-05T15:17:02.2770620Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): Disposed of algorithm handlers.
+2022-07-05T15:17:13.1634475Z TRACE:: Config.Get(): Configuration key not found. Key: data-directory - Using default value: ../../../Data/
+2022-07-05T15:17:13.1721543Z TRACE:: Config.Get(): Configuration key not found. Key: version-id - Using default value: 
+2022-07-05T15:17:13.1724133Z TRACE:: Config.Get(): Configuration key not found. Key: cache-location - Using default value: /Data
+2022-07-05T15:17:13.1727791Z TRACE:: Engine.Main(): LEAN ALGORITHMIC TRADING ENGINE v2.5.0.0 Mode: DEBUG (64bit) Host: bc6b57b25f0a
+2022-07-05T15:17:13.1732256Z TRACE:: Python for .NET Assembly: Python.Runtime, Version=2.0.16.0, Culture=neutral, PublicKeyToken=5000fea6cba702dd
+2022-07-05T15:17:13.1757954Z TRACE:: Engine.Main(): Started 3:17 PM
+2022-07-05T15:17:13.1776979Z TRACE:: Config.Get(): Configuration key not found. Key: lean-manager-type - Using default value: LocalLeanManager
+2022-07-05T15:17:13.1891668Z TRACE:: JobQueue.NextJob(): Selected QuantConnect.Algorithm.CSharp.dll
+2022-07-05T15:17:13.1997823Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-capacity - Using default value: 120
+2022-07-05T15:17:13.1998393Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-time-interval-minutes - Using default value: 1440
+2022-07-05T15:17:13.1998683Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-refill-amount - Using default value: 18
+2022-07-05T15:17:13.1999744Z TRACE:: Config.GetValue(): storage-limit-mb - Using default value: 5
+2022-07-05T15:17:13.2000049Z TRACE:: Config.GetValue(): storage-file-count - Using default value: 100
+2022-07-05T15:17:13.2000376Z TRACE:: Config.GetValue(): storage-permissions - Using default value: 3
+2022-07-05T15:17:13.2000621Z TRACE:: Config.Get(): Configuration key not found. Key: algorithm-id - Using default value: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:13.2016020Z TRACE:: Config.GetValue(): job-project-id - Using default value: 0
+2022-07-05T15:17:13.2023355Z TRACE:: Config.Get(): Configuration key not found. Key: data-permission-manager - Using default value: DataPermissionManager
+2022-07-05T15:17:13.2080510Z TRACE:: Config.Get(): Configuration key not found. Key: object-store-root - Using default value: ./storage
+2022-07-05T15:17:13.2099313Z TRACE:: AlgorithmManager.CreateTokenBucket(): Initializing LeakyBucket: Capacity: 120 RefillAmount: 18 TimeInterval: 1440
+2022-07-05T15:17:13.2113530Z TRACE:: Config.GetValue(): algorithm-manager-time-loop-maximum - Using default value: 20
+2022-07-05T15:17:13.2172330Z TRACE:: TextSubscriptionDataSourceReader.SetCacheSize(): Setting cache size to 71582788 items
+2022-07-05T15:17:13.4998014Z TRACE:: Config.GetValue(): algorithm-creation-timeout - Using default value: 90
+2022-07-05T15:17:13.5027032Z TRACE:: Loader.TryCreateILAlgorithm(): Loading only the algorithm assembly
+2022-07-05T15:17:13.5198690Z TRACE:: Config.GetValue(): api-data-update-period - Using default value: 1
+2022-07-05T15:17:13.5857135Z TRACE:: Loader.TryCreateILAlgorithm(): Loaded BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:13.5978197Z TRACE:: LocalObjectStore.Initialize(): Storage Root: /Lean/Launcher/bin/Debug/storage/BasicTemplateFrameworkAlgorithm. StorageFileCount 100. StorageLimitMB 5
+2022-07-05T15:17:13.6102183Z TRACE:: BacktestingSetupHandler.Setup(): Setting up job: UID: 0, PID: 0, Version: 2.5.0.0, Source: WebIDE
+2022-07-05T15:17:13.6131723Z TRACE:: Config.Get(): Configuration key not found. Key: security-data-feeds - Using default value: 
+2022-07-05T15:17:13.7193285Z TRACE:: BaseSetupHandler.SetupCurrencyConversions():
+Symbol      Quantity    Conversion = Value in USD
+USD: $      100000.00 @       1.00 = $100000.0
+-------------------------------------------------
+CashBook Total Value:                $100000.0
+
+2022-07-05T15:17:13.7220053Z TRACE:: SetUp Backtesting: User: 0 ProjectId: 0 AlgoId: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:13.7226425Z TRACE:: Dates: Start: 10/07/2013 End: 10/11/2013 Cash: ¤100,000.00 MaximumRuntime: 100.00:00:00 MaxOrders: 2147483647
+2022-07-05T15:17:13.7245245Z TRACE:: BacktestingResultHandler(): Sample Period Set: 04.00
+2022-07-05T15:17:13.7270752Z TRACE:: Config.GetValue(): forward-console-messages - Using default value: True
+2022-07-05T15:17:13.7287332Z TRACE:: JOB HANDLERS: 
+2022-07-05T15:17:13.7288457Z TRACE::          DataFeed:     QuantConnect.Lean.Engine.DataFeeds.FileSystemDataFeed
+2022-07-05T15:17:13.7289016Z TRACE::          Setup:        QuantConnect.Lean.Engine.Setup.BacktestingSetupHandler
+2022-07-05T15:17:13.7289489Z TRACE::          RealTime:     QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler
+2022-07-05T15:17:13.7290064Z TRACE::          Results:      QuantConnect.Lean.Engine.Results.BacktestingResultHandler
+2022-07-05T15:17:13.7290482Z TRACE::          Transactions: QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler
+2022-07-05T15:17:13.7290909Z TRACE::          Alpha:        QuantConnect.Lean.Engine.Alphas.DefaultAlphaHandler
+2022-07-05T15:17:13.7291353Z TRACE::          ObjectStore:  QuantConnect.Lean.Engine.Storage.LocalObjectStore
+2022-07-05T15:17:13.7292146Z TRACE::          History Provider:     QuantConnect.Lean.Engine.HistoricalData.HistoryProviderManager
+2022-07-05T15:17:13.7563647Z TRACE:: Event Name "Daily Sampling", scheduled to run.
+2022-07-05T15:17:13.7570812Z TRACE:: AlgorithmManager.Run(): Begin DataStream - Start: 10/7/2013 12:00:00 AM Stop: 10/11/2013 11:59:59 PM Time: 10/7/2013 12:00:00 AM Warmup: False
+2022-07-05T15:17:13.7899913Z TRACE:: Debug: Launching analysis for BasicTemplateFrameworkAlgorithm with LEAN Engine v2.5.0.0
+2022-07-05T15:17:13.8039913Z TRACE:: Config.GetValue(): data-feed-max-work-weight - Using default value: 400
+2022-07-05T15:17:13.8042764Z TRACE:: Config.GetValue(): data-feed-workers-count - Using default value: 4
+2022-07-05T15:17:13.8044033Z TRACE:: WeightedWorkScheduler(): will use 4 workers and MaxWorkWeight is 400
+2022-07-05T15:17:13.8271920Z TRACE:: Config.GetValue(): show-missing-data-logs - Using default value: False
+2022-07-05T15:17:13.8916211Z TRACE:: UniverseSelection.AddPendingInternalDataFeeds(): Adding internal benchmark data feed SPY,#0,SPY,Hour,TradeBar,Trade,Adjusted,OpenInterest,Internal
+2022-07-05T15:17:14.2116472Z TRACE:: Debug: Purchased Stock: SPY
+2022-07-05T15:17:14.3245746Z TRACE:: Synchronizer.GetEnumerator(): Exited thread.
+2022-07-05T15:17:14.3249143Z TRACE:: AlgorithmManager.Run(): Firing On End Of Algorithm...
+2022-07-05T15:17:14.3253376Z TRACE:: Engine.Run(): Exiting Algorithm Manager
+2022-07-05T15:17:14.3283955Z TRACE:: FileSystemDataFeed.Exit(): Start. Setting cancellation token...
+2022-07-05T15:17:14.3297417Z TRACE:: FileSystemDataFeed.Exit(): Exit Finished.
+2022-07-05T15:17:14.3299386Z TRACE:: DefaultAlphaHandler.Exit(): Exiting...
+2022-07-05T15:17:14.3568107Z TRACE:: DefaultAlphaHandler.Exit(): Ended
+2022-07-05T15:17:14.3570809Z TRACE:: BacktestingResultHandler.Exit(): starting...
+2022-07-05T15:17:14.3572037Z TRACE:: BacktestingResultHandler.Exit(): Saving logs...
+2022-07-05T15:17:14.3580239Z TRACE:: Debug: Algorithm Id:(BasicTemplateFrameworkAlgorithm) completed in 0.60 seconds at 7k data points per second. Processing total of 3,943 data points.
+2022-07-05T15:17:14.3580773Z TRACE:: Debug: Your log was successfully created and can be retrieved from: /Results/BasicTemplateFrameworkAlgorithm-log.txt
+2022-07-05T15:17:14.3581173Z TRACE:: BacktestingResultHandler.Run(): Ending Thread...
+2022-07-05T15:17:14.3583650Z TRACE:: StopSafely(): waiting for 'Result Thread' thread to stop...
+2022-07-05T15:17:14.4785911Z TRACE:: 
+STATISTICS:: Total Trades 3
+STATISTICS:: Average Win 0%
+STATISTICS:: Average Loss -1.01%
+STATISTICS:: Compounding Annual Return 261.134%
+STATISTICS:: Drawdown 2.200%
+STATISTICS:: Expectancy -1
+STATISTICS:: Net Profit 1.655%
+STATISTICS:: Sharpe Ratio 8.505
+STATISTICS:: Probabilistic Sharpe Ratio 66.840%
+STATISTICS:: Loss Rate 100%
+STATISTICS:: Win Rate 0%
+STATISTICS:: Profit-Loss Ratio 0
+STATISTICS:: Alpha -0.091
+STATISTICS:: Beta 1.006
+STATISTICS:: Annual Standard Deviation 0.224
+STATISTICS:: Annual Variance 0.05
+STATISTICS:: Information Ratio -33.445
+STATISTICS:: Tracking Error 0.002
+STATISTICS:: Treynor Ratio 1.893
+STATISTICS:: Total Fees $10.32
+STATISTICS:: Estimated Strategy Capacity $27000000.00
+STATISTICS:: Lowest Capacity Asset SPY R735QTJ8XC9X
+STATISTICS:: Fitness Score 0.747
+STATISTICS:: Kelly Criterion Estimate 38.796
+STATISTICS:: Kelly Criterion Probability Value 0.228
+STATISTICS:: Sortino Ratio 79228162514264337593543950335
+STATISTICS:: Return Over Maximum Drawdown 85.095
+STATISTICS:: Portfolio Turnover 0.747
+STATISTICS:: Total Insights Generated 100
+STATISTICS:: Total Insights Closed 99
+STATISTICS:: Total Insights Analysis Completed 99
+STATISTICS:: Long Insight Count 100
+STATISTICS:: Short Insight Count 0
+STATISTICS:: Long/Short Ratio 100%
+STATISTICS:: Estimated Monthly Alpha Value $135639.1761
+STATISTICS:: Total Accumulated Estimated Alpha Value $21852.9784
+STATISTICS:: Mean Population Estimated Insight Value $220.7372
+STATISTICS:: Mean Population Direction 53.5354%
+STATISTICS:: Mean Population Magnitude 53.5354%
+STATISTICS:: Rolling Averaged Population Direction 58.2788%
+STATISTICS:: Rolling Averaged Population Magnitude 58.2788%
+STATISTICS:: OrderListHash ad2216297c759d8e5aef48ff065f8919
+2022-07-05T15:17:14.4786433Z TRACE:: BacktestingResultHandler.SendAnalysisResult(): Processed final packet
+2022-07-05T15:17:14.4790319Z TRACE:: Engine.Run(): Disconnecting from brokerage...
+2022-07-05T15:17:14.4791373Z TRACE:: Engine.Run(): Disposing of setup handler...
+2022-07-05T15:17:14.4792028Z TRACE:: Engine.Main(): Analysis Completed and Results Posted.
+2022-07-05T15:17:14.4799032Z TRACE:: Config.GetValue(): close-automatically - Using default value: False
+2022-07-05T15:17:14.4801517Z TRACE:: Engine.Main(): Packet removed from queue: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:14.4802827Z TRACE:: LeanEngineSystemHandlers.Dispose(): start...
+2022-07-05T15:17:14.4804097Z TRACE:: LeanEngineSystemHandlers.Dispose(): Disposed of system handlers.
+2022-07-05T15:17:14.4805180Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): start...
+2022-07-05T15:17:14.4811824Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): Disposed of algorithm handlers.
+2022-07-05T15:17:22.9095436Z TRACE:: Config.Get(): Configuration key not found. Key: data-directory - Using default value: ../../../Data/
+2022-07-05T15:17:22.9161940Z TRACE:: Config.Get(): Configuration key not found. Key: version-id - Using default value: 
+2022-07-05T15:17:22.9164543Z TRACE:: Config.Get(): Configuration key not found. Key: cache-location - Using default value: /Data
+2022-07-05T15:17:22.9167326Z TRACE:: Engine.Main(): LEAN ALGORITHMIC TRADING ENGINE v2.5.0.0 Mode: DEBUG (64bit) Host: 65de1616696f
+2022-07-05T15:17:22.9174340Z TRACE:: Python for .NET Assembly: Python.Runtime, Version=2.0.16.0, Culture=neutral, PublicKeyToken=5000fea6cba702dd
+2022-07-05T15:17:22.9211223Z TRACE:: Engine.Main(): Started 3:17 PM
+2022-07-05T15:17:22.9237310Z TRACE:: Config.Get(): Configuration key not found. Key: lean-manager-type - Using default value: LocalLeanManager
+2022-07-05T15:17:22.9397635Z TRACE:: JobQueue.NextJob(): Selected QuantConnect.Algorithm.CSharp.dll
+2022-07-05T15:17:22.9543927Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-capacity - Using default value: 120
+2022-07-05T15:17:22.9544596Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-time-interval-minutes - Using default value: 1440
+2022-07-05T15:17:22.9544993Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-refill-amount - Using default value: 18
+2022-07-05T15:17:22.9546056Z TRACE:: Config.GetValue(): storage-limit-mb - Using default value: 5
+2022-07-05T15:17:22.9546331Z TRACE:: Config.GetValue(): storage-file-count - Using default value: 100
+2022-07-05T15:17:22.9546811Z TRACE:: Config.GetValue(): storage-permissions - Using default value: 3
+2022-07-05T15:17:22.9547046Z TRACE:: Config.Get(): Configuration key not found. Key: algorithm-id - Using default value: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:22.9567558Z TRACE:: Config.GetValue(): job-project-id - Using default value: 0
+2022-07-05T15:17:22.9577297Z TRACE:: Config.Get(): Configuration key not found. Key: data-permission-manager - Using default value: DataPermissionManager
+2022-07-05T15:17:22.9675672Z TRACE:: Config.Get(): Configuration key not found. Key: object-store-root - Using default value: ./storage
+2022-07-05T15:17:22.9703294Z TRACE:: AlgorithmManager.CreateTokenBucket(): Initializing LeakyBucket: Capacity: 120 RefillAmount: 18 TimeInterval: 1440
+2022-07-05T15:17:22.9722118Z TRACE:: Config.GetValue(): algorithm-manager-time-loop-maximum - Using default value: 20
+2022-07-05T15:17:22.9809500Z TRACE:: TextSubscriptionDataSourceReader.SetCacheSize(): Setting cache size to 71582788 items
+2022-07-05T15:17:23.2358958Z TRACE:: Config.GetValue(): algorithm-creation-timeout - Using default value: 90
+2022-07-05T15:17:23.2384520Z TRACE:: Loader.TryCreateILAlgorithm(): Loading only the algorithm assembly
+2022-07-05T15:17:23.2551486Z TRACE:: Config.GetValue(): api-data-update-period - Using default value: 1
+2022-07-05T15:17:23.3212939Z TRACE:: Loader.TryCreateILAlgorithm(): Loaded BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:23.3330838Z TRACE:: LocalObjectStore.Initialize(): Storage Root: /Lean/Launcher/bin/Debug/storage/BasicTemplateFrameworkAlgorithm. StorageFileCount 100. StorageLimitMB 5
+2022-07-05T15:17:23.3456925Z TRACE:: BacktestingSetupHandler.Setup(): Setting up job: UID: 0, PID: 0, Version: 2.5.0.0, Source: WebIDE
+2022-07-05T15:17:23.3486753Z TRACE:: Config.Get(): Configuration key not found. Key: security-data-feeds - Using default value: 
+2022-07-05T15:17:23.4564093Z TRACE:: BaseSetupHandler.SetupCurrencyConversions():
+Symbol      Quantity    Conversion = Value in USD
+USD: $      100000.00 @       1.00 = $100000.0
+-------------------------------------------------
+CashBook Total Value:                $100000.0
+
+2022-07-05T15:17:23.4590965Z TRACE:: SetUp Backtesting: User: 0 ProjectId: 0 AlgoId: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:23.4597096Z TRACE:: Dates: Start: 10/07/2013 End: 10/11/2013 Cash: ¤100,000.00 MaximumRuntime: 100.00:00:00 MaxOrders: 2147483647
+2022-07-05T15:17:23.4617385Z TRACE:: BacktestingResultHandler(): Sample Period Set: 04.00
+2022-07-05T15:17:23.4646356Z TRACE:: Config.GetValue(): forward-console-messages - Using default value: True
+2022-07-05T15:17:23.4664817Z TRACE:: JOB HANDLERS: 
+2022-07-05T15:17:23.4665624Z TRACE::          DataFeed:     QuantConnect.Lean.Engine.DataFeeds.FileSystemDataFeed
+2022-07-05T15:17:23.4666156Z TRACE::          Setup:        QuantConnect.Lean.Engine.Setup.BacktestingSetupHandler
+2022-07-05T15:17:23.4666706Z TRACE::          RealTime:     QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler
+2022-07-05T15:17:23.4667211Z TRACE::          Results:      QuantConnect.Lean.Engine.Results.BacktestingResultHandler
+2022-07-05T15:17:23.4667704Z TRACE::          Transactions: QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler
+2022-07-05T15:17:23.4668184Z TRACE::          Alpha:        QuantConnect.Lean.Engine.Alphas.DefaultAlphaHandler
+2022-07-05T15:17:23.4668752Z TRACE::          ObjectStore:  QuantConnect.Lean.Engine.Storage.LocalObjectStore
+2022-07-05T15:17:23.4669353Z TRACE::          History Provider:     QuantConnect.Lean.Engine.HistoricalData.HistoryProviderManager
+2022-07-05T15:17:23.4958183Z TRACE:: Event Name "Daily Sampling", scheduled to run.
+2022-07-05T15:17:23.4965309Z TRACE:: AlgorithmManager.Run(): Begin DataStream - Start: 10/7/2013 12:00:00 AM Stop: 10/11/2013 11:59:59 PM Time: 10/7/2013 12:00:00 AM Warmup: False
+2022-07-05T15:17:23.5045015Z TRACE:: Debug: Launching analysis for BasicTemplateFrameworkAlgorithm with LEAN Engine v2.5.0.0
+2022-07-05T15:17:23.5423698Z TRACE:: Config.GetValue(): data-feed-max-work-weight - Using default value: 400
+2022-07-05T15:17:23.5426008Z TRACE:: Config.GetValue(): data-feed-workers-count - Using default value: 4
+2022-07-05T15:17:23.5426848Z TRACE:: WeightedWorkScheduler(): will use 4 workers and MaxWorkWeight is 400
+2022-07-05T15:17:23.5688218Z TRACE:: Config.GetValue(): show-missing-data-logs - Using default value: False
+2022-07-05T15:17:23.6425136Z TRACE:: UniverseSelection.AddPendingInternalDataFeeds(): Adding internal benchmark data feed SPY,#0,SPY,Hour,TradeBar,Trade,Adjusted,OpenInterest,Internal
+2022-07-05T15:17:23.9554876Z TRACE:: Debug: Purchased Stock: SPY
+2022-07-05T15:17:24.0827759Z TRACE:: Synchronizer.GetEnumerator(): Exited thread.
+2022-07-05T15:17:24.0830556Z TRACE:: AlgorithmManager.Run(): Firing On End Of Algorithm...
+2022-07-05T15:17:24.0834068Z TRACE:: Engine.Run(): Exiting Algorithm Manager
+2022-07-05T15:17:24.0865047Z TRACE:: FileSystemDataFeed.Exit(): Start. Setting cancellation token...
+2022-07-05T15:17:24.0878895Z TRACE:: FileSystemDataFeed.Exit(): Exit Finished.
+2022-07-05T15:17:24.0880608Z TRACE:: DefaultAlphaHandler.Exit(): Exiting...
+2022-07-05T15:17:24.1057741Z TRACE:: Debug: Algorithm Id:(BasicTemplateFrameworkAlgorithm) completed in 0.62 seconds at 6k data points per second. Processing total of 3,943 data points.
+2022-07-05T15:17:24.1159990Z TRACE:: DefaultAlphaHandler.Exit(): Ended
+2022-07-05T15:17:24.1162962Z TRACE:: BacktestingResultHandler.Exit(): starting...
+2022-07-05T15:17:24.1164428Z TRACE:: BacktestingResultHandler.Exit(): Saving logs...
+2022-07-05T15:17:24.1172775Z TRACE:: Debug: Your log was successfully created and can be retrieved from: /Results/BasicTemplateFrameworkAlgorithm-log.txt
+2022-07-05T15:17:24.1174671Z TRACE:: BacktestingResultHandler.Run(): Ending Thread...
+2022-07-05T15:17:24.1176034Z TRACE:: StopSafely(): waiting for 'Result Thread' thread to stop...
+2022-07-05T15:17:24.2530869Z TRACE:: 
+STATISTICS:: Total Trades 3
+STATISTICS:: Average Win 0%
+STATISTICS:: Average Loss -1.01%
+STATISTICS:: Compounding Annual Return 261.134%
+STATISTICS:: Drawdown 2.200%
+STATISTICS:: Expectancy -1
+STATISTICS:: Net Profit 1.655%
+STATISTICS:: Sharpe Ratio 8.505
+STATISTICS:: Probabilistic Sharpe Ratio 66.840%
+STATISTICS:: Loss Rate 100%
+STATISTICS:: Win Rate 0%
+STATISTICS:: Profit-Loss Ratio 0
+STATISTICS:: Alpha -0.091
+STATISTICS:: Beta 1.006
+STATISTICS:: Annual Standard Deviation 0.224
+STATISTICS:: Annual Variance 0.05
+STATISTICS:: Information Ratio -33.445
+STATISTICS:: Tracking Error 0.002
+STATISTICS:: Treynor Ratio 1.893
+STATISTICS:: Total Fees $10.32
+STATISTICS:: Estimated Strategy Capacity $27000000.00
+STATISTICS:: Lowest Capacity Asset SPY R735QTJ8XC9X
+STATISTICS:: Fitness Score 0.747
+STATISTICS:: Kelly Criterion Estimate 38.796
+STATISTICS:: Kelly Criterion Probability Value 0.228
+STATISTICS:: Sortino Ratio 79228162514264337593543950335
+STATISTICS:: Return Over Maximum Drawdown 85.095
+STATISTICS:: Portfolio Turnover 0.747
+STATISTICS:: Total Insights Generated 100
+STATISTICS:: Total Insights Closed 99
+STATISTICS:: Total Insights Analysis Completed 99
+STATISTICS:: Long Insight Count 100
+STATISTICS:: Short Insight Count 0
+STATISTICS:: Long/Short Ratio 100%
+STATISTICS:: Estimated Monthly Alpha Value $135639.1761
+STATISTICS:: Total Accumulated Estimated Alpha Value $21852.9784
+STATISTICS:: Mean Population Estimated Insight Value $220.7372
+STATISTICS:: Mean Population Direction 53.5354%
+STATISTICS:: Mean Population Magnitude 53.5354%
+STATISTICS:: Rolling Averaged Population Direction 58.2788%
+STATISTICS:: Rolling Averaged Population Magnitude 58.2788%
+STATISTICS:: OrderListHash ad2216297c759d8e5aef48ff065f8919
+2022-07-05T15:17:24.2531502Z TRACE:: BacktestingResultHandler.SendAnalysisResult(): Processed final packet
+2022-07-05T15:17:24.2535240Z TRACE:: Engine.Run(): Disconnecting from brokerage...
+2022-07-05T15:17:24.2536232Z TRACE:: Engine.Run(): Disposing of setup handler...
+2022-07-05T15:17:24.2536877Z TRACE:: Engine.Main(): Analysis Completed and Results Posted.
+2022-07-05T15:17:24.2542681Z TRACE:: Config.GetValue(): close-automatically - Using default value: False
+2022-07-05T15:17:24.2545321Z TRACE:: Engine.Main(): Packet removed from queue: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:24.2546716Z TRACE:: LeanEngineSystemHandlers.Dispose(): start...
+2022-07-05T15:17:24.2548079Z TRACE:: LeanEngineSystemHandlers.Dispose(): Disposed of system handlers.
+2022-07-05T15:17:24.2549232Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): start...
+2022-07-05T15:17:24.2555248Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): Disposed of algorithm handlers.
+2022-07-05T15:17:42.0023633Z TRACE:: Config.Get(): Configuration key not found. Key: data-directory - Using default value: ../../../Data/
+2022-07-05T15:17:42.0031685Z TRACE:: Config.Get(): Configuration key not found. Key: version-id - Using default value: 
+2022-07-05T15:17:42.0033470Z TRACE:: Config.Get(): Configuration key not found. Key: cache-location - Using default value: /Data
+2022-07-05T15:17:42.0036236Z TRACE:: Engine.Main(): LEAN ALGORITHMIC TRADING ENGINE v2.5.0.0 Mode: DEBUG (64bit) Host: 69f19e36ba01
+2022-07-05T15:17:42.0069051Z TRACE:: Engine.Main(): Started 3:17 PM
+2022-07-05T15:17:42.0089634Z TRACE:: Config.Get(): Configuration key not found. Key: lean-manager-type - Using default value: LocalLeanManager
+2022-07-05T15:17:42.0223668Z TRACE:: JobQueue.NextJob(): Selected QuantConnect.Algorithm.CSharp.dll
+2022-07-05T15:17:42.0356510Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-capacity - Using default value: 120
+2022-07-05T15:17:42.0358902Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-time-interval-minutes - Using default value: 1440
+2022-07-05T15:17:42.0359616Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-refill-amount - Using default value: 18
+2022-07-05T15:17:42.0361111Z TRACE:: Config.GetValue(): storage-limit-mb - Using default value: 5
+2022-07-05T15:17:42.0361768Z TRACE:: Config.GetValue(): storage-file-count - Using default value: 100
+2022-07-05T15:17:42.0362369Z TRACE:: Config.GetValue(): storage-permissions - Using default value: 3
+2022-07-05T15:17:42.0362922Z TRACE:: Config.Get(): Configuration key not found. Key: algorithm-id - Using default value: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:42.0380034Z TRACE:: Config.GetValue(): job-project-id - Using default value: 0
+2022-07-05T15:17:42.0388468Z TRACE:: Config.Get(): Configuration key not found. Key: data-permission-manager - Using default value: DataPermissionManager
+2022-07-05T15:17:42.0447772Z TRACE:: Config.Get(): Configuration key not found. Key: object-store-root - Using default value: ./storage
+2022-07-05T15:17:42.0470307Z TRACE:: AlgorithmManager.CreateTokenBucket(): Initializing LeakyBucket: Capacity: 120 RefillAmount: 18 TimeInterval: 1440
+2022-07-05T15:17:42.0486381Z TRACE:: Config.GetValue(): algorithm-manager-time-loop-maximum - Using default value: 20
+2022-07-05T15:17:42.0555505Z TRACE:: TextSubscriptionDataSourceReader.SetCacheSize(): Setting cache size to 71582788 items
+2022-07-05T15:17:42.3572271Z TRACE:: Config.GetValue(): algorithm-creation-timeout - Using default value: 90
+2022-07-05T15:17:42.3600108Z TRACE:: Loader.TryCreateILAlgorithm(): Loading only the algorithm assembly
+2022-07-05T15:17:42.3781669Z TRACE:: Config.GetValue(): api-data-update-period - Using default value: 1
+2022-07-05T15:17:42.4623717Z TRACE:: Loader.TryCreateILAlgorithm(): Loaded BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:42.4750815Z TRACE:: LocalObjectStore.Initialize(): Storage Root: /Lean/Launcher/bin/Debug/storage/BasicTemplateFrameworkAlgorithm. StorageFileCount 100. StorageLimitMB 5
+2022-07-05T15:17:42.4913123Z TRACE:: BacktestingSetupHandler.Setup(): Setting up job: UID: 0, PID: 0, Version: 2.5.0.0, Source: WebIDE
+2022-07-05T15:17:42.4955139Z TRACE:: Config.Get(): Configuration key not found. Key: security-data-feeds - Using default value: 
+2022-07-05T15:17:42.6365238Z TRACE:: BaseSetupHandler.SetupCurrencyConversions():
+Symbol      Quantity    Conversion = Value in USD
+USD: $      100000.00 @       1.00 = $100000.0
+-------------------------------------------------
+CashBook Total Value:                $100000.0
+
+2022-07-05T15:17:42.6387352Z TRACE:: SetUp Backtesting: User: 0 ProjectId: 0 AlgoId: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:42.6392112Z TRACE:: Dates: Start: 10/07/2013 End: 10/11/2013 Cash: ¤100,000.00 MaximumRuntime: 100.00:00:00 MaxOrders: 2147483647
+2022-07-05T15:17:42.6410182Z TRACE:: BacktestingResultHandler(): Sample Period Set: 04.00
+2022-07-05T15:17:42.6432864Z TRACE:: Config.GetValue(): forward-console-messages - Using default value: True
+2022-07-05T15:17:42.6463060Z TRACE:: JOB HANDLERS: 
+2022-07-05T15:17:42.6463935Z TRACE::          DataFeed:     QuantConnect.Lean.Engine.DataFeeds.FileSystemDataFeed
+2022-07-05T15:17:42.6464478Z TRACE::          Setup:        QuantConnect.Lean.Engine.Setup.BacktestingSetupHandler
+2022-07-05T15:17:42.6465021Z TRACE::          RealTime:     QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler
+2022-07-05T15:17:42.6465848Z TRACE::          Results:      QuantConnect.Lean.Engine.Results.BacktestingResultHandler
+2022-07-05T15:17:42.6466118Z TRACE::          Transactions: QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler
+2022-07-05T15:17:42.6467115Z TRACE::          Alpha:        QuantConnect.Lean.Engine.Alphas.DefaultAlphaHandler
+2022-07-05T15:17:42.6468312Z TRACE::          ObjectStore:  QuantConnect.Lean.Engine.Storage.LocalObjectStore
+2022-07-05T15:17:42.6468748Z TRACE::          History Provider:     QuantConnect.Lean.Engine.HistoricalData.HistoryProviderManager
+2022-07-05T15:17:42.6796182Z TRACE:: Event Name "Daily Sampling", scheduled to run.
+2022-07-05T15:17:42.6805554Z TRACE:: AlgorithmManager.Run(): Begin DataStream - Start: 10/7/2013 12:00:00 AM Stop: 10/11/2013 11:59:59 PM Time: 10/7/2013 12:00:00 AM Warmup: False
+2022-07-05T15:17:42.7049124Z TRACE:: Debug: Launching analysis for BasicTemplateFrameworkAlgorithm with LEAN Engine v2.5.0.0
+2022-07-05T15:17:42.7438382Z TRACE:: Config.GetValue(): data-feed-max-work-weight - Using default value: 400
+2022-07-05T15:17:42.7440839Z TRACE:: Config.GetValue(): data-feed-workers-count - Using default value: 4
+2022-07-05T15:17:42.7441593Z TRACE:: WeightedWorkScheduler(): will use 4 workers and MaxWorkWeight is 400
+2022-07-05T15:17:42.7700251Z TRACE:: Config.GetValue(): show-missing-data-logs - Using default value: False
+2022-07-05T15:17:42.8387256Z TRACE:: UniverseSelection.AddPendingInternalDataFeeds(): Adding internal benchmark data feed SPY,#0,SPY,Hour,TradeBar,Trade,Adjusted,OpenInterest,Internal
+2022-07-05T15:17:43.2059689Z TRACE:: Debug: Purchased Stock: SPY
+2022-07-05T15:17:43.3378137Z TRACE:: Synchronizer.GetEnumerator(): Exited thread.
+2022-07-05T15:17:43.3382261Z TRACE:: AlgorithmManager.Run(): Firing On End Of Algorithm...
+2022-07-05T15:17:43.3386553Z TRACE:: Engine.Run(): Exiting Algorithm Manager
+2022-07-05T15:17:43.3420262Z TRACE:: FileSystemDataFeed.Exit(): Start. Setting cancellation token...
+2022-07-05T15:17:43.3436237Z TRACE:: FileSystemDataFeed.Exit(): Exit Finished.
+2022-07-05T15:17:43.3438859Z TRACE:: DefaultAlphaHandler.Exit(): Exiting...
+2022-07-05T15:17:43.3583327Z TRACE:: Debug: Algorithm Id:(BasicTemplateFrameworkAlgorithm) completed in 0.69 seconds at 6k data points per second. Processing total of 3,943 data points.
+2022-07-05T15:17:43.3733889Z TRACE:: DefaultAlphaHandler.Exit(): Ended
+2022-07-05T15:17:43.3737987Z TRACE:: BacktestingResultHandler.Exit(): starting...
+2022-07-05T15:17:43.3739644Z TRACE:: BacktestingResultHandler.Exit(): Saving logs...
+2022-07-05T15:17:43.3748475Z TRACE:: Debug: Your log was successfully created and can be retrieved from: /Results/BasicTemplateFrameworkAlgorithm-log.txt
+2022-07-05T15:17:43.3748702Z TRACE:: BacktestingResultHandler.Run(): Ending Thread...
+2022-07-05T15:17:43.3751809Z TRACE:: StopSafely(): waiting for 'Result Thread' thread to stop...
+2022-07-05T15:17:43.5058753Z TRACE:: 
+STATISTICS:: Total Trades 3
+STATISTICS:: Average Win 0%
+STATISTICS:: Average Loss -1.01%
+STATISTICS:: Compounding Annual Return 261.134%
+STATISTICS:: Drawdown 2.200%
+STATISTICS:: Expectancy -1
+STATISTICS:: Net Profit 1.655%
+STATISTICS:: Sharpe Ratio 8.505
+STATISTICS:: Probabilistic Sharpe Ratio 66.840%
+STATISTICS:: Loss Rate 100%
+STATISTICS:: Win Rate 0%
+STATISTICS:: Profit-Loss Ratio 0
+STATISTICS:: Alpha -0.091
+STATISTICS:: Beta 1.006
+STATISTICS:: Annual Standard Deviation 0.224
+STATISTICS:: Annual Variance 0.05
+STATISTICS:: Information Ratio -33.445
+STATISTICS:: Tracking Error 0.002
+STATISTICS:: Treynor Ratio 1.893
+STATISTICS:: Total Fees $10.32
+STATISTICS:: Estimated Strategy Capacity $27000000.00
+STATISTICS:: Lowest Capacity Asset SPY R735QTJ8XC9X
+STATISTICS:: Fitness Score 0.747
+STATISTICS:: Kelly Criterion Estimate 38.796
+STATISTICS:: Kelly Criterion Probability Value 0.228
+STATISTICS:: Sortino Ratio 79228162514264337593543950335
+STATISTICS:: Return Over Maximum Drawdown 85.095
+STATISTICS:: Portfolio Turnover 0.747
+STATISTICS:: Total Insights Generated 100
+STATISTICS:: Total Insights Closed 99
+STATISTICS:: Total Insights Analysis Completed 99
+STATISTICS:: Long Insight Count 100
+STATISTICS:: Short Insight Count 0
+STATISTICS:: Long/Short Ratio 100%
+STATISTICS:: Estimated Monthly Alpha Value $135639.1761
+STATISTICS:: Total Accumulated Estimated Alpha Value $21852.9784
+STATISTICS:: Mean Population Estimated Insight Value $220.7372
+STATISTICS:: Mean Population Direction 53.5354%
+STATISTICS:: Mean Population Magnitude 53.5354%
+STATISTICS:: Rolling Averaged Population Direction 58.2788%
+STATISTICS:: Rolling Averaged Population Magnitude 58.2788%
+STATISTICS:: OrderListHash ad2216297c759d8e5aef48ff065f8919
+2022-07-05T15:17:43.5059349Z TRACE:: BacktestingResultHandler.SendAnalysisResult(): Processed final packet
+2022-07-05T15:17:43.5063963Z TRACE:: Engine.Run(): Disconnecting from brokerage...
+2022-07-05T15:17:43.5065166Z TRACE:: Engine.Run(): Disposing of setup handler...
+2022-07-05T15:17:43.5065963Z TRACE:: Engine.Main(): Analysis Completed and Results Posted.
+2022-07-05T15:17:43.5074092Z TRACE:: Config.GetValue(): close-automatically - Using default value: False
+2022-07-05T15:17:43.5076656Z TRACE:: Engine.Main(): Packet removed from queue: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:17:43.5078149Z TRACE:: LeanEngineSystemHandlers.Dispose(): start...
+2022-07-05T15:17:43.5079653Z TRACE:: LeanEngineSystemHandlers.Dispose(): Disposed of system handlers.
+2022-07-05T15:17:43.5080860Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): start...
+2022-07-05T15:17:43.5087618Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): Disposed of algorithm handlers.
+2022-07-05T15:19:17.0835999Z TRACE:: Config.Get(): Configuration key not found. Key: data-directory - Using default value: ../../../Data/
+2022-07-05T15:19:17.0841614Z TRACE:: Config.Get(): Configuration key not found. Key: version-id - Using default value: 
+2022-07-05T15:19:17.0842441Z TRACE:: Config.Get(): Configuration key not found. Key: cache-location - Using default value: /Data
+2022-07-05T15:19:17.0844210Z TRACE:: Engine.Main(): LEAN ALGORITHMIC TRADING ENGINE v2.5.0.0 Mode: DEBUG (64bit) Host: 7ab517a1e7ed
+2022-07-05T15:19:17.0872469Z TRACE:: Engine.Main(): Started 3:19 PM
+2022-07-05T15:19:17.0891045Z TRACE:: Config.Get(): Configuration key not found. Key: lean-manager-type - Using default value: LocalLeanManager
+2022-07-05T15:19:17.1011242Z TRACE:: JobQueue.NextJob(): Selected QuantConnect.Algorithm.CSharp.dll
+2022-07-05T15:19:17.1137873Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-capacity - Using default value: 120
+2022-07-05T15:19:17.1138630Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-time-interval-minutes - Using default value: 1440
+2022-07-05T15:19:17.1138901Z TRACE:: Config.GetValue(): scheduled-event-leaky-bucket-refill-amount - Using default value: 18
+2022-07-05T15:19:17.1139713Z TRACE:: Config.GetValue(): storage-limit-mb - Using default value: 5
+2022-07-05T15:19:17.1139952Z TRACE:: Config.GetValue(): storage-file-count - Using default value: 100
+2022-07-05T15:19:17.1140146Z TRACE:: Config.GetValue(): storage-permissions - Using default value: 3
+2022-07-05T15:19:17.1140318Z TRACE:: Config.Get(): Configuration key not found. Key: algorithm-id - Using default value: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:19:17.1155907Z TRACE:: Config.GetValue(): job-project-id - Using default value: 0
+2022-07-05T15:19:17.1162768Z TRACE:: Config.Get(): Configuration key not found. Key: data-permission-manager - Using default value: DataPermissionManager
+2022-07-05T15:19:17.1214707Z TRACE:: Config.Get(): Configuration key not found. Key: object-store-root - Using default value: ./storage
+2022-07-05T15:19:17.1234147Z TRACE:: AlgorithmManager.CreateTokenBucket(): Initializing LeakyBucket: Capacity: 120 RefillAmount: 18 TimeInterval: 1440
+2022-07-05T15:19:17.1247596Z TRACE:: Config.GetValue(): algorithm-manager-time-loop-maximum - Using default value: 20
+2022-07-05T15:19:17.1308303Z TRACE:: TextSubscriptionDataSourceReader.SetCacheSize(): Setting cache size to 71582788 items
+2022-07-05T15:19:17.3942406Z TRACE:: Config.GetValue(): algorithm-creation-timeout - Using default value: 90
+2022-07-05T15:19:17.3967684Z TRACE:: Loader.TryCreateILAlgorithm(): Loading only the algorithm assembly
+2022-07-05T15:19:17.4129463Z TRACE:: Config.GetValue(): api-data-update-period - Using default value: 1
+2022-07-05T15:19:17.4768251Z TRACE:: Loader.TryCreateILAlgorithm(): Loaded BasicTemplateFrameworkAlgorithm
+2022-07-05T15:19:17.4923803Z TRACE:: LocalObjectStore.Initialize(): Storage Root: /Lean/Launcher/bin/Debug/storage/BasicTemplateFrameworkAlgorithm. StorageFileCount 100. StorageLimitMB 5
+2022-07-05T15:19:17.5087958Z TRACE:: BacktestingSetupHandler.Setup(): Setting up job: UID: 0, PID: 0, Version: 2.5.0.0, Source: WebIDE
+2022-07-05T15:19:17.5120237Z TRACE:: Config.Get(): Configuration key not found. Key: security-data-feeds - Using default value: 
+2022-07-05T15:19:17.6162119Z TRACE:: BaseSetupHandler.SetupCurrencyConversions():
+Symbol      Quantity    Conversion = Value in USD
+USD: $      100000.00 @       1.00 = $100000.0
+-------------------------------------------------
+CashBook Total Value:                $100000.0
+
+2022-07-05T15:19:17.6188661Z TRACE:: SetUp Backtesting: User: 0 ProjectId: 0 AlgoId: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:19:17.6194836Z TRACE:: Dates: Start: 10/07/2013 End: 10/11/2013 Cash: ¤100,000.00 MaximumRuntime: 100.00:00:00 MaxOrders: 2147483647
+2022-07-05T15:19:17.6212853Z TRACE:: BacktestingResultHandler(): Sample Period Set: 04.00
+2022-07-05T15:19:17.6241412Z TRACE:: Config.GetValue(): forward-console-messages - Using default value: True
+2022-07-05T15:19:17.6259495Z TRACE:: JOB HANDLERS: 
+2022-07-05T15:19:17.6260460Z TRACE::          DataFeed:     QuantConnect.Lean.Engine.DataFeeds.FileSystemDataFeed
+2022-07-05T15:19:17.6262028Z TRACE::          Setup:        QuantConnect.Lean.Engine.Setup.BacktestingSetupHandler
+2022-07-05T15:19:17.6262771Z TRACE::          RealTime:     QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler
+2022-07-05T15:19:17.6263495Z TRACE::          Results:      QuantConnect.Lean.Engine.Results.BacktestingResultHandler
+2022-07-05T15:19:17.6263998Z TRACE::          Transactions: QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler
+2022-07-05T15:19:17.6264977Z TRACE::          Alpha:        QuantConnect.Lean.Engine.Alphas.DefaultAlphaHandler
+2022-07-05T15:19:17.6265741Z TRACE::          ObjectStore:  QuantConnect.Lean.Engine.Storage.LocalObjectStore
+2022-07-05T15:19:17.6266613Z TRACE::          History Provider:     QuantConnect.Lean.Engine.HistoricalData.HistoryProviderManager
+2022-07-05T15:19:17.6541924Z TRACE:: Debug: Launching analysis for BasicTemplateFrameworkAlgorithm with LEAN Engine v2.5.0.0
+2022-07-05T15:19:17.6606468Z TRACE:: Event Name "Daily Sampling", scheduled to run.
+2022-07-05T15:19:17.6612064Z TRACE:: AlgorithmManager.Run(): Begin DataStream - Start: 10/7/2013 12:00:00 AM Stop: 10/11/2013 11:59:59 PM Time: 10/7/2013 12:00:00 AM Warmup: False
+2022-07-05T15:19:17.7067779Z TRACE:: Config.GetValue(): data-feed-max-work-weight - Using default value: 400
+2022-07-05T15:19:17.7069144Z TRACE:: Config.GetValue(): data-feed-workers-count - Using default value: 4
+2022-07-05T15:19:17.7069330Z TRACE:: WeightedWorkScheduler(): will use 4 workers and MaxWorkWeight is 400
+2022-07-05T15:19:17.7293109Z TRACE:: Config.GetValue(): show-missing-data-logs - Using default value: False
+2022-07-05T15:19:17.7869068Z TRACE:: UniverseSelection.AddPendingInternalDataFeeds(): Adding internal benchmark data feed SPY,#0,SPY,Hour,TradeBar,Trade,Adjusted,OpenInterest,Internal
+2022-07-05T15:19:18.1051187Z TRACE:: Debug: Purchased Stock: SPY
+2022-07-05T15:19:18.2568102Z TRACE:: Synchronizer.GetEnumerator(): Exited thread.
+2022-07-05T15:19:18.2571484Z TRACE:: AlgorithmManager.Run(): Firing On End Of Algorithm...
+2022-07-05T15:19:18.2575231Z TRACE:: Engine.Run(): Exiting Algorithm Manager
+2022-07-05T15:19:18.2614662Z TRACE:: FileSystemDataFeed.Exit(): Start. Setting cancellation token...
+2022-07-05T15:19:18.2631231Z TRACE:: FileSystemDataFeed.Exit(): Exit Finished.
+2022-07-05T15:19:18.2633097Z TRACE:: DefaultAlphaHandler.Exit(): Exiting...
+2022-07-05T15:19:18.2971435Z TRACE:: DefaultAlphaHandler.Exit(): Ended
+2022-07-05T15:19:18.2974334Z TRACE:: BacktestingResultHandler.Exit(): starting...
+2022-07-05T15:19:18.2975797Z TRACE:: BacktestingResultHandler.Exit(): Saving logs...
+2022-07-05T15:19:18.2983703Z TRACE:: Debug: Algorithm Id:(BasicTemplateFrameworkAlgorithm) completed in 0.63 seconds at 6k data points per second. Processing total of 3,943 data points.
+2022-07-05T15:19:18.2984261Z TRACE:: Debug: Your log was successfully created and can be retrieved from: /Results/BasicTemplateFrameworkAlgorithm-log.txt
+2022-07-05T15:19:18.2984819Z TRACE:: BacktestingResultHandler.Run(): Ending Thread...
+2022-07-05T15:19:18.2986692Z TRACE:: StopSafely(): waiting for 'Result Thread' thread to stop...
+2022-07-05T15:19:18.4155005Z TRACE:: 
+STATISTICS:: Total Trades 3
+STATISTICS:: Average Win 0%
+STATISTICS:: Average Loss -1.01%
+STATISTICS:: Compounding Annual Return 261.134%
+STATISTICS:: Drawdown 2.200%
+STATISTICS:: Expectancy -1
+STATISTICS:: Net Profit 1.655%
+STATISTICS:: Sharpe Ratio 8.505
+STATISTICS:: Probabilistic Sharpe Ratio 66.840%
+STATISTICS:: Loss Rate 100%
+STATISTICS:: Win Rate 0%
+STATISTICS:: Profit-Loss Ratio 0
+STATISTICS:: Alpha -0.091
+STATISTICS:: Beta 1.006
+STATISTICS:: Annual Standard Deviation 0.224
+STATISTICS:: Annual Variance 0.05
+STATISTICS:: Information Ratio -33.445
+STATISTICS:: Tracking Error 0.002
+STATISTICS:: Treynor Ratio 1.893
+STATISTICS:: Total Fees $10.32
+STATISTICS:: Estimated Strategy Capacity $27000000.00
+STATISTICS:: Lowest Capacity Asset SPY R735QTJ8XC9X
+STATISTICS:: Fitness Score 0.747
+STATISTICS:: Kelly Criterion Estimate 38.796
+STATISTICS:: Kelly Criterion Probability Value 0.228
+STATISTICS:: Sortino Ratio 79228162514264337593543950335
+STATISTICS:: Return Over Maximum Drawdown 85.095
+STATISTICS:: Portfolio Turnover 0.747
+STATISTICS:: Total Insights Generated 100
+STATISTICS:: Total Insights Closed 99
+STATISTICS:: Total Insights Analysis Completed 99
+STATISTICS:: Long Insight Count 100
+STATISTICS:: Short Insight Count 0
+STATISTICS:: Long/Short Ratio 100%
+STATISTICS:: Estimated Monthly Alpha Value $135639.1761
+STATISTICS:: Total Accumulated Estimated Alpha Value $21852.9784
+STATISTICS:: Mean Population Estimated Insight Value $220.7372
+STATISTICS:: Mean Population Direction 53.5354%
+STATISTICS:: Mean Population Magnitude 53.5354%
+STATISTICS:: Rolling Averaged Population Direction 58.2788%
+STATISTICS:: Rolling Averaged Population Magnitude 58.2788%
+STATISTICS:: OrderListHash ad2216297c759d8e5aef48ff065f8919
+2022-07-05T15:19:18.4155653Z TRACE:: BacktestingResultHandler.SendAnalysisResult(): Processed final packet
+2022-07-05T15:19:18.4159411Z TRACE:: Engine.Run(): Disconnecting from brokerage...
+2022-07-05T15:19:18.4160403Z TRACE:: Engine.Run(): Disposing of setup handler...
+2022-07-05T15:19:18.4160975Z TRACE:: Engine.Main(): Analysis Completed and Results Posted.
+2022-07-05T15:19:18.4167317Z TRACE:: Config.GetValue(): close-automatically - Using default value: False
+2022-07-05T15:19:18.4169929Z TRACE:: Engine.Main(): Packet removed from queue: BasicTemplateFrameworkAlgorithm
+2022-07-05T15:19:18.4171153Z TRACE:: LeanEngineSystemHandlers.Dispose(): start...
+2022-07-05T15:19:18.4172441Z TRACE:: LeanEngineSystemHandlers.Dispose(): Disposed of system handlers.
+2022-07-05T15:19:18.4173863Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): start...
+2022-07-05T15:19:18.4180052Z TRACE:: LeanEngineAlgorithmHandlers.Dispose(): Disposed of algorithm handlers.

@@ -1,0 +1,7 @@
+
+LEAN_RESULTS_FOLDER = 'leanQC/results'
+
+lean_dict = {
+    'LEAN_RESULTS_FOLDER': LEAN_RESULTS_FOLDER,
+    'REASONABLE_FITNESS_SECS': 60,
+    }
