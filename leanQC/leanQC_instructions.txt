@@ -55,12 +55,20 @@
 
   ###
   #
-  # @@@ the above builds correctly (and quickly) ___needs a test run!
+  # @@@ the above builds correctly (and quickly)
   #
   ###
 
+5. Test run of the leanQC/run_docker.sh
+  >> update absolute path of where the Lean installation - in the .sh file
+  >> run in it's location:
+    bash run_docker.sh
+  >>
+    # should run the lean:latest
+    # and
+    # output results into the leanQC/results folder
 
-
+6. Test 
 
 NOTES:
 A. See /previous folder, hsth's 2020 workings to get the LeanFoundation
