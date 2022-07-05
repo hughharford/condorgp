@@ -89,6 +89,7 @@ if [ ! -d "$results_dir" ]; then
     exit 1
 fi
 
+# sudo
 sudo docker run --rm --mount type=bind,source=$launcher_dir,target=/root/Lean \
  --mount type=bind,source=$data_dir,target=/Data \
  --mount type=bind,source=$results_dir,target=/Results \
