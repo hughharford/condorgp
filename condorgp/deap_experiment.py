@@ -73,7 +73,7 @@ def evalIntoAndFromLean(individual):
     func = toolbox.compile(expr=individual)
 
     # output a compile function to a file, so it can be run via Lean
-    
+
 
     # Evaluate the sum of squared difference between the expression
     # and the real function values : x**4 + x**3 + x**2 + x
@@ -98,7 +98,8 @@ def main():
     stats.register("min", numpy.min)
     stats.register("max", numpy.max)
 
-    algorithms.eaSimple(pop, toolbox, 0.5, 0.1, 40, stats, halloffame=hof)
+    # set to 1 generation for testing
+    algorithms.eaSimple(pop, toolbox, 0.5, 0.1, 1, stats, halloffame=hof)
 
     return pop, stats, hof
 

@@ -4,7 +4,7 @@ from datetime import datetime
 
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condorgp.utils import run_bash
+from condorgp.utils import run_lean_bash_script
 from condorgp.params import lean_dict
 
 EXTRA_TYPES = {
@@ -18,7 +18,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/02_lean.feature')
+scenarios('../features/02_lean_results.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             Lean runs and outputs results
@@ -42,13 +42,13 @@ def run_docker_shell_file_exists():
 
 @when('run_docker.sh is run')
 def call_run_docker():
-    run_bash()
+    run_lean_bash_script()
     pass
 
 @then('leanQC/results files are updated')
 def results_files_are_updated():
     results_path = lean_dict['LEAN_RESULTS_FOLDER']
-    results_files = [results_path + '/' + x for x in os.listdir(results_path)]
+    results_files = [results_path + x for x in os.listdir(results_path)]
     assert len(results_files) > 1
     assert check_recent_mod(results_files)
 
