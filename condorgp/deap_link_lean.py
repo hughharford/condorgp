@@ -66,9 +66,22 @@ def evalSymbReg(individual):
     # Evaluate the sum of squared difference between the expression
     # and the real function values : x**4 + x**3 + x**2 + x
     diff = numpy.sum((func(samples) - values)**2)
+    return diff
+
+def evalIntoAndFromLean(individual):
+    # Transform the tree expression in a callable function
+    func = toolbox.compile(expr=individual)
+
+    # output a compile function to a file, so it can be run via Lean
+
+
+    # Evaluate the sum of squared difference between the expression
+    # and the real function values : x**4 + x**3 + x**2 + x
+    diff = numpy.sum((func(samples) - values)**2)
     return diff,
 
-toolbox.register("evaluate", evalSymbReg)
+# toolbox.register("evaluate", evalSymbReg)
+toolbox.register("evaluate", evalIntoAndFromLean)
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register("mate", gp.cxOnePoint)
 toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
@@ -85,7 +98,8 @@ def main():
     stats.register("min", numpy.min)
     stats.register("max", numpy.max)
 
-    algorithms.eaSimple(pop, toolbox, 0.5, 0.1, 40, stats, halloffame=hof)
+    # set to 1 generation for testing
+    algorithms.eaSimple(pop, toolbox, 0.5, 0.1, 1, stats, halloffame=hof)
 
     return pop, stats, hof
 
