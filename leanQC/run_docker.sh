@@ -32,11 +32,11 @@ actual_lean_dir=/home/hsth/code/QuantConnect/Lean
 default_image=lean:latest
 default_launcher_dir=$actual_lean_dir/Launcher/bin/Debug
 raw_launcher_dir=$actual_lean_dir/Launcher
-
 default_data_dir=$actual_lean_dir/Data
 default_results_dir=$current_dir/results
-# DIDN'T WORK: default_config_file=/home/hsth/code/hughharford/condorgp/leanQC/config/config.json
-default_config_file=$raw_launcher_dir/config.json
+# default_config_file=$default_launcher_dir/config.json
+default_config_file=/Launcher/bin/Debug/config_test_condor.json
+
 
 # if [ -f "$1" ]; then
 #     IFS="="
@@ -69,10 +69,10 @@ if [ -z "$config_file" ]; then
     config_file=$default_config_file
 fi
 
-if [ ! -f "$config_file" ]; then
-    echo "Lean config file $config_file does not exist"
-    exit 1
-fi
+# if [ ! -f "$config_file" ]; then
+#     echo "Lean config file $config_file does not exist"
+#     exit 1
+# fi
 
 if [ -z "$data_dir" ]; then
     data_dir=$default_data_dir
