@@ -1,11 +1,10 @@
 import os
-import sys
-from datetime import datetime
 
 from pytest_bdd import scenarios, given, when, then, parsers
 
 from condorgp.utils import run_lean_bash_script
 from condorgp.utils import copy_config_json_to_lean_launcher_dir
+from condorgp.utils import copy_ind_to_lean_algos_dir
 from condorgp.params import lean_dict, test_dict
 
 EXTRA_TYPES = {
@@ -39,20 +38,35 @@ Scenario Outline: Lean tests each individual
 def lean_container_tested_already():
     pass # assumes local lean:latest image extant
 
-@given(parsers.cfparse('an evolved "{individual:String}" is specified', extra_types=EXTRA_TYPES), target_fixture='individual')
-@given('an evolved "<individual>" is specified')
-def copy_config_to_raw_launcher_dir(individual):
+@given(parsers.cfparse('an evolved "{input_ind:String}" is specified',
+                       extra_types=EXTRA_TYPES), target_fixture='input_ind')
+@given('an evolved "<input_ind>" is specified', target_fixture='input_ind')
+def copy_config_n_algo_across(input_ind):
+    # copy config.json across before container launch
+    config_to_copy = test_dict['CONDOR_TEST_CONFIG_FILE']
+    config_path = test_dict['CONDOR_CONFIG_PATH']
+    copy_config_json_to_lean_launcher_dir(config_path, config_to_copy)
+
+    # copy algo.py across before container launch
     test_ind_path = test_dict['CONDOR_TEST_ALGOS_FOLDER']
-    copy_config_json_to_lean_launcher_dir(test_ind_path + individual + '.py')
+    copy_ind_to_lean_algos_dir(test_ind_path, input_ind + '.py')
+
 
 @when('Lean runs')
 def run_lean():
     run_lean_bash_script()
     pass
 
-@given(parsers.cfparse('the "{individual:String}" is used', extra_types=EXTRA_TYPES), target_fixture='individual')
-@then('the "<individual>" is used')
-def results_files_are_updated(individual):
+@then(parsers.cfparse('the "{output_ind:String}" is found',
+                       extra_types=EXTRA_TYPES), target_fixture='output_ind')
+@then('the "<output_ind>" is found', target_fixture='output_ind')
+def results_files_are_updated(output_ind):
     results_path = lean_dict['LEAN_RESULTS_FOLDER']
-    results_files = [results_path + '/' + x for x in os.listdir(results_path)]
-    assert results_files[0] == individual
+    output_ind = results_path + output_ind
+    # 'leanQC/results/BasicTemplateFrameworkAlgorithm'
+    results_files = [results_path + x for x in os.listdir(results_path)]
+    found_algo_name = False
+    for folder_or_file in results_files:
+        if folder_or_file == output_ind:
+            found_algo_name = True
+    assert found_algo_name

@@ -1,6 +1,6 @@
 [
   {
-    "id": "9ba16e9afcba4994a1372b0ceb6052e8",
+    "id": "95af80325a3a4b91847aae846123bd0c",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381152660.0,
@@ -22,7 +22,7 @@
     "estimated-value": "3347.4576"
   },
   {
-    "id": "b5a17541461e4718881c335d2f396b99",
+    "id": "5b544d1178534242bea968346cf9374a",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381153860.0,
@@ -44,7 +44,7 @@
     "estimated-value": "879.7176"
   },
   {
-    "id": "c4d59b4937704c37a4158ab39f6250be",
+    "id": "fa91e34dcacf47b7b3df1e3001507ed4",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381155060.0,
@@ -66,7 +66,7 @@
     "estimated-value": "961.1903"
   },
   {
-    "id": "ca458552daa3430398856cee5aa255eb",
+    "id": "ca33221262664a4d9c793dfbb5aed385",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381156260.0,
@@ -88,7 +88,7 @@
     "estimated-value": "-295.9228"
   },
   {
-    "id": "3154d856f685446c804c62494a9304b2",
+    "id": "d2eea446283d4bae8d832806faa92a36",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381157460.0,
@@ -110,7 +110,7 @@
     "estimated-value": "-26.9941"
   },
   {
-    "id": "ffeced1f650546beb70beaf8d7ad92ce",
+    "id": "fb9bd16fd4344d2b9c0dc2656fc96d0b",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381158660.0,
@@ -132,7 +132,7 @@
     "estimated-value": "-160.8146"
   },
   {
-    "id": "7d77cf9237024867afc68750c0d91430",
+    "id": "6ccd19027d434189be5f5a3918ee884d",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381159860.0,
@@ -154,7 +154,7 @@
     "estimated-value": "942.6398"
   },
   {
-    "id": "3f347928d6204b76a0ae4e20b1385b55",
+    "id": "c4be663d83574c3db393b8d42a062dfe",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381161060.0,
@@ -176,7 +176,7 @@
     "estimated-value": "-264.9329"
   },
   {
-    "id": "b3dd9f731e5049e590d99cf848bc0357",
+    "id": "dff13e77030a49be8209c7f95e438223",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381162260.0,
@@ -198,7 +198,7 @@
     "estimated-value": "-341.5694"
   },
   {
-    "id": "5379360f353d4caca576d9e782af0758",
+    "id": "52769bbdd8e94b08828d6d8f490f6801",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381163460.0,
@@ -220,7 +220,7 @@
     "estimated-value": "686.3530"
   },
   {
-    "id": "7748b10af84e479f9c8d6969e6e5c155",
+    "id": "15abd106151d4aada4c222d7c344a803",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381164660.0,
@@ -242,7 +242,7 @@
     "estimated-value": "-19.7360"
   },
   {
-    "id": "cfc9ef4ce2574d20b9079e1c5a40d35b",
+    "id": "da76513110e54a2695670916199bf4e9",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381165860.0,
@@ -264,7 +264,7 @@
     "estimated-value": "401.1186"
   },
   {
-    "id": "870133c45d7b4d46b37a7b93517935d5",
+    "id": "bc39e7329d64401b9a9b0814bb2b494e",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381167060.0,
@@ -286,7 +286,7 @@
     "estimated-value": "-227.4118"
   },
   {
-    "id": "4fcd9ec16fbe4cb780a089320fff7b1c",
+    "id": "d53de29d2f25475e81f60acbaa258fb6",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381168260.0,
@@ -308,7 +308,7 @@
     "estimated-value": "324.5089"
   },
   {
-    "id": "8eeabfb47bac47e58f4f7d225ddf2f13",
+    "id": "e5231cf45c8540c9b955f5cacd62527b",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381169460.0,
@@ -330,7 +330,7 @@
     "estimated-value": "46.0772"
   },
   {
-    "id": "2093b5b88bcb421cbf9e3cca72a9f1fe",
+    "id": "154e559f3b774bf6a841297378f022ea",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381170660.0,
@@ -352,7 +352,7 @@
     "estimated-value": "9.1517"
   },
   {
-    "id": "3dfa27f1e5134bb4b9c4db3ead5c6962",
+    "id": "051b221315cb4766a15170a8438c817b",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381171860.0,
@@ -374,7 +374,7 @@
     "estimated-value": "14.4566"
   },
   {
-    "id": "28d95159ec4c498aa82200d26dc3be57",
+    "id": "21b70d22c38742739d456f2b17eb639f",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381173060.0,
@@ -396,7 +396,7 @@
     "estimated-value": "-346.5366"
   },
   {
-    "id": "111ecf5d216742f5af1bc7134bc16762",
+    "id": "0f099ec7c87549acb322347061a3273d",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381174260.0,
@@ -418,7 +418,7 @@
     "estimated-value": "-641.9225"
   },
   {
-    "id": "eb252968b83440d6b443df6bf811df8f",
+    "id": "c701f6c660ba47adbbb1b5433d2e6fd9",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381175460.0,
@@ -440,7 +440,7 @@
     "estimated-value": "-3484.3253"
   },
   {
-    "id": "dd28a6ec344b47c9a111afd8e43d8694",
+    "id": "b5e628b73e7b44dfbaba308efe1b18a9",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381239060.0,
@@ -462,7 +462,7 @@
     "estimated-value": "-1156.6653"
   },
   {
-    "id": "048c29b2118546b5833affebb9692fa0",
+    "id": "3ad982df0cec494cadef91da047d52de",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381240260.0,
@@ -484,7 +484,7 @@
     "estimated-value": "-429.2000"
   },
   {
-    "id": "f0e5988511d340fd8c131c2d3ab06ce4",
+    "id": "dfa6aba0c7bc4bf89a7f3b08a95b0f5a",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381241460.0,
@@ -506,7 +506,7 @@
     "estimated-value": "706.0974"
   },
   {
-    "id": "f8fe7408b3214e1fb28c0969e1cedf0a",
+    "id": "4ea38cacad7745268554ac7b12a6eb5f",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381242660.0,
@@ -528,7 +528,7 @@
     "estimated-value": "-1037.6731"
   },
   {
-    "id": "e97e3d72782a4c29a21837c2535f9443",
+    "id": "cb1b858fc6f04eb28b47da4a1ca295f7",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381243860.0,
@@ -550,7 +550,7 @@
     "estimated-value": "414.7098"
   },
   {
-    "id": "a4a7a162c00a4c81b04dce8e0f1d1f25",
+    "id": "259118b6722d479db8bc4de35513b542",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381245060.0,
@@ -572,7 +572,7 @@
     "estimated-value": "-814.3831"
   },
   {
-    "id": "a9fa1ea9f58d43dba793a08738522f8f",
+    "id": "65f27377b3ef4229a45b4131e88c1886",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381246260.0,
@@ -594,7 +594,7 @@
     "estimated-value": "-1754.4508"
   },
   {
-    "id": "39b4f1a59a644699b655f850ac5e6697",
+    "id": "24dab6f9dae246b2a565a2690ca43e61",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381247460.0,
@@ -616,7 +616,7 @@
     "estimated-value": "68.0980"
   },
   {
-    "id": "f3cd8580b3d54dd48c85b161adbaade9",
+    "id": "dea562e9f74a4d869e0d5133856b767a",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381248660.0,
@@ -638,7 +638,7 @@
     "estimated-value": "-492.7396"
   },
   {
-    "id": "c92199b53f704e409757394884fb955f",
+    "id": "236f251a33804e6e9e25a4ffdc884a16",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381249860.0,
@@ -660,7 +660,7 @@
     "estimated-value": "599.7823"
   },
   {
-    "id": "f355cf3c4d424f0a9a0a2a1fdd200388",
+    "id": "d9a9d3f7943b4241884454acbd63542b",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381251060.0,
@@ -682,7 +682,7 @@
     "estimated-value": "-219.4065"
   },
   {
-    "id": "0b64c7e8034f4ab88856886cc980a8bc",
+    "id": "6524f9ca8d6245df95c746eb0f711b29",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381252260.0,
@@ -704,7 +704,7 @@
     "estimated-value": "301.6979"
   },
   {
-    "id": "981c433a840b4d67b2259a38241e584a",
+    "id": "c508ee03fc314e53af2f6e5bd68825e4",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381253460.0,
@@ -726,7 +726,7 @@
     "estimated-value": "-929.3465"
   },
   {
-    "id": "654c77d52e144887b73e2c04df4cf329",
+    "id": "13480440b0ff4364aa731c0f0f6992cb",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381254660.0,
@@ -748,7 +748,7 @@
     "estimated-value": "-266.2130"
   },
   {
-    "id": "e2b897f1bfba42fca2418ad85e220c85",
+    "id": "10effefa2f1c4d6fad5e030446bdca86",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381255860.0,
@@ -770,7 +770,7 @@
     "estimated-value": "384.4381"
   },
   {
-    "id": "1f4e61a562a6481e89af961b7232eb33",
+    "id": "5320fdb9df3547848184962c2dff7c53",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381257060.0,
@@ -792,7 +792,7 @@
     "estimated-value": "-1221.4953"
   },
   {
-    "id": "8ac90b72f1d44058a75c30b2614eeab5",
+    "id": "bc39cfb09cf84fc8a8e6da4d06eae3fe",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381258260.0,
@@ -814,7 +814,7 @@
     "estimated-value": "163.3262"
   },
   {
-    "id": "f2a4e1c1f438461b8e152f210c8eaeee",
+    "id": "f4a577764eaa4599aaae1ea0fe8efe13",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381259460.0,
@@ -836,7 +836,7 @@
     "estimated-value": "1167.5122"
   },
   {
-    "id": "953f5355b7c940349d8f2217336b4960",
+    "id": "09d98162bdf742af9bb4b04b3e3033bd",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381260660.0,
@@ -858,7 +858,7 @@
     "estimated-value": "-1040.2807"
   },
   {
-    "id": "0df4300148194f16939d4504843243e9",
+    "id": "d4e11fa59ef14a32ab36148a2d97cb6f",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381261860.0,
@@ -880,7 +880,7 @@
     "estimated-value": "-1905.5471"
   },
   {
-    "id": "25633851481e4d43abf99d5544f4d082",
+    "id": "4bbf8e8534754ea0a0fd4b9befba8b76",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381325460.0,
@@ -902,7 +902,7 @@
     "estimated-value": "-4499.4654"
   },
   {
-    "id": "a78604832fe342bdb8b1eb524745ba53",
+    "id": "a9f0d4f1eed9458bb38309645ad02941",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381326660.0,
@@ -924,7 +924,7 @@
     "estimated-value": "1375.2197"
   },
   {
-    "id": "5d30961d1b71425d910cb0786f2e9f37",
+    "id": "ee96ef4c33f846b2999f862ce1a7c34c",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381327860.0,
@@ -946,7 +946,7 @@
     "estimated-value": "914.7639"
   },
   {
-    "id": "e2a043224d5c4227a0a9c020cb1f0d60",
+    "id": "2b8a5468d820463ea160817fa51a890e",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381329060.0,
@@ -968,7 +968,7 @@
     "estimated-value": "-566.9127"
   },
   {
-    "id": "78aa7395b5604261954d2fe055557f9c",
+    "id": "093176b4fdbd455495ed231bee56df7e",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381330260.0,
@@ -990,7 +990,7 @@
     "estimated-value": "-1125.2555"
   },
   {
-    "id": "978bf961ed064c7db999f7d5ae527b61",
+    "id": "907c3201ed894ad494ccd124eefc5920",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381331460.0,
@@ -1012,7 +1012,7 @@
     "estimated-value": "-293.3059"
   },
   {
-    "id": "d2bd99d116a34149af1dfbdd7392e103",
+    "id": "46b3b41ac04744f0a476a3abd9926ccf",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381332660.0,
@@ -1034,7 +1034,7 @@
     "estimated-value": "1690.5067"
   },
   {
-    "id": "be5844481fc143419feb91aed96ad793",
+    "id": "c85a086eeea64b96ba3bc5ca71cd8346",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381333860.0,
@@ -1056,7 +1056,7 @@
     "estimated-value": "0.0000"
   },
   {
-    "id": "e48b02ccb1be4eaf86354f5814ce6aa1",
+    "id": "884379355147483386bbc7c1efb39520",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381335060.0,
@@ -1078,7 +1078,7 @@
     "estimated-value": "19.1999"
   },
   {
-    "id": "23a8985c68f148a0aa359019ef271d84",
+    "id": "73dedddee9e44890bb432c67680beeb7",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381336260.0,
@@ -1100,7 +1100,7 @@
     "estimated-value": "-476.0415"
   },
   {
-    "id": "b5e1cf8db2454f778817006a4a936122",
+    "id": "f984755d54244da68c9b2139e6f45a3f",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381337460.0,
@@ -1122,7 +1122,7 @@
     "estimated-value": "612.9213"
   },
   {
-    "id": "2bfda641ce464f74a766ba77196dd9cc",
+    "id": "3359de1c4e0a4fc6bea1f6fe80af4075",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381338660.0,
@@ -1144,7 +1144,7 @@
     "estimated-value": "2281.4325"
   },
   {
-    "id": "236753425c1747478c7b5dcc3d05f61e",
+    "id": "33dfc1cde8b04946ae1ea13588b3c253",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381339860.0,
@@ -1166,7 +1166,7 @@
     "estimated-value": "-468.1400"
   },
   {
-    "id": "d1fbb5d864f34523b3c3719acc292ea8",
+    "id": "b78939941614494683799915008368c8",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381341060.0,
@@ -1188,7 +1188,7 @@
     "estimated-value": "158.3498"
   },
   {
-    "id": "d58ba57a061e4475b8c917bf0e5f551b",
+    "id": "31f7337a766a43a08bb746e42954b8ff",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381342260.0,
@@ -1210,7 +1210,7 @@
     "estimated-value": "412.2370"
   },
   {
-    "id": "f1bab764940b4185b417b6d32c59a197",
+    "id": "4920051f071b44f4b31b74eaee994c75",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381343460.0,
@@ -1232,7 +1232,7 @@
     "estimated-value": "-713.3712"
   },
   {
-    "id": "629ea3308585468c8890b6123342a45d",
+    "id": "f02975cccf3e4b569f622168d2ad7feb",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381344660.0,
@@ -1254,7 +1254,7 @@
     "estimated-value": "156.3601"
   },
   {
-    "id": "da3eaafc97ff41aab75b478195bc4ae2",
+    "id": "39034a01fee4451894d23258f5da4bf0",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381345860.0,
@@ -1276,7 +1276,7 @@
     "estimated-value": "-72.9546"
   },
   {
-    "id": "872a6d6f0c4e4c74ac01df514a6e993d",
+    "id": "3ded7e1b6d9542969de1c60ad9eee317",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381347060.0,
@@ -1298,7 +1298,7 @@
     "estimated-value": "-1169.2746"
   },
   {
-    "id": "bb86865ef3834157af09cef4440c6966",
+    "id": "ab050796193d454cb01a8cd09de703a4",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381348260.0,
@@ -1320,7 +1320,7 @@
     "estimated-value": "20722.8948"
   },
   {
-    "id": "1398adaf471747d8a0c3d8d53baa74cd",
+    "id": "abba71f23f0d44f08f7b9a2c2fa5a373",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381411860.0,
@@ -1342,7 +1342,7 @@
     "estimated-value": "3151.3855"
   },
   {
-    "id": "73bd203801eb4e70bd09983f0068a397",
+    "id": "5cb78194b70a4e1b80d0559b652488dd",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381413060.0,
@@ -1364,7 +1364,7 @@
     "estimated-value": "1012.8880"
   },
   {
-    "id": "e45d81b345ea42c5a32ac4c82836d80e",
+    "id": "8c813646bf4c4dcda525fbb4a5bc130d",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381414260.0,
@@ -1386,7 +1386,7 @@
     "estimated-value": "150.8622"
   },
   {
-    "id": "47b2a1969b384174a66416ed9cafac66",
+    "id": "e145202354194c8ebb78950226e0a4ae",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381415460.0,
@@ -1408,7 +1408,7 @@
     "estimated-value": "537.7987"
   },
   {
-    "id": "3b455e73a55449dc85c5be8162003333",
+    "id": "d9f744c011e5463f836fc10b2d5b0457",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381416660.0,
@@ -1430,7 +1430,7 @@
     "estimated-value": "-1791.9058"
   },
   {
-    "id": "e266c85b442a4bc9a4055539c806d075",
+    "id": "e41371a515d64fbdacd488025d123b22",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381417860.0,
@@ -1452,7 +1452,7 @@
     "estimated-value": "486.3308"
   },
   {
-    "id": "0a3da808032b4f68b4c94e2d0749467a",
+    "id": "72d2c46b9a854ad2821095104de43555",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381419060.0,
@@ -1474,7 +1474,7 @@
     "estimated-value": "2077.3475"
   },
   {
-    "id": "1e3136a8ea8741aeadee8b7544e5d5ac",
+    "id": "88cd9d0d8b704e65a1cb64eb0e8c291a",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381420260.0,
@@ -1496,7 +1496,7 @@
     "estimated-value": "319.2776"
   },
   {
-    "id": "aca9d2b43a7f47c9a0effbd67155ae4e",
+    "id": "fb1d377ea1bd46438dedd53824ffa16c",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381421460.0,
@@ -1518,7 +1518,7 @@
     "estimated-value": "61.2868"
   },
   {
-    "id": "2fd70606e2a44d0b90c5f2bc7cdc8e69",
+    "id": "e20f3806b44a4968992b1c954c67f31d",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381422660.0,
@@ -1540,7 +1540,7 @@
     "estimated-value": "9.2883"
   },
   {
-    "id": "8d0f2ac294604c59908b4f8c714cb392",
+    "id": "fe13d701396a46369c23ee9fbe4ec705",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381423860.0,
@@ -1562,7 +1562,7 @@
     "estimated-value": "-107.2420"
   },
   {
-    "id": "fcc0dae2bf1a4661a172f9692fb39374",
+    "id": "d0363c18b66f49f98a0afe5735bf3307",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381425060.0,
@@ -1584,7 +1584,7 @@
     "estimated-value": "-119.0565"
   },
   {
-    "id": "3226322f09574dd2abb853b55751b9b5",
+    "id": "75f75bb738834d90b9109d8d4bd18d25",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381426260.0,
@@ -1606,7 +1606,7 @@
     "estimated-value": "102.5247"
   },
   {
-    "id": "56d713bb0e8e4e9fb2f0dbc88c40fb10",
+    "id": "3b5b059477954012ac2febc6272e4fa7",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381427460.0,
@@ -1628,7 +1628,7 @@
     "estimated-value": "-1774.1714"
   },
   {
-    "id": "a597b49e2fa64de5b1d198ace7d7925b",
+    "id": "69bc2476058b43d7985b6375cbb7624c",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381428660.0,
@@ -1650,7 +1650,7 @@
     "estimated-value": "80.4243"
   },
   {
-    "id": "6dc3a1989e4441458a92f069545b5be5",
+    "id": "6f990bb9ad3d4471a64c5bf67ebe8266",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381429860.0,
@@ -1672,7 +1672,7 @@
     "estimated-value": "114.3782"
   },
   {
-    "id": "af763968311b45608c26ab198285713c",
+    "id": "582c6957c1fd44dfa76935a9fcef0c50",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381431060.0,
@@ -1694,7 +1694,7 @@
     "estimated-value": "694.3297"
   },
   {
-    "id": "a8d5135a6e9d4f33acc6489b61a3e9d0",
+    "id": "4f957a9f6e9546ddbcefbf71622c91b2",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381432260.0,
@@ -1716,7 +1716,7 @@
     "estimated-value": "516.6765"
   },
   {
-    "id": "d7c4c74395294ed08c4fecf3a140f6b8",
+    "id": "2530e03b0a61418298c387829e0b1beb",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381433460.0,
@@ -1738,7 +1738,7 @@
     "estimated-value": "-1483.5945"
   },
   {
-    "id": "bbbbd91693314455bd4ff7c476084dff",
+    "id": "c12cb62df3ed4eacbd0f344d728a7f6d",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381434660.0,
@@ -1760,7 +1760,7 @@
     "estimated-value": "886.7555"
   },
   {
-    "id": "ab21c2b1d7994945bbe5fbdf8862b136",
+    "id": "1cf90cbae2de4b60930a1c93f80c5844",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381498260.0,
@@ -1782,7 +1782,7 @@
     "estimated-value": "3002.1634"
   },
   {
-    "id": "6ad5953bb3634dd4b4130f010684b42a",
+    "id": "3754e96abd4e4c208cc13326ad1f20a7",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381499460.0,
@@ -1804,7 +1804,7 @@
     "estimated-value": "704.6569"
   },
   {
-    "id": "1eeddfd1d6dd4c138f6f50b845e09a81",
+    "id": "95abe82f434f47b1856f11d6c8185d0e",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381500660.0,
@@ -1826,7 +1826,7 @@
     "estimated-value": "-209.2195"
   },
   {
-    "id": "44fb6abfbfcc482fb59702cac807e14e",
+    "id": "f57e7a32658a4cef9e5533ccef0af1dc",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381501860.0,
@@ -1848,7 +1848,7 @@
     "estimated-value": "-510.7185"
   },
   {
-    "id": "970619894e2946dc9f2695b29dd2502d",
+    "id": "0e150c9b586e490ba4c12e390c2447cc",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381503060.0,
@@ -1870,7 +1870,7 @@
     "estimated-value": "500.6738"
   },
   {
-    "id": "ed60ac94479d43fa91a88c7e0123e558",
+    "id": "d5693f95b919455282349f65c236188b",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381504260.0,
@@ -1892,7 +1892,7 @@
     "estimated-value": "-19.6161"
   },
   {
-    "id": "464062fb333f41b5826c8e172902955c",
+    "id": "ec849bcc1f964f9d83c6a527f4bddde1",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381505460.0,
@@ -1914,7 +1914,7 @@
     "estimated-value": "703.8403"
   },
   {
-    "id": "fca897dd1d7847a88bc018b7b84a2d13",
+    "id": "140c41bb321f4c41b5058af7e949ad6d",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381506660.0,
@@ -1936,7 +1936,7 @@
     "estimated-value": "644.6642"
   },
   {
-    "id": "0badfcb084944ed29bb4ce181729590e",
+    "id": "96524814e6804e2c87dea8a483c49f06",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381507860.0,
@@ -1958,7 +1958,7 @@
     "estimated-value": "341.5600"
   },
   {
-    "id": "af6fde6539e9456b82d523fceb77be5e",
+    "id": "9e3cf94bf4c14d21b0cff3f84f3860df",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381509060.0,
@@ -1980,7 +1980,7 @@
     "estimated-value": "31.7977"
   },
   {
-    "id": "21beb2a28cf84d50abca5748c317ec56",
+    "id": "6b373a196639442ca287107116929a50",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381510260.0,
@@ -2002,7 +2002,7 @@
     "estimated-value": "191.0285"
   },
   {
-    "id": "7e55822e641a425c97cb0e6c0a6ce40e",
+    "id": "0c81d58056804396a6e7e3ce50f186d6",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381511460.0,
@@ -2024,7 +2024,7 @@
     "estimated-value": "-371.8002"
   },
   {
-    "id": "668d765bf61f4af0851ee36400c64542",
+    "id": "28d0ebfcdb6345b9bcff6905f4c9d7b0",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381512660.0,
@@ -2046,7 +2046,7 @@
     "estimated-value": "-64.1767"
   },
   {
-    "id": "fef33416398644de95bdf54eb5922522",
+    "id": "c76051501462492b8fe02edca59f1259",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381513860.0,
@@ -2068,7 +2068,7 @@
     "estimated-value": "218.1847"
   },
   {
-    "id": "54de4c349aa542389d45cec07111c90f",
+    "id": "9103a20a355846118503377cb54e0ae0",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381515060.0,
@@ -2090,7 +2090,7 @@
     "estimated-value": "-62.8895"
   },
   {
-    "id": "b11360ba1bf346469b1d51c8bc82c58d",
+    "id": "e436f2ef43c440e0a39c9f7c60b679d7",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381516260.0,
@@ -2112,7 +2112,7 @@
     "estimated-value": "-49.2569"
   },
   {
-    "id": "e354e4ab09af4f97927d3be4a3bb4c64",
+    "id": "6ac78450174d471480c4ee5e62dcb1a2",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381517460.0,
@@ -2134,7 +2134,7 @@
     "estimated-value": "-38.5502"
   },
   {
-    "id": "e9404167b8cd4bb5b079a0d65c449ff8",
+    "id": "e2fcbcc032c141ebafdd21fc77ba1eb2",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381518660.0,
@@ -2156,7 +2156,7 @@
     "estimated-value": "66.7976"
   },
   {
-    "id": "6d814f24bd87468f96d02584bdd4bdb0",
+    "id": "9026c13f26254ee6ba826098da095586",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381519860.0,
@@ -2178,7 +2178,7 @@
     "estimated-value": "-1451.6761"
   },
   {
-    "id": "74910c0b99fc4df9b251c597855d1712",
+    "id": "3c06dffb72404c66b48a65bbc686d236",
     "group-id": null,
     "source-model": "ConstantAlphaModel(Price,Up,00:20:00,0.025)",
     "generated-time": 1381521060.0,

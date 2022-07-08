@@ -1,3 +1,6 @@
+# IndBasicAlgo1
+# IndBasicAlgo2
+
 Feature: Lean tests each evolved individual
   As a fitness function,
   I want to Lean to run each fitness test,
@@ -5,11 +8,12 @@ Feature: Lean tests each evolved individual
 
   Scenario Outline: Lean tests each individual
     Given a Lean container ready to run
-    And an evolved "<individual>" is specified
+    And an evolved "<input_ind>" is specified
     When Lean runs
-    Then the "<individual>" is used
+    Then the "<output_ind>" is found
 
     Examples:
-      | individual          |
-      | IndBasicAlgo1       |
-      | IndBasicAlgo2       |
+      | input_ind                        |   output_ind                        |
+#      | BasicTemplateFrameworkAlgorithm  |   BasicTemplateFrameworkAlgorithm   |
+      | IndBasicAlgo1                    |   IndBasicAlgo1                     |
+#      | IndBasicAlgo2                    |   IndBasicAlgo2                     |
