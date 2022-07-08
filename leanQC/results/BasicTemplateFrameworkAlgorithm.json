@@ -380,152 +380,6 @@
     "MeanPopulationEstimatedInsightValue": "220.73715526465373737373737374"
   },
   "Charts": {
-    "Exposure": {
-      "Name": "Exposure",
-      "ChartType": 0,
-      "Series": {
-        "Equity - Long Ratio": {
-          "Name": "Equity - Long Ratio",
-          "Unit": "",
-          "Index": 0,
-          "Values": [
-            {
-              "x": 1381204800,
-              "y": 0.9961
-            },
-            {
-              "x": 1381291200,
-              "y": 0.9965
-            },
-            {
-              "x": 1381377600,
-              "y": 0.9965
-            },
-            {
-              "x": 1381464000,
-              "y": 0.9965
-            },
-            {
-              "x": 1381521600,
-              "y": 0.9966
-            }
-          ],
-          "SeriesType": 0,
-          "Color": "",
-          "ScatterMarkerSymbol": "none"
-        },
-        "Equity - Short Ratio": {
-          "Name": "Equity - Short Ratio",
-          "Unit": "",
-          "Index": 0,
-          "Values": [
-            {
-              "x": 1381204800,
-              "y": 0.0
-            },
-            {
-              "x": 1381291200,
-              "y": 0.0
-            },
-            {
-              "x": 1381377600,
-              "y": 0.0
-            },
-            {
-              "x": 1381464000,
-              "y": 0.0
-            },
-            {
-              "x": 1381521600,
-              "y": 0.0
-            }
-          ],
-          "SeriesType": 0,
-          "Color": "",
-          "ScatterMarkerSymbol": "none"
-        }
-      }
-    },
-    "Benchmark": {
-      "Name": "Benchmark",
-      "ChartType": 0,
-      "Series": {
-        "Benchmark": {
-          "Name": "Benchmark",
-          "Unit": "$",
-          "Index": 0,
-          "Values": [
-            {
-              "x": 1381118400,
-              "y": 146.0268
-            },
-            {
-              "x": 1381204800,
-              "y": 144.7558
-            },
-            {
-              "x": 1381291200,
-              "y": 143.0784
-            },
-            {
-              "x": 1381377600,
-              "y": 143.1562
-            },
-            {
-              "x": 1381464000,
-              "y": 146.3294
-            },
-            {
-              "x": 1381521600,
-              "y": 147.2459
-            }
-          ],
-          "SeriesType": 0,
-          "Color": "",
-          "ScatterMarkerSymbol": "none"
-        }
-      }
-    },
-    "Drawdown": {
-      "Name": "Drawdown",
-      "ChartType": 0,
-      "Series": {
-        "Equity Drawdown": {
-          "Name": "Equity Drawdown",
-          "Unit": "%",
-          "Index": 0,
-          "Values": [
-            {
-              "x": 1381118400,
-              "y": 0.0
-            },
-            {
-              "x": 1381204800,
-              "y": -0.02
-            },
-            {
-              "x": 1381291200,
-              "y": -1.21
-            },
-            {
-              "x": 1381377600,
-              "y": -1.16
-            },
-            {
-              "x": 1381464000,
-              "y": 0.0
-            },
-            {
-              "x": 1381521600,
-              "y": 0.0
-            }
-          ],
-          "SeriesType": 0,
-          "Color": "",
-          "ScatterMarkerSymbol": "none"
-        }
-      }
-    },
     "Insight Count": {
       "Name": "Insight Count",
       "ChartType": 0,
@@ -553,62 +407,6 @@
             }
           ],
           "SeriesType": 3,
-          "Color": "",
-          "ScatterMarkerSymbol": "none"
-        }
-      }
-    },
-    "Assets Sales Volume": {
-      "Name": "Assets Sales Volume",
-      "ChartType": 0,
-      "Series": {
-        "SPY": {
-          "Name": "SPY",
-          "Unit": "$",
-          "Index": 0,
-          "Values": [
-            {
-              "x": 1381204800,
-              "y": 99609.8262
-            },
-            {
-              "x": 1381291200,
-              "y": 296860.4818
-            },
-            {
-              "x": 1381377600,
-              "y": 296860.4818
-            },
-            {
-              "x": 1381464000,
-              "y": 296860.4818
-            },
-            {
-              "x": 1381521600,
-              "y": 296860.4818
-            }
-          ],
-          "SeriesType": 7,
-          "Color": "",
-          "ScatterMarkerSymbol": "none"
-        }
-      }
-    },
-    "Alpha Assets": {
-      "Name": "Alpha Assets",
-      "ChartType": 0,
-      "Series": {
-        "SPY": {
-          "Name": "SPY",
-          "Unit": null,
-          "Index": 0,
-          "Values": [
-            {
-              "x": 1381498260,
-              "y": 81.0
-            }
-          ],
-          "SeriesType": 7,
           "Color": "",
           "ScatterMarkerSymbol": "none"
         }
@@ -2640,6 +2438,46 @@
         }
       }
     },
+    "Drawdown": {
+      "Name": "Drawdown",
+      "ChartType": 0,
+      "Series": {
+        "Equity Drawdown": {
+          "Name": "Equity Drawdown",
+          "Unit": "%",
+          "Index": 0,
+          "Values": [
+            {
+              "x": 1381118400,
+              "y": 0.0
+            },
+            {
+              "x": 1381204800,
+              "y": -0.02
+            },
+            {
+              "x": 1381291200,
+              "y": -1.21
+            },
+            {
+              "x": 1381377600,
+              "y": -1.16
+            },
+            {
+              "x": 1381464000,
+              "y": 0.0
+            },
+            {
+              "x": 1381521600,
+              "y": 0.0
+            }
+          ],
+          "SeriesType": 0,
+          "Color": "",
+          "ScatterMarkerSymbol": "none"
+        }
+      }
+    },
     "Strategy Equity": {
       "Name": "Strategy Equity",
       "ChartType": 0,
@@ -4269,6 +4107,168 @@
             }
           ],
           "SeriesType": 3,
+          "Color": "",
+          "ScatterMarkerSymbol": "none"
+        }
+      }
+    },
+    "Benchmark": {
+      "Name": "Benchmark",
+      "ChartType": 0,
+      "Series": {
+        "Benchmark": {
+          "Name": "Benchmark",
+          "Unit": "$",
+          "Index": 0,
+          "Values": [
+            {
+              "x": 1381118400,
+              "y": 146.0268
+            },
+            {
+              "x": 1381204800,
+              "y": 144.7558
+            },
+            {
+              "x": 1381291200,
+              "y": 143.0784
+            },
+            {
+              "x": 1381377600,
+              "y": 143.1562
+            },
+            {
+              "x": 1381464000,
+              "y": 146.3294
+            },
+            {
+              "x": 1381521600,
+              "y": 147.2459
+            }
+          ],
+          "SeriesType": 0,
+          "Color": "",
+          "ScatterMarkerSymbol": "none"
+        }
+      }
+    },
+    "Assets Sales Volume": {
+      "Name": "Assets Sales Volume",
+      "ChartType": 0,
+      "Series": {
+        "SPY": {
+          "Name": "SPY",
+          "Unit": "$",
+          "Index": 0,
+          "Values": [
+            {
+              "x": 1381204800,
+              "y": 99609.8262
+            },
+            {
+              "x": 1381291200,
+              "y": 296860.4818
+            },
+            {
+              "x": 1381377600,
+              "y": 296860.4818
+            },
+            {
+              "x": 1381464000,
+              "y": 296860.4818
+            },
+            {
+              "x": 1381521600,
+              "y": 296860.4818
+            }
+          ],
+          "SeriesType": 7,
+          "Color": "",
+          "ScatterMarkerSymbol": "none"
+        }
+      }
+    },
+    "Alpha Assets": {
+      "Name": "Alpha Assets",
+      "ChartType": 0,
+      "Series": {
+        "SPY": {
+          "Name": "SPY",
+          "Unit": null,
+          "Index": 0,
+          "Values": [
+            {
+              "x": 1381498260,
+              "y": 81.0
+            }
+          ],
+          "SeriesType": 7,
+          "Color": "",
+          "ScatterMarkerSymbol": "none"
+        }
+      }
+    },
+    "Exposure": {
+      "Name": "Exposure",
+      "ChartType": 0,
+      "Series": {
+        "Equity - Long Ratio": {
+          "Name": "Equity - Long Ratio",
+          "Unit": "",
+          "Index": 0,
+          "Values": [
+            {
+              "x": 1381204800,
+              "y": 0.9961
+            },
+            {
+              "x": 1381291200,
+              "y": 0.9965
+            },
+            {
+              "x": 1381377600,
+              "y": 0.9965
+            },
+            {
+              "x": 1381464000,
+              "y": 0.9965
+            },
+            {
+              "x": 1381521600,
+              "y": 0.9966
+            }
+          ],
+          "SeriesType": 0,
+          "Color": "",
+          "ScatterMarkerSymbol": "none"
+        },
+        "Equity - Short Ratio": {
+          "Name": "Equity - Short Ratio",
+          "Unit": "",
+          "Index": 0,
+          "Values": [
+            {
+              "x": 1381204800,
+              "y": 0.0
+            },
+            {
+              "x": 1381291200,
+              "y": 0.0
+            },
+            {
+              "x": 1381377600,
+              "y": 0.0
+            },
+            {
+              "x": 1381464000,
+              "y": 0.0
+            },
+            {
+              "x": 1381521600,
+              "y": 0.0
+            }
+          ],
+          "SeriesType": 0,
           "Color": "",
           "ScatterMarkerSymbol": "none"
         }

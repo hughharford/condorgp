@@ -31,9 +31,12 @@ current_dir=$(dirname $full_path)
 actual_lean_dir=/home/hsth/code/QuantConnect/Lean
 default_image=lean:latest
 default_launcher_dir=$actual_lean_dir/Launcher/bin/Debug
+raw_launcher_dir=$actual_lean_dir/Launcher
+
 default_data_dir=$actual_lean_dir/Data
 default_results_dir=$current_dir/results
-default_config_file=$default_launcher_dir/config.json
+# DIDN'T WORK: default_config_file=/home/hsth/code/hughharford/condorgp/leanQC/config/config.json
+default_config_file=$raw_launcher_dir/config.json
 
 # if [ -f "$1" ]; then
 #     IFS="="
