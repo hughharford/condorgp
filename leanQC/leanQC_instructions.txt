@@ -43,7 +43,8 @@
         # the commented line above is the original, which will download
         # the shorter line will look to build from local Docker image
   >> run:
-    sudo docker build . -t lean:latest
+    sudo docker build . -t quantconnect/lean:latest
+    # quantconnect/lean:latest
 
   >>>> but this fails... interesting. Needs the following adjustment to build
     # adjusted from line 23 in the Dockerfile to:
@@ -68,7 +69,7 @@
     # and
     # output results into the leanQC/results folder
 
-6. Test 
+6. Test
 
 NOTES:
 A. See /previous folder, hsth's 2020 workings to get the LeanFoundation

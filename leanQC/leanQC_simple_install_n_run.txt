@@ -1,0 +1,121 @@
+# much simpler way of running things:
+# just:
+
+pip install lean
+
+in the lean directory, run
+lean init
+# this will download data etc
+
+# gave the following output:
+- lean.json contains the configuration used when running the LEAN engine locally
+- data/ contains the data that is used when running the LEAN engine locally
+
+The following documentation pages may be useful:
+- Setting up local autocomplete: https://www.lean.io/docs/lean-cli/projects/autocomplete
+- Synchronizing projects with the cloud:
+https://www.lean.io/docs/lean-cli/projects/cloud-synchronization
+
+Here are some commands to get you going:
+- Run `lean create-project "My Project"` to create a new project with starter code
+- Run `lean cloud pull` to download all your QuantConnect projects to your local drive
+- Run `lean backtest "My Project"` to backtest a project locally with the data in data/
+
+will need to have followed the detail in
+leanQC_instructions.txt, as lean expects the docker image
+It will pull it from the cloud if you haven't built
+
+# RUN with:
+
+lean backtest tests/resources/IndBasicAlgo1.py --lean-config leanQC/config/config_test_condor.json
+
+# obviously this only runs a backtest
+# but does specify the IndBasicAlgo1 and try to use it
+
+# ERRORS found as follows:
+
+could not find: '/Lean/Data/market-hours/market-hours-database.json'
+
+# trying:
+lean backtest ../hughharford/condorgp/tests/resources/IndBasicAlgo1.py --lean-config ../hughharford/condorgp/leanQC/config/config_test_condor.json
+~ nope, cannot find market-hours as above
+~ and mismatched paths seem to stop it...
+
+# trying with config file in same location:
+lean backtest ../hughharford/condorgp/tests/resources/IndBasicAlgo1.py --lean-config ../hughharford/condorgp/tests/resources/config_test_condor.json
+# THIS RUNS but indicates not all is perfect
+~ puts results in a different folder
+
+# looking to adjust output folder:
+# trying:
+lean backtest --output ../hughharford/condorgp/leanQC/results ../hughharford/condorgp/tests/resources/IndBasicAlgo1.py --lean-config ../hughharford/condorgp/tests/resources/config_test_condor.json
+# frustratingly, got to be in a matching path...
+
+lean backtest ../hughharford/condorgp/leanQC/runs/IndBasicAlgo1.py --lean-config ../hughharford/condorgp/leanQC/runs/config_test_condor.json
+
+# FRUSTRATING, the above
+
+# Looking again, noticed that the lean.json in QuantConnect/Lean root folder also was setting the data folder
+
+>> adjusted the lean.json
+    so that the data folder setting looks like:
+      // engine
+  "data-folder": "../../../data",
+
+>> also removed references in config_test_condor
+  // engine
+  // was: "data-folder": "../../../Data/",
+  // "data-folder": "../../../Data/",
+  // "data-directory": "../../../Data/",
+
+# Trying the same again, with adjusted paths:
+lean backtest ../../hughharford/condorgp/leanQC/runs/IndBasicAlgo1.py --lean-config ../../hughharford/condorgp/leanQC/runs/config_test_condor.json
+>> which gives only:
+                    Error: 'data-folder'
+
+# So going to set the data folder to the same, i.e. ../../../data:
+>> in config_test_condor:
+  // engine
+  "data-folder": "../../../data",
+  // "data-folder": "../../../Data/",
+  // "data-directory": "../../../Data/",
+
+
+# Still gets the same:
+20220711 14:14:07.929 ERROR:: Algorithm.Initialize() Error: One or more errors occurred. (Could not
+find a part of the path '/Lean/Data/market-hours/market-hours-database.json'.) Stack Trace: One or more errors
+occurred. (Could not find a part of the path '/Lean/Data/market-hours/market-hours-database.json'.)
+ One or more errors occurred. (Could not find a part of the path
+'/Lean/Data/market-hours/market-hours-database.json'.)
+
+>> note, the capital D, so data folder seetings not getting through
+
+>> The last line in one red error output is:
+at QuantConnect.Lean.Engine.Engine.Run(AlgorithmNodePacket job, AlgorithmManager manager, String
+assemblyPath, WorkerThread workerThread) in /home/hsth/code/QuantConnect/Lean/Engine/Engine.cs:line 110
+
+>> Reading further in the error:
+at QuantConnect.Securities.MarketHoursDatabase.FromFile(String path) in /home/hsth/code/QuantConnect/Lean/Common/Securities/MarketHoursDatabase.cs:line
+155
+>> At line 155 and all through MarketHoursDatabase.cs it refers to dataFolder
+>> rather than data-folder as in the Dockerfile...
+
+>> so changing to that, in case it helps
+>> expecting this to give the error above, and that data-folder is required
+and that maybe dataFolder is created by one of params loader functions
+@@ confirmed, this didn't work...
+
+## ASSUMPTION (this will need testing!!)
+That only the following .json files make any impact:
+
+QuantConnect/Lean/lean.json
+condorgp/leanQC/runs/config_test_condor.json
+
+## keep going!
+
+>> look for the source of definition of: dataFolder
+line 126 in: MarketHoursDatabase
+            return FromDataFolder(Globals.DataFolder);
+
+SEE: QuantConnect/Lean/Common/Globals.cs
+definitely worth a look at!!
