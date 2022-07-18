@@ -2,7 +2,7 @@ import os
 
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condorgp.utils import run_lean
+from condorgp.utils import run_lean_via_CLI
 from condorgp.utils import copy_config_json_to_lean_launcher_dir
 from condorgp.utils import copy_ind_to_lean_algos_dir
 from condorgp.params import lean_dict, test_dict
@@ -53,9 +53,9 @@ def copy_config_n_algo_across(input_ind):
 
 
 @when('Lean runs')
-def run_lean():
-    run_lean()
-    pass
+def set_lean_runner():
+    '''uses the utils method to set an os system command via Lean CLI'''
+    run_lean_via_CLI()
 
 @then(parsers.cfparse('the "{output_ind:String}" is found',
                        extra_types=EXTRA_TYPES), target_fixture='output_ind')
@@ -70,3 +70,17 @@ def results_files_are_updated(output_ind):
         if folder_or_file == output_ind:
             found_algo_name = True
     assert found_algo_name
+
+####### TEST AGAINST THE FOLLOWING INSTEAD:
+
+
+# near start:
+# Compiling '/LeanCLI/IndBasicAlgo1.py'...
+# 20220718 21:00:45.997 TRACE:: JobQueue.NextJob(): Selected
+# /LeanCLI/IndBasicAlgo1.py
+
+# 2022-07-18T20:50:21.3422736Z TRACE:: Engine.Main(): Started 8:50 PM
+
+# then, further down:
+# [GCC 7.3.0]: Importing python module IndBasicAlgo1
+# 2022-07-18T20:50:24.8145994Z TRACE:: AlgorithmPythonWrapper(): IndBasicAlgo1 successfully imported.

@@ -4,7 +4,7 @@ import shutil
 from condorgp.params import lean_dict, test_dict #
 
 
-def run_lean():
+def run_lean_via_CLI():
     ''' simple but current Condorgp primary way to run lean fitness function.
 
     Requires:
@@ -28,9 +28,10 @@ def run_lean():
     ALGO_PATH = lean_dict['LEAN_ALGOS_FOLDER']
 
     os. chdir("../Lean")
-    os.system("pwd")
-    os.system(f"lean backtest {ALGO_PATH}IndBasicAlgo1.py --lean-config {JSON_PATH}config_test_condor.json --verbose --output Backtests")
+    os.system(f"lean backtest {ALGO_PATH}IndBasicAlgo1.py --lean-config {JSON_PATH}config_test_condor.json --output Backtests")
     os. chdir("../condorgp")
+
+    # --verbose
 
 
 def copy_ind_to_lean_algos_dir(file_path, filename):
@@ -40,11 +41,11 @@ def copy_ind_to_lean_algos_dir(file_path, filename):
 
 def copy_config_json_to_lean_launcher_dir(file_path, filename):
     src = file_path + filename
-    print(src)
+    # print(src)
     # dst = lean_dict['LEAN_CONFIG_DIR'] + filename
     dst = '../Lean/' + filename
-    print(dst)
+    # print(dst)
     shutil.copy(src, dst, follow_symlinks=True)
 
 if __name__ == "__main__":
-    run_lean()
+    run_lean_via_CLI()

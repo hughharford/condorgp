@@ -1,9 +1,12 @@
 
 LEAN_BASE_PATH = '/home/hsth/code/hughharford/Lean/'
 
-LEAN_RESULTS_DIR = 'leanQC/results/' # not currently in use
 LEAN_ALGOS_DIR = LEAN_BASE_PATH + 'Algorithm.Python/'
 LEAN_LAUNCHER_DIR = 'Launcher/bin/Debug/'
+
+LEAN_BACKTEST_OUTPUTS_DIR = LEAN_BASE_PATH + 'Backtests/'
+# outputs here:
+LEAN_RESULTS_DIR = LEAN_BACKTEST_OUTPUTS_DIR
 
 LEAN_CONFIG_DIR = LEAN_BASE_PATH + LEAN_LAUNCHER_DIR
 LEAN_CONFIG_FILE = 'config.json'
@@ -20,11 +23,11 @@ lean_dict = {
     'LEAN_ALGOS_FOLDER': LEAN_ALGOS_DIR,
 
     'LEAN_RESULTS_FOLDER': LEAN_RESULTS_DIR,
-
+    'LEAN_BACKTEST_OUTPUTS_DIR': LEAN_BACKTEST_OUTPUTS_DIR,
     }
 
 CONDOR_TEST_CONFIG_FILE = 'config_test_condor.json'
-CONDOR_TEST_ALGOS_DIR = 'leanQC/config'
+CONDOR_TEST_ALGOS_DIR = 'leanQC/config/'
 
 test_dict = {
     'REASONABLE_FITNESS_SECS': 60,
