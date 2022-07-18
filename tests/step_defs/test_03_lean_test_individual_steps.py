@@ -2,7 +2,7 @@ import os
 
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condorgp.utils import run_lean_bash_script
+from condorgp.utils import run_lean
 from condorgp.utils import copy_config_json_to_lean_launcher_dir
 from condorgp.utils import copy_ind_to_lean_algos_dir
 from condorgp.params import lean_dict, test_dict
@@ -54,7 +54,7 @@ def copy_config_n_algo_across(input_ind):
 
 @when('Lean runs')
 def run_lean():
-    run_lean_bash_script()
+    run_lean()
     pass
 
 @then(parsers.cfparse('the "{output_ind:String}" is found',

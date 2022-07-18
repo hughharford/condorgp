@@ -1,7 +1,7 @@
 
-LEAN_BASE_PATH = '/home/hsth/code/QuantConnect/Lean/'
+LEAN_BASE_PATH = '/home/hsth/code/hughharford/Lean/'
 
-LEAN_RESULTS_DIR = 'leanQC/results/'
+LEAN_RESULTS_DIR = 'leanQC/results/' # not currently in use
 LEAN_ALGOS_DIR = LEAN_BASE_PATH + 'Algorithm.Python/'
 LEAN_LAUNCHER_DIR = 'Launcher/bin/Debug/'
 
@@ -24,7 +24,7 @@ lean_dict = {
     }
 
 CONDOR_TEST_CONFIG_FILE = 'config_test_condor.json'
-CONDOR_TEST_ALGOS_DIR = 'tests/resources/'
+CONDOR_TEST_ALGOS_DIR = 'leanQC/config'
 
 test_dict = {
     'REASONABLE_FITNESS_SECS': 60,

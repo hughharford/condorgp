@@ -119,3 +119,184 @@ line 126 in: MarketHoursDatabase
 
 SEE: QuantConnect/Lean/Common/Globals.cs
 definitely worth a look at!!
+
+
+AlSO:
+Config.Get(): Configuration key not found
+The above is reported regularly in the log output
+
+see QuantConnect.Configuration:
+
+Lean/Configuration/Config.cs
+line 34:
+        private static string ConfigurationFileName = "config.json";
+        so the default .json cannot be renamed...
+
+>>> Trying: root folder config.json:
+lean backtest ../../hughharford/condorgp/leanQC/runs/IndBasicAlgo1.py --lean-config config.json
+@@ THIS MADE A BIG DIFFERENCE
+but still threw errors:
+
+
+@@ trying in original folder, just config.json filename
+lean backtest ../../hughharford/condorgp/leanQC/runs/IndBasicAlgo1.py --lean-config ../../hughharford/condorgp/leanQC/runs/config.json
+
+this still didn't work:
+INTERNET CONNECTION ERROR:
+HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /QuantConnect/Lean/master/Data/symbol-properties/symbol-properties-database.csv (Caused by
+NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7ff0c2b66af0>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))
+PREVIOUSLY SEEN ERROR (understood to relate to the config.json):
+Error: Expecting property name enclosed in double quotes: line 2 column 3 (char 4)
+
+@@ going to try various things to do with the lean.json
+1st: move it (safe delete)
+ERRORS:
+      Same:
+        Error: Expecting property name enclosed in double quotes: line 2 column 3 (char 4)
+      But, no internet connection error
+      => doesn't solve the immediate, but useful
+2nd: refer directly to it, not the config.json
+ERRORS:
+      Didn't make any difference
+      same internet connection issue, and line about double quotes
+
+@@ What is frustrating, is that, just once, Lean did run nicely, almost with the current settings
+
+@@>> looking at Lean CLI --help
+
+➜  Lean git:(master) ✗ lean --help                                                                                                                                                            [🐍 lewagon]
+HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /QuantConnect/Lean/master/Data/symbol-properties/symbol-properties-database.csv (Caused by
+NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f6f2a332670>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))
+Usage: lean [OPTIONS] COMMAND [ARGS]...
+
+  The Lean CLI by QuantConnect.
+
+Options:
+  --version  Show the version and exit.
+  --help     Show this message and exit.
+
+Commands:
+  backtest        Backtest a project locally using Docker.
+  build           Build Docker images of your own version of LEAN and the...
+  cloud           Interact with the QuantConnect cloud.
+  config          Configure Lean CLI options.
+  create-project  Create a new project containing starter code.
+  data            Download or generate data for local use.
+  init            Scaffold a Lean configuration file and data directory.
+  library         Manage custom libraries in a project.
+  live            Start live trading a project locally using Docker.
+  login           Log in with a QuantConnect account.
+  logout          Log out and remove stored credentials.
+  logs            Display the most recent backtest/live/optimization logs.
+  optimize        Optimize a project's parameters locally using Docker.
+  report          Generate a report of a backtest.
+  research        Run a Jupyter Lab environment locally using Docker.
+  whoami          Display who is logged in.
+
+@@ lean create-project PROJECTNAME sets up a range of stuff
+  Probably best in the path:
+  ../Lean/LocalPackages
+
+@@ uninstalling and reseting Lean to be in the path:
+  /home/hsth/code/hughharford/Lean/
+  as otherwise just annoying
+
+@@ ha ha, uinstalled and deleted QuantConnect/Lean - but without internet, now stuck!
+
+@@ now back up:
+
+@@ adding --verbose to the lean backtest CLI command helps:
+lean backtest ../../hughharford/condorgp/leanQC/runs/IndBasicAlgo1.py --lean-config ../../hughharford/condorgp/leanQC/runs/config.json --verbose
+
+Traceback (most recent call last):
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/lean/main.py", line 103, in main
+    lean.main(standalone_mode=False)
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/click/core.py", line 1659, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/lean/click.py", line 125, in invoke
+    result = super().invoke(ctx)
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/lean/commands/backtest.py", line 324, in backtest
+    lean_config = lean_config_manager.get_complete_lean_config("backtesting", algorithm_file, debugging_method)
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/lean/components/config/lean_config_manager.py", line 238, in
+get_complete_lean_config
+    "job-project-id": self._project_config_manager.get_local_id(algorithm_file.parent),
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/lean/components/config/project_config_manager.py", line 50, in
+get_local_id
+    project_config = self.get_project_config(project_directory)
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/lean/components/config/project_config_manager.py", line 40, in
+get_project_config
+    return Storage(str(project_directory / PROJECT_CONFIG_FILE_NAME))
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/lean/components/config/storage.py", line 30, in __init__
+    self._data = json.loads(self.file.read_text(encoding="utf-8"))
+  File "/home/hsth/.pyenv/versions/3.8.12/lib/python3.8/json/__init__.py", line 357, in loads
+    return _default_decoder.decode(s)
+  File "/home/hsth/.pyenv/versions/3.8.12/lib/python3.8/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/home/hsth/.pyenv/versions/3.8.12/lib/python3.8/json/decoder.py", line 353, in raw_decode
+    obj, end = self.scan_once(s, idx)
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 2 column 3 (char 4)
+
+@@ also, given the complexity of the above, tried something simple:
+@@ used an online json verifier:
+  was definitely throwing issues
+  => the new config.json has only 20 not 500 lines, and zero comments
+
+lean backtest ../../hughharford/condorgp/leanQC/runs/IndBasicAlgo1.py --lean-config ../../hughharford/condorgp/leanQC/runs/config.json --verbose
+
+@ >>> this now ran again, long lines of output. wow.
+
+@ ==> the --verbose output illustrates some important bits, so that's a
+        revalation!
+
+  >>> got this:
+
+  Running 'quantconnect/lean:latest' with the following configuration:
+  {
+      'environment': {},
+      'stop_signal': 'SIGINT',
+      'mounts': [
+          {'Target': '/Lean/Launcher/bin/Debug/config.json', 'Source': '/tmp/lean-cli-v8on2az2/config.json', 'Type': 'bind', 'ReadOnly': True},
+          {'Target': '/lean-cli-start.sh', 'Source': '/tmp/lean-cli-c3xeh6yz/lean-cli-start.sh', 'Type': 'bind', 'ReadOnly': True}
+      ],
+      'volumes': {
+          '/home/hsth/code/hughharford/condorgp/leanQC/runs/../../../data': {'bind': '/Lean/Data', 'mode': 'rw'},
+          '/home/hsth/code/hughharford/condorgp/leanQC/runs/backtests/2022-07-18_07-03-35': {'bind': '/Results', 'mode': 'rw'},
+          '/home/hsth/code/hughharford/condorgp/leanQC/runs/storage': {'bind': '/Storage', 'mode': 'rw'},
+          '/home/hsth/code/hughharford/condorgp/leanQC/runs': {'bind': '/LeanCLI', 'mode': 'rw'}
+      },
+      'ports': {},
+      'name': 'lean_cli_2f331a86db934190bb3cd88542916bd5',
+      'entrypoint': ['bash', '/lean-cli-start.sh'],
+      'detach': True,
+      'hostname': 'hsth-ThinkPad-2nd',
+      'tty': True,
+      'stdin_open': True,
+      'extra_hosts': {'host.docker.internal': '172.17.0.1'},
+      'network': 'lean_cli'
+  }
+
+  @ ==> this shows clearly a incorrectly configured path
+      i.e. the ../../ does not operate. classic.
+  @ ==> however, GOOD NEWS, the data-folder property, for example, is clearly
+      picked up. not found, mind, of course, but clearly visible. GREAT NEWS
+
+  @@ run from the Lean root folder only...
+  @@@@@@@@@@@@ MUST COPY THE config.json and the ALGO.py into this root folder.
+
+lean backtest IndBasicAlgo1.py --lean-config config.json --verbose
+
+this WORKED __________________________________
+**********************************************
+**********************************************
+finally!
+
+@ again (unlikely hopefulness) to set the output folder to somewhere outside
+  of .../Lean/ it fails...
+
+  

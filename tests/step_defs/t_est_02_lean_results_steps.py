@@ -4,7 +4,7 @@ from datetime import datetime
 
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condorgp.utils import run_lean_bash_script
+from condorgp.utils import run_lean
 from condorgp.params import lean_dict
 
 EXTRA_TYPES = {
@@ -42,7 +42,7 @@ def run_docker_shell_file_exists():
 
 @when('run_docker.sh is run')
 def call_run_docker():
-    run_lean_bash_script()
+    run_lean()
     pass
 
 @then('leanQC/results files are updated')

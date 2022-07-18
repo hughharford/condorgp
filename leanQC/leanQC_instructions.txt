@@ -78,3 +78,11 @@ B. See also .bat, .cfg and .sh in this folder, all examples from 2020
     and files expected in the Lean repo as previous.
     These were used to run dockers, build etc on various systems and with
     various configurations
+
+
+7. Simple instructions for setting up lean properly
+  (no doubt this is clearly outlined in the setup instructions somewhere)
+
+  git clone the repo
+  pip install lean
+  lean init (not required for initial run - the Data folder is extant)
