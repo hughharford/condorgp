@@ -8,6 +8,8 @@
   4. Consider robustness vs:
      1. Market changes
      2. Generalisability
+  5. Ensure a sight-unseen validation dataset for reliable test
+     1. Avoid data leakage
 
 ## Other notes
   1. Generalisability is key

@@ -15,16 +15,21 @@ def run_lean():
     Then the run command is made
     '''
     # copy algo py into place
-    copy_ind_to_lean_algos_dir(test_dict['CONDOR_CONFIG_PATH'], 'IndBasicAlgo1.py')
+    copy_ind_to_lean_algos_dir(
+        test_dict['CONDOR_CONFIG_PATH'],
+        'IndBasicAlgo1.py')
 
     # copy .json across:
     copy_config_json_to_lean_launcher_dir(
         test_dict['CONDOR_CONFIG_PATH'],
         test_dict['CONDOR_TEST_CONFIG_FILE'])
 
+    JSON_PATH = ''
+    ALGO_PATH = lean_dict['LEAN_ALGOS_FOLDER']
+
     os. chdir("../Lean")
     os.system("pwd")
-    # os.system(f"lean backtest IndBasicAlgo1.py --lean-config config_test_condor.json --verbose")
+    os.system(f"lean backtest {ALGO_PATH}IndBasicAlgo1.py --lean-config {JSON_PATH}config_test_condor.json --verbose --output Backtests")
     os. chdir("../condorgp")
 
 
@@ -35,9 +40,10 @@ def copy_ind_to_lean_algos_dir(file_path, filename):
 
 def copy_config_json_to_lean_launcher_dir(file_path, filename):
     src = file_path + filename
-    # print(src)
-    dst = lean_dict['LEAN_CONFIG_DIR'] + filename
-    # print(dst)
+    print(src)
+    # dst = lean_dict['LEAN_CONFIG_DIR'] + filename
+    dst = '../Lean/' + filename
+    print(dst)
     shutil.copy(src, dst, follow_symlinks=True)
 
 if __name__ == "__main__":
