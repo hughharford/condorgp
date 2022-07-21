@@ -2,10 +2,12 @@ import os
 
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condorgp.utils import run_lean_via_CLI
+from condorgp.utils import get_last_x_log_lines
 from condorgp.utils import copy_config_json_to_lean_launcher_dir
 from condorgp.utils import copy_ind_to_lean_algos_dir
-from condorgp.params import lean_dict, test_dict
+from condorgp.params import lean_dict, test_dict, util_dict
+
+from condorgp.lean_runner import RunLean
 
 EXTRA_TYPES = {
     'Number': int,
@@ -55,32 +57,21 @@ def copy_config_n_algo_across(input_ind):
 @when('Lean runs')
 def set_lean_runner():
     '''uses the utils method to set an os system command via Lean CLI'''
-    run_lean_via_CLI()
+    lean = RunLean()
+    lean.run_lean_via_CLI()
 
 @then(parsers.cfparse('the "{output_ind:String}" is found',
                        extra_types=EXTRA_TYPES), target_fixture='output_ind')
 @then('the "<output_ind>" is found', target_fixture='output_ind')
 def results_files_are_updated(output_ind):
     results_path = lean_dict['LEAN_RESULTS_FOLDER']
-    output_ind = results_path + output_ind
-    # 'leanQC/results/BasicTemplateFrameworkAlgorithm'
-    results_files = [results_path + x for x in os.listdir(results_path)]
+    output_ind_with_path = results_path + output_ind
+    print(output_ind)
+    no_lines = util_dict['NO_LOG_LINES']
+    results_list = get_last_x_log_lines(lines = no_lines, log_file_n_path = lean_dict['BACKTEST_LOG_FILE_N_PATH'])
     found_algo_name = False
-    for folder_or_file in results_files:
-        if folder_or_file == output_ind:
+    for line in results_list:
+        if output_ind in line:
+            print(line)
             found_algo_name = True
     assert found_algo_name
-
-####### TEST AGAINST THE FOLLOWING INSTEAD:
-
-
-# near start:
-# Compiling '/LeanCLI/IndBasicAlgo1.py'...
-# 20220718 21:00:45.997 TRACE:: JobQueue.NextJob(): Selected
-# /LeanCLI/IndBasicAlgo1.py
-
-# 2022-07-18T20:50:21.3422736Z TRACE:: Engine.Main(): Started 8:50 PM
-
-# then, further down:
-# [GCC 7.3.0]: Importing python module IndBasicAlgo1
-# 2022-07-18T20:50:24.8145994Z TRACE:: AlgorithmPythonWrapper(): IndBasicAlgo1 successfully imported.

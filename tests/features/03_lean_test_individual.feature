@@ -14,6 +14,5 @@ Feature: Lean tests each evolved individual
 
     Examples:
       | input_ind                        |   output_ind                        |
-#      | BasicTemplateFrameworkAlgorithm  |   BasicTemplateFrameworkAlgorithm   |
       | IndBasicAlgo1                    |   IndBasicAlgo1                     |
-#      | IndBasicAlgo2                    |   IndBasicAlgo2                     |
+      | IndBasicAlgo2                    |   IndBasicAlgo2                     |
