@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from condorgp.params import lean_dict, test_dict #
+from condorgp.params import lean_dict, test_dict
 from file_read_backwards import FileReadBackwards
 
 
@@ -17,6 +17,14 @@ def copy_config_json_to_lean_launcher_dir(file_path, filename):
     dst = '../Lean/' + filename
     # print(dst)
     shutil.copy(src, dst, follow_symlinks=True)
+
+def delete_file_from_path(file_path, filename):
+    file_to_delete = file_path + filename
+    ## If file exists, delete it ##
+    if os.path.isfile(file_to_delete):
+        os.remove(file_to_delete)
+    else:    ## Show an error ##
+        print("Error: %s file not found" % file_to_delete)
 
 def get_last_x_log_lines(lines = 150, log_file_n_path = '/home/hsth/code/hughharford/Lean/Backtests/log.txt'):
     list_lines = []
