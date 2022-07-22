@@ -5,7 +5,7 @@ from os.path import exists
 from pytest_bdd import scenarios, given, when, then, parsers
 
 from condorgp.lean_runner import RunLean
-from condorgp.utils import check_recent_mod
+from condorgp.utils import retrieve_log_line_with_key
 from condorgp.params import lean_dict, test_dict
 
 EXTRA_TYPES = {
@@ -98,8 +98,10 @@ def expected_result_is_updated(Return_Over_Maximum_Drawdown):
     Currently using
         Return_Over_Maximum_Drawdown
     '''
-    pass
-    # Return_Over_Maximum_Drawdown = Return_Over_Maximum_Drawdown
+    key_req = Return_Over_Maximum_Drawdown
+    found_line = retrieve_log_line_with_key(key_req)
+    if found_line != '':
+        assert key_req in found_line
 
 @then('the fitness function demonstrates this result')
 def fitness_function_demos_the_result():

@@ -39,12 +39,20 @@ def get_last_x_log_lines(lines = 150, log_file_n_path = '/home/hsth/code/hughhar
             list_lines.append(l)
     return list_lines
 
-def alternative_from_file_end():
-    with open('logfile.txt', 'rb') as f:
-        f.seek(-2, os.SEEK_END)
-    while f.read(1) != b'\n':
-        f.seek(-2, os.SEEK_CUR)
-    print(f.readline().decode())
+def retrieve_log_line_with_key(
+                    key,
+                    lines = 150,
+                    log_file_n_path = '/home/hsth/code/hughharford/Lean/Backtests/log.txt'):
+    '''
+    Get the X lines of a log
+    And search for the key given
+
+    Returns the FIRST line if found, or '' if not found
+    '''
+    log_to_search_list = get_last_x_log_lines(lines, log_file_n_path)
+    for line in log_to_search_list:
+        if str(key) in line: return line
+    return ''
 
 def check_recent_mod(input_file_paths):
     '''
