@@ -30,7 +30,7 @@ class IndBasicAlgo2(QCAlgorithm):
 
         self.SetStartDate(2013,10,7)   #Set Start Date
         self.SetEndDate(2013,10,11)    #Set End Date
-        self.SetCash(100000)           #Set Strategy Cash
+        self.SetCash(100_000)           #Set Strategy Cash
 
         # Find more symbols here: http://quantconnect.com/data
         # Forex, CFD, Equities Resolutions: Tick, Second, Minute, Hour, Daily.

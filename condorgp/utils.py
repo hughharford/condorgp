@@ -1,5 +1,7 @@
 import os
 import shutil
+from datetime import datetime
+
 
 from condorgp.params import lean_dict, test_dict
 from file_read_backwards import FileReadBackwards
@@ -44,5 +46,24 @@ def alternative_from_file_end():
         f.seek(-2, os.SEEK_CUR)
     print(f.readline().decode())
 
+def check_recent_mod(input_file_paths):
+    '''
+    Returns true if all files in the path updated within
+    'reasonable fitness seconds' set in params.py
+    '''
+    dt = datetime.now()
+    now = datetime.timestamp(dt)
+    diff = 1000*test_dict['REASONABLE_FITNESS_SECS']
+    count = 0
+    for file_path in input_file_paths:
+        count += 1
+        print(f'{file_path} and {now - diff}')
+        if (now - diff) > os.path.getmtime(file_path): return False
+        if count == 0: return False
+    return True
+
 if __name__ == "__main__":
-    get_last_x_log_lines()
+    results_files = [lean_dict['LEAN_RESULTS_FOLDER'] + x for
+                     x in os.listdir(lean_dict['LEAN_RESULTS_FOLDER'])
+                     if os.path.isfile(lean_dict['LEAN_RESULTS_FOLDER'] + x)]
+    assert check_recent_mod(results_files)

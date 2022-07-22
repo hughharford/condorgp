@@ -28,9 +28,9 @@ class IndBasicAlgo1(QCAlgorithm):
         # Set requested data resolution
         self.UniverseSettings.Resolution = Resolution.Minute
 
-        self.SetStartDate(2013,10,7)   #Set Start Date
-        self.SetEndDate(2013,10,11)    #Set End Date
-        self.SetCash(100000)           #Set Strategy Cash
+        self.SetStartDate(2014,10,7)   #Set Start Date
+        self.SetEndDate(2014,10,11)    #Set End Date
+        self.SetCash(1_000_000)           #Set Strategy Cash
 
         # Find more symbols here: http://quantconnect.com/data
         # Forex, CFD, Equities Resolutions: Tick, Second, Minute, Hour, Daily.

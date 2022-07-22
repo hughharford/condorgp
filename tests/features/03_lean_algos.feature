@@ -14,6 +14,6 @@ Feature: Lean tests each evolved individual
     And the "<input_ind>" algorithm is tidied away
 
     Examples:
-      | input_ind                        |   output_ind                        |
-      | IndBasicAlgo2                    |   IndBasicAlgo2                     |
-      | IndBasicAlgo1                    |   IndBasicAlgo1                     |
+      | input_ind            |   output_ind              |
+      | IndBasicAlgo2        |   IndBasicAlgo2           |
+      | IndBasicAlgo1        |   IndBasicAlgo1           |

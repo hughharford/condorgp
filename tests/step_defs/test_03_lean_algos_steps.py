@@ -52,9 +52,9 @@ def copy_config_n_algo_across(input_ind):
     # copy config.json across before container launch
     config_path = test_dict['CONDOR_CONFIG_PATH']
     if input_ind[-1] == '1':
-        config_to_copy = test_dict['CONDOR_TEST_CONFIG_FILE_1']
+        config_to_copy = test_dict['CONFIG_TEST_ALGOS_FILE_1']
     elif input_ind[-1] == '2':
-        config_to_copy = test_dict['CONDOR_TEST_CONFIG_FILE_2']
+        config_to_copy = test_dict['CONFIG_TEST_ALGOS_FILE_2']
     copy_config_json_to_lean_launcher_dir(config_path, config_to_copy)
 
     # copy algo.py across before container launch
