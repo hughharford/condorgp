@@ -44,41 +44,6 @@ RUN apt-get install -y \
 # was: RUN apt-get install docker.io -y
 RUN apt-get install -y docker.io docker-compose
 
-#### LE WAGON INSTALLS ##### start #
-# REF                                https://gto76.github.io/python-cheatsheet/
-### TODO: Convert to requirements.txt
-
-RUN pip3 install pygame \
-	&& pip3 install PySimpleGUI \
-	# FROM 					REF/#logging
-	&& pip3 install loguru \
-	# for logging
-	&& pip3 install requests beautifulsoup4 \
-	# for web-scraping
-	&& pip3 install bottle \
-	# for web
-	&& pip3 install line_profiler memory_profiler \
-	# for profiling by line
-	&& pip3 install pycallgraph2 \
-	# for a PNG image of the call graph with highlighted bottlenecks (see example)
-	&& pip3 install pillow \
-	# for image
-	&& pip3 install pyttsx3 \
-	# for text to speech recognition
-	#													&& pip3 install simpleaudio \
-	# for synthesizer
-	&& pip3 install plotly kaleido \
-	# for plotly
-	&& pip3 install cython \
-	# for the Library that compiles Python code into C.
-	&& pip3 install tqdm \
-	# progress bar
-	&& pip3 install tabulate
-	# can prints a CSV file as an ASCII table
-
-### TODO: Convert to requirements.txt
-#### LE WAGON INSTALLS ##### end #
-
 
 # # make some useful symlinks that are expected to exist
  RUN cd /usr/local/bin \
@@ -166,19 +131,22 @@ RUN set -ex; \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
-# HSTH fulfill from requirements.txt
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+# CondorGP clone lean
+RUN git clone https://github.com/QuantConnect/Lean.git
+WORKDIR /Lean/
+# RUN pip install Lean # requires a "Y"
+# RUN lean init
+WORKDIR /condorgp/
 
 # HSTH - CondorGP files copy over
 # COPY Lean/ Lean/ # doesn't work as Lean includes .dockerignore
 COPY condorgp/ condorgp/
 COPY leanQC/ leanQC/
-COPY Data/ Data/
 COPY tests/ tests/
 COPY setup.py setup.py
 
-# CondorGP clone lean
-RUN git clone https://github.com/QuantConnect/Lean.git
+# HSTH fulfill from requirements.txt
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
 
 CMD ["/bin/bash"]
