@@ -4,6 +4,17 @@
 # Set here only, in theory:
 LOCAL_BASE_PATH = '/home/hsth/code/hughharford/'
 
+# HIGH LEVEL CONFIGURATION OPTIONS:
+#######################################################################
+# run using lean, expecting built containers etc
+RUN_WITH_LEAN_CONTAINERS = True
+
+highlevel_config_dict = {
+    'RUN_WITH_LEAN_CONTAINERS': RUN_WITH_LEAN_CONTAINERS,
+
+}
+
+
 # ################################## ##################################
 #           MAIN LEAN PARAMS
 # ################################## ##################################
@@ -30,6 +41,8 @@ FITNESS_BASE = 'STATISTICS:: '
 CURRENT_FITNESS_STAT = 'Return Over Maximum Drawdown'
 FITNESS_CRITERIA = FITNESS_BASE + CURRENT_FITNESS_STAT
 
+WORKING_ALGO_WRAPPER_FILE = 'path and filename to template aglo'
+
 lean_dict = {
     'LEAN_CONFIG_FILE': LEAN_CONFIG_FILE,
     'LEAN_CONFIG_DIR': LEAN_CONFIG_DIR,
@@ -43,6 +56,8 @@ lean_dict = {
     'BACKTEST_LOG': BACKTEST_LOG,
 
     'FITNESS_CRITERIA': FITNESS_CRITERIA,
+
+    'WORKING_ALGO_WRAPPER_FILE': WORKING_ALGO_WRAPPER_FILE,
 
     }
 
@@ -58,6 +73,7 @@ CONFIG_TEST_ALGOS_FILE_2 = 'config_test_algos_2.json'
 BASIC_TEST_ALGO_NAME = 'IndBasicAlgo1'
 
 CONDOR_TEST_ALGOS_DIR = 'leanQC/config/'
+
 
 test_dict = {
     'REASONABLE_FITNESS_SECS': 60,
