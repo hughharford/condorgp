@@ -126,14 +126,4 @@ def get_fitness_from_log(
 
 
 if __name__ == "__main__":
-    key1 = 'TRACE:: Engine.Run(): Disposing of setup handler...'
-    key2 = 'STATISTICS:: Return Over Maximum Drawdown'
-    key1_line_check = 6
-    key2_line_check = 24
-    got = get_keyed_line_within_limits(key2)
-    print(got)
-
-    assert got[0] != ''
-    assert got[1] == key2_line_check
-
-    print(get_last_chars(got[0]))
+    pass

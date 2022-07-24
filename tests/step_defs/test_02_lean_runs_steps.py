@@ -85,9 +85,12 @@ def results_files_are_updated():
         (1) there, i.e. >1 file
         (2) updated within reasonable timeframe
     '''
-    results_path = lean_dict['LEAN_RESULTS_FOLDER']
-    results_files = [results_path + x for
-                     x in os.listdir(results_path)
-                     if os.path.isfile(results_path + x)]
-    assert len(results_files) > 1
+    # results_path = lean_dict['LEAN_BACKTEST_OUTPUTS_DIR']
+    # results_files = [results_path + x for
+    #                  x in os.listdir(results_path)
+    #                  if os.path.isfile(results_path + x)]
+    results_file = lean_dict['BACKTEST_LOG']
+    results_files = []
+    results_files.append(results_file)
+    assert len(results_files) >= 1
     assert check_recent_mod(results_files)

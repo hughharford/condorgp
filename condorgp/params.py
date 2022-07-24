@@ -22,6 +22,7 @@ LEAN_CONFIG_FILE = 'config.json'
 
 CONDOR_CONFIG_FILE = 'config_condor.json'
 CONDOR_CONFIG_PATH = 'leanQC/config/'
+# /home/hsth/code/hughharford/condorgp/leanQC/config/config_test_algos_2.json
 
 BACKTEST_LOG = LEAN_BACKTEST_OUTPUTS_DIR + 'log.txt'
 

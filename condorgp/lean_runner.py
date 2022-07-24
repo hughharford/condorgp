@@ -41,7 +41,7 @@ class RunLean():
         ALGO_NAME_SIN_PY = input_ind
 
         os. chdir("../Lean")
-        os.system(f"lean backtest {ALGO_PATH}{ALGO_NAME_SIN_PY}.py --lean-config {JSON_PATH}config_test_condor.json --output Backtests")
+        # os.system(f"lean backtest {ALGO_PATH}{ALGO_NAME_SIN_PY}.py --lean-config {JSON_PATH}config_test_condor.json --output Backtests")
         os. chdir("../condorgp")
 
         # --verbose
