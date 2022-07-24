@@ -28,6 +28,7 @@ RUN apt-get install -y \
 		unzip \
 		curl \
 		wget \
+    snapd \
 		virtualenv \
 		python3-pip
 
@@ -132,21 +133,27 @@ RUN set -ex; \
 	rm -f get-pip.py
 
 # CondorGP clone lean
+
+# LEAN dependencies:
+RUN snap install dotnet-sdk --classic --channel=6.0
+
 RUN git clone https://github.com/QuantConnect/Lean.git
 WORKDIR /Lean/
+RUN dotnet build QuantConnect.Lean.sln
+
 # RUN pip install Lean # requires a "Y"
 # RUN lean init
 WORKDIR /condorgp/
 
 # HSTH - CondorGP files copy over
 # COPY Lean/ Lean/ # doesn't work as Lean includes .dockerignore
-COPY condorgp/ condorgp/
-COPY leanQC/ leanQC/
-COPY tests/ tests/
-COPY setup.py setup.py
+# COPY condorgp/ condorgp/
+# COPY leanQC/ leanQC/
+# COPY tests/ tests/
+# COPY setup.py setup.py
 
 # HSTH fulfill from requirements.txt
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+# COPY requirements.txt requirements.txt
+# RUN pip3 install -r requirements.txt
 
 CMD ["/bin/bash"]

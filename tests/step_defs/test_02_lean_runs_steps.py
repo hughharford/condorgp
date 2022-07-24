@@ -74,9 +74,10 @@ def call_run_docker():
     '''
     Calls the CLI runner class once
     '''
-    r = RunLean()
-    r.run_lean_via_CLI(test_dict['BASIC_TEST_ALGO_NAME'])
-
+    input_ind = test_dict['BASIC_TEST_ALGO_NAME']
+    config_to_run = test_dict['CONFIG_TEST_ALGOS_FILE_1']
+    lean = RunLean()
+    lean.run_lean_via_CLI(input_ind, config_to_run)
 
 @then('Lean/Backtests files are updated')
 def results_files_are_updated():

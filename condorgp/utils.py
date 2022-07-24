@@ -21,9 +21,9 @@ def copy_config_json_to_lean_launcher_dir(file_path, filename):
     Copy the file to
         lean_dict['LEAN_CONFIG_DIR']
     '''
-    src = file_path + filename
-    dst = lean_dict['LEAN_CONFIG_DIR'] + filename
-    shutil.copy(src, dst, follow_symlinks=True)
+    src_ingoing_config = file_path + filename
+    dst_to_copy_to = lean_dict['LEAN_CONFIG_DIR'] + filename
+    shutil.copy(src_ingoing_config, dst_to_copy_to, follow_symlinks=True)
 
 def delete_file_from_path(file_path, filename):
     '''

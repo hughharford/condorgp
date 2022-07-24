@@ -50,12 +50,12 @@ def copy_config_n_algo_across(input_ind):
     copies across config files and algorithms as needed
     '''
     # copy config.json across before container launch
-    config_path = test_dict['CONDOR_CONFIG_PATH']
+    config_from_path = test_dict['CONDOR_CONFIG_PATH']
     if input_ind[-1] == '1':
         config_to_copy = test_dict['CONFIG_TEST_ALGOS_FILE_1']
     elif input_ind[-1] == '2':
         config_to_copy = test_dict['CONFIG_TEST_ALGOS_FILE_2']
-    copy_config_json_to_lean_launcher_dir(config_path, config_to_copy)
+    copy_config_json_to_lean_launcher_dir(config_from_path, config_to_copy)
 
     # copy algo.py across before container launch
     test_ind_path = test_dict['CONDOR_TEST_ALGOS_FOLDER']
@@ -66,8 +66,14 @@ def copy_config_n_algo_across(input_ind):
 @when('Lean runs the "<input_ind>" via the CLI', target_fixture='input_ind')
 def set_lean_runner(input_ind):
     '''uses the utils method to set an os system command via Lean CLI'''
+    # TO DO: not DRY!
+    config_to_run = ''
+    if input_ind[-1] == '1':
+        config_to_run = test_dict['CONFIG_TEST_ALGOS_FILE_1']
+    elif input_ind[-1] == '2':
+        config_to_run = test_dict['CONFIG_TEST_ALGOS_FILE_2']
     lean = RunLean()
-    lean.run_lean_via_CLI(input_ind)
+    lean.run_lean_via_CLI(input_ind, config_to_run)
 
 @then(parsers.cfparse('the "{output_ind:String}" is found',
                        extra_types=EXTRA_TYPES), target_fixture='output_ind')

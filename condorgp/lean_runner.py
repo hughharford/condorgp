@@ -15,7 +15,7 @@ class RunLean():
         '''
         pass
 
-    def run_lean_via_CLI(self, input_ind):
+    def run_lean_via_CLI(self, input_ind, input_json):
         ''' simple but current Condorgp primary way to run lean fitness function.
 
         Requires:
@@ -35,13 +35,13 @@ class RunLean():
         #     test_dict['CONDOR_CONFIG_PATH'],
         #     test_dict['CONDOR_TEST_CONFIG_FILE'])
 
-        JSON_PATH = ''
+        JSON_PATH = lean_dict['LEAN_CONFIG_DIR']
         ALGO_PATH = lean_dict['LEAN_ALGOS_FOLDER']
-        # ALGO_NAME_SIN_PY = 'IndBasicAlgo1'
         ALGO_NAME_SIN_PY = input_ind
+        JSON_CONFIG_INC_JSON = input_json
 
         os. chdir("../Lean")
-        # os.system(f"lean backtest {ALGO_PATH}{ALGO_NAME_SIN_PY}.py --lean-config {JSON_PATH}config_test_condor.json --output Backtests")
+        os.system(f"lean backtest {ALGO_PATH}{ALGO_NAME_SIN_PY}.py --lean-config {JSON_PATH}{JSON_CONFIG_INC_JSON} --output Backtests")
         os. chdir("../condorgp")
 
         # --verbose
