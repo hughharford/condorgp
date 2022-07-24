@@ -1,9 +1,14 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#       LOCAL BASE PATH
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Set here only, in theory:
+LOCAL_BASE_PATH = '/home/hsth/code/hughharford/'
 
 # ################################## ##################################
 #           MAIN LEAN PARAMS
 # ################################## ##################################
 
-LEAN_BASE_PATH = '/home/hsth/code/hughharford/Lean/'
+LEAN_BASE_PATH = LOCAL_BASE_PATH + 'Lean/'
 
 LEAN_ALGOS_DIR = LEAN_BASE_PATH + 'Algorithm.Python/'
 LEAN_LAUNCHER_DIR = 'Launcher/bin/Debug/'
@@ -20,6 +25,10 @@ CONDOR_CONFIG_PATH = 'leanQC/config/'
 
 BACKTEST_LOG = LEAN_BACKTEST_OUTPUTS_DIR + 'log.txt'
 
+FITNESS_BASE = 'STATISTICS:: '
+CURRENT_FITNESS_STAT = 'Return Over Maximum Drawdown'
+FITNESS_CRITERIA = FITNESS_BASE + CURRENT_FITNESS_STAT
+
 lean_dict = {
     'LEAN_CONFIG_FILE': LEAN_CONFIG_FILE,
     'LEAN_CONFIG_DIR': LEAN_CONFIG_DIR,
@@ -31,7 +40,9 @@ lean_dict = {
     'LEAN_BACKTEST_OUTPUTS_DIR': LEAN_BACKTEST_OUTPUTS_DIR,
 
     'BACKTEST_LOG': BACKTEST_LOG,
-    
+
+    'FITNESS_CRITERIA': FITNESS_CRITERIA,
+
     }
 
 # ################################## ##################################
@@ -65,7 +76,13 @@ test_dict = {
 # ################################## ##################################
 
 NO_LOG_LINES = 150
+CONDOR_BASE_PATH = LOCAL_BASE_PATH + 'condorgp/'
+CONDOR_LOG_PATH = CONDOR_BASE_PATH + 'condorgp/util/logs/'
+CONDOR_LOG = CONDOR_LOG_PATH + 'condor_log.txt'
 
 util_dict = {
-    'NO_LOG_LINES': NO_LOG_LINES
+    'CONDOR_LOG_PATH': CONDOR_LOG_PATH,
+    'CONDOR_LOG': CONDOR_LOG,
+    'NO_LOG_LINES': NO_LOG_LINES,
+
 }

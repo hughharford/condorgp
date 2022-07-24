@@ -97,16 +97,10 @@ def expected_result_is_updated(Return_Over_Maximum_Drawdown):
 
     With different specific algorithms, different results expected
     Currently using
-        Return_Over_Maximum_Drawdown
+        lean_dict['FITNESS_CRITERIA']
+        22 07: Return_Over_Maximum_Drawdown
     '''
     key_req = Return_Over_Maximum_Drawdown
-    returned = retrieve_log_line_with_key(key_req)
-    found_line = returned[0]
-    line_no_found_at = returned[1]
-    if found_line != '':
-        assert key_req in found_line
-    assert line_no_found_at < 150
-
     limit_lines = 50
     got = get_keyed_line_within_limits(key_req, limit_lines = limit_lines)
     assert got[0] != ''

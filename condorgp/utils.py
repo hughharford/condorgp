@@ -115,6 +115,15 @@ def get_keyed_line_within_limits(
         return f'past limit given: {limit_lines}', -3
     return line, no_lines_after_start
 
+def get_last_chars(line):
+    temp = str.split(line,' ')
+    return temp[-1]
+
+def get_fitness_from_log(
+        key = lean_dict['FITNESS_CRITERIA'],
+        log_file_n_path = lean_dict['BACKTEST_LOG']):
+    pass
+
 
 if __name__ == "__main__":
     key1 = 'TRACE:: Engine.Run(): Disposing of setup handler...'
@@ -126,3 +135,5 @@ if __name__ == "__main__":
 
     assert got[0] != ''
     assert got[1] == key2_line_check
+
+    print(get_last_chars(got[0]))
