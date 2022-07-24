@@ -26,6 +26,9 @@ from deap import creator
 from deap import tools
 from deap import gp
 
+from utils import get_keyed_line_within_limits
+
+
 # Define new functions
 def protectedDiv(left, right):
     with numpy.errstate(divide='ignore',invalid='ignore'):
@@ -75,10 +78,15 @@ def evalIntoAndFromLean(individual):
     # output a compile function to a file, so it can be run via Lean
 
 
+
     # Evaluate the sum of squared difference between the expression
     # and the real function values : x**4 + x**3 + x**2 + x
     diff = numpy.sum((func(samples) - values)**2)
-    return diff
+    Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
+    new_fitness = get_keyed_line_within_limits(Return_over_MDD)[0]
+    fill = '>'*41
+    print(f'new fitness {fill}{new_fitness}')
+    return diff,
 
 # toolbox.register("evaluate", evalSymbReg)
 toolbox.register("evaluate", evalIntoAndFromLean)

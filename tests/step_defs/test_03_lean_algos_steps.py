@@ -79,7 +79,9 @@ def results_files_are_updated(output_ind):
     '''
     print(output_ind)
     no_lines = util_dict['NO_LOG_LINES']
-    results_list = get_last_x_log_lines(lines = no_lines, log_file_n_path = lean_dict['BACKTEST_LOG_FILE_N_PATH'])
+    results_list = get_last_x_log_lines(
+                            lines = no_lines,
+                            log_file_n_path = lean_dict['BACKTEST_LOG'])
     found_algo_name = False
     for line in results_list:
         if output_ind in line:

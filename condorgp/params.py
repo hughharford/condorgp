@@ -18,7 +18,7 @@ LEAN_CONFIG_FILE = 'config.json'
 CONDOR_CONFIG_FILE = 'config_condor.json'
 CONDOR_CONFIG_PATH = 'leanQC/config/'
 
-BACKTEST_LOG_FILE_N_PATH = LEAN_BACKTEST_OUTPUTS_DIR + 'log.txt'
+BACKTEST_LOG = LEAN_BACKTEST_OUTPUTS_DIR + 'log.txt'
 
 lean_dict = {
     'LEAN_CONFIG_FILE': LEAN_CONFIG_FILE,
@@ -30,8 +30,8 @@ lean_dict = {
     'LEAN_RESULTS_FOLDER': LEAN_RESULTS_DIR,
     'LEAN_BACKTEST_OUTPUTS_DIR': LEAN_BACKTEST_OUTPUTS_DIR,
 
-    'BACKTEST_LOG_FILE_N_PATH': BACKTEST_LOG_FILE_N_PATH,
-
+    'BACKTEST_LOG': BACKTEST_LOG,
+    
     }
 
 # ################################## ##################################
