@@ -115,14 +115,18 @@ ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/3cb8888cc2869620f57d5
 ENV PYTHON_GET_PIP_SHA256 c518250e91a70d7b20cceb15272209a4ded2a0c263ae5776f129e0d9b5674309
 
 # HSTH additional to deal with: WARNING: pip is configured with locations that require TLS/SSL, however the ssl module in Python is not available.
-RUN apt-get install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+RUN apt-get install -y \
+          libreadline-gplv2-dev \
+          libncursesw5-dev \
+          libssl-dev \
+          libsqlite3-dev \
+          tk-dev \
+          libgdbm-dev \
+          libc6-dev \
+          libbz2-dev \
+          libicu-dev
 
-# separated as didn't work immediately:
-RUN apt install snapd -y
-# setup snap
-RUN systemctl unmask snapd.service
-RUN systemctl enable snapd.service
-RUN systemctl start snapd.service
+# NB. Condorgp req for Lean dotnet install, needs:  libicu-dev
 
 
 RUN set -ex; \
@@ -140,32 +144,26 @@ RUN set -ex; \
 	rm -f get-pip.py
 
 
-# # LEAN dependencies:
-RUN snap install dotnet-sdk --classic
-# RUN wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-# RUN dpkg -i packages-microsoft-prod.deb
-# RUN rm packages-microsoft-prod.deb
-# RUN snap install dotnet-sdk --classic --channel=6.0
-
-
 # # CondorGP clone lean
-# RUN git clone https://github.com/QuantConnect/Lean.git
-# WORKDIR /Lean/
-# RUN dotnet build QuantConnect.Lean.sln
+RUN git clone https://github.com/QuantConnect/Lean.git
+WORKDIR /Lean/
+
+WORKDIR /
+# HSTH - CondorGP files copy over
+RUN git clone https://github.com/hughharford/condorgp.git
+WORKDIR /condorgp/
+
+# HSTH fulfill from requirements.txt
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
 
 # RUN pip install Lean # requires a "Y"
 # RUN lean init
+# # LEAN installation dependencies:
 WORKDIR /condorgp/
-
-# HSTH - CondorGP files copy over
-# COPY Lean/ Lean/ # doesn't work as Lean includes .dockerignore
-# COPY condorgp/ condorgp/
-# COPY leanQC/ leanQC/
-# COPY tests/ tests/
-# COPY setup.py setup.py
-
-# HSTH fulfill from requirements.txt
-# COPY requirements.txt requirements.txt
-# RUN pip3 install -r requirements.txt
+COPY leanQC/installation/dotnet-install.sh leanQC/installation/dotnet-install.sh
+RUN bash leanQC/installation/dotnet-install.sh -c Current
+RUN export PATH="$PATH:./root/.dotnet"
+RUN dotnet build QuantConnect.Lean.sln
 
 CMD ["/bin/bash"]
