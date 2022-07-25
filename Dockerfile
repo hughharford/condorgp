@@ -153,6 +153,8 @@ WORKDIR /
 RUN git clone https://github.com/hughharford/condorgp.git
 WORKDIR /condorgp/
 
+RUN apt-get install file_read_backwards
+
 # HSTH fulfill from requirements.txt
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
@@ -163,7 +165,10 @@ RUN pip3 install -r requirements.txt
 WORKDIR /condorgp/
 COPY leanQC/installation/dotnet-install.sh leanQC/installation/dotnet-install.sh
 RUN bash leanQC/installation/dotnet-install.sh -c Current
-RUN export PATH="$PATH:./root/.dotnet"
+WORKDIR /Lean/
+ENV PATH="$PATH:.././root/.dotnet"
 RUN dotnet build QuantConnect.Lean.sln
+
+WORKDIR /condorgp/
 
 CMD ["/bin/bash"]

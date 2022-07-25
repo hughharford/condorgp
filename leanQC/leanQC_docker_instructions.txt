@@ -4,7 +4,7 @@
   run one folder 'back', i.e. alongside the condorgp repo
 
 2. Build the container for LeanFoundation
-  sudo docker build -f DockerfileLeanFoundation -t lean:foundation .
+  sudo docker build -f DockerfileLeanFoundation -t quantconnect/lean:foundation .
 
   >> n.b. you will need to be in the file location for the
     docker file DockerfileLeanFoundation, i.e. Lean
@@ -22,7 +22,7 @@
     # for linux or CI builds, the script file runs nicely:
     leanQC/installation/dotnet-install.sh
     # Ran:
-    #     sudo bash dotnet-install.sh -c Current
+    #     sudo bash leanQC/installation/dotnet-install.sh/dotnet-install.sh -c Current
     # BUT failed to install dotnet
     # Trying snap (this won't work with WSL)
     sudo snap install dotnet-sdk --classic --channel=6.0
@@ -35,19 +35,20 @@
 
 
 4. Build the subsequent docker for Lean, using the LeanFoundation image
+***********************************
   >> Navigate to Lean/
-  >> Edit the cloned Dockerfile found there:
-        FROM lean:foundation
-        # FROM quantconnect/lean:foundation
-        # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        # the commented line above is the original, which will download
-        # the shorter line will look to build from local Docker image
   >> run:
     sudo docker build . -t quantconnect/lean:latest
     # quantconnect/lean:latest
 
-  >>>> but this fails... interesting. Needs the following adjustment to build
+  >> likely have errors:
+  >>> so
+      Edit the cloned Dockerfile found there:
+
+  >>>> Needs the following adjustment to build
     # adjusted from line 23 in the Dockerfile to:
+    # i.e. comment out 2 lines, and leave 3 lines:
+
     # COPY ./DataLibraries /Lean/Launcher/bin/Debug/
     # COPY ./AlphaStreams/QuantConnect.AlphaStream/bin/Debug/ /Lean/Launcher/bin/Debug/
     COPY ./Launcher/bin/Debug/ /Lean/Launcher/bin/Debug/
@@ -60,20 +61,16 @@
   #
   ###
 
-5. Test run of the utils/run_lean function:
-  >>
-    # should run the lean:latest
-    # and
-    # output results into the lean/Backtests folder
+5. Test run of the lean_runner.py:
+***********************************
+    from condorgp.lean_runner import RunLean
+    r = RunLean()
+    r.run_lean_via_CLI()
 
 6. Test
+***********************************
+    See BBD tests 02-05 and probably further
 
-
-
-
-7. Simple instructions for setting up lean properly
-  (no doubt this is clearly outlined in the setup instructions somewhere)
-
-  git clone the repo
-  pip install lean
-  lean init (not required for initial run - the Data folder is extant)
+7. Follow the installation instructions in
+***********************************
+    'leanQC_THESE_instructions.txt'

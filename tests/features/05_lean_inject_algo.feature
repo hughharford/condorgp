@@ -6,11 +6,11 @@ Feature: Lean reports results for each evolved individual
   Scenario Outline: Lean reports results for injected individual
     Given a Lean container ready to run
     And a Lean algo wrapper that works
-    And a text of "<evolved_code>" is injected
+    And a text of "<gp_code_file>" is injected
     When Lean runs the "<input_ind>" via the CLI
     Then the result: "<Return_Over_Maximum_Drawdown>" is reported
     And the fitness function demonstrates this result
 
     Examples:
-      | evolved_code        | input_ind       | Return_Over_Maximum_Drawdown  |
-      | file_with_gp_code   | gpInjectAlgo1   | 999999                        |
+      | gp_code_file        | input_ind       | Return_Over_Maximum_Drawdown  |
+      | evolved_code.txt   | gpInjectAlgo1   | 999999                        |

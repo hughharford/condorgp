@@ -30,3 +30,6 @@ termcolor
 
 # condorgp utilities etc
 pytest-bdd
+
+# lean dotnet build requirements
+# libicu-dev # apt get install instead

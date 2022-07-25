@@ -7,13 +7,13 @@ Feature: Lean reports results for each evolved individual
     Given a Lean container ready to run
     And an evolved "<input_ind>" is specified
     When Lean runs the "<input_ind>" via the CLI
-    Then the result: "<Return_Over_Maximum_Drawdown>" is reported
+    Then the result: "<ROI_over_MDD_value>" is reported
     And the fitness function demonstrates this result
 
     Examples:
-      | input_ind            |   Return_Over_Maximum_Drawdown             |
-      | IndBasicAlgo2        |   85.095                                   |
-      | IndBasicAlgo1        |   79228162514264337593543950335            |
+      | input_ind            |   ROI_over_MDD_value                 |
+      | IndBasicAlgo2        |   85.095                             |
+      | IndBasicAlgo1        |   79228162514264337593543950335      |
 
 
 # Each of the test algos has different dates and cash:

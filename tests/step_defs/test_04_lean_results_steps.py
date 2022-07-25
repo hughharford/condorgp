@@ -7,6 +7,7 @@ from pytest_bdd import scenarios, given, when, then, parsers
 from condorgp.lean_runner import RunLean
 from condorgp.utils import retrieve_log_line_with_key
 from condorgp.utils import get_keyed_line_within_limits
+from condorgp.utils import get_last_chars
 from condorgp.params import lean_dict, test_dict
 
 EXTRA_TYPES = {
@@ -75,7 +76,7 @@ def individual_specified(input_ind):
     An algorithm 'individual' is specified
     Confirms this is present
     '''
-    pass
+    assert input_ind
 
 @when(parsers.cfparse('Lean runs the "{input_ind:String}" via the CLI',
                        extra_types=EXTRA_TYPES), target_fixture='input_ind')
@@ -84,14 +85,13 @@ def runs_the_individual_via_the_cli(input_ind):
     '''
     Calls the CLI runner class, with the algorithm specified
     '''
-    pass
-    # r = RunLean()
-    # r.run_lean_via_CLI(input_ind)
+    r = RunLean()
+    r.run_lean_via_CLI(input_ind) # runs with default config (not set here)
 
-@then(parsers.cfparse('the result: "{Return_Over_Maximum_Drawdown:Float}" is reported',
-                       extra_types=EXTRA_TYPES), target_fixture='Return_Over_Maximum_Drawdown')
-@then('the result: "<Return_Over_Maximum_Drawdown>" is reported', target_fixture='Return_Over_Maximum_Drawdown')
-def expected_result_is_updated(Return_Over_Maximum_Drawdown):
+@then(parsers.cfparse('the result: "{ROI_over_MDD_value:Float}" is reported',
+                       extra_types=EXTRA_TYPES), target_fixture='ROI_over_MDD_value')
+@then('the result: "<ROI_over_MDD_value>" is reported', target_fixture='ROI_over_MDD_value')
+def expected_result_is_updated(ROI_over_MDD_value):
     '''
     Checks the expected result
 
@@ -100,11 +100,13 @@ def expected_result_is_updated(Return_Over_Maximum_Drawdown):
         lean_dict['FITNESS_CRITERIA']
         22 07: Return_Over_Maximum_Drawdown
     '''
-    key_req = Return_Over_Maximum_Drawdown
+    key_req = 'Return Over Maximum Drawdown'
     limit_lines = 50
     got = get_keyed_line_within_limits(key_req, limit_lines = limit_lines)
-    assert got[0] != ''
-    assert got[1] < limit_lines
+
+    assert got[0] != 'not found'
+    assert got[1] > 0 and got[1] < limit_lines
+    assert ROI_over_MDD_value == float(get_last_chars(got[0]))
 
 @then('the fitness function demonstrates this result')
 def fitness_function_demos_the_result():

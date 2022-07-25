@@ -7,7 +7,7 @@ from file_read_backwards import FileReadBackwards
 from condorgp.params import lean_dict, test_dict, util_dict
 
 
-def copy_ind_to_lean_algos_dir(file_path, filename):
+def cp_ind_to_lean_algos(file_path, filename):
     '''
     Copy a file to the
         lean_dict['LEAN_ALGOS_FOLDER']
@@ -16,7 +16,7 @@ def copy_ind_to_lean_algos_dir(file_path, filename):
     dst = lean_dict['LEAN_ALGOS_FOLDER'] + filename
     shutil.copy(src, dst, follow_symlinks=True)
 
-def copy_config_json_to_lean_launcher_dir(file_path, filename):
+def cp_config_to_lean_launcher(file_path, filename):
     '''
     Copy the file to
         lean_dict['LEAN_CONFIG_DIR']
@@ -51,6 +51,10 @@ def check_recent_mod(input_file_paths):
         if (now - diff) > os.path.getmtime(file_path): return False
         if count == 0: return False
     return True
+
+def get_all_lines(file_input):
+    lines = open(file_input).readlines()
+    return lines
 
 def get_last_x_log_lines(
         lines = 150,
@@ -127,3 +131,4 @@ def get_fitness_from_log(
 
 if __name__ == "__main__":
     pass
+    print('not much set here')

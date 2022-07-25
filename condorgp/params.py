@@ -5,13 +5,15 @@
 LOCAL_BASE_PATH = '/home/hsth/code/hughharford/'
 
 # HIGH LEVEL CONFIGURATION OPTIONS:
-#######################################################################
+####################################################
+# ###################
 # run using lean, expecting built containers etc
-RUN_WITH_LEAN_CONTAINERS = True
+RUN_WITH_LEAN_CONTAINERS = False
+RUN_VERBOSE_FOR_DEBUG = True # leave this as true, update the line above T/F
 
 highlevel_config_dict = {
     'RUN_WITH_LEAN_CONTAINERS': RUN_WITH_LEAN_CONTAINERS,
-
+    'RUN_VERBOSE_FOR_DEBUG': RUN_VERBOSE_FOR_DEBUG,
 }
 
 
@@ -41,7 +43,7 @@ FITNESS_BASE = 'STATISTICS:: '
 CURRENT_FITNESS_STAT = 'Return Over Maximum Drawdown'
 FITNESS_CRITERIA = FITNESS_BASE + CURRENT_FITNESS_STAT
 
-WORKING_ALGO_WRAPPER_FILE = 'path and filename to template aglo'
+ALGO_WRAPPER_SIN_PY = 'gpInjectAlgo'
 
 lean_dict = {
     'LEAN_CONFIG_FILE': LEAN_CONFIG_FILE,
@@ -57,7 +59,7 @@ lean_dict = {
 
     'FITNESS_CRITERIA': FITNESS_CRITERIA,
 
-    'WORKING_ALGO_WRAPPER_FILE': WORKING_ALGO_WRAPPER_FILE,
+    'ALGO_WRAPPER_SIN_PY': ALGO_WRAPPER_SIN_PY,
 
     }
 
@@ -74,6 +76,8 @@ BASIC_TEST_ALGO_NAME = 'IndBasicAlgo1'
 
 CONDOR_TEST_ALGOS_DIR = 'leanQC/config/'
 
+CONDORGP_WITHIN_LEAN_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
+CONDORGP_IN_BACKTESTS_DIR = '/home/hsth/code/hughharford/Lean/LocalPackages/condorgp/backtests/'
 
 test_dict = {
     'REASONABLE_FITNESS_SECS': 60,
@@ -86,6 +90,9 @@ test_dict = {
     'BASIC_TEST_ALGO_NAME': BASIC_TEST_ALGO_NAME,
 
     'CONDOR_CONFIG_PATH': CONDOR_CONFIG_PATH,
+
+    'CONDORGP_WITHIN_LEAN_DIR': CONDORGP_WITHIN_LEAN_DIR,
+    'CONDORGP_IN_BACKTESTS_DIR': CONDORGP_IN_BACKTESTS_DIR
     }
 
 # ################################## ##################################
