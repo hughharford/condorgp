@@ -7,6 +7,7 @@ from pytest_bdd import scenarios, given, when, then, parsers
 from condorgp.lean_runner import RunLean
 from condorgp.utils import retrieve_log_line_with_key
 from condorgp.utils import get_keyed_line_within_limits
+from condorgp.utils import get_all_lines
 from condorgp.params import lean_dict, test_dict
 
 EXTRA_TYPES = {
@@ -30,17 +31,17 @@ scenarios('../features/05_lean_inject_algo.feature')
   Scenario Outline: Lean reports results for injected individual
     Given a Lean container ready to run
     And a Lean algo wrapper that works
-    And a text of "<evolved_code>" is injected from a file
+    And a text of "<gp_code_file>" is injected from a file
     When Lean runs the "<input_ind>" via the CLI
     Then the result: "<Return_Over_Maximum_Drawdown>" is reported
     And the fitness function demonstrates this result
 
     Examples:
-      | evolved_code        | input_ind       | Return_Over_Maximum_Drawdown  |
+      | gp_code_file        | input_ind       | Return_Over_Maximum_Drawdown  |
       | file_with_gp_code   | gpInjectAlgo1   | 999999                        |
 """
 
-WORKING_ALGO_WRAPPER_FILE = lean_dict['WORKING_ALGO_WRAPPER_FILE']
+ALGO_WRAPPER_SIN_PY = lean_dict['ALGO_WRAPPER_SIN_PY']
 
 @given('a Lean container ready to run')
 def docker_image_exists():
@@ -58,18 +59,24 @@ def docker_image_exists():
 
 @given('a Lean algo wrapper that works')
 def working_algo_wrapper():
-    assert WORKING_ALGO_WRAPPER_FILE # i.e. is not empty
+    assert ALGO_WRAPPER_SIN_PY # i.e. is not empty
+    file_exists = test_dict['CONDOR_CONFIG_PATH'] + ALGO_WRAPPER_SIN_PY + '.py'
+    print(file_exists)
+    assert os.path.isfile(file_exists)
 
-#  And a text of "<evolved_code>" is injected
-@given(parsers.cfparse('a text of "{evolved_code:String}" is injected',
-                       extra_types=EXTRA_TYPES), target_fixture='evolved_code')
-@given('a text of "<evolved_code>" is injected', target_fixture='evolved_code')
-def individual_specified(evolved_code):
+#  And a text of "<gp_code_file>" is injected
+@given(parsers.cfparse('a text of "{gp_code_file:String}" is injected',
+                       extra_types=EXTRA_TYPES), target_fixture='gp_code_file')
+@given('a text of "<gp_code_file>" is injected', target_fixture='gp_code_file')
+def individual_specified(gp_code_file):
     '''
-    An algorithm 'individual' is specified based on evolved_code variable
+    An algorithm 'individual' is specified based on gp_code_file variable
     Confirms this is present, length > 0
     '''
-    assert len(evolved_code) > 0
+    ROOT = '/home/hsth/code/hughharford/condorgp/condorgp/gp/output/'
+    f_path = ROOT + gp_code_file
+    lines = get_all_lines(f_path)
+    assert len(lines) > 0
 
 @when(parsers.cfparse('Lean runs the "{input_ind:String}" via the CLI',
                        extra_types=EXTRA_TYPES), target_fixture='input_ind')
@@ -94,11 +101,8 @@ def expected_result_is_updated(Return_Over_Maximum_Drawdown):
         lean_dict['FITNESS_CRITERIA']
         22 07: Return_Over_Maximum_Drawdown
     '''
-    key_req = Return_Over_Maximum_Drawdown
-    limit_lines = 50
-    got = get_keyed_line_within_limits(key_req, limit_lines = limit_lines)
-    assert got[0] != ''
-    assert got[1] < limit_lines
+    pass
+    # get from updated test_04
 
 @then('the fitness function demonstrates this result')
 def fitness_function_demos_the_result():

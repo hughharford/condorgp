@@ -4,7 +4,7 @@
     "algorithm-language": "Python",
     "algorithm-location": "IndBasicAlgo2.py",
     "research-object-store-name": "QuantBook",
-    "data-folder": "Data",
+    "data-folder": "data",
     "debugging": false,
     "debugging-method": "LocalCmdline",
     "log-handler": "QuantConnect.Logging.CompositeLogHandler",

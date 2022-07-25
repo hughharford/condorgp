@@ -3,8 +3,8 @@ import os
 from pytest_bdd import scenarios, given, when, then, parsers
 
 from condorgp.utils import delete_file_from_path, get_last_x_log_lines
-from condorgp.utils import copy_config_json_to_lean_launcher_dir
-from condorgp.utils import copy_ind_to_lean_algos_dir
+from condorgp.utils import cp_config_to_lean_launcher
+from condorgp.utils import cp_ind_to_lean_algos
 
 from condorgp.params import lean_dict, test_dict, util_dict
 
@@ -55,11 +55,11 @@ def copy_config_n_algo_across(input_ind):
         config_to_copy = test_dict['CONFIG_TEST_ALGOS_FILE_1']
     elif input_ind[-1] == '2':
         config_to_copy = test_dict['CONFIG_TEST_ALGOS_FILE_2']
-    copy_config_json_to_lean_launcher_dir(config_from_path, config_to_copy)
+    cp_config_to_lean_launcher(config_from_path, config_to_copy)
 
     # copy algo.py across before container launch
     test_ind_path = test_dict['CONDOR_TEST_ALGOS_FOLDER']
-    copy_ind_to_lean_algos_dir(test_ind_path, input_ind + '.py')
+    cp_ind_to_lean_algos(test_ind_path, input_ind + '.py')
 
 @when(parsers.cfparse('Lean runs the "{input_ind:String}" via the CLI',
                        extra_types=EXTRA_TYPES), target_fixture='input_ind')
