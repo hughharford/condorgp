@@ -1,7 +1,7 @@
 1. Need to clone Lean repo:
   git clone git@github.com:QuantConnect/Lean.git
   >> suggest strongly for path-hell reasons that this git clone command is
-  run two folders 'back', i.e. ../../ from the base of condorgp repo
+  run one folder 'back', i.e. alongside the condorgp repo
 
 2. Build the container for LeanFoundation
   sudo docker build -f DockerfileLeanFoundation -t lean:foundation .
@@ -35,7 +35,7 @@
 
 
 4. Build the subsequent docker for Lean, using the LeanFoundation image
-  >> Navigate to ../../QuantConnect/Lean
+  >> Navigate to Lean/
   >> Edit the cloned Dockerfile found there:
         FROM lean:foundation
         # FROM quantconnect/lean:foundation
@@ -43,7 +43,8 @@
         # the commented line above is the original, which will download
         # the shorter line will look to build from local Docker image
   >> run:
-    sudo docker build . -t lean:latest
+    sudo docker build . -t quantconnect/lean:latest
+    # quantconnect/lean:latest
 
   >>>> but this fails... interesting. Needs the following adjustment to build
     # adjusted from line 23 in the Dockerfile to:
@@ -59,21 +60,20 @@
   #
   ###
 
-5. Test run of the leanQC/run_docker.sh
-  >> update absolute path of where the Lean installation - in the .sh file
-  >> run in it's location:
-    bash run_docker.sh
+5. Test run of the utils/run_lean function:
   >>
     # should run the lean:latest
     # and
-    # output results into the leanQC/results folder
+    # output results into the lean/Backtests folder
 
-6. Test 
+6. Test
 
-NOTES:
-A. See /previous folder, hsth's 2020 workings to get the LeanFoundation
-    and other builds, docker folder mounting etc to work.
-B. See also .bat, .cfg and .sh in this folder, all examples from 2020
-    and files expected in the Lean repo as previous.
-    These were used to run dockers, build etc on various systems and with
-    various configurations
+
+
+
+7. Simple instructions for setting up lean properly
+  (no doubt this is clearly outlined in the setup instructions somewhere)
+
+  git clone the repo
+  pip install lean
+  lean init (not required for initial run - the Data folder is extant)

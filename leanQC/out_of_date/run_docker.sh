@@ -28,7 +28,7 @@
 
 full_path=$(realpath $0)
 current_dir=$(dirname $full_path)
-actual_lean_dir=/home/hsth/code/QuantConnect/Lean
+actual_lean_dir=/home/hsth/code/hughharford/Lean
 default_image=lean:latest
 default_launcher_dir=$actual_lean_dir/Launcher/bin/Debug
 raw_launcher_dir=$actual_lean_dir/Launcher

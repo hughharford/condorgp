@@ -6,7 +6,7 @@
 2 save that output as a useful function by Lean
   ## where - paths and outputs etc
   Lean config.json (see leanQC/run_docker.sh)
-    default_config_file=/home/hsth/code/QuantConnect/Lean/Launcher/bin/Debug/config.json
+    default_config_file=/home/hsth/code/hughharford/Lean/Launcher/bin/Debug/config.json
 
     see leanQC/lean_detail/config_json.md - this is a copy of the .json above:
     lines       note on alteration

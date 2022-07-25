@@ -1,8 +1,8 @@
 {
     "environment": "backtesting",
-    "algorithm-type-name": "IndBasicAlgo1",
+    "algorithm-type-name": "IndBasicAlgo2",
     "algorithm-language": "Python",
-    "algorithm-location": "IndBasicAlgo1.py",
+    "algorithm-location": "IndBasicAlgo2.py",
     "research-object-store-name": "QuantBook",
     "data-folder": "Data",
     "debugging": false,

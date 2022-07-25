@@ -27,6 +27,22 @@ from deap import tools
 from deap import gp
 
 from utils import get_keyed_line_within_limits
+from util.log import CondorLogger
+
+
+class CondorDeap():
+    def __init__(self):
+        pass
+
+    def run(self):
+        logger = CondorLogger()
+        log = logger.get_logger()
+        filler_WARN = '&'*15
+        filler_DEBUG = '@'*15
+        filler_CRITICAL = '££'*15
+        log.debug(f"{filler_DEBUG}, a DEBUG message: {__name__}")
+        log.warning(f"{filler_WARN}: deap_with_lean, a WARNING message: {__name__}")
+        log.critical(f"{filler_CRITICAL}: deap_with_lean, a WARNING message: {__name__}")
 
 
 # Define new functions
@@ -39,6 +55,9 @@ def protectedDiv(left, right):
         elif numpy.isinf(x) or numpy.isnan(x):
             x = 1
     return x
+
+
+
 
 pset = gp.PrimitiveSet("MAIN", 1)
 pset.addPrimitive(numpy.add, 2, name="vadd")
@@ -67,11 +86,33 @@ def evalSymbReg(individual):
     # Transform the tree expression in a callable function
     func = toolbox.compile(expr=individual)
     # Evaluate the sum of squared difference between the expression
+
+
     # and the real function values : x**4 + x**3 + x**2 + x
     diff = numpy.sum((func(samples) - values)**2)
+    return diff
+
+def evalIntoAndFromLean(individual):
+    # Transform the tree expression in a callable function
+    func = toolbox.compile(expr=individual)
+
+    # output a compile function to a file, so it can be run via Lean
+
+
+
+    # Evaluate the sum of squared difference between the expression
+    # and the real function values : x**4 + x**3 + x**2 + x
+    diff = numpy.sum((func(samples) - values)**2)
+    Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
+    new_fitness = get_keyed_line_within_limits(Return_over_MDD)[0]
+    fill = '>'*41
+    # print(f'new fitness {fill}{new_fitness}')
+    # returns a float in a tuple, i.e.
+    #                               14736.68704775238,
     return diff,
 
-toolbox.register("evaluate", evalSymbReg)
+# toolbox.register("evaluate", evalSymbReg)
+toolbox.register("evaluate", evalIntoAndFromLean)
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register("mate", gp.cxOnePoint)
 toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
@@ -88,12 +129,16 @@ def main():
     stats.register("min", numpy.min)
     stats.register("max", numpy.max)
 
-    algorithms.eaSimple(pop, toolbox, 0.5, 0.1, 40, stats, halloffame=hof)
+    # set to 1 generation for testing
+    algorithms.eaSimple(pop, toolbox, 0.5, 0.1, 1, stats, halloffame=hof)
 
     return pop, stats, hof
 
 if __name__ == "__main__":
     # run gp, outputting population, stats, hall of fame:
+    ccc = CondorDeap()
+    ccc.run()
+
     pop, stats, hof = main()
     # see what we got:
     print("print hof[0]:")
