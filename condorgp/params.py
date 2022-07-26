@@ -8,8 +8,8 @@ LOCAL_BASE_PATH = '/home/hsth/code/hughharford/'
 ####################################################
 # ###################
 # run using lean, expecting built containers etc
-RUN_WITH_LEAN_CONTAINERS = False
-RUN_VERBOSE_FOR_DEBUG = True # leave this as true, update the line above T/F
+RUN_WITH_LEAN_CONTAINERS = True
+RUN_VERBOSE_FOR_DEBUG = False # mostly leave this as true, update line above
 
 highlevel_config_dict = {
     'RUN_WITH_LEAN_CONTAINERS': RUN_WITH_LEAN_CONTAINERS,
@@ -22,11 +22,14 @@ highlevel_config_dict = {
 # ################################## ##################################
 
 LEAN_BASE_PATH = LOCAL_BASE_PATH + 'Lean/'
+LOCALPACKAGES_PATH = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
 
 LEAN_ALGOS_DIR = LEAN_BASE_PATH + 'Algorithm.Python/'
 LEAN_LAUNCHER_DIR = 'Launcher/bin/Debug/'
 
 LEAN_BACKTEST_OUTPUTS_DIR = LEAN_BASE_PATH + 'Backtests/'
+LOCALPACKAGES_BACKTEST_OUTPUTS_DIR = LOCALPACKAGES_PATH + 'Backtests/'
+
 # outputs here:
 LEAN_RESULTS_DIR = LEAN_BACKTEST_OUTPUTS_DIR
 
@@ -38,12 +41,15 @@ CONDOR_CONFIG_PATH = 'leanQC/config/'
 # /home/hsth/code/hughharford/condorgp/leanQC/config/config_test_algos_2.json
 
 BACKTEST_LOG = LEAN_BACKTEST_OUTPUTS_DIR + 'log.txt'
+BACKTEST_LOG_LOCALPACKAGES = LOCALPACKAGES_BACKTEST_OUTPUTS_DIR + 'log.txt'
 
 FITNESS_BASE = 'STATISTICS:: '
 CURRENT_FITNESS_STAT = 'Return Over Maximum Drawdown'
 FITNESS_CRITERIA = FITNESS_BASE + CURRENT_FITNESS_STAT
 
 ALGO_WRAPPER_SIN_PY = 'gpInjectAlgo'
+
+'/home/hsth/code/hughharford/Lean/LocalPackages/condorgp/Backtests/log.txt'
 
 lean_dict = {
     'LEAN_CONFIG_FILE': LEAN_CONFIG_FILE,
@@ -56,6 +62,8 @@ lean_dict = {
     'LEAN_BACKTEST_OUTPUTS_DIR': LEAN_BACKTEST_OUTPUTS_DIR,
 
     'BACKTEST_LOG': BACKTEST_LOG,
+    'BACKTEST_LOG_LOCALPACKAGES': BACKTEST_LOG_LOCALPACKAGES,
+    'LOCALPACKAGES_PATH': LOCALPACKAGES_PATH,
 
     'FITNESS_CRITERIA': FITNESS_CRITERIA,
 
@@ -100,13 +108,7 @@ test_dict = {
 # ################################## ##################################
 
 NO_LOG_LINES = 150
-CONDOR_BASE_PATH = LOCAL_BASE_PATH + 'condorgp/'
-CONDOR_LOG_PATH = CONDOR_BASE_PATH + 'condorgp/util/logs/'
-CONDOR_LOG = CONDOR_LOG_PATH + 'condor_log.txt'
 
 util_dict = {
-    'CONDOR_LOG_PATH': CONDOR_LOG_PATH,
-    'CONDOR_LOG': CONDOR_LOG,
     'NO_LOG_LINES': NO_LOG_LINES,
-
 }
