@@ -14,7 +14,7 @@ import logging
 
 from AlgorithmImports import *
 
-from condorgp.params import util_dict
+from condorgp.params import lean_dict
 
 ### <summary>
 ### Basic template framework algorithm uses framework components to define the algorithm.
@@ -86,7 +86,7 @@ class CondorLogger():
         ch.setLevel(logging.WARNING)
         ch.setFormatter(formatter)
         # set basic file handler
-        fh = logging.FileHandler(filename = util_dict['CONDOR_LOG'],
+        fh = logging.FileHandler(filename = lean_dict['BACKTEST_LOG_LOCALPACKAGES'],
                                  mode='a',
                                  encoding=None,
                                  delay=False,)

@@ -16,7 +16,12 @@ class RunLean():
         pass
 
     def run_lean_via_CLI(self, input_ind="set", input_json="set"):
-        ''' simple but current Condorgp primary way to run lean fitness function.
+        '''
+        current Condorgp primary way to run lean fitness function.
+
+            # this is the latest run format for Lean CLI
+            # note how it runs in Lean/LocalPackages
+
         N.b. Can cut out use of Lean containers if required.
              In this case, tests will fail...
         Requires:
@@ -26,9 +31,36 @@ class RunLean():
         Both 1 & 2 are copied into place in the Lean package.
         Then the run command is made
         '''
-
-        previously = 0 # i.e. run the new bit below, not this bit...
+        previously = 1 # i.e. == 1 means run the this new bit, not the below
         if previously:
+            JSON_PATH = test_dict['CONDORGP_WITHIN_LEAN_DIR']
+            ALGO_PATH = test_dict['CONDORGP_WITHIN_LEAN_DIR']
+            ALGO_NAME_SIN_PY = input_ind # 'main' # 'IndBasicAlgo2'
+            JSON_CONFIG_INC_JSON = input_json # 'config_test_algos_2.json' # 'config.json'
+            BACKTEST_PATH_LOCALPACKAGES = 'condorgp/Backtests/'
+
+            if input_ind == "set":
+                ALGO_NAME_SIN_PY = set_default_individual() # input_ind
+            if input_json == "set":
+                JSON_CONFIG_INC_JSON = set_default_config_json() # input_json
+
+            if highlevel_config_dict['RUN_VERBOSE_FOR_DEBUG']:
+                os. chdir("../Lean/LocalPackages")
+                os.system(f"lean backtest {ALGO_PATH}{ALGO_NAME_SIN_PY}.py \
+                            --lean-config {JSON_PATH}{JSON_CONFIG_INC_JSON} \
+                            --output {BACKTEST_PATH_LOCALPACKAGES} \
+                            --verbose")
+                os. chdir("../../condorgp")
+
+            if highlevel_config_dict['RUN_VERBOSE_FOR_DEBUG'] == False:
+                os. chdir("../Lean/LocalPackages")
+                os.system(f"lean backtest condorgp \
+                            --lean-config {JSON_PATH}{JSON_CONFIG_INC_JSON} \
+                            --output {BACKTEST_PATH_LOCALPACKAGES} \
+                            --verbose")
+                os. chdir("../../condorgp")
+
+        else:
             JSON_PATH = lean_dict['LEAN_CONFIG_DIR']
             ALGO_PATH = lean_dict['LEAN_ALGOS_FOLDER']
             ALGO_NAME_SIN_PY = input_ind
@@ -53,22 +85,6 @@ class RunLean():
                             --output Backtests \
                             --verbose")
                 os. chdir("../condorgp")
-        else:
-            JSON_PATH = test_dict['CONDORGP_WITHIN_LEAN_DIR']
-            ALGO_PATH = test_dict['CONDORGP_WITHIN_LEAN_DIR']
-            ALGO_NAME_SIN_PY = 'main' # 'IndBasicAlgo2'
-            JSON_CONFIG_INC_JSON = 'config.json' # 'config_test_algos_2.json' #
-            BACKTEST_PATH_LOCALPACKAGES = 'LocalPackages/condorgp/Backtests'
-
-            # i.e. be able to cut out all usage of Lean containers if helpful
-            if highlevel_config_dict['RUN_VERBOSE_FOR_DEBUG']:
-                os. chdir("../Lean")
-                os.system(f"lean backtest {ALGO_PATH}{ALGO_NAME_SIN_PY}.py \
-                            --lean-config {JSON_PATH}{JSON_CONFIG_INC_JSON} \
-                            --output {BACKTEST_PATH_LOCALPACKAGES} \
-                            --verbose")
-                os. chdir("../condorgp")
-
 
 def set_default_individual(): # input_ind
     algo_name = test_dict['CONFIG_TEST_ALGOS_FILE_2']

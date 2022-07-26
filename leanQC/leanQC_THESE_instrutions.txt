@@ -11,4 +11,5 @@ dotnet build QuantConnect.Lean.sln
 
 # INSTALL AND INITIALISE LEAN
 pip install lean
+lean create-project condorgpLEAN
 lean init

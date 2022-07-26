@@ -2,9 +2,10 @@ import os
 
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condorgp.utils import delete_file_from_path, get_last_x_log_lines
+from condorgp.utils import get_last_x_log_lines
 from condorgp.utils import cp_config_to_lean_launcher
 from condorgp.utils import cp_ind_to_lean_algos
+from condorgp.utils import overwrite_main_with_input_ind
 
 from condorgp.params import lean_dict, test_dict, util_dict
 
@@ -56,6 +57,7 @@ def copy_config_n_algo_across(input_ind):
     elif input_ind[-1] == '2':
         config_to_copy = test_dict['CONFIG_TEST_ALGOS_FILE_2']
     cp_config_to_lean_launcher(config_from_path, config_to_copy)
+    overwrite_main_with_input_ind(input_ind)
 
     # copy algo.py across before container launch
     test_ind_path = test_dict['CONDOR_TEST_ALGOS_FOLDER']
@@ -87,7 +89,7 @@ def results_files_are_updated(output_ind):
     no_lines = util_dict['NO_LOG_LINES']
     results_list = get_last_x_log_lines(
                             lines = no_lines,
-                            log_file_n_path = lean_dict['BACKTEST_LOG'])
+                            log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES'])
     found_algo_name = False
     for line in results_list:
         if output_ind in line:

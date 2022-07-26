@@ -13,8 +13,9 @@ def cp_ind_to_lean_algos(file_path, filename):
         lean_dict['LEAN_ALGOS_FOLDER']
     '''
     src = file_path + filename
-    dst = lean_dict['LEAN_ALGOS_FOLDER'] + filename
+    dst = lean_dict['LOCALPACKAGES_PATH'] + filename
     shutil.copy(src, dst, follow_symlinks=True)
+
 
 def cp_config_to_lean_launcher(file_path, filename):
     '''
@@ -22,7 +23,7 @@ def cp_config_to_lean_launcher(file_path, filename):
         lean_dict['LEAN_CONFIG_DIR']
     '''
     src_ingoing_config = file_path + filename
-    dst_to_copy_to = lean_dict['LEAN_CONFIG_DIR'] + filename
+    dst_to_copy_to = lean_dict['LOCALPACKAGES_PATH'] + filename
     shutil.copy(src_ingoing_config, dst_to_copy_to, follow_symlinks=True)
 
 def delete_file_from_path(file_path, filename):
@@ -58,7 +59,7 @@ def get_all_lines(file_input):
 
 def get_last_x_log_lines(
         lines = 150,
-        log_file_n_path = lean_dict['BACKTEST_LOG']):
+        log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES']):
     '''
     Get from the (default) log the last X lines
     '''
@@ -75,7 +76,7 @@ def get_last_x_log_lines(
 def retrieve_log_line_with_key(
         key,
         lines = 150,
-        log_file_n_path = lean_dict['BACKTEST_LOG']):
+        log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES']):
     '''
     Get the X lines of a log
     And search for the key given
@@ -95,7 +96,7 @@ def retrieve_log_line_with_key(
 
 def get_keyed_line_within_limits(
         key,
-        log_file_n_path = lean_dict['BACKTEST_LOG'],
+        log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES'],
         limit_lines = util_dict['NO_LOG_LINES'],
         start_line = 0)-> tuple:
     '''
@@ -125,10 +126,37 @@ def get_last_chars(line):
 
 def get_fitness_from_log(
         key = lean_dict['FITNESS_CRITERIA'],
-        log_file_n_path = lean_dict['BACKTEST_LOG']):
+        log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES']):
     pass
 
+def overwrite_main_with_input_ind(input_ind):
+    f_path = lean_dict['LOCALPACKAGES_PATH']
+    src = f_path + input_ind
+    dst = f_path + 'main.py'
+    if src and dst:
+        shutil.copy(src, dst, follow_symlinks=True)
+
+def rename_main_class_as_condorgp():
+    '''
+    Rename the class in the main.py to:
+        class condorgp(QCAlgorithm)
+    '''
+    f_path = lean_dict['LOCALPACKAGES_PATH']
+    key_line = 'class IndBasicAlgo2(QCAlgorithm):'
+    replacement_line = 'class condorgp(QCAlgorithm):'
+    main_py_for_class_rename = f_path + 'main.py'
+    # get and cycle through
+    working_file = open(main_py_for_class_rename,"r+")
+    with working_file:
+        full_file_contents = working_file.readlines()
+        for line in full_file_contents:
+            if key_line in line:
+                key_line = replacement_line
+                # i.e. have replaced only 1 key line to rename the class
 
 if __name__ == "__main__":
     pass
-    print('not much set here')
+    # print('not much set here')
+    input_ind = 'IndBasicAlgo2.py'
+    overwrite_main_with_input_ind(input_ind)
+    rename_main_class_as_condorgp() # does nothing so far
