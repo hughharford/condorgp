@@ -61,12 +61,12 @@ def copy_config_in(input_ind):
     elif input_ind[-1] == '2':
         config_to_copy = test_dict['CONDOR_TEST_CONFIG_FILE_2']
     cp_config_to_lean_launcher(config_from_path, config_to_copy)
-    overwrite_main_with_input_ind(input_ind + '.py')
 
-def     copy_algo_in(input_ind):
+def copy_algo_in(input_ind):
     # copy algo.py across before container launch
     test_ind_path = test_dict['CONDOR_TEST_ALGOS_FOLDER']
     cp_ind_to_lean_algos(test_ind_path, input_ind + '.py')
+    overwrite_main_with_input_ind(input_ind + '.py')
 
 @when(parsers.cfparse('Lean runs the "{input_ind:String}" via the CLI',
                        extra_types=EXTRA_TYPES), target_fixture='input_ind')
@@ -80,7 +80,7 @@ def set_lean_runner(input_ind):
     elif input_ind[-1] == '2':
         config_to_run = test_dict['CONFIG_TEST_ALGOS_FILE_2']
     lean = RunLean()
-    lean.run_lean_via_CLI(input_ind, config_to_run)
+    lean.run_lean_via_CLI() # input_ind, config_to_run)
 
 @then(parsers.cfparse('the "{output_ind:String}" is found',
                        extra_types=EXTRA_TYPES), target_fixture='output_ind')

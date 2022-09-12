@@ -9,7 +9,7 @@ LOCAL_BASE_PATH = '/home/hsth/code/hughharford/'
 # ###################
 # run using lean, expecting built containers etc
 RUN_WITH_LEAN_CONTAINERS = True
-RUN_VERBOSE_FOR_DEBUG = False # mostly leave this as true, update line above
+RUN_VERBOSE_FOR_DEBUG = True # mostly leave this as true, update line above
 
 highlevel_config_dict = {
     'RUN_WITH_LEAN_CONTAINERS': RUN_WITH_LEAN_CONTAINERS,
@@ -116,7 +116,7 @@ test_dict = {
 #           UTIL PARAMS
 # ################################## ##################################
 
-NO_LOG_LINES = 500
+NO_LOG_LINES = 150
 
 util_dict = {
     'NO_LOG_LINES': NO_LOG_LINES,

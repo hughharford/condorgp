@@ -10,7 +10,9 @@ from condorgp.params import lean_dict, test_dict, util_dict
 def cp_ind_to_lean_algos(file_path, filename):
     '''
     Copy a file to the
-        lean_dict['LEAN_ALGOS_FOLDER']
+        lean_dict['LOCALPACKAGES_PATH']
+
+        previously was to: LEAN_ALGOS_FOLDER
     '''
     if filename[-3:] != '.py':
         filename = filename + '.py'
@@ -22,7 +24,7 @@ def cp_ind_to_lean_algos(file_path, filename):
 def cp_config_to_lean_launcher(file_path, filename):
     '''
     Copy the file to
-        lean_dict['LEAN_CONFIG_DIR']
+        lean_dict['LOCALPACKAGES_PATH']
     '''
     src_ingoing_config = file_path + filename
     dst_to_copy_to = lean_dict['LOCALPACKAGES_PATH'] + filename
@@ -177,4 +179,4 @@ if __name__ == "__main__":
     pass
     print('going...')
     input_ind = 'IndBasicAlgo1.py'
-    overwrite_main_with_input_ind(input_ind)
+    cp_ind_to_lean_algos(test_dict['CONDOR_TEST_ALGOS_FOLDER'], input_ind)

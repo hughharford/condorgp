@@ -54,7 +54,6 @@ class IndBasicAlgo1(QCAlgorithm):
         self.SetRiskManagement(MaximumDrawdownPercentPerSecurity(0.01))
 
         self.Debug("numpy test >>> print numpy.pi: " + str(np.pi))
-        self.Debug(self.__name__ + 'hsth_testing') # pushing name out for early testing
 
     def OnOrderEvent(self, orderEvent):
         if orderEvent.Status == OrderStatus.Filled:
