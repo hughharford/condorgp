@@ -19,18 +19,18 @@ from AlgorithmImports import *
 ### <meta name="tag" content="using data" />
 ### <meta name="tag" content="using quantconnect" />
 ### <meta name="tag" content="trading and orders" />
-class IndBasicAlgo1(QCAlgorithm):
+class BasicTemplateFrameworkAlgorithm(QCAlgorithm):
     '''Basic template framework algorithm uses framework components to define the algorithm.'''
 
     def Initialize(self):
         ''' Initialise the data and resolution required, as well as the cash and start-end dates for your algorithm. All algorithms must initialized.'''
 
         # Set requested data resolution
-        self.UniverseSettings.Resolution = Resolution.Hour
+        self.UniverseSettings.Resolution = Resolution.Minute
 
         self.SetStartDate(2013,10,7)   #Set Start Date
         self.SetEndDate(2013,10,11)    #Set End Date
-        self.SetCash(1_000_000)           #Set Strategy Cash
+        self.SetCash(100000)           #Set Strategy Cash
 
         # Find more symbols here: http://quantconnect.com/data
         # Forex, CFD, Equities Resolutions: Tick, Second, Minute, Hour, Daily.
@@ -54,7 +54,6 @@ class IndBasicAlgo1(QCAlgorithm):
         self.SetRiskManagement(MaximumDrawdownPercentPerSecurity(0.01))
 
         self.Debug("numpy test >>> print numpy.pi: " + str(np.pi))
-        self.Debug(self.__name__ + 'hsth_testing') # pushing name out for early testing
 
     def OnOrderEvent(self, orderEvent):
         if orderEvent.Status == OrderStatus.Filled:

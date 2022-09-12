@@ -15,5 +15,5 @@ Feature: Lean tests each evolved individual
 
     Examples:
       | input_ind            |   output_ind              |
-      | IndBasicAlgo2        |   IndBasicAlgo2           |
+      | IndBasicAlgo2        |   hsth_testing           |
       | IndBasicAlgo1        |   IndBasicAlgo1           |

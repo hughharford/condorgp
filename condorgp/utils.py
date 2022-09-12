@@ -12,6 +12,8 @@ def cp_ind_to_lean_algos(file_path, filename):
     Copy a file to the
         lean_dict['LEAN_ALGOS_FOLDER']
     '''
+    if filename[-3:] != '.py':
+        filename = filename + '.py'
     src = file_path + filename
     dst = lean_dict['LOCALPACKAGES_PATH'] + filename
     shutil.copy(src, dst, follow_symlinks=True)
@@ -130,7 +132,21 @@ def get_fitness_from_log(
     pass
 
 def overwrite_main_with_input_ind(input_ind):
+    '''
+    Replace main.py with our algorithm, from an existing .py file
+    '''
+    cp_rename_algo_to_main(input_ind)
+    rename_main_class_as_condorgp()
+
+def cp_rename_algo_to_main(input_ind):
+    '''
+    Rename file to main.py
+
+    Requires our algo to be in the localpackages path
+    '''
     f_path = lean_dict['LOCALPACKAGES_PATH']
+    if input_ind[-3:] != '.py':
+        input_ind = input_ind + '.py'
     src = f_path + input_ind
     dst = f_path + 'main.py'
     if src and dst:
@@ -142,21 +158,23 @@ def rename_main_class_as_condorgp():
         class condorgp(QCAlgorithm)
     '''
     f_path = lean_dict['LOCALPACKAGES_PATH']
-    key_line = 'class IndBasicAlgo2(QCAlgorithm):'
-    replacement_line = 'class condorgp(QCAlgorithm):'
+    key_line = 'class'
+    replacement_line = "class condorgp(QCAlgorithm): \n"
     main_py_for_class_rename = f_path + 'main.py'
-    # get and cycle through
-    working_file = open(main_py_for_class_rename,"r+")
-    with working_file:
-        full_file_contents = working_file.readlines()
-        for line in full_file_contents:
-            if key_line in line:
-                key_line = replacement_line
-                # i.e. have replaced only 1 key line to rename the class
+
+    with open(main_py_for_class_rename, 'r') as f:
+        lines = f.readlines()
+
+    with open(main_py_for_class_rename, 'w') as f:
+        count = 0
+        for line in lines:
+            if key_line in line and count == 0:
+                line = replacement_line
+                count += 1
+            f.write(line)
 
 if __name__ == "__main__":
     pass
-    # print('not much set here')
-    input_ind = 'IndBasicAlgo2.py'
+    print('going...')
+    input_ind = 'IndBasicAlgo1.py'
     overwrite_main_with_input_ind(input_ind)
-    rename_main_class_as_condorgp() # does nothing so far

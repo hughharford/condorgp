@@ -50,15 +50,20 @@ def copy_config_n_algo_across(input_ind):
     '''
     copies across config files and algorithms as needed
     '''
+    copy_config_in(input_ind)
+    copy_algo_in(input_ind)
+
+def copy_config_in(input_ind):
     # copy config.json across before container launch
     config_from_path = test_dict['CONDOR_CONFIG_PATH']
     if input_ind[-1] == '1':
-        config_to_copy = test_dict['CONFIG_TEST_ALGOS_FILE_1']
+        config_to_copy = test_dict['CONDOR_TEST_CONFIG_FILE_1']
     elif input_ind[-1] == '2':
-        config_to_copy = test_dict['CONFIG_TEST_ALGOS_FILE_2']
+        config_to_copy = test_dict['CONDOR_TEST_CONFIG_FILE_2']
     cp_config_to_lean_launcher(config_from_path, config_to_copy)
-    overwrite_main_with_input_ind(input_ind)
+    overwrite_main_with_input_ind(input_ind + '.py')
 
+def     copy_algo_in(input_ind):
     # copy algo.py across before container launch
     test_ind_path = test_dict['CONDOR_TEST_ALGOS_FOLDER']
     cp_ind_to_lean_algos(test_ind_path, input_ind + '.py')

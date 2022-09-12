@@ -90,7 +90,7 @@ def results_files_are_updated():
     # results_files = [results_path + x for
     #                  x in os.listdir(results_path)
     #                  if os.path.isfile(results_path + x)]
-    results_file = lean_dict['BACKTEST_LOG']
+    results_file = lean_dict['BACKTEST_LOG_LOCALPACKAGES']
     results_files = []
     results_files.append(results_file)
     assert len(results_files) >= 1
