@@ -7,6 +7,8 @@ from condorgp.utils import cp_config_to_lean_launcher
 from condorgp.utils import cp_ind_to_lean_algos
 from condorgp.utils import overwrite_main_with_input_ind
 from condorgp.utils import confirm_ind_name_in_log_lines
+from condorgp.utils import get_keyed_line_within_limits
+from condorgp.utils import get_last_chars
 
 from condorgp.params import lean_dict, test_dict, util_dict
 
@@ -15,6 +17,7 @@ from condorgp.lean_runner import RunLean
 EXTRA_TYPES = {
     'Number': int,
     'String': str,
+    'Float': float,
 }
 
 CONVERTERS = {
@@ -92,6 +95,25 @@ def results_files_are_updated(output_ind):
     only uses the last X lines of the log file
     '''
     assert confirm_ind_name_in_log_lines(output_ind)
+    # check_results(output_ind)
+
+@then(parsers.cfparse('the result: "{ROI_over_MDD_value:Float}" is reported',
+                       extra_types=EXTRA_TYPES), target_fixture='ROI_over_MDD_value')
+@then('the result: "<ROI_over_MDD_value>" is reported', target_fixture='ROI_over_MDD_value')
+def check_results(ROI_over_MDD_value):
+    # # TODO: not DRY!
+    # ROI_over_MDD_value = 0
+    # if output_ind[-1] == '1':
+    #     ROI_over_MDD_value = 74.891
+    # elif output_ind[-1] == '2':
+    #     ROI_over_MDD_value = 110.382
+    key_req = 'Return Over Maximum Drawdown'
+    limit_lines = 25 # util_dict['NO_LOG_LINES']
+    got = get_keyed_line_within_limits(key_req, limit_lines = limit_lines)
+
+    assert got[0] != 'not found'
+    assert got[1] > 0 and got[1] < limit_lines
+    assert ROI_over_MDD_value == float(get_last_chars(got[0]))
 
 @then(parsers.cfparse('the "{input_ind:String}" algorithm is tidied away',
                        extra_types=EXTRA_TYPES), target_fixture='input_ind')

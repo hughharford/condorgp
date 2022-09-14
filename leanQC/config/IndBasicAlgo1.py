@@ -8,8 +8,8 @@ class IndBasicAlgo1(QCAlgorithm):
         # Set requested data resolution
         self.UniverseSettings.Resolution = Resolution.Hour
 
-        self.SetStartDate(2013,10,7)   #Set Start Date
-        self.SetEndDate(2013,10,11)    #Set End Date
+        self.SetStartDate(2013,10,4)   #Set Start Date
+        self.SetEndDate(2013,10,25)    #Set End Date
         self.SetCash(1_000_000)           #Set Strategy Cash
 
         # Find more symbols here: http://quantconnect.com/data
