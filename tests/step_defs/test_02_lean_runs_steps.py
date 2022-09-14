@@ -5,8 +5,8 @@ from os.path import exists
 from pytest_bdd import scenarios, given, when, then, parsers
 
 from condorgp.lean_runner import RunLean
-from condorgp.utils import check_recent_mod
-from condorgp.params import lean_dict, test_dict
+from condorgp.utils import check_recent_mod, get_last_x_log_lines
+from condorgp.params import lean_dict, test_dict, util_dict
 
 EXTRA_TYPES = {
     'Number': int,
@@ -74,10 +74,10 @@ def call_run_docker():
     '''
     Calls the CLI runner class once
     '''
-    input_ind = test_dict['BASIC_TEST_ALGO_NAME']
-    config_to_run = test_dict['CONFIG_TEST_ALGOS_FILE_1']
+    # input_ind = test_dict['BASIC_TEST_ALGO_NAME']
+    # config_to_run = test_dict['CONFIG_TEST_ALGOS_FILE_1']
     lean = RunLean()
-    lean.run_lean_via_CLI(input_ind, config_to_run)
+    lean.run_lean_via_CLI() # input_ind, config_to_run)
 
 @then('Lean/Backtests files are updated')
 def results_files_are_updated():
@@ -86,12 +86,14 @@ def results_files_are_updated():
         (1) there, i.e. >1 file
         (2) updated within reasonable timeframe
     '''
-    # results_path = lean_dict['LEAN_BACKTEST_OUTPUTS_DIR']
-    # results_files = [results_path + x for
-    #                  x in os.listdir(results_path)
-    #                  if os.path.isfile(results_path + x)]
+
     results_file = lean_dict['BACKTEST_LOG_LOCALPACKAGES']
-    results_files = []
-    results_files.append(results_file)
-    assert len(results_files) >= 1
-    assert check_recent_mod(results_files)
+    log_found = get_last_x_log_lines(
+                                    lines = util_dict['NO_LOG_LINES'],
+                                    log_file_n_path = results_file)
+    output = []
+    for line in log_found:
+        output.append(line)
+
+    assert len(output) >= 10
+    assert check_recent_mod(test_dict['CONDORGP_IN_BACKTESTS_DIR'])

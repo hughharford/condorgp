@@ -81,19 +81,19 @@ CONDOR_TEST_CONFIG_FILE = 'config_test_condor.json'
 CONDOR_TEST_CONFIG_FILE_1 = 'config_test_algos_1.json'
 CONDOR_TEST_CONFIG_FILE_2 = 'config_test_algos_2.json'
 
-BASIC_TEST_ALGO_NAME = 'IndBasicAlgo1'
-CONFIG_TEST_ALGOS_FILE_1 = 'IndBasicAlgo1'
-CONFIG_TEST_ALGOS_FILE_2 = 'IndBasicAlgo2'
-BASIC_TEST_ALGO_LEAN = 'BasicTemplateFrameworkAlgorithm'
+BASIC_TEST_ALGO_NAME = 'IndBasicAlgo0.py'
+CONFIG_TEST_ALGOS_FILE_1 = 'IndBasicAlgo1.py'
+CONFIG_TEST_ALGOS_FILE_2 = 'IndBasicAlgo2.py'
+BASIC_TEST_ALGO_LEAN = 'BasicTemplateFrameworkAlgorithm.py'
 
 
 CONDOR_TEST_ALGOS_DIR = 'leanQC/config/'
 
 CONDORGP_WITHIN_LEAN_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
-CONDORGP_IN_BACKTESTS_DIR = '/home/hsth/code/hughharford/Lean/LocalPackages/condorgp/backtests/'
+CONDORGP_IN_BACKTESTS_DIR = '/home/hsth/code/hughharford/Lean/LocalPackages/condorgp/Backtests/'
 
 test_dict = {
-    'REASONABLE_FITNESS_SECS': 60,
+    'REASONABLE_FITNESS_SECS': 0.0001,
     'CONDOR_TEST_ALGOS_FOLDER': CONDOR_TEST_ALGOS_DIR,
 
     'BASIC_TEST_ALGO_NAME': BASIC_TEST_ALGO_NAME,
@@ -116,7 +116,7 @@ test_dict = {
 #           UTIL PARAMS
 # ################################## ##################################
 
-NO_LOG_LINES = 150
+NO_LOG_LINES = 300
 
 util_dict = {
     'NO_LOG_LINES': NO_LOG_LINES,

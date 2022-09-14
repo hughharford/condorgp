@@ -1,4 +1,6 @@
 import os
+from os import listdir
+from os.path import isfile, join
 import shutil
 from datetime import datetime
 
@@ -50,20 +52,22 @@ def check_recent_mod(input_file_paths):
     now = datetime.timestamp(dt)
     diff = 1000*test_dict['REASONABLE_FITNESS_SECS']
     count = 0
-    for file_path in input_file_paths:
+    recent = 0
+    onlyfiles = [f for f in listdir(input_file_paths) if isfile(join(input_file_paths, f))]
+    for file_path in onlyfiles:
         count += 1
-        print(f'{file_path} and {now - diff}')
-        if (now - diff) > os.path.getmtime(file_path): return False
-        if count == 0: return False
-    return True
+        # print(f'{file_path}: ___ {now - os.path.getmtime(input_file_paths +"/"+ file_path)} < {now - diff}')
+        if (now - os.path.getmtime(input_file_paths +'/'+ file_path)) < (now - diff): recent += 1
+    if count == 0: return False
+    if recent > 0: return True
 
 def get_all_lines(file_input):
     lines = open(file_input).readlines()
     return lines
 
 def get_last_x_log_lines(
-        lines = 150,
-        log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES']):
+                        lines = 150,
+                        log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES']):
     '''
     Get from the (default) log the last X lines
     '''
@@ -76,6 +80,19 @@ def get_last_x_log_lines(
             # print(l)
             list_lines.append(l)
     return list_lines
+
+def confirm_ind_name_in_log_lines(output_ind):
+    print(output_ind)
+    results_list = get_last_x_log_lines(
+                            lines =  util_dict['NO_LOG_LINES'],
+                            log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES'])
+    # print(results_list)
+    found_algo_name = False
+    for line in results_list:
+        if output_ind in line:
+            print(line)
+            found_algo_name = True
+    return found_algo_name
 
 def retrieve_log_line_with_key(
         key,
@@ -178,5 +195,4 @@ def rename_main_class_as_condorgp():
 if __name__ == "__main__":
     pass
     print('going...')
-    input_ind = 'IndBasicAlgo1.py'
-    cp_ind_to_lean_algos(test_dict['CONDOR_TEST_ALGOS_FOLDER'], input_ind)
+    print(confirm_ind_name_in_log_lines('IndBasicAlgo1'))

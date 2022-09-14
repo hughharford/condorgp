@@ -10,11 +10,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import logging
 
 from AlgorithmImports import *
-
-from condorgp.params import lean_dict
 
 ### <summary>
 ### Basic template framework algorithm uses framework components to define the algorithm.
@@ -29,11 +26,11 @@ class IndBasicAlgo2(QCAlgorithm):
         ''' Initialise the data and resolution required, as well as the cash and start-end dates for your algorithm. All algorithms must initialized.'''
 
         # Set requested data resolution
-        self.UniverseSettings.Resolution = Resolution.Minute
+        self.UniverseSettings.Resolution = Resolution.Hour
 
         self.SetStartDate(2013,10,7)   #Set Start Date
         self.SetEndDate(2013,10,11)    #Set End Date
-        self.SetCash(100_000)           #Set Strategy Cash
+        self.SetCash(1_000_000)           #Set Strategy Cash
 
         # Find more symbols here: http://quantconnect.com/data
         # Forex, CFD, Equities Resolutions: Tick, Second, Minute, Hour, Daily.
@@ -56,45 +53,8 @@ class IndBasicAlgo2(QCAlgorithm):
         self.SetExecution(ImmediateExecutionModel())
         self.SetRiskManagement(MaximumDrawdownPercentPerSecurity(0.01))
 
-        logger = CondorLogger()
-        log = logger.get_logger()
-        filler_WARN = '&'*15
-        filler_DEBUG = '@'*15
-        filler_CRITICAL = '££'*15
-        self.Debug(f"{filler_DEBUG}, a DEBUG message: {__name__}")
-        self.Warning(f"{filler_WARN}: deap_with_lean, a WARNING message: {__name__}")
-        log.critical(f"{filler_CRITICAL}: deap_with_lean, a WARNING message: {__name__}")
-
         self.Debug("numpy test >>> print numpy.pi: " + str(np.pi))
 
     def OnOrderEvent(self, orderEvent):
         if orderEvent.Status == OrderStatus.Filled:
             self.Debug("Purchased Stock: {0}".format(orderEvent.Symbol))
-
-
-class CondorLogger():
-    def __init__(self):
-        self.log = logging.getLogger(__name__)
-        # logging.basicConfig(
-        #         format='%(asctime)s - %(levelname)s - %(message)s',
-        #         level=logging.DEBUG)
-        formatter = logging.Formatter('%(asctime)s -  %(levelname)s - %(message)s')
-        # formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-                                                    # useless name
-        # create console handler and set level to debug
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.WARNING)
-        ch.setFormatter(formatter)
-        # set basic file handler
-        fh = logging.FileHandler(filename = lean_dict['BACKTEST_LOG_LOCALPACKAGES'],
-                                 mode='a',
-                                 encoding=None,
-                                 delay=False,)
-        fh.setFormatter(formatter)
-        fh.setLevel(logging.DEBUG)
-        # add handlers to logger
-        self.log.addHandler(ch)
-        self.log.addHandler(fh)
-
-    def get_logger(self):
-        return self.log
