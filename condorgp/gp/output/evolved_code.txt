@@ -1,6 +1,6 @@
         # this is just a sample set of gp evolved code
         # Set requested data resolution
-        self.UniverseSettings.Resolution = Resolution.Minute
+        self.UniverseSettings.Resolution = Resolution.Hour
 
         self.SetStartDate(2013,10,7)   #Set Start Date
         self.SetEndDate(2013,10,11)    #Set End Date

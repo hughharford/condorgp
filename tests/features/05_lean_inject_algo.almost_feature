@@ -9,8 +9,7 @@ Feature: Lean reports results for each evolved individual
     And a text of "<gp_code_file>" is injected
     When Lean runs the "<input_ind>" via the CLI
     Then the result: "<Return_Over_Maximum_Drawdown>" is reported
-    And the fitness function demonstrates this result
 
     Examples:
-      | gp_code_file        | input_ind       | Return_Over_Maximum_Drawdown  |
+      | gp_code_file       | input_ind       | Return_Over_Maximum_Drawdown  |
       | evolved_code.txt   | gpInjectAlgo1   | 999999                        |

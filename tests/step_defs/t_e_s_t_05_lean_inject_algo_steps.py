@@ -103,10 +103,3 @@ def expected_result_is_updated(Return_Over_Maximum_Drawdown):
     '''
     pass
     # get from updated test_04
-
-@then('the fitness function demonstrates this result')
-def fitness_function_demos_the_result():
-    '''
-    The fitness function gathers the result
-    '''
-    pass
