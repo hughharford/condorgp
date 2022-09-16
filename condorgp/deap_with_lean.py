@@ -14,6 +14,7 @@
 #    You should have received a copy of the GNU Lesser General Public
 #    License along with EAP. If not, see <http://www.gnu.org/licenses/>.
 
+from logging import NOTSET
 import operator
 import math
 import random
@@ -26,24 +27,105 @@ from deap import creator
 from deap import tools
 from deap import gp
 
-from utils import get_keyed_line_within_limits
-from util.log import CondorLogger
+from condorgp.utils import get_keyed_line_within_limits
+from condorgp.util.log import CondorLogger
 
 
-class CondorDeap():
+class CondorDeap:
     def __init__(self):
-        pass
+        '''
+            Setup the gp run
+        '''
 
-    def run(self):
+        # logging
         logger = CondorLogger()
-        log = logger.get_logger()
-        filler_WARN = '&'*15
-        filler_DEBUG = '@'*15
-        filler_CRITICAL = '££'*15
-        log.debug(f"{filler_DEBUG}, a DEBUG message: {__name__}")
-        log.warning(f"{filler_WARN}: deap_with_lean, a WARNING message: {__name__}")
-        log.critical(f"{filler_CRITICAL}: deap_with_lean, a WARNING message: {__name__}")
+        self.log = logger.get_logger()
+        filler_INIT = '>'*10
+        self.log.info(f"{filler_INIT}, {__class__} - DEAP gp - run began {filler_INIT}")
 
+        # primitive set:
+        self.pset = gp.PrimitiveSet("MAIN", 1)
+        self.pset.addPrimitive(numpy.add, 2, name="vadd")
+        self.pset.addPrimitive(numpy.subtract, 2, name="vsub")
+        self.pset.addPrimitive(numpy.multiply, 2, name="vmul")
+        self.pset.addPrimitive(protectedDiv, 2)
+        self.pset.addPrimitive(numpy.negative, 1, name="vneg")
+        self.pset.addPrimitive(numpy.cos, 1, name="vcos")
+        self.pset.addPrimitive(numpy.sin, 1, name="vsin")
+        self.pset.addEphemeralConstant("rand101", lambda: random.randint(-1,1))
+        self.pset.renameArguments(ARG0='x')
+
+        # fundamentals for the gp tree
+        creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+        creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
+
+        # toobox and it's components, including population
+        self.toolbox = base.Toolbox()
+        self.toolbox.register("expr", gp.genHalfAndHalf, pset=self.pset, min_=1, max_=2)
+        self.toolbox.register("individual",
+                              tools.initIterate,
+                              creator.Individual,
+                              self.toolbox.expr)
+        self.toolbox.register("population", tools.initRepeat, list, self.toolbox.individual)
+        self.toolbox.register("compile", gp.compile, pset=self.pset)
+
+        self.samples = numpy.linspace(-1, 1, 10000)
+        self.values = self.samples**4 \
+                            + self.samples**3 \
+                            + self.samples**2 \
+                            + self.samples
+
+        self.rand = random.seed(318)
+
+        self.pop = self.toolbox.population(n=300)
+        self.hof = tools.HallOfFame(5)
+        self.stats = tools.Statistics(lambda ind: ind.fitness.values)
+        self.stats.register("avg", numpy.mean)
+        self.stats.register("std", numpy.std)
+        self.stats.register("min", numpy.min)
+        self.stats.register("max", numpy.max)
+
+        # toolbox.register("evaluate", evalSymbReg)
+        self.toolbox.register("evaluate", self.evalIntoAndFromLean)
+        self.toolbox.register("select", tools.selTournament, tournsize=3)
+        self.toolbox.register("mate", gp.cxOnePoint)
+        self.toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
+        self.toolbox.register('mutate', gp.mutUniform, expr=self.toolbox.expr_mut, pset=self.pset)
+
+    def evalSymbReg(self, individual):
+        # Transform the tree expression in a callable function
+        func = self.toolbox.compile(expr=individual)
+        # Evaluate the sum of squared difference between the expression
+
+
+        # and the real function values : x**4 + x**3 + x**2 + x
+        diff = numpy.sum((func(self.samples) - self.values)**2)
+        return diff
+
+    def evalIntoAndFromLean(self, individual):
+        # Transform the tree expression in a callable function
+        func = self.toolbox.compile(expr=individual)
+
+        # output a compile function to a file, so it can be run via Lean
+
+
+
+        # Evaluate the sum of squared difference between the expression
+        # and the real function values : x**4 + x**3 + x**2 + x
+        diff = numpy.sum((func(self.samples) - self.values)**2)
+        Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
+        new_fitness = get_keyed_line_within_limits(Return_over_MDD)[0]
+        fill = '>'*41
+        # print(f'new fitness {fill}{new_fitness}')
+        # returns a float in a tuple, i.e.
+        #                               14736.68704775238,
+        return diff,
+
+    def main(self):
+        # set to 1 generation for testing
+        algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, 1, self.stats, halloffame=self.hof)
+
+        return self.pop, self.stats, self.hof
 
 # Define new functions
 def protectedDiv(left, right):
@@ -56,90 +138,18 @@ def protectedDiv(left, right):
             x = 1
     return x
 
-
-
-
-pset = gp.PrimitiveSet("MAIN", 1)
-pset.addPrimitive(numpy.add, 2, name="vadd")
-pset.addPrimitive(numpy.subtract, 2, name="vsub")
-pset.addPrimitive(numpy.multiply, 2, name="vmul")
-pset.addPrimitive(protectedDiv, 2)
-pset.addPrimitive(numpy.negative, 1, name="vneg")
-pset.addPrimitive(numpy.cos, 1, name="vcos")
-pset.addPrimitive(numpy.sin, 1, name="vsin")
-pset.addEphemeralConstant("rand101", lambda: random.randint(-1,1))
-pset.renameArguments(ARG0='x')
-
-creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
-
-toolbox = base.Toolbox()
-toolbox.register("expr", gp.genHalfAndHalf, pset=pset, min_=1, max_=2)
-toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.expr)
-toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-toolbox.register("compile", gp.compile, pset=pset)
-
-samples = numpy.linspace(-1, 1, 10000)
-values = samples**4 + samples**3 + samples**2 + samples
-
-def evalSymbReg(individual):
-    # Transform the tree expression in a callable function
-    func = toolbox.compile(expr=individual)
-    # Evaluate the sum of squared difference between the expression
-
-
-    # and the real function values : x**4 + x**3 + x**2 + x
-    diff = numpy.sum((func(samples) - values)**2)
-    return diff
-
-def evalIntoAndFromLean(individual):
-    # Transform the tree expression in a callable function
-    func = toolbox.compile(expr=individual)
-
-    # output a compile function to a file, so it can be run via Lean
-
-
-
-    # Evaluate the sum of squared difference between the expression
-    # and the real function values : x**4 + x**3 + x**2 + x
-    diff = numpy.sum((func(samples) - values)**2)
-    Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
-    new_fitness = get_keyed_line_within_limits(Return_over_MDD)[0]
-    fill = '>'*41
-    # print(f'new fitness {fill}{new_fitness}')
-    # returns a float in a tuple, i.e.
-    #                               14736.68704775238,
-    return diff,
-
-# toolbox.register("evaluate", evalSymbReg)
-toolbox.register("evaluate", evalIntoAndFromLean)
-toolbox.register("select", tools.selTournament, tournsize=3)
-toolbox.register("mate", gp.cxOnePoint)
-toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
-toolbox.register('mutate', gp.mutUniform, expr=toolbox.expr_mut, pset=pset)
-
-def main():
-    random.seed(318)
-
-    pop = toolbox.population(n=300)
-    hof = tools.HallOfFame(1)
-    stats = tools.Statistics(lambda ind: ind.fitness.values)
-    stats.register("avg", numpy.mean)
-    stats.register("std", numpy.std)
-    stats.register("min", numpy.min)
-    stats.register("max", numpy.max)
-
-    # set to 1 generation for testing
-    algorithms.eaSimple(pop, toolbox, 0.5, 0.1, 1, stats, halloffame=hof)
-
-    return pop, stats, hof
-
 if __name__ == "__main__":
     # run gp, outputting population, stats, hall of fame:
     ccc = CondorDeap()
-    ccc.run()
+#    ccc.run()
 
-    pop, stats, hof = main()
+    pop, stats, hof = ccc.main()
     # see what we got:
-    print("print hof[0]:")
-    print(hof.items[0])
+    ccc.log.info('Hall of fame:')
+    for x, individual in enumerate(hof):
+        ccc.log.info(hof.items[x])
+
+    ccc.log.info(f'prims_count = {ccc.pset.prims_count}')
+
+    # TRYING TO ACCESS PRIMITIVE SET
+    # ccc.log.info(ccc.pset.primitives.items[0])

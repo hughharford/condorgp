@@ -1,7 +1,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #       LOCAL BASE PATH
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Set here only, in theory:
+# Set here only:
 LOCAL_BASE_PATH = '/home/hsth/code/hughharford/'
 
 # HIGH LEVEL CONFIGURATION OPTIONS:
@@ -115,7 +115,9 @@ test_dict = {
 # ################################## ##################################
 
 NO_LOG_LINES = 300
+CONDOR_LOG = LOCAL_BASE_PATH + 'condorgp/condorgp/util/logs/condor_log.txt'
 
 util_dict = {
     'NO_LOG_LINES': NO_LOG_LINES,
+    'CONDOR_LOG': CONDOR_LOG,
 }
