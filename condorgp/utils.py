@@ -61,6 +61,32 @@ def check_recent_mod(input_file_paths):
     if count == 0: return False
     if recent > 0: return True
 
+def pull_latest_log_into_overall_backtest_log():
+    backtestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR']
+    backtestlog = lean_dict['BACKTEST_LOG_LOCALPACKAGES']
+    foundfolders = [f for f in listdir(backtestfolder) if not isfile(join(backtestfolder, f))]
+    if len(foundfolders) > 0:
+        latest = ''
+        for folder in foundfolders:
+            if folder > latest:
+                latest = folder
+    if latest != '':
+        # open file, and append to existing log
+        latestlogs = get_all_lines(backtestfolder + latest + '/log.txt')
+        # Open a file with access mode 'a'
+        updatedlog = open(backtestlog, 'a')
+        for line in latestlogs:
+            updatedlog.write(line)
+        updatedlog.close()
+    return latest
+
+def cut_pys_from_latest_backtests_code_dir():
+    latestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR'] + pull_latest_log_into_overall_backtest_log() + '/code/'
+    print(latestfolder)
+    onlyfiles = [f for f in listdir(latestfolder) if isfile(join(latestfolder, f))]
+    for file in onlyfiles:
+        os.rename(latestfolder+file, latestfolder+file[:-3])
+
 def get_all_lines(file_input):
     lines = open(file_input).readlines()
     return lines
@@ -192,7 +218,17 @@ def rename_main_class_as_condorgp():
                 count += 1
             f.write(line)
 
+
 if __name__ == "__main__":
     pass
     print('going...')
-    print(confirm_ind_name_in_log_lines('IndBasicAlgo1'))
+    # print(confirm_ind_name_in_log_lines('IndBasicAlgo1'))
+
+    # bt1 = 'condorgp/backtests/2022-09-15_21-34-40'
+    # bt2 = ''
+    # 'condorgp/backtests/2022-09-15_21-35-09'
+    # if bt2 > bt1:
+    #     print('bt2 greater than bt1')
+    # else:
+    #     print('bt1 greater than bt2')
+    print(pull_latest_log_into_overall_backtest_log())
