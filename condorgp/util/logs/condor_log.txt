@@ -1,9 +1,118 @@
-2022-07-23 15:26:11,917 - util.log - WARNING - &&&&&&&&&&&&&&&deap_with_lean, a WARNING message: __main__
-2022-07-23 15:26:51,961 - util.log - WARNING - &&&&&&&&&&&&&&&deap_with_lean, a WARNING message: __main__
-2022-07-23 15:26:51,961 - util.log - CRITICAL - ££££££££££££££££££££££££££££££deap_with_lean, a WARNING message: __main__
-2022-07-24 05:29:14,411 - util.log - WARNING - &&&&&&&&&&&&&&&deap_with_lean, a WARNING message: __main__
-2022-07-24 05:29:14,412 - util.log - CRITICAL - ££££££££££££££££££££££££££££££deap_with_lean, a WARNING message: __main__
-2022-07-24 05:31:08,339 - WARNING - &&&&&&&&&&&&&&&deap_with_lean, a WARNING message: __main__
-2022-07-24 05:31:08,339 - CRITICAL - ££££££££££££££££££££££££££££££deap_with_lean, a WARNING message: __main__
-2022-07-24 05:31:24,454 - util.log - WARNING - &&&&&&&&&&&&&&&deap_with_lean, a WARNING message: __main__
-2022-07-24 05:31:24,454 - util.log - CRITICAL - ££££££££££££££££££££££££££££££deap_with_lean, a WARNING message: __main__
+2022-09-16 17:34:25,886 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:34:27,755 -  INFO - Hall of fame:
+2022-09-16 17:34:27,756 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:34:27,780 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:34:27,780 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:34:27,781 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:34:27,781 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:34:50,413 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:34:52,308 -  INFO - Hall of fame:
+2022-09-16 17:34:52,308 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:34:52,308 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:34:52,308 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:34:52,309 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:34:52,309 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:35:17,839 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:35:19,842 -  INFO - Hall of fame:
+2022-09-16 17:35:19,842 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:35:19,842 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:35:19,842 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:35:19,843 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:35:19,843 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:35:25,325 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:35:27,325 -  INFO - Hall of fame:
+2022-09-16 17:35:27,325 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:35:27,325 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:35:27,326 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:35:27,326 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:35:27,326 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:36:21,852 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:36:23,979 -  INFO - Hall of fame:
+2022-09-16 17:36:23,979 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:36:23,980 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:36:23,980 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:36:23,980 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:36:23,980 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:38:07,333 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:38:09,161 -  INFO - Hall of fame:
+2022-09-16 17:38:09,161 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:38:09,162 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:38:09,162 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:38:09,162 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:38:09,162 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:38:09,162 -  INFO - <class 'object'>
+2022-09-16 17:38:56,697 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:38:58,612 -  INFO - Hall of fame:
+2022-09-16 17:38:58,612 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:38:58,612 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:38:58,612 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:38:58,612 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:38:58,612 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:39:21,062 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:39:23,276 -  INFO - Hall of fame:
+2022-09-16 17:39:23,276 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:39:23,276 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:39:23,277 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:39:23,277 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:39:23,277 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:39:23,277 -  INFO - prims_count = 7
+2022-09-16 17:40:05,361 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:40:07,160 -  INFO - Hall of fame:
+2022-09-16 17:40:07,160 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:40:07,160 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:40:07,161 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:40:07,161 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:40:07,161 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:40:07,161 -  INFO - prims_count = 7
+2022-09-16 17:40:07,161 -  INFO - <class 'object'>
+2022-09-16 17:40:22,237 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:40:24,233 -  INFO - Hall of fame:
+2022-09-16 17:40:24,234 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:40:24,234 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:40:24,234 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:40:24,234 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:40:24,234 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:40:24,234 -  INFO - prims_count = 7
+2022-09-16 17:48:53,682 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:48:55,584 -  INFO - Hall of fame:
+2022-09-16 17:48:55,585 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:48:55,585 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:48:55,585 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:48:55,585 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:48:55,585 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:48:55,585 -  INFO - prims_count = 7
+2022-09-16 17:48:55,585 -  INFO - <slot wrapper '__str__' of 'object' objects>
+2022-09-16 17:49:03,614 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:49:05,533 -  INFO - Hall of fame:
+2022-09-16 17:49:05,533 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:49:05,533 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:49:05,533 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:49:05,533 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:49:05,533 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:49:05,533 -  INFO - prims_count = 7
+2022-09-16 17:49:05,533 -  INFO - <class 'object'>
+2022-09-16 17:49:24,583 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:49:26,376 -  INFO - Hall of fame:
+2022-09-16 17:49:26,376 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:49:26,376 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:49:26,376 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:49:26,376 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:49:26,376 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:49:26,376 -  INFO - prims_count = 7
+2022-09-16 17:49:50,384 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:49:52,506 -  INFO - Hall of fame:
+2022-09-16 17:49:52,507 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:49:52,507 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:49:52,507 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:49:52,507 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:49:52,507 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:49:52,507 -  INFO - prims_count = 7
+2022-09-16 17:49:52,507 -  INFO - <built-in method items of collections.defaultdict object at 0x7f70d18375e0>
+2022-09-16 17:50:28,508 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-16 17:50:30,321 -  INFO - Hall of fame:
+2022-09-16 17:50:30,321 -  INFO - vsub(vsin(1), protectedDiv(x, -1))
+2022-09-16 17:50:30,322 -  INFO - vadd(vsin(1), vsin(x))
+2022-09-16 17:50:30,322 -  INFO - protectedDiv(vmul(x, 1), vcos(x))
+2022-09-16 17:50:30,322 -  INFO - vcos(vsub(1, x))
+2022-09-16 17:50:30,322 -  INFO - vcos(vsub(x, 1))
+2022-09-16 17:50:30,322 -  INFO - prims_count = 7
