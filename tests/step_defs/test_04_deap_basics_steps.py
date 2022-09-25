@@ -5,10 +5,6 @@ from pytest_bdd import scenarios, given, when, then
 from condorgp.params import lean_dict, test_dict, util_dict
 from condorgp.deap_condor import CondorDeap
 
-from deap import algorithms
-from deap import base
-from deap import creator
-from deap import tools
 from deap import gp
 # /home/hsth/code/hughharford/condorgp/condorgp/deap_with_lean.py
 
