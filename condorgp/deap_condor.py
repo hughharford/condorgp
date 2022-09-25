@@ -143,13 +143,9 @@ if __name__ == "__main__":
     ccc = CondorDeap()
 #    ccc.run()
 
+    # SAMPLE RUN
     pop, stats, hof = ccc.main()
     # see what we got:
     ccc.log.info('Hall of fame:')
     for x, individual in enumerate(hof):
         ccc.log.info(hof.items[x])
-
-    ccc.log.info(f'prims_count = {ccc.pset.prims_count}')
-
-    # TRYING TO ACCESS PRIMITIVE SET
-    # ccc.log.info(ccc.pset.primitives.items[0])
