@@ -1,15 +1,17 @@
 import os
 
 from condorgp.params import lean_dict, test_dict, highlevel_config_dict
-from condorgp.utils import cp_config_to_lean_launcher
-from condorgp.utils import cp_ind_to_lean_algos
-from condorgp.utils import overwrite_main_with_input_ind
-from condorgp.utils import cut_pys_from_latest_backtests_code_dir
-from condorgp.utils import pull_latest_log_into_overall_backtest_log
+# from condorgp.utils import cp_config_to_lean_launcher
+# from condorgp.utils import cp_ind_to_lean_algos
+# from condorgp.utils import overwrite_main_with_input_ind
+# from condorgp.utils import cut_pys_from_latest_backtests_code_dir
+# from condorgp.utils import pull_latest_log_into_overall_backtest_log
+
+from condorgp.utils import Utils
 
 class RunLean():
     def __init__(self) -> None:
-        pass
+        self.util = Utils()
 
     def adjust_config_specifics():
         '''
@@ -44,11 +46,11 @@ class RunLean():
 
 
         if input_ind == "set":
-            ALGO_NAME = set_default_individual() # input_ind
+            ALGO_NAME = self.set_default_individual() # input_ind
         elif input_ind == "test":
-            ALGO_NAME = set_test_individual()
+            ALGO_NAME = self.set_test_individual()
         if input_json == "set" or input_ind == "test":
-            JSON_CONFIG = set_default_config_json() # input_json
+            JSON_CONFIG = self.set_default_config_json() # input_json
 
         if highlevel_config_dict['RUN_VERBOSE_FOR_DEBUG']:
             os. chdir("../Lean/LocalPackages/condorgp")
@@ -58,8 +60,8 @@ class RunLean():
             os. chdir("../../../condorgp")
 
             # tidy and get what our needs from backtests / Results output
-            cut_pys_from_latest_backtests_code_dir()
-            pull_latest_log_into_overall_backtest_log()
+            self.util.cut_pys_from_latest_backtests_code_dir()
+            self.util.pull_latest_log_into_overall_backtest_log()
 
             # --output {BACKTEST_PATH_LOCALPACKAGES} \
                 # taking out output specification, to control output tree repetition
@@ -79,21 +81,21 @@ class RunLean():
 
 
 
-def set_default_individual(): # input_ind
-    algo_name = test_dict['BASIC_TEST_ALGO_LEAN']
-    cp_ind_to_lean_algos(test_dict['CONDOR_CONFIG_PATH'], algo_name)
-    return algo_name
+    def set_default_individual(self): # input_ind
+        algo_name = test_dict['BASIC_TEST_ALGO_LEAN']
+        self.util.cp_ind_to_lean_algos(test_dict['CONDOR_CONFIG_PATH'], algo_name)
+        return algo_name
 
-def set_test_individual(): # input_ind
-    algo_name = test_dict['V1_TEST_ALGO_LEAN']
-    cp_ind_to_lean_algos(test_dict['CONDOR_CONFIG_PATH'], algo_name)
-    overwrite_main_with_input_ind(algo_name)
-    return algo_name
+    def set_test_individual(self): # input_ind
+        algo_name = test_dict['V1_TEST_ALGO_LEAN']
+        self.util.cp_ind_to_lean_algos(test_dict['CONDOR_CONFIG_PATH'], algo_name)
+        self.util.overwrite_main_with_input_ind(algo_name)
+        return algo_name
 
-def set_default_config_json(): # input_json
-    f_json = test_dict['CONDOR_TEST_CONFIG_FILE_1']
-    cp_config_to_lean_launcher(test_dict['CONDOR_CONFIG_PATH'], f_json)
-    return f_json
+    def set_default_config_json(self): # input_json
+        f_json = test_dict['CONDOR_TEST_CONFIG_FILE_1']
+        self.util.cp_config_to_lean_launcher(test_dict['CONDOR_CONFIG_PATH'], f_json)
+        return f_json
 
 if __name__ == "__main__":
     lean = RunLean()

@@ -45,7 +45,7 @@ FITNESS_BASE = 'STATISTICS:: '
 CURRENT_FITNESS_STAT = 'Return Over Maximum Drawdown'
 FITNESS_CRITERIA = FITNESS_BASE + CURRENT_FITNESS_STAT
 
-ALGO_WRAPPER_SIN_PY = 'gpInjectAlgo'
+# ALGO_WRAPPER_SIN_PY = 'gpInjectAlgo' # checking for delete
 
 lean_dict = {
     'LEAN_CONFIG_FILE': LEAN_CONFIG_FILE,
@@ -61,7 +61,7 @@ lean_dict = {
 
     'FITNESS_CRITERIA': FITNESS_CRITERIA,
 
-    'ALGO_WRAPPER_SIN_PY': ALGO_WRAPPER_SIN_PY,
+    # 'ALGO_WRAPPER_SIN_PY': ALGO_WRAPPER_SIN_PY, # checking for delete
 
     }
 

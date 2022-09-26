@@ -653,3 +653,9 @@
 2022-09-25 21:54:35,778 -  INFO - >>>>>>>>>>, <class 'condorgp.deap_condor.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
 2022-09-25 21:54:35,815 -  INFO - primitives_count = 6
 2022-09-25 21:54:35,815 -  INFO - terminals_count = 3
+2022-09-26 11:06:22,852 -  INFO - >>>>>>>>>>, <class 'condorgp.deap_condor.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 11:06:22,861 -  INFO - primitives_count = 6
+2022-09-26 11:06:22,861 -  INFO - terminals_count = 3
+2022-09-26 11:08:58,886 -  INFO - >>>>>>>>>>, <class 'condorgp.deap_condor.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 11:08:58,891 -  INFO - primitives_count = 6
+2022-09-26 11:08:58,892 -  INFO - terminals_count = 3

@@ -27,15 +27,15 @@ from deap import creator
 from deap import tools
 from deap import gp
 
-from condorgp.utils import get_keyed_line_within_limits
+from condorgp.utils import Utils
 from condorgp.util.log import CondorLogger
-
 
 class CondorDeap:
     def __init__(self):
         '''
             Setup the gp run
         '''
+        self.util = Utils()
 
         # logging
         logger = CondorLogger()
@@ -56,8 +56,8 @@ class CondorDeap:
         self.pset.renameArguments(ARG0='x')
 
         # fundamentals for the gp tree
-        creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-        creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
+        creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+        creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMax)
 
         # toobox and it's components, including population
         self.toolbox = base.Toolbox()
@@ -107,19 +107,18 @@ class CondorDeap:
         func = self.toolbox.compile(expr=individual)
 
         # output a compile function to a file, so it can be run via Lean
+        # run lean
 
 
 
-        # Evaluate the sum of squared difference between the expression
-        # and the real function values : x**4 + x**3 + x**2 + x
-        diff = numpy.sum((func(self.samples) - self.values)**2)
+
         Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
-        new_fitness = get_keyed_line_within_limits(Return_over_MDD)[0]
+        new_fitness = self.util.get_keyed_line_within_limits(Return_over_MDD)[0]
         fill = '>'*41
-        # print(f'new fitness {fill}{new_fitness}')
+        print(f'new fitness {fill}{new_fitness}')
         # returns a float in a tuple, i.e.
         #                               14736.68704775238,
-        return diff,
+        return new_fitness,
 
     def main(self):
         # set to 1 generation for testing
@@ -149,3 +148,17 @@ if __name__ == "__main__":
     ccc.log.info('Hall of fame:')
     for x, individual in enumerate(hof):
         ccc.log.info(hof.items[x])
+
+class EvaluateWithLean():
+
+    def __init__(ind_path_n_filename):
+        print("ind_path_n_filename is: " + ind_path_n_filename)
+        pass
+
+    def evaluate_with_lean():
+        '''
+        Takes the premade class and pushes it to lean/localpackages/condorgp
+        Then runs lean
+        '''
+            #     copy_config_in(input_ind)
+        pass #copy_algo_in(input_ind)

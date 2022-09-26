@@ -2,10 +2,12 @@ import os
 import sys
 from os.path import exists
 
+import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
 from condorgp.lean_runner import RunLean
-from condorgp.utils import check_recent_mod, get_last_x_log_lines
+from condorgp.utils import Utils
+
 from condorgp.params import lean_dict, test_dict, util_dict
 
 EXTRA_TYPES = {
@@ -31,6 +33,15 @@ Scenario: Basic Lean run
     When RunLean.run_lean_via_CLI is run
     Then Lean/Backtests files are updated
 """
+
+class UtilTest:
+    def __init__(self) -> None:
+        self.u = Utils()
+
+@pytest.fixture
+def utils():
+    util = UtilTest()
+    return util.u
 
 @given('quantconnect/lean:latest docker image')
 def docker_image_exists():

@@ -6,7 +6,6 @@ from condorgp.params import lean_dict, test_dict, util_dict
 from condorgp.deap_condor import CondorDeap
 
 from deap import gp
-# /home/hsth/code/hughharford/condorgp/condorgp/deap_with_lean.py
 
 scenarios('../features/04_deap_basics.feature')
 
@@ -23,9 +22,6 @@ scenarios('../features/04_deap_basics.feature')
 class DeapTester:
     def __init__(self) -> None:
         self.ourdeap = CondorDeap()
-
-    # def get_deap(self):
-    #     return self.ourdeap
 
 @pytest.fixture
 def get_one():
