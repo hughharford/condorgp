@@ -1260,3 +1260,42 @@
 2022-09-26 15:21:05,007 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
 2022-09-26 15:21:05,008 -  INFO - Hall of fame:
 2022-09-26 15:21:05,014 -  INFO - vadd(vadd(1, x), vadd(x, 1))
+2022-09-26 20:37:48,434 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 20:38:01,074 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-26 20:38:01,076 -  INFO - Hall of fame:
+2022-09-26 20:38:01,077 -  INFO - vadd(vadd(1, x), vadd(x, 1))
+2022-09-26 20:38:13,549 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 20:38:27,345 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-26 20:38:27,346 -  INFO - Hall of fame:
+2022-09-26 20:38:27,346 -  INFO - vadd(vadd(1, x), vadd(x, 1))
+2022-09-26 20:39:50,275 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 20:40:03,808 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-26 20:40:03,810 -  INFO - Hall of fame:
+2022-09-26 20:40:23,972 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 20:40:37,601 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-26 20:40:37,603 -  INFO - Hall of fame:
+2022-09-26 20:40:37,604 -  INFO - <deap.gp.rand101 object at 0x7f40d861d7c0>
+2022-09-26 21:16:29,679 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 21:16:40,428 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-26 21:17:22,681 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 21:17:34,195 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-26 21:18:07,647 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 21:18:18,691 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-26 21:18:18,692 -  INFO - Hall of fame:
+2022-09-26 21:18:18,692 -  INFO - <deap.gp.rand101 object at 0x7ff2e0ec2770>
+2022-09-26 21:19:35,380 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 21:19:46,251 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-26 21:19:46,252 -  INFO - Hall of fame:
+2022-09-26 21:19:46,252 -  INFO - vadd(vadd(1, x), vadd(x, 1))
+2022-09-26 21:19:58,655 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 21:20:10,152 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-26 21:20:10,154 -  INFO - Hall of fame:
+2022-09-26 21:20:10,154 -  INFO - vadd(vadd(1, x), vadd(x, 1))
+2022-09-26 21:20:51,383 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 21:21:02,560 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-26 21:21:02,561 -  INFO - Hall of fame:
+2022-09-26 21:21:02,562 -  INFO - vadd(vadd(1, x), vadd(x, 1))
+2022-09-26 21:23:45,262 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-26 21:23:55,912 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-26 21:23:55,914 -  INFO - Hall of fame:
+2022-09-26 21:23:55,914 -  INFO - vadd(vadd(1, x), vadd(x, 1))

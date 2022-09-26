@@ -45,6 +45,7 @@
   # ability to set, run, and restart a pickled population (checkpointing)
       # confirm can pickle
       # confirm can unpickle and run
-
+    # REF: https://deap.readthedocs.io/en/master/tutorials/advanced/checkpoint.html
+    
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # DONE

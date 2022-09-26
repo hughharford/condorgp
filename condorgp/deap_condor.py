@@ -92,7 +92,21 @@ class CondorDeap:
         self.toolbox.register("select", tools.selTournament, tournsize=3)
         self.toolbox.register("mate", gp.cxOnePoint)
         self.toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
-        self.toolbox.register('mutate', gp.mutUniform, expr=self.toolbox.expr_mut, pset=self.pset)
+        self.toolbox.register('mutate', gp.mutUniform,
+                              expr=self.toolbox.expr_mut, pset=self.pset)
+
+        self.logbook = tools.Logbook()
+
+        self.multi_stats()
+
+
+    def multi_stats(self):
+        self.stats_fit = tools.Statistics(key=lambda ind: ind.fitness.values)
+        self.stats_size = tools.Statistics(key=len)
+        self.mstats = tools.MultiStatistics(fitness=self.stats_fit,
+                                            size=self.stats_size)
+        self.mstats.register("max", numpy.max)
+
 
     def evalSymbReg(self, individual):
         # Transform the tree expression in a callable function
@@ -136,9 +150,9 @@ class CondorDeap:
         '''
         Do a GP run, with default 1 generation for testing
         '''
-        algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, ngen, \
+        self.logbook  = algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, ngen, \
                             self.stats, halloffame=self.hof)
-        return self.pop, self.stats, self.hof
+        return self.pop, self.stats, self.mstats, self.hof, self.logbook
 
     def set_evaluator(self, new_evaluator):
         '''
@@ -172,10 +186,22 @@ if __name__ == "__main__":
 
     # SAMPLE RUN
     ccc.set_population(1)
-    pop, stats, hof = ccc.do_run(1)
+    pop, stats, mstats, hof, logbook = ccc.do_run(3)
     # see what we got:
     ccc.log.info('Hall of fame:')
     for x, individual in enumerate(hof):
         ccc.log.info(hof.items[x])
 
-    print(ccc.stats.__dict__)
+    # Stats does not have the fitness data, just the stats functions
+    # print(ccc.stats.__dict__)
+    # print(ccc.stats.fields[0])
+
+    print()
+
+    # logbook:
+    print(f'logbook: \n {logbook}')
+
+    print()
+
+    # mstats
+    print(f'mstats: \n {mstats}')
