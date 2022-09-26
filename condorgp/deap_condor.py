@@ -28,7 +28,9 @@ from deap import tools
 from deap import gp
 
 from condorgp.utils import Utils
+from condorgp.params import util_dict, test_dict, lean_dict
 from condorgp.util.log import CondorLogger
+from condorgp.lean_runner import RunLean
 
 class CondorDeap:
     def __init__(self):
@@ -96,8 +98,6 @@ class CondorDeap:
         # Transform the tree expression in a callable function
         func = self.toolbox.compile(expr=individual)
         # Evaluate the sum of squared difference between the expression
-
-
         # and the real function values : x**4 + x**3 + x**2 + x
         diff = numpy.sum((func(self.samples) - self.values)**2)
         return diff
@@ -105,26 +105,54 @@ class CondorDeap:
     def evalIntoAndFromLean(self, individual):
         # Transform the tree expression in a callable function
         func = self.toolbox.compile(expr=individual)
+        # output individual into Lean-ready class, for Lean evaluation
 
-        # output a compile function to a file, so it can be run via Lean
-        # run lean
+        # Lean evaluation: basic Lean run for now
+        input_ind = 'IndBasicAlgo1'
+        config_to_run = ''
+        if input_ind[-1] == '1':
+            config_to_run = test_dict['CONDOR_TEST_CONFIG_FILE_1']
+        elif input_ind[-1] == '2':
+            config_to_run = test_dict['CONDOR_TEST_CONFIG_FILE_2']
 
+        self.util.copy_config_in(input_ind)
+        self.util.copy_algo_in(input_ind)
 
-
+        lean = RunLean()
+        lean.run_lean_via_CLI(input_ind+'.py', config_to_run)
 
         Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
-        new_fitness = self.util.get_keyed_line_within_limits(Return_over_MDD)[0]
-        fill = '>'*41
+        got = self.util.get_keyed_line_within_limits(Return_over_MDD)
+        new_fitness = float(self.util.get_last_chars(got[0]))
+
+        fill = '<*>'*6
         print(f'new fitness {fill}{new_fitness}')
+        self.log.info(f'evalIntoAndFromLean, new fitness {fill}{new_fitness}')
         # returns a float in a tuple, i.e.
         #                               14736.68704775238,
         return new_fitness,
 
-    def main(self):
-        # set to 1 generation for testing
-        algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, 1, self.stats, halloffame=self.hof)
-
+    def do_run(self, ngen=1):
+        '''
+        Do a GP run, with default 1 generation for testing
+        '''
+        algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, ngen, \
+                            self.stats, halloffame=self.hof)
         return self.pop, self.stats, self.hof
+
+    def set_evaluator(self, new_evaluator):
+        '''
+        Sets evaluation function:
+        so this can be customised / overridden
+        '''
+        self.toolbox.register("evaluate", new_evaluator)
+
+    def set_population(self, newpop):
+        '''
+        Sets the population as the required
+        '''
+        self.pop = self.toolbox.population(n=newpop)
+
 
 # Define new functions
 def protectedDiv(left, right):
@@ -143,22 +171,11 @@ if __name__ == "__main__":
 #    ccc.run()
 
     # SAMPLE RUN
-    pop, stats, hof = ccc.main()
+    ccc.set_population(1)
+    pop, stats, hof = ccc.do_run(1)
     # see what we got:
     ccc.log.info('Hall of fame:')
     for x, individual in enumerate(hof):
         ccc.log.info(hof.items[x])
 
-class EvaluateWithLean():
-
-    def __init__(ind_path_n_filename):
-        print("ind_path_n_filename is: " + ind_path_n_filename)
-        pass
-
-    def evaluate_with_lean():
-        '''
-        Takes the premade class and pushes it to lean/localpackages/condorgp
-        Then runs lean
-        '''
-            #     copy_config_in(input_ind)
-        pass #copy_algo_in(input_ind)
+    print(ccc.stats.__dict__)

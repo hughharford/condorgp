@@ -4,9 +4,14 @@
 ## REQUIREMENTS
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  # demonstrate decoupling
+      # decouple deap_condor from Lean
+      # decouple lean_runner from deap_condor
+      # ENSURE deap_condor decoupled by design from ecosystem etc
+
   # gets fitness from lean
       # working fitness result (lean)
-          # TODO: test to check deap gets fitness
+          # TODO: test to check deap runs lean and gets fitness
 
   # setup gp structure to run effectively with lean
       # TODO: test that required functionality provided in lean-evaluated class

@@ -230,6 +230,21 @@ class Utils:
         else:
             print(f"The file specified: {file_to_del} does not exist")
 
+    def copy_config_in(self, input_ind):
+        # copy config.json across before container launch
+        config_from_path = test_dict['CONDOR_CONFIG_PATH']
+        if input_ind[-1] == '1':
+            config_to_copy = test_dict['CONDOR_TEST_CONFIG_FILE_1']
+        elif input_ind[-1] == '2':
+            config_to_copy = test_dict['CONDOR_TEST_CONFIG_FILE_2']
+        self.cp_config_to_lean_launcher(config_from_path, config_to_copy)
+
+    def copy_algo_in(self, input_ind):
+        # copy algo.py across before container launch
+        test_ind_path = test_dict['CONDOR_TEST_ALGOS_FOLDER']
+        self.cp_ind_to_lean_algos(test_ind_path, input_ind+'.py')
+        self.overwrite_main_with_input_ind(input_ind+'.py')
+
 if __name__ == "__main__":
     pass
     print('going...')

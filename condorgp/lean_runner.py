@@ -1,12 +1,6 @@
 import os
 
 from condorgp.params import lean_dict, test_dict, highlevel_config_dict
-# from condorgp.utils import cp_config_to_lean_launcher
-# from condorgp.utils import cp_ind_to_lean_algos
-# from condorgp.utils import overwrite_main_with_input_ind
-# from condorgp.utils import cut_pys_from_latest_backtests_code_dir
-# from condorgp.utils import pull_latest_log_into_overall_backtest_log
-
 from condorgp.utils import Utils
 
 class RunLean():
