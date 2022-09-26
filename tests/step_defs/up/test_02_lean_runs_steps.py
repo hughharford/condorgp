@@ -21,7 +21,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/02_lean_runs.feature')
+scenarios('../../features/02_lean_runs.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             Lean runs and outputs results

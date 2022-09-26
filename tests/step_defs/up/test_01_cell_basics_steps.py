@@ -13,7 +13,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/01_cell_basics.feature')
+scenarios('../../features/01_cell_basics.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             ADD CELLS

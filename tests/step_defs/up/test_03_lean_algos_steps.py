@@ -4,18 +4,8 @@ import os.path
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
-# from condorgp.utils import get_last_x_log_lines
-# from condorgp.utils import cp_config_to_lean_launcher
-# from condorgp.utils import cp_ind_to_lean_algos
-# from condorgp.utils import overwrite_main_with_input_ind
-# from condorgp.utils import confirm_ind_name_in_log_lines
-# from condorgp.utils import get_keyed_line_within_limits
-# from condorgp.utils import get_last_chars
-
-from condorgp.utils import Utils
-
+from tests.fixtures import utils
 from condorgp.params import lean_dict, test_dict, util_dict
-
 from condorgp.lean_runner import RunLean
 
 EXTRA_TYPES = {
@@ -30,7 +20,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/03_lean_algos.feature')
+scenarios('../../features/03_lean_algos.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             Lean tests each evolved individual
@@ -50,15 +40,6 @@ Scenario Outline: Lean tests each individual
             that the fitness is found, and the log is up to date
 '''
 
-class UtilTest:
-    def __init__(self) -> None:
-        self.u = Utils()
-
-@pytest.fixture
-def utils():
-    util = UtilTest()
-    return util.u
-
 @given('a Lean container ready to run')
 def lean_container_tested_already():
     pass # assumes local lean:latest image extant
@@ -70,23 +51,8 @@ def copy_config_n_algo_across(utils, input_ind):
     '''
     copies across config files and algorithms as needed
     '''
-    copy_config_in(utils, input_ind)
-    copy_algo_in(utils, input_ind)
-
-def copy_config_in(utils, input_ind):
-    # copy config.json across before container launch
-    config_from_path = test_dict['CONDOR_CONFIG_PATH']
-    if input_ind[-1] == '1':
-        config_to_copy = test_dict['CONDOR_TEST_CONFIG_FILE_1']
-    elif input_ind[-1] == '2':
-        config_to_copy = test_dict['CONDOR_TEST_CONFIG_FILE_2']
-    utils.cp_config_to_lean_launcher(config_from_path, config_to_copy)
-
-def copy_algo_in(utils, input_ind):
-    # copy algo.py across before container launch
-    test_ind_path = test_dict['CONDOR_TEST_ALGOS_FOLDER']
-    utils.cp_ind_to_lean_algos(test_ind_path, input_ind+'.py')
-    utils.overwrite_main_with_input_ind(input_ind+'.py')
+    utils.copy_config_in(input_ind)
+    utils.copy_algo_in(input_ind)
 
 @when(parsers.cfparse('Lean runs the "{input_ind:String}" via the CLI',
                        extra_types=EXTRA_TYPES), target_fixture='input_ind')
