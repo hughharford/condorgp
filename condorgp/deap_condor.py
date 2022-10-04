@@ -14,23 +14,24 @@
 #    You should have received a copy of the GNU Lesser General Public
 #    License along with EAP. If not, see <http://www.gnu.org/licenses/>.
 
-from logging import NOTSET
 import operator
 import math
 import random
 
 import numpy
 
-from deap import algorithms
+# from deap import algorithms
 from deap import base
-from deap import creator
-from deap import tools
-from deap import gp
+# from deap import creator
+# from deap import tools
+# from deap import gp
 
 from condorgp.utils import Utils
 from condorgp.params import util_dict, test_dict, lean_dict
 from condorgp.util.log import CondorLogger
 from condorgp.lean_runner import RunLean
+from condorgp.factories.initial_factory import LocalFactory
+
 
 class CondorDeap:
     def __init__(self):
@@ -45,79 +46,50 @@ class CondorDeap:
         filler_INIT = '>'*10
         self.log.info(f"{filler_INIT}, {__class__} - DEAP gp - run began {filler_INIT}")
 
-        # primitive set:
-        self.pset = gp.PrimitiveSet("MAIN", 1)
-        self.pset.addPrimitive(numpy.add, 2, name="vadd")
-        self.pset.addPrimitive(numpy.subtract, 2, name="vsub")
-        self.pset.addPrimitive(numpy.multiply, 2, name="vmul")
-        self.pset.addPrimitive(self.protectedDiv, 2)
-        self.pset.addPrimitive(numpy.negative, 1, name="vneg")
-        self.pset.addPrimitive(numpy.cos, 1, name="vcos")
-        self.pset.addPrimitive(numpy.sin, 1, name="vsin")
-        self.pset.addEphemeralConstant("rand101", lambda: random.randint(-1,1))
-        self.pset.renameArguments(ARG0='x')
+        lf = LocalFactory()
+        self.gp = lf.get_gp_provider()
 
-        # fundamentals for the gp tree
-        creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-        creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMax)
+    def setup_gp(self):
+        ''' sets additional functions & terminals '''
+        additional_funcs = {'name': 'protectedDiv',
+                            'arrity': 2,
+                            'method': self.protectedDiv}
+        additional_terms = {}
+        self.gp.set_pset(additional_funcs, additional_terms)
 
-        # toobox and it's components, including population
-        self.toolbox = base.Toolbox()
-        self.toolbox.register("expr", gp.genHalfAndHalf, pset=self.pset, min_=1, max_=2)
-        self.toolbox.register("individual",
-                              tools.initIterate,
-                              creator.Individual,
-                              self.toolbox.expr)
-        self.toolbox.register("population", tools.initRepeat, list, self.toolbox.individual)
-        self.toolbox.register("compile", gp.compile, pset=self.pset)
+    def setup_gp_params(self, params = {}):
+        ''' sets major gp parameters'''
+        self.gp.set_gp_params(params)
 
-        self.samples = numpy.linspace(-1, 1, 10000)
-        self.values = self.samples**4 \
-                            + self.samples**3 \
-                            + self.samples**2 \
-                            + self.samples
+    def setup_inputs(self, inputs = {}):
+        ''' sets inputs for fitness evaluation'''
+        self.gp.set_inputs(inputs)
 
-        self.rand = random.seed(318)
+    def setup_pop_size(self, pop_size = 2):
+        ''' sets the population size, defaults to 2 to test efficacy'''
+        self.gp.set_pop_size(pop_size)
 
-        self.pop = self.toolbox.population(n=300)
-        self.hof = tools.HallOfFame(5)
-        self.stats = tools.Statistics(lambda ind: ind.fitness.values)
-        self.stats.register("avg", numpy.mean)
-        self.stats.register("std", numpy.std)
-        self.stats.register("min", numpy.min)
-        self.stats.register("max", numpy.max)
+    def setup_no_gens(self, no_gens = 1):
+        ''' sets the number of generations'''
+        self.gp.set_gens(no_gens)
 
-        # toolbox.register("evaluate", evalSymbReg)
-        self.toolbox.register("evaluate", self.evalIntoAndFromLean)
-        self.toolbox.register("select", tools.selTournament, tournsize=3)
-        self.toolbox.register("mate", gp.cxOnePoint)
-        self.toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
-        self.toolbox.register('mutate', gp.mutUniform,
-                              expr=self.toolbox.expr_mut, pset=self.pset)
+    def setup_evaluator(self):
+        self.gp.set_evaluator(self.evalIntoAndFromLean)
 
-        self.logbook = tools.Logbook()
+    def setup_stats(self, stat_params = {}):
+        self.gp.set_stats(stat_params)
 
-        self.multi_stats()
-
-
-    def multi_stats(self):
-        self.stats_fit = tools.Statistics(key=lambda ind: ind.fitness.values)
-        self.stats_size = tools.Statistics(key=len)
-        self.mstats = tools.MultiStatistics(fitness=self.stats_fit,
-                                            size=self.stats_size)
-        self.mstats.register("max", numpy.max)
-
-
-    def evalSymbReg(self, individual):
-        # Transform the tree expression in a callable function
-        func = self.toolbox.compile(expr=individual)
-        # Evaluate the sum of squared difference between the expression
-        # and the real function values : x**4 + x**3 + x**2 + x
-        diff = numpy.sum((func(self.samples) - self.values)**2)
-        return diff
+    def run_gp(self):
+        ''' undertakes the run as specified'''
+        self.gp.run_gp()
 
     def evalIntoAndFromLean(self, individual):
         # Transform the tree expression in a callable function
+        # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+        # ERROR CAUSED HERE
+        # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+        # this line alone worked when DEAP setup in this class:  func = self.toolbox.compile(expr=individual)
+        self.toolbox = base.Toolbox()
         func = self.toolbox.compile(expr=individual)
         # output individual into Lean-ready class, for Lean evaluation
 
@@ -146,28 +118,6 @@ class CondorDeap:
         #                               14736.68704775238,
         return new_fitness,
 
-    def do_run(self, ngen=1):
-        '''
-        Do a GP run, with default 1 generation for testing
-        '''
-        self.logbook  = algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, ngen, \
-                            self.stats, halloffame=self.hof)
-        return self.pop, self.stats, self.hof, self.logbook
-
-    def set_evaluator(self, new_evaluator):
-        '''
-        Sets evaluation function:
-        so this can be customised / overridden
-        '''
-        self.toolbox.register("evaluate", new_evaluator)
-
-    def set_population(self, newpop):
-        '''
-        Sets the population as the required
-        '''
-        self.pop = self.toolbox.population(n=newpop)
-
-
     # Define new functions
     def protectedDiv(left, right):
         with numpy.errstate(divide='ignore',invalid='ignore'):
@@ -179,31 +129,43 @@ class CondorDeap:
                 x = 1
         return x
 
-
+def main():
+    c = CondorDeap()
+    c.setup_gp()
+    c.setup_gp_params()
+    c.setup_inputs()
+    c.setup_pop_size(1)
+    c.setup_no_gens()
+    c.setup_evaluator()
+    c.setup_stats()
+    c.run_gp()
 
 if __name__ == "__main__":
-    # run gp, outputting population, stats, hall of fame:
-    ccc = CondorDeap()
-#    ccc.run()
+    main()
 
-    # SAMPLE RUN
-    ccc.set_population(1)
-    pop, stats, mstats, hof, logbook = ccc.do_run(3)
-    # see what we got:
-    ccc.log.info('Hall of fame:')
-    for x, individual in enumerate(hof):
-        ccc.log.info(hof.items[x])
+##### PREVIOUSLY:
+#     # run gp, outputting population, stats, hall of fame:
+#     ccc = CondorDeap()
+# #    ccc.run()
 
-    # Stats does not have the fitness data, just the stats functions
-    # print(ccc.stats.__dict__)
-    # print(ccc.stats.fields[0])
+#     # SAMPLE RUN
+#     ccc.set_population(1)
+#     pop, stats, mstats, hof, logbook = ccc.do_run(3)
+#     # see what we got:
+#     ccc.log.info('Hall of fame:')
+#     for x, individual in enumerate(hof):
+#         ccc.log.info(hof.items[x])
 
-    print()
+#     # Stats does not have the fitness data, just the stats functions
+#     # print(ccc.stats.__dict__)
+#     # print(ccc.stats.fields[0])
 
-    # logbook:
-    print(f'logbook: \n {logbook}')
+#     print()
 
-    print()
+#     # logbook:
+#     print(f'logbook: \n {logbook}')
 
-    # mstats
-    print(f'mstats: \n {mstats}')
+#     print()
+
+#     # mstats
+#     print(f'mstats: \n {mstats}')
