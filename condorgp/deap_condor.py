@@ -24,7 +24,7 @@ import numpy
 from deap import base
 # from deap import creator
 # from deap import tools
-# from deap import gp
+from deap import gp
 
 from condorgp.utils import Utils
 from condorgp.params import util_dict, test_dict, lean_dict
@@ -56,6 +56,8 @@ class CondorDeap:
                             'method': self.protectedDiv}
         additional_terms = {}
         self.gp.set_pset(additional_funcs, additional_terms)
+        self.pset = self.gp.get_pset() # geeting this back to enable eval func
+
 
     def setup_gp_params(self, params = {}):
         ''' sets major gp parameters'''
@@ -89,7 +91,9 @@ class CondorDeap:
         # ERROR CAUSED HERE
         # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
         # this line alone worked when DEAP setup in this class:  func = self.toolbox.compile(expr=individual)
-        self.toolbox = base.Toolbox()
+        # self.toolbox = base.Toolbox()
+        # self.toolbox.register("compile", gp.compile, pset=self.pset)
+
         func = self.toolbox.compile(expr=individual)
         # output individual into Lean-ready class, for Lean evaluation
 

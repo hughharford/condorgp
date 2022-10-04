@@ -9,6 +9,17 @@ from deap import gp
 
 from condorgp.interfaces.gp_provider import GpProvider
 
+# Define new functions
+def protectedDiv(left, right):
+    with numpy.errstate(divide='ignore',invalid='ignore'):
+        x = numpy.divide(left, right)
+        if isinstance(x, numpy.ndarray):
+            x[numpy.isinf(x)] = 1
+            x[numpy.isnan(x)] = 1
+        elif numpy.isinf(x) or numpy.isnan(x):
+            x = 1
+    return x
+
 class GpDependency(GpProvider):
     def __init__(self):
         pass
@@ -24,12 +35,15 @@ class GpDependency(GpProvider):
         self.pset.addPrimitive(numpy.subtract, 2, name="vsub")
         self.pset.addPrimitive(numpy.multiply, 2, name="vmul")
         self.pset.addPrimitive(
-            functions['name'], functions['arrity'], functions['method'])
+            functions['method'], functions['arrity'], functions['name'])
         self.pset.addPrimitive(numpy.negative, 1, name="vneg")
         self.pset.addPrimitive(numpy.cos, 1, name="vcos")
         self.pset.addPrimitive(numpy.sin, 1, name="vsin")
         self.pset.addEphemeralConstant("rand101", lambda: random.randint(-1,1))
         self.pset.renameArguments(ARG0='x')
+
+    def get_pset(self):
+        return self.pset
 
     def set_gp_params(self, params: dict):
 
