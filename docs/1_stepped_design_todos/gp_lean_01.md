@@ -8,6 +8,8 @@
       # decouple deap_condor from Lean
       # decouple lean_runner from deap_condor
       # ENSURE deap_condor decoupled by design from ecosystem etc
+      # LIKELY implement: https://github.com/ets-labs/python-dependency-injector
+      # keep it super simple in the immediate term
 
   # gets fitness from lean
       # working fitness result (lean)
@@ -46,6 +48,6 @@
       # confirm can pickle
       # confirm can unpickle and run
     # REF: https://deap.readthedocs.io/en/master/tutorials/advanced/checkpoint.html
-    
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # DONE

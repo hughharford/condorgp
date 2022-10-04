@@ -1299,3 +1299,9 @@
 2022-09-26 21:23:55,912 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
 2022-09-26 21:23:55,914 -  INFO - Hall of fame:
 2022-09-26 21:23:55,914 -  INFO - vadd(vadd(1, x), vadd(x, 1))
+2022-09-29 09:39:34,717 -  INFO - >>>>>>>>>>, <class 'condorgp.deap_condor.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-29 09:39:49,128 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-29 09:41:16,354 -  INFO - >>>>>>>>>>, <class 'condorgp.deap_condor.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-29 09:41:27,812 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-09-29 09:43:47,417 -  INFO - >>>>>>>>>>, <class 'condorgp.deap_condor.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-09-29 09:43:58,932 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891

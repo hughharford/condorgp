@@ -50,7 +50,7 @@ class CondorDeap:
         self.pset.addPrimitive(numpy.add, 2, name="vadd")
         self.pset.addPrimitive(numpy.subtract, 2, name="vsub")
         self.pset.addPrimitive(numpy.multiply, 2, name="vmul")
-        self.pset.addPrimitive(protectedDiv, 2)
+        self.pset.addPrimitive(self.protectedDiv, 2)
         self.pset.addPrimitive(numpy.negative, 1, name="vneg")
         self.pset.addPrimitive(numpy.cos, 1, name="vcos")
         self.pset.addPrimitive(numpy.sin, 1, name="vsin")
@@ -152,7 +152,7 @@ class CondorDeap:
         '''
         self.logbook  = algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, ngen, \
                             self.stats, halloffame=self.hof)
-        return self.pop, self.stats, self.mstats, self.hof, self.logbook
+        return self.pop, self.stats, self.hof, self.logbook
 
     def set_evaluator(self, new_evaluator):
         '''
@@ -168,16 +168,18 @@ class CondorDeap:
         self.pop = self.toolbox.population(n=newpop)
 
 
-# Define new functions
-def protectedDiv(left, right):
-    with numpy.errstate(divide='ignore',invalid='ignore'):
-        x = numpy.divide(left, right)
-        if isinstance(x, numpy.ndarray):
-            x[numpy.isinf(x)] = 1
-            x[numpy.isnan(x)] = 1
-        elif numpy.isinf(x) or numpy.isnan(x):
-            x = 1
-    return x
+    # Define new functions
+    def protectedDiv(left, right):
+        with numpy.errstate(divide='ignore',invalid='ignore'):
+            x = numpy.divide(left, right)
+            if isinstance(x, numpy.ndarray):
+                x[numpy.isinf(x)] = 1
+                x[numpy.isnan(x)] = 1
+            elif numpy.isinf(x) or numpy.isnan(x):
+                x = 1
+        return x
+
+
 
 if __name__ == "__main__":
     # run gp, outputting population, stats, hall of fame:
