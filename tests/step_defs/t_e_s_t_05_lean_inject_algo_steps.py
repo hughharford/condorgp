@@ -4,7 +4,7 @@ from os.path import exists
 
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condorgp.lean_runner import RunLean
+from condorgp.evaluation.lean_runner import RunLean
 from condorgp.utils import retrieve_log_line_with_key
 from condorgp.utils import get_keyed_line_within_limits
 from condorgp.utils import get_all_lines

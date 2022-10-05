@@ -6,7 +6,7 @@ from pytest_bdd import scenarios, given, when, then, parsers
 
 from tests.fixtures import utils
 from condorgp.params import lean_dict, test_dict, util_dict
-from condorgp.lean_runner import RunLean
+from condorgp.evaluation.lean_runner import RunLean
 
 EXTRA_TYPES = {
     'Number': int,

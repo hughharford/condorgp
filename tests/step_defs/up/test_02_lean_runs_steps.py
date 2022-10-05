@@ -5,7 +5,7 @@ from os.path import exists
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condorgp.lean_runner import RunLean
+from condorgp.evaluation.lean_runner import RunLean
 from condorgp.utils import Utils
 
 from condorgp.params import lean_dict, test_dict, util_dict

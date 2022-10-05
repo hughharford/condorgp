@@ -59,7 +59,6 @@ class Utils:
         onlyfiles = [f for f in listdir(input_file_paths) if isfile(join(input_file_paths, f))]
         for file_path in onlyfiles:
             count += 1
-            # print(f'{file_path}: ___ {now - os.path.getmtime(input_file_paths +"/"+ file_path)} < {now - diff}')
             if (now - os.path.getmtime(input_file_paths +'/'+ file_path)) < (now - diff): recent += 1
         if count == 0: return False
         if recent > 0: return True
@@ -84,9 +83,10 @@ class Utils:
         return latest
 
     def cut_pys_from_latest_backtests_code_dir(self):
-        latestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR'] + self.pull_latest_log_into_overall_backtest_log() + '/code/'
-        print(latestfolder)
-        onlyfiles = [f for f in listdir(latestfolder) if isfile(join(latestfolder, f))]
+        latestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR'] + \
+            self.pull_latest_log_into_overall_backtest_log() + '/code/'
+        onlyfiles = \
+            [f for f in listdir(latestfolder) if isfile(join(latestfolder, f))]
         for file in onlyfiles:
             os.rename(latestfolder+file, latestfolder+file[:-3])
 
@@ -95,8 +95,8 @@ class Utils:
         return lines
 
     def get_last_x_log_lines(self,
-                            lines = 150,
-                            log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES']):
+                lines = 150,
+                log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES']):
         '''
         Get from the (default) log the last X lines
         '''
@@ -113,9 +113,8 @@ class Utils:
     def confirm_ind_name_in_log_lines(self,output_ind):
         print(output_ind)
         results_list = self.get_last_x_log_lines(
-                                lines =  util_dict['NO_LOG_LINES'],
-                                log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES'])
-        # print(results_list)
+                    lines =  util_dict['NO_LOG_LINES'],
+                    log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES'])
         found_algo_name = False
         for line in results_list:
             if output_ind in line:
@@ -248,14 +247,14 @@ class Utils:
 if __name__ == "__main__":
     pass
     print('going...')
-    u = Utils()
+    # u = Utils()
 
-    key_req = 'Return Over Maximum Drawdown'
-    limit_lines = 25 # util_dict['NO_LOG_LINES']
-    got = u.get_keyed_line_within_limits(key_req, limit_lines = limit_lines)
+    # key_req = 'Return Over Maximum Drawdown'
+    # limit_lines = 25 # util_dict['NO_LOG_LINES']
+    # got = u.get_keyed_line_within_limits(key_req, limit_lines = limit_lines)
 
-    print(u.get_last_chars(got[0]))
-    print(type(u.get_last_chars(got[0])))
+    # print(u.get_last_chars(got[0]))
+    # print(type(u.get_last_chars(got[0])))
 
 
     # test_algos_path = lean_dict['LOCALPACKAGES_PATH']

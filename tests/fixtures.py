@@ -1,6 +1,6 @@
 import pytest
 from condorgp.utils import Utils
-from condorgp.deap_condor import CondorDeap
+from condorgp.gp_control import GpControl
 from condorgp.learning.dependency import Dependency
 
 @pytest.fixture
@@ -9,7 +9,7 @@ def utils():
 
 @pytest.fixture
 def deap_one():
-    return CondorDeap()
+    return GpControl()
 
 @pytest.fixture
 def get_dependency1():

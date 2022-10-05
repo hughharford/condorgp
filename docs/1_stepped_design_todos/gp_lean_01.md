@@ -5,11 +5,16 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # demonstrate decoupling
-      # decouple deap_condor from Lean
-      # decouple lean_runner from deap_condor
-      # ENSURE deap_condor decoupled by design from ecosystem etc
-      # LIKELY implement: https://github.com/ets-labs/python-dependency-injector
+      # decouple deap from gp_control
+          # DONE, see interfaces/gp_provider & inject_gp method
+      # decouple lean_runner (and thereby Lean) from gp_control
+          # DONE - see inject_lean_runner method
+      # decouple utils from gp_control
+          # DONE - see inject_utils method
+      # ENSURE gp_control decoupled by design from ecosystem etc
+      # CONSIDER implement: https://github.com/ets-labs/python-dependency-injector
       # keep it super simple in the immediate term
+        # => manual DI, single factory
 
   # gets fitness from lean
       # working fitness result (lean)
