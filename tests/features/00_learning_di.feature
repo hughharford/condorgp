@@ -6,9 +6,11 @@ Feature: dependency basics
     Scenario: With the original dependency
     Given a fixture providing the class
     When the dependency is instantiated
-    Then dep_method returns 1000 * our value
+    Then dep_multiply returns 1000 * our value
+    Then dep_add returns our value + 1000
 
     Scenario: With our mocked dependency
-    Given a fixture providing the class
-    When the dependency is instantiated
-    Then dep_method returns 5000 * our value
+    Given a fixture providing the mocked class
+    When the mocked dependency is instantiated
+    Then dep_multiply mock returns 5000 * our value
+    Then dep_add mock returns our value + 5000
