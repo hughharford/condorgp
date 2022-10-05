@@ -20,7 +20,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/05_deap_runs_lean.feature')
+scenarios('../../features/05_deap_runs_lean.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             Lean tests each evolved individual
@@ -59,8 +59,9 @@ def deap_sets_algo_to_Lean(utils, input_ind):
 def short_deap_run(deap_two):
     assert deap_two is not None
     newpop = 1
+    deap_two.setup_gp()
     deap_two.set_population(newpop)
-    deap_two.pop, deap_two.stats, deap_two.hof, deap_two.logbook = deap_two.do_run(1)
+    deap_two.run_gp()
 
 
 @then(parsers.cfparse('the result: "{ROI_over_MDD_value:Float}" is found',
@@ -70,9 +71,8 @@ def find_results(ROI_over_MDD_value, deap_two):
 
     # deap_two.stats
     value_from_deap_stats = 74
-    for x, individual in enumerate(deap_two.hof):
-        pass # assert deap_two.hof.items[x] == 74.891
-        # it's not the HoF that holds the fitness
+    # assert deap_two.hof.items[x] == 74.891
+    # it's not the HoF that holds the fitness
 
     assert ROI_over_MDD_value >= value_from_deap_stats
 

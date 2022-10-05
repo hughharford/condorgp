@@ -30,9 +30,6 @@ class GpDeap(GpProvider):
         self.pset.addEphemeralConstant("rand101", lambda: random.randint(-1,1))
         self.pset.renameArguments(ARG0='x')
 
-    def get_pset(self):
-        return self.pset
-
     def set_gp_params(self, params: dict):
 
         # fundamentals for the gp tree
@@ -91,12 +88,12 @@ class GpDeap(GpProvider):
         self.stats.register("min", numpy.min)
         self.stats.register("max", numpy.max)
 
-    def multi_stats(self):
-        self.stats_fit = tools.Statistics(key=lambda ind: ind.fitness.values)
-        self.stats_size = tools.Statistics(key=len)
-        self.mstats = tools.MultiStatistics(fitness=self.stats_fit,
-                                            size=self.stats_size)
-        self.mstats.register("max", numpy.max)
+    # def multi_stats(self):
+    #     self.stats_fit = tools.Statistics(key=lambda ind: ind.fitness.values)
+    #     self.stats_size = tools.Statistics(key=len)
+    #     self.mstats = tools.MultiStatistics(fitness=self.stats_fit,
+    #                                         size=self.stats_size)
+    #     self.mstats.register("max", numpy.max)
 
     def run_gp(self):
         ''' Do a GP run, with default 1 generation for testing '''

@@ -82,8 +82,8 @@ class GpControl:
         self.gp.set_inputs(inputs)
 
         # Sets 4: population size, defaults to 2 to test efficacy
-        pop_size = 1
-        self.gp.set_pop_size(pop_size)
+        self.pop_size = 1
+        self.gp.set_pop_size(self.pop_size)
 
         # Set 5: the number of generations
         no_gens = 1
@@ -96,6 +96,9 @@ class GpControl:
         stat_params = {}
         self.gp.set_stats(stat_params)
 
+    def set_population(self, pop_size = 2):
+        self.gp.set_pop_size(pop_size)
+
     def run_gp(self):
         ''' undertakes the run as specified'''
         self.gp.run_gp()
@@ -107,11 +110,7 @@ class GpControl:
 
         # Lean evaluation: basic Lean run for now
         input_ind = 'IndBasicAlgo1'
-        config_to_run = ''
-        if input_ind[-1] == '1':
-            config_to_run = test_dict['CONDOR_TEST_CONFIG_FILE_1']
-        elif input_ind[-1] == '2':
-            config_to_run = test_dict['CONDOR_TEST_CONFIG_FILE_2']
+        config_to_run = test_dict['CONDOR_TEST_CONFIG_FILE_1']
 
         self.util.copy_config_in(input_ind)
         self.util.copy_algo_in(input_ind)
@@ -139,13 +138,10 @@ class GpControl:
                 x = 1
         return x
 
-def main():
+if __name__ == "__main__":
     c = GpControl()
     c.setup_gp()
     c.run_gp()
-
-if __name__ == "__main__":
-    main()
 
 ##### PREVIOUSLY:
 #     # run gp, outputting population, stats, hall of fame:

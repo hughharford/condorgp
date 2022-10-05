@@ -1,6 +1,6 @@
 import pytest
-from condorgp.utils import Utils
-from condorgp.gp_control import GpControl
+from condorgp.util.utils import Utils
+from condorgp.gp.gp_control import GpControl
 from condorgp.learning.dependency_factory import DependencyFactory
 from condorgp.learning.dependency_factory_overridden import DependencyFactoryOverridden
 

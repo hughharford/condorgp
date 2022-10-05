@@ -27,7 +27,7 @@ from deap import creator
 from deap import tools
 from deap import gp
 
-from condorgp.utils import get_keyed_line_within_limits
+from condorgp.util.utils import get_keyed_line_within_limits
 from condorgp.util.log import CondorLogger
 
 

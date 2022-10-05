@@ -5,7 +5,7 @@ from deap import gp
 
 from tests.fixtures import *
 
-scenarios('../../features/04_deap_basics.feature')
+scenarios('../../features/03_deap_basics.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             Deap basic operations
@@ -49,5 +49,4 @@ def get_deap_functions(deap_one):
 
 @then('the fundamental functions are found')
 def check_deap_functions_match():
-    assert 1 == 1
-    pass # nothing to do here
+    pass # the above will suffice

@@ -1,7 +1,7 @@
 import os
 
 from condorgp.params import lean_dict, test_dict, highlevel_config_dict
-from condorgp.utils import Utils
+from condorgp.util.utils import Utils
 
 class RunLean():
     def __init__(self) -> None:

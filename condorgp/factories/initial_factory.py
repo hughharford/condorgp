@@ -1,7 +1,8 @@
-from condorgp.utils import Utils
+from condorgp.util.utils import Utils
 from condorgp.gp.gp_deap import GpDeap
 from condorgp.evaluation.lean_runner import RunLean
 from condorgp.util.log import CondorLogger
+
 class LocalFactory:
     def __init__(self):
         pass

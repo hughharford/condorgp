@@ -20,7 +20,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../../features/03_lean_algos.feature')
+scenarios('../../features/02_lean_algos.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             Lean tests each evolved individual

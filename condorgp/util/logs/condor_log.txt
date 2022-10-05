@@ -1353,3 +1353,51 @@
 2022-10-05 13:52:21,968 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
 2022-10-05 13:57:35,696 -  INFO - >>>>>>>>>>, <class '__main__.GpControl'> - DEAP gp - run began >>>>>>>>>>
 2022-10-05 13:57:51,243 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 15:04:22,828 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:04:43,652 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:04:43,652 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:04:43,653 -  INFO - primitives_count = 6
+2022-10-05 15:04:43,653 -  INFO - primitives_count = 6
+2022-10-05 15:04:43,653 -  INFO - terminals_count = 3
+2022-10-05 15:04:43,653 -  INFO - terminals_count = 3
+2022-10-05 15:08:18,848 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:08:40,614 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:08:40,614 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:08:40,615 -  INFO - primitives_count = 6
+2022-10-05 15:08:40,615 -  INFO - primitives_count = 6
+2022-10-05 15:08:40,616 -  INFO - terminals_count = 3
+2022-10-05 15:08:40,616 -  INFO - terminals_count = 3
+2022-10-05 15:13:18,096 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:13:29,504 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 15:14:23,883 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:14:35,198 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 15:16:21,298 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:16:31,880 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 15:17:14,977 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:17:25,553 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 15:22:15,991 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:22:25,661 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 15:22:46,417 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:22:46,417 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:22:46,418 -  INFO - primitives_count = 6
+2022-10-05 15:22:46,418 -  INFO - primitives_count = 6
+2022-10-05 15:22:46,418 -  INFO - terminals_count = 3
+2022-10-05 15:22:46,418 -  INFO - terminals_count = 3
+2022-10-05 15:28:08,425 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:28:18,411 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 15:28:39,615 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:28:39,615 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 15:28:39,616 -  INFO - primitives_count = 6
+2022-10-05 15:28:39,616 -  INFO - primitives_count = 6
+2022-10-05 15:28:39,616 -  INFO - terminals_count = 3
+2022-10-05 15:28:39,616 -  INFO - terminals_count = 3
+2022-10-05 19:53:42,464 -  INFO - >>>>>>>>>>, <class 'condorgp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 19:53:42,469 -  INFO - primitives_count = 6
+2022-10-05 19:53:42,470 -  INFO - terminals_count = 3
+2022-10-05 19:57:11,280 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 19:57:11,282 -  INFO - primitives_count = 6
+2022-10-05 19:57:11,282 -  INFO - terminals_count = 3
+2022-10-05 19:57:11,295 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 19:57:11,295 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 19:57:20,987 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 19:57:20,987 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
