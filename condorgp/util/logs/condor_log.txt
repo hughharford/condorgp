@@ -1332,3 +1332,13 @@
 2022-10-05 09:23:08,449 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
 2022-10-05 09:30:28,472 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
 2022-10-05 09:30:39,531 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 09:34:34,190 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 09:34:44,851 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 09:44:00,906 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 09:44:15,695 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 09:44:26,477 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 09:44:36,773 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 09:45:40,963 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeap'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 09:45:51,848 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 09:46:02,314 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 09:46:12,821 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891

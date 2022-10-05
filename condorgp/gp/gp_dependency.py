@@ -113,7 +113,7 @@ class GpDependency(GpProvider):
         self.mstats.register("max", numpy.max)
 
 
-    def set_gens(self, no_gens: int):
+    def set_gens(self, no_gens: int = 2):
         self.ngen = no_gens
 
     def run_gp(self):

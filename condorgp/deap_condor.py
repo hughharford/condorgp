@@ -46,11 +46,20 @@ class CondorDeap:
         filler_INIT = '>'*10
         self.log.info(f"{filler_INIT}, {__class__} - DEAP gp - run began {filler_INIT}")
 
+    def inject_gp(self):
         lf = LocalFactory()
         self.gp = lf.get_gp_provider()
 
     def setup_gp(self):
-        ''' sets additional functions & terminals '''
+        ''' sets: 1. additional functions & terminals
+                  2. major gp parameters
+                  3: inputs for fitness evaluation
+                  4: population size, defaults to 2 to test efficacy
+                  5: the number of generations
+                  6: the evaluator
+                  7: the stats feedback
+        '''
+        # Set: 1. additional functions & terminals
         additional_funcs = {'name': 'protectedDiv',
                             'arrity': 2,
                             'method': self.protectedDiv}
@@ -58,27 +67,27 @@ class CondorDeap:
         self.gp.set_pset(additional_funcs, additional_terms)
         self.pset = self.gp.get_pset() # geeting this back to enable eval func
 
-
-    def setup_gp_params(self, params = {}):
-        ''' sets major gp parameters'''
+        # Set 2. major gp parameters
+        params = {}
         self.gp.set_gp_params(params)
 
-    def setup_inputs(self, inputs = {}):
-        ''' sets inputs for fitness evaluation'''
+        # Sets 3: inputs for fitness evaluation
+        inputs = {}
         self.gp.set_inputs(inputs)
 
-    def setup_pop_size(self, pop_size = 2):
-        ''' sets the population size, defaults to 2 to test efficacy'''
+        # Sets 4: population size, defaults to 2 to test efficacy
+        pop_size = 2
         self.gp.set_pop_size(pop_size)
 
-    def setup_no_gens(self, no_gens = 1):
-        ''' sets the number of generations'''
+        # Set 5: the number of generations
+        no_gens = 2
         self.gp.set_gens(no_gens)
 
-    def setup_evaluator(self):
+        # Set 6: the evaluator
         self.gp.set_evaluator(self.evalIntoAndFromLean)
 
-    def setup_stats(self, stat_params = {}):
+        # Set 7: the stats feedback
+        stat_params = {}
         self.gp.set_stats(stat_params)
 
     def run_gp(self):
@@ -135,13 +144,8 @@ class CondorDeap:
 
 def main():
     c = CondorDeap()
+    c.inject_gp()
     c.setup_gp()
-    c.setup_gp_params()
-    c.setup_inputs()
-    c.setup_pop_size(1)
-    c.setup_no_gens()
-    c.setup_evaluator()
-    c.setup_stats()
     c.run_gp()
 
 if __name__ == "__main__":
