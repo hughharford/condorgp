@@ -94,7 +94,7 @@ class CondorDeap:
         # self.toolbox = base.Toolbox()
         # self.toolbox.register("compile", gp.compile, pset=self.pset)
 
-        func = self.toolbox.compile(expr=individual)
+        func = self.gp.toolbox.compile(expr=individual)
         # output individual into Lean-ready class, for Lean evaluation
 
         # Lean evaluation: basic Lean run for now

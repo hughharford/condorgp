@@ -63,6 +63,14 @@ class GpDependency(GpProvider):
 
         self.rand = random.seed(318)
 
+        # attempting insert of these lines here. have seperated out this line:
+        #    toolbox.register("evaluate", evalSymbReg)
+        # which normally appears before these 4...
+        self.toolbox.register("select", tools.selTournament, tournsize=3)
+        self.toolbox.register("mate", gp.cxOnePoint)
+        self.toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
+        self.toolbox.register('mutate', gp.mutUniform, expr=self.toolbox.expr_mut, pset=self.pset)
+
     def set_inputs(self, inputs: dict):
         '''
         Set the input values for fitness evaluation:
