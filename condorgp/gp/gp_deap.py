@@ -97,12 +97,11 @@ class GpDeap(GpProvider):
 
     def run_gp(self):
         ''' Do a GP run, with default 1 generation for testing '''
-        self.logbook  = algorithms.eaSimple(
-                                    self.pop,
-                                    self.toolbox,
-                                    0.5,
-                                    0.1,
-                                    self.ngen,
-                                    self.stats,
-                                    halloffame=self.hof)
+        self.pop, self.logbook = algorithms.eaSimple(self.pop,
+                                                    self.toolbox,
+                                                    0.5,
+                                                    0.1,
+                                                    self.ngen,
+                                                    self.stats,
+                                                    halloffame=self.hof)
         return self.pop, self.stats, self.hof, self.logbook

@@ -138,34 +138,11 @@ class GpControl:
                 x = 1
         return x
 
+    def get_logbook(self):
+        return self.gp.logbook
+
 if __name__ == "__main__":
     c = GpControl()
     c.setup_gp()
     c.run_gp()
 
-##### PREVIOUSLY:
-#     # run gp, outputting population, stats, hall of fame:
-#     ccc = CondorDeap()
-# #    ccc.run()
-
-#     # SAMPLE RUN
-#     ccc.set_population(1)
-#     pop, stats, mstats, hof, logbook = ccc.do_run(3)
-#     # see what we got:
-#     ccc.log.info('Hall of fame:')
-#     for x, individual in enumerate(hof):
-#         ccc.log.info(hof.items[x])
-
-#     # Stats does not have the fitness data, just the stats functions
-#     # print(ccc.stats.__dict__)
-#     # print(ccc.stats.fields[0])
-
-#     print()
-
-#     # logbook:
-#     print(f'logbook: \n {logbook}')
-
-#     print()
-
-#     # mstats
-#     print(f'mstats: \n {mstats}')

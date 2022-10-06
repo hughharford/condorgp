@@ -13,10 +13,6 @@ def deap_one():
     return GpControl()
 
 @pytest.fixture
-def deap_two():
-    return GpControl()
-
-@pytest.fixture
 def dep_di():
     return DependencyFactory().get_dependency()
 

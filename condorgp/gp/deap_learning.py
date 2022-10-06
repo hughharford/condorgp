@@ -166,10 +166,13 @@ if __name__ == "__main__":
     gen, avg = ccc.logbook.select("gen", "max")
     print(gen, avg)
 
-    print('logbook.chapters["fitness"].select("min")')
-    print(ccc.logbook.chapters["fitness"].select("min"))
-    print('logbook.chapters["fitness"]')
-    print(ccc.logbook.chapters["fitness"].select("max"))
+    # CHAPTERS only for Multi stats:
+    # print('logbook.chapters["fitness"].select("min")')
+
+
+    print()
+    # print(c.gp.logbook)
+    print("max fitness found: " + str(ccc.logbook.select("max")[-1]))
 
     # *******************************************************************
     learning = 0
