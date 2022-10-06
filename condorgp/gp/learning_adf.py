@@ -119,8 +119,8 @@ def main():
     random.seed(1024)
     ind = toolbox.individual()
 
-    pop = toolbox.population(n=100)
-    hof = tools.HallOfFame(1)
+    pop = toolbox.population(n=10)
+    hof = tools.HallOfFame(5)
     stats = tools.Statistics(lambda ind: ind.fitness.values)
     stats.register("avg", numpy.mean)
     stats.register("std", numpy.std)
@@ -175,11 +175,26 @@ def main():
 
     print('Best individual : ', hof[0][0], hof[0].fitness)
 
+    # print('Toolbox.adf0: ', toolbox.ADF0.__repr__())
+    # print('toolbox.adf_expr0 ', toolbox.adf_expr0)
+
+    print('func_cycle \
+        = [toolbox.MAIN, toolbox.ADF0, toolbox.ADF1, toolbox.ADF2]')
+
+    for x, ind in enumerate(hof):
+        print(f' for hof[{x}] _______________________')
+        print(' ADF 0 : ', hof[x][1])
+        # print(' ADF 1 : ', hof[x][2])
+        # print(' ADF 2 : ', hof[x][3])
+
     return pop, stats, hof
 
 if __name__ == "__main__":
     pop, stats, hof = main()
     for ind in pop:
         pass
-        # print(ind.__repr__())
+        # print("ind[0] (ind in pop): ", ind[0])
         # print()
+
+    # print("individuals from hof[0][0])", hof[0][0], '\n')
+    # print("pop[0][0]: ", pop[0][0])

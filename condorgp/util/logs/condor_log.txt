@@ -1503,3 +1503,41 @@
 2022-10-06 11:39:06,585 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
 2022-10-06 11:41:00,599 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
 2022-10-06 11:41:10,925 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-06 11:45:03,284 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:45:03,285 -  INFO - primitives_count = 6
+2022-10-06 11:45:03,285 -  INFO - terminals_count = 3
+2022-10-06 11:45:03,316 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:45:03,316 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:45:15,309 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-06 11:45:15,309 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-06 12:48:13,216 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 12:51:24,310 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 12:51:54,711 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 12:52:29,082 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 12:54:24,376 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 12:55:01,105 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:02:12,535 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:02:25,632 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:02:38,270 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:02:56,382 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:04:53,920 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:05:14,171 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:06:18,202 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:06:58,097 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:07:01,304 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:07:03,269 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:07:09,956 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:07:14,015 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:07:15,602 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:07:18,770 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:10:08,421 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:10:12,371 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:10:20,092 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:10:22,631 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:10:24,019 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:10:53,793 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 13:28:28,661 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 15:36:55,135 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 15:37:18,912 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 16:01:13,243 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 20:03:08,919 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
