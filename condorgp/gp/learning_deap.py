@@ -19,6 +19,7 @@ from logging import NOTSET
 import operator
 import math
 import random
+import itertools
 
 import numpy
 
@@ -45,21 +46,47 @@ class CondorDeapLearning:
 
         self.util = LocalFactory().get_utils()
 
-        # primitive set:
-        self.pset = gp.PrimitiveSet("MAIN", 1)
-        self.pset.addPrimitive(numpy.add, 2, name="vadd")
-        self.pset.addPrimitive(numpy.subtract, 2, name="vsub")
-        self.pset.addPrimitive(numpy.multiply, 2, name="vmul")
-        self.pset.addPrimitive(protectedDiv, 2)
-        self.pset.addPrimitive(numpy.negative, 1, name="vneg")
-        self.pset.addPrimitive(numpy.cos, 1, name="vcos")
-        self.pset.addPrimitive(numpy.sin, 1, name="vsin")
-        self.pset.addEphemeralConstant("rand101", lambda: random.randint(-1,1))
-        self.pset.addEphemeralConstant("rand202", lambda: random.randint(-2,2))
+        # first primitive set:
+        self.pset1 = gp.PrimitiveSet("INITIAL", 4)
+        # can add own defined function, with 4 inputs
+        # just can't yet control where it comes
+        self.pset1.addPrimitive(baseSplit4, 4, name="baseSplit4")
+        self.pset1.addPrimitive(numpy.add, 2, name="vadd")
+        self.pset1.addPrimitive(numpy.subtract, 2, name="vsub")
+        self.pset1.addPrimitive(numpy.multiply, 2, name="vmul")
+        self.pset1.addPrimitive(protectedDiv, 2)
+        self.pset1.addPrimitive(numpy.negative, 1, name="vneg")
+        self.pset1.addPrimitive(numpy.cos, 1, name="vcos")
+        self.pset1.addPrimitive(numpy.sin, 1, name="vsin")
+        self.pset1.addEphemeralConstant("rand101", lambda: random.randint(-1,1))
+        self.pset1.addEphemeralConstant("rand202", lambda: random.randint(-2,2))
+        self.pset1.renameArguments(ARG0='x')
 
-        self.pset.renameArguments(ARG0='x')
+        # attempt at a strongly typed pset with adfs etc
+        # aming to get multi-line output
 
+        # defined a new primitive set for strongly typed GP
+        self.pset2 = gp.PrimitiveSetTyped("TYPED", itertools.repeat(float, 57), bool, "IN")
 
+        # boolean operators
+        self.pset2.addPrimitive(operator.and_, [bool, bool], bool)
+        self.pset2.addPrimitive(operator.or_, [bool, bool], bool)
+        self.pset2.addPrimitive(operator.not_, [bool], bool)
+
+        # floating point operators
+        self.pset2.addPrimitive(operator.add, [float,float], float)
+        self.pset2.addPrimitive(operator.sub, [float,float], float)
+        self.pset2.addPrimitive(operator.mul, [float,float], float)
+        self.pset2.addPrimitive(protectedDiv, [float,float], float)
+
+        # logic operators
+        self.pset2.addPrimitive(operator.lt, [float, float], bool)
+        self.pset2.addPrimitive(operator.eq, [float, float], bool)
+        self.pset2.addPrimitive(if_then_else, [bool, float, float], float)
+
+        # terminals
+        self.pset2.addEphemeralConstant("rand100", lambda: random.random() * 100, float)
+        self.pset2.addTerminal(False, bool)
 
         # fundamentals for the gp tree
         creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
@@ -67,13 +94,13 @@ class CondorDeapLearning:
 
         # toobox and it's components, including population
         self.toolbox = base.Toolbox()
-        self.toolbox.register("expr", gp.genHalfAndHalf, pset=self.pset, min_=1, max_=2)
+        self.toolbox.register("expr", gp.genHalfAndHalf, pset=self.pset2, min_=1, max_=2)
         self.toolbox.register("individual",
                               tools.initIterate,
                               creator.Individual,
                               self.toolbox.expr)
         self.toolbox.register("population", tools.initRepeat, list, self.toolbox.individual)
-        self.toolbox.register("compile", gp.compile, pset=self.pset)
+        self.toolbox.register("compile", gp.compile, pset=self.pset2)
 
         self.samples = numpy.linspace(-1, 1, 10000)
         self.values = self.samples**4 \
@@ -96,7 +123,7 @@ class CondorDeapLearning:
         self.toolbox.register("select", tools.selTournament, tournsize=3)
         self.toolbox.register("mate", gp.cxOnePoint)
         self.toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
-        self.toolbox.register('mutate', gp.mutUniform, expr=self.toolbox.expr_mut, pset=self.pset)
+        self.toolbox.register('mutate', gp.mutUniform, expr=self.toolbox.expr_mut, pset=self.pset2)
 
     def evalSymbReg(self, individual):
         # Transform the tree expression in a callable function
@@ -111,13 +138,8 @@ class CondorDeapLearning:
     def evalIntoAndFromLean(self, individual):
         # Transform the tree expression in a callable function
         func = self.toolbox.compile(expr=individual)
-
         # output a compile function to a file, so it can be run via Lean
         # TO DO:
-
-        # Evaluate the sum of squared difference between the expression
-        # and the real function values : x**4 + x**3 + x**2 + x
-        diff = numpy.sum((func(self.samples) - self.values)**2)
 
         # get fitness from the Lean log
         Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
@@ -129,6 +151,7 @@ class CondorDeapLearning:
         # returns a float in a tuple, i.e.
         #                               .68704775238,
         return new_fitness,
+
 
     def main(self):
         # set to 1 generation for testing
@@ -146,6 +169,14 @@ def protectedDiv(left, right):
         elif numpy.isinf(x) or numpy.isnan(x):
             x = 1
     return x
+
+# Define a new if-then-else function
+def if_then_else(input, output1, output2):
+    if input: return output1
+    else: return output2
+
+def baseSplit4(in1, in2, in3, in4):
+    return 0
 
 if __name__ == "__main__":
     # run gp, outputting population, stats, hall of fame:
@@ -166,13 +197,14 @@ if __name__ == "__main__":
     gen, avg = ccc.logbook.select("gen", "max")
     print(gen, avg)
 
-    # CHAPTERS only for Multi stats:
-    # print('logbook.chapters["fitness"].select("min")')
-
+    print()
+    print("max fitness found: " + str(ccc.logbook.select("max")[-1]))
 
     print()
-    # print(c.gp.logbook)
-    print("max fitness found: " + str(ccc.logbook.select("max")[-1]))
+    print('print of each individual might give code enough:\n')
+    for ind in ccc.pop:
+        print(ind)
+        print('****************')
 
     # *******************************************************************
     learning = 0
