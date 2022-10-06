@@ -1401,3 +1401,93 @@
 2022-10-05 19:57:11,295 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
 2022-10-05 19:57:20,987 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
 2022-10-05 19:57:20,987 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-05 20:11:32,225 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 20:12:51,995 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 20:12:54,930 -  INFO - Hall of fame:
+2022-10-05 20:12:54,931 -  INFO - vsub(-2, -2)
+2022-10-05 20:12:54,931 -  INFO - vcos(x)
+2022-10-05 20:12:54,931 -  INFO - protectedDiv(vadd(0, x), protectedDiv(0, x))
+2022-10-05 20:12:54,932 -  INFO - vadd(-2, 1)
+2022-10-05 20:12:54,932 -  INFO - protectedDiv(vsub(0, 1), protectedDiv(1, -1))
+2022-10-05 20:12:54,932 -  INFO - primitives_count = 7
+2022-10-05 20:12:54,932 -  INFO - terminals_count = 3
+2022-10-05 20:14:51,276 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-05 20:14:54,366 -  INFO - Hall of fame:
+2022-10-05 20:14:54,367 -  INFO - vsub(-2, -2)
+2022-10-05 20:14:54,367 -  INFO - vcos(x)
+2022-10-05 20:14:54,368 -  INFO - protectedDiv(vadd(0, x), protectedDiv(0, x))
+2022-10-05 20:14:54,368 -  INFO - vadd(-2, 1)
+2022-10-05 20:14:54,368 -  INFO - protectedDiv(vsub(0, 1), protectedDiv(1, -1))
+2022-10-05 20:14:54,368 -  INFO - primitives_count = 7
+2022-10-05 20:14:54,368 -  INFO - terminals_count = 3
+2022-10-06 08:58:23,339 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 08:58:26,166 -  INFO - Hall of fame:
+2022-10-06 08:58:26,166 -  INFO - vsub(-2, -2)
+2022-10-06 08:58:26,168 -  INFO - vcos(x)
+2022-10-06 08:58:26,169 -  INFO - protectedDiv(vadd(0, x), protectedDiv(0, x))
+2022-10-06 08:58:26,169 -  INFO - vadd(-2, 1)
+2022-10-06 08:58:26,170 -  INFO - protectedDiv(vsub(0, 1), protectedDiv(1, -1))
+2022-10-06 08:58:26,170 -  INFO - primitives_count = 7
+2022-10-06 08:58:26,170 -  INFO - terminals_count = 3
+2022-10-06 08:59:57,839 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 08:59:59,985 -  INFO - Hall of fame:
+2022-10-06 08:59:59,985 -  INFO - vsub(-2, -2)
+2022-10-06 08:59:59,985 -  INFO - vcos(x)
+2022-10-06 08:59:59,985 -  INFO - protectedDiv(vadd(0, x), protectedDiv(0, x))
+2022-10-06 08:59:59,985 -  INFO - vadd(-2, 1)
+2022-10-06 08:59:59,985 -  INFO - protectedDiv(vsub(0, 1), protectedDiv(1, -1))
+2022-10-06 08:59:59,986 -  INFO - primitives_count = 7
+2022-10-06 08:59:59,986 -  INFO - terminals_count = 3
+2022-10-06 09:03:51,838 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 09:03:54,237 -  INFO - Hall of fame:
+2022-10-06 09:03:54,237 -  INFO - vsub(-2, -2)
+2022-10-06 09:03:54,237 -  INFO - vcos(x)
+2022-10-06 09:03:54,238 -  INFO - protectedDiv(vadd(0, x), protectedDiv(0, x))
+2022-10-06 09:03:54,238 -  INFO - vadd(-2, 1)
+2022-10-06 09:03:54,238 -  INFO - protectedDiv(vsub(0, 1), protectedDiv(1, -1))
+2022-10-06 09:03:54,238 -  INFO - primitives_count = 7
+2022-10-06 09:03:54,238 -  INFO - terminals_count = 3
+2022-10-06 09:04:35,345 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 09:04:37,541 -  INFO - Hall of fame:
+2022-10-06 09:04:37,541 -  INFO - vsub(-2, -2)
+2022-10-06 09:04:37,542 -  INFO - vcos(x)
+2022-10-06 09:04:37,542 -  INFO - protectedDiv(vadd(0, x), protectedDiv(0, x))
+2022-10-06 09:04:37,542 -  INFO - vadd(-2, 1)
+2022-10-06 09:04:37,542 -  INFO - protectedDiv(vsub(0, 1), protectedDiv(1, -1))
+2022-10-06 09:04:37,542 -  INFO - primitives_count = 7
+2022-10-06 09:04:37,542 -  INFO - terminals_count = 3
+2022-10-06 09:04:48,829 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 09:04:51,164 -  INFO - Hall of fame:
+2022-10-06 09:04:51,164 -  INFO - vsub(-2, -2)
+2022-10-06 09:04:51,164 -  INFO - vcos(x)
+2022-10-06 09:04:51,164 -  INFO - protectedDiv(vadd(0, x), protectedDiv(0, x))
+2022-10-06 09:04:51,164 -  INFO - vadd(-2, 1)
+2022-10-06 09:04:51,165 -  INFO - protectedDiv(vsub(0, 1), protectedDiv(1, -1))
+2022-10-06 09:04:51,165 -  INFO - primitives_count = 7
+2022-10-06 09:04:51,165 -  INFO - terminals_count = 3
+2022-10-06 10:58:13,631 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 10:58:15,589 -  INFO - Hall of fame:
+2022-10-06 10:58:15,589 -  INFO - vsub(-2, -2)
+2022-10-06 10:58:15,589 -  INFO - vcos(x)
+2022-10-06 10:58:15,589 -  INFO - protectedDiv(vadd(0, x), protectedDiv(0, x))
+2022-10-06 10:58:15,589 -  INFO - vadd(-2, 1)
+2022-10-06 10:58:15,589 -  INFO - protectedDiv(vsub(0, 1), protectedDiv(1, -1))
+2022-10-06 10:58:15,589 -  INFO - primitives_count = 7
+2022-10-06 10:58:15,589 -  INFO - terminals_count = 3
+2022-10-06 10:58:37,011 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:04:20,741 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:14:56,317 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:15:31,434 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:17:00,644 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:18:02,271 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:18:43,171 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:19:26,210 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:22:12,334 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:22:34,009 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:24:00,235 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:24:00,237 -  INFO - primitives_count = 6
+2022-10-06 11:24:00,237 -  INFO - terminals_count = 3
+2022-10-06 11:24:00,270 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:24:00,270 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-06 11:24:09,951 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-06 11:24:09,951 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891

@@ -14,6 +14,7 @@
 #    You should have received a copy of the GNU Lesser General Public
 #    License along with EAP. If not, see <http://www.gnu.org/licenses/>.
 
+from distutils.cygwinccompiler import CygwinCCompiler
 from logging import NOTSET
 import operator
 import math
@@ -27,9 +28,8 @@ from deap import creator
 from deap import tools
 from deap import gp
 
-from condorgp.util.utils import get_keyed_line_within_limits
 from condorgp.util.log import CondorLogger
-
+from condorgp.factories.initial_factory import LocalFactory
 
 class CondorDeapLearning:
     def __init__(self):
@@ -42,6 +42,8 @@ class CondorDeapLearning:
         self.log = logger.get_logger()
         filler_INIT = '>'*10
         self.log.info(f"{filler_INIT}, {__class__} - DEAP gp - run began {filler_INIT}")
+
+        self.util = LocalFactory().get_utils()
 
         # primitive set:
         self.pset = gp.PrimitiveSet("MAIN", 1)
@@ -111,25 +113,28 @@ class CondorDeapLearning:
         func = self.toolbox.compile(expr=individual)
 
         # output a compile function to a file, so it can be run via Lean
-
-
+        # TO DO:
 
         # Evaluate the sum of squared difference between the expression
         # and the real function values : x**4 + x**3 + x**2 + x
         diff = numpy.sum((func(self.samples) - self.values)**2)
+
+        # get fitness from the Lean log
         Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
-        new_fitness = get_keyed_line_within_limits(Return_over_MDD)[0]
-        fill = '>'*41
+        got = self.util.get_keyed_line_within_limits(Return_over_MDD)
+        new_fitness = float(self.util.get_last_chars(got[0]))
+
+        fill = '>'*17 + '_'*7
         # print(f'new fitness {fill}{new_fitness}')
         # returns a float in a tuple, i.e.
-        #                               14736.68704775238,
-        return diff,
+        #                               .68704775238,
+        return new_fitness,
 
     def main(self):
         # set to 1 generation for testing
-        algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, 1, self.stats, halloffame=self.hof)
+        self.pop, self.logbook = algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, 1, self.stats, halloffame=self.hof)
 
-        return self.pop, self.stats, self.hof
+        return self.pop, self.stats, self.hof, self.logbook
 
 # Define new functions
 def protectedDiv(left, right):
@@ -148,58 +153,88 @@ if __name__ == "__main__":
 #    ccc.run()
 
     # SAMPLE RUN
-    pop, stats, hof = ccc.main()
-    # see what we got:
-    ccc.log.info('Hall of fame:')
-    for x, individual in enumerate(hof):
-        ccc.log.info(hof.items[x])
+    ccc.main()
 
-    ccc.log.info(f'primitives_count = {ccc.pset.prims_count}')
-    ccc.log.info(f'terminals_count = {ccc.pset.terms_count}')
-    print("NOTE: count of terminals includes base terminal class => -1")
+    print('ccc.logbook in full:')
+    print(ccc.logbook)
 
-    # TRYING TO ACCESS PRIMITIVE SET
-    # ccc.log.info(ccc.pset.primitives.items[0])
-    # print(ccc.toolbox.__dict__)
+    print('gen')
+    gen = ccc.logbook.select("gen")
+    print(gen)
 
-    print()
+    print('gen, avg')
+    gen, avg = ccc.logbook.select("gen", "max")
+    print(gen, avg)
 
-    # see the first Primitive in 1st individual
-    # print(ccc.toolbox.select(pop, 1)[0])
+    print('logbook.chapters["fitness"].select("min")')
+    print(ccc.logbook.chapters["fitness"].select("min"))
+    print('logbook.chapters["fitness"]')
+    print(ccc.logbook.chapters["fitness"].select("max"))
 
-    # # print all the individuals
-    # selection = ccc.toolbox.select(pop, len(pop))
-    # for x in range(len(selection)):
-    #     print(selection[x])
+    # *******************************************************************
+    learning = 0
+    if learning == 1:
+        # see what we got:
+        ccc.log.info('Hall of fame:')
+        for x, individual in enumerate(ccc.hof):
+            ccc.log.info(ccc.hof.items[x])
 
-    # see the pset as a list
-    print(list(ccc.pset.__dict__))
+        ccc.log.info(f'primitives_count = {ccc.pset.prims_count}')
+        ccc.log.info(f'terminals_count = {ccc.pset.terms_count}')
+        print("NOTE: count of terminals includes base terminal class => -1")
 
-    print()
+        # TRYING TO ACCESS PRIMITIVE SET
+        # ccc.log.info(ccc.pset.primitives.items[0])
+        # print(ccc.toolbox.__dict__)
 
-    # print the whole pset
-    # print((ccc.pset.__dict__))
+        print()
 
-    print()
+        print('see the first Primitive in 1st individual')
+        print(ccc.toolbox.select(ccc.pop, 1)[0])
 
-    # terminals is a defaultdict
-    print((ccc.pset.terminals))
+        print('all the individuals')
+        selection = ccc.toolbox.select(ccc.pop, len(ccc.pop))
+        for x in range(len(selection)):
+            print(selection[x])
 
-    print()
+        # see the pset as a list
+        print('pset.__dict__:')
+        print(list(ccc.pset.__dict__))
 
-    # the context keys holds the names of the func & terminal set
-    context_list = list(ccc.pset.context.keys())
-    print(f'{context_list} and length: {len(context_list)-1}')
+        print()
 
-    # this user added function is <class 'numpy.ufunc'>
-    print(type(ccc.pset.context.get(context_list[1])))
+        # print the whole pset
+        # print((ccc.pset.__dict__))
 
-    # name of the primitive set
-    print(ccc.pset.name)
+        print()
 
-    print()
+        # terminals is a defaultdict
+        print('pset.terminals:')
+        print((ccc.pset.terminals))
 
-    # confirm count of primitives or terminals:
-    term_keys = list(ccc.pset.terminals.keys())
-    list_terminals = ccc.pset.terminals.get(term_keys[0])
-    print(type(list_terminals[2]))
+        print()
+
+        print('the context keys holds the names of the func & terminal set')
+        context_list = list(ccc.pset.context.keys())
+        print(f'{context_list} and length: {len(context_list)-1}')
+
+        print('this shows the user added function is <class "numpy.ufunc">')
+        print(type(ccc.pset.context.get(context_list[1])))
+
+        # name of the primitive set
+        print('pset.name: ')
+        print(ccc.pset.name)
+
+        print()
+
+        print('looking at count of primitives or terminals:')
+        term_keys = list(ccc.pset.terminals.keys())
+        list_terminals = ccc.pset.terminals.get(term_keys[0])
+        print(type(list_terminals[2]))
+
+        print()
+
+        print('ccc.stats.__dict__:')
+        print(ccc.stats.__dict__)
+
+        print()
