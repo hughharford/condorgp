@@ -1,4 +1,7 @@
 import numpy
+from condorgp.params import test_dict
+from condorgp.factories.initial_factory import InitialFactory
+
 
 
 class GpCustomFunctions:
@@ -16,3 +19,6 @@ class GpCustomFunctions:
             elif numpy.isinf(x) or numpy.isnan(x):
                 x = 1
         return x
+
+    def test_C_func(x0):
+        pass

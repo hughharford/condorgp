@@ -14,3 +14,12 @@ Feature: GpControl class achieves various functionality
       | pset_input      |  primitive_name   |
       | test_psetA      |  vmul             |
       | test_psetB      |  vadd             |
+
+  Scenario Outline: test psets can output specific text
+    Given a specific test pset "<test_C_psets>"
+    When provided the "<arg_input>"
+    Then the result is "<text_output>"
+
+    Examples:
+      | arg_input     | test_C_psets    |  text_output        |
+      | hello_world   | test_psetC      |  hello_world        |

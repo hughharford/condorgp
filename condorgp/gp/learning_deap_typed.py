@@ -30,7 +30,7 @@ from deap import tools
 from deap import gp
 
 from condorgp.util.log import CondorLogger
-from condorgp.factories.initial_factory import LocalFactory
+from condorgp.factories.initial_factory import InitialFactory
 
 class CondorDeapLearning:
     def __init__(self):
@@ -44,7 +44,7 @@ class CondorDeapLearning:
         filler_INIT = '>'*10
         self.log.info(f"{filler_INIT}, {__class__} - DEAP gp - run began {filler_INIT}")
 
-        self.util = LocalFactory().get_utils()
+        self.util = InitialFactory().get_utils()
 
         # attempt at a strongly typed pset with adfs etc
         # aming to get multi-line output
@@ -127,7 +127,7 @@ class CondorDeapLearning:
 
         # get fitness from the Lean log
         Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
-        got = self.util.get_keyed_line_within_limits(Return_over_MDD)
+        got = self.util.get_keyed_line_in_limits(Return_over_MDD)
         new_fitness = float(self.util.get_last_chars(got[0]))
 
         fill = '>'*17 + '_'*7

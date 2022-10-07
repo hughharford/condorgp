@@ -4,12 +4,12 @@ import random
 import operator
 import math
 
-
-PSETS = []
+from condorgp.util.log import CondorLogger
 
 class GpPsets:
     def __init__(self, custom_funcs):
         self.custom_funcs = custom_funcs
+        self.log = CondorLogger().get_logger()
 
     def get_named_pset(self, named_pset):
         try:
@@ -55,9 +55,18 @@ class GpPsets:
 
     def get_test_psetB(self):
         ''' test pset B '''
-        self.testA = gp.PrimitiveSet("test pset B", 0)
-        self.testA.addPrimitive(numpy.add, 2, name="vadd")
-        return self.testA
+        self.testB = gp.PrimitiveSet("test pset B", 0)
+        self.testB.addPrimitive(numpy.add, 2, name="vadd")
+        self.testB.addPrimitive(print, 1, name="print")
+        self.testB.addTerminal("***_***_***", "3x3")
+        return self.testB
+
+    def get_test_psetC(self):
+        ''' test pset C '''
+        self.testC = gp.PrimitiveSet("test pset C", 1)
+        self.testC.addPrimitive(self.log.info, 1, name="self.log.info")
+        self.testC.renameArguments(ARG0='x0')
+        return self.testC
 
     def get_adf2(self):
         self.adfset2 = gp.PrimitiveSet("ADF2", 2)
@@ -107,12 +116,14 @@ if __name__ == '__main__':
     # uncomment the below and run to have a look into a pset created above:
 
     from deap import gp
-    from condorgp.factories.initial_factory import LocalFactory
-    lf = LocalFactory()
-    gp_custom_funcs = lf.get_gp_custom_functions()
+    from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
+    cf = CustomFuncsFactory()
+    gp_custom_funcs = cf.get_gp_custom_functions()
     gpp = GpPsets(gp_custom_funcs)
-    one = gpp.get_named_pset('default_untyped')
+    one = gpp.get_named_pset('test_psetC')
+    # set_pset('test_psetC_untyped')
     print(type(one))
+    print('Pset name = ', one.name)
     one.addPrimitive(operator.add, 2, name="NEW ONE, NEW ONE")
     print(one.terminals)
 

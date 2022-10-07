@@ -21,9 +21,9 @@ CONVERTERS = {
 
 scenarios('../features/05_gp_control.feature')
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             Lean tests each evolved individual
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#             GpControl can set different psets as needed
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
   Scenario Outline: GpControl can set different psets as needed
     Given a specific pset is needed
@@ -37,8 +37,6 @@ scenarios('../features/05_gp_control.feature')
       | psetA           |  mul          |
       | psetB           |  add          |
 """
-
-# 'Successfully ran '.' in the 'backtesting' environment and stored the output in'
 
 @given('a specific pset is needed')
 def setup_ready():
@@ -76,3 +74,51 @@ def pset_contains(gpc, primitive_name):
     assert gpc.test_pset
     prim_names = list(gpc.test_pset.context.keys())
     assert primitive_name in prim_names
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#             GpControl can set different psets as needed
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+'''
+  Scenario Outline: test psets can output specific text
+    Given a specific test pset "<test_psetC_untyped>"
+    When provided the "<arg_input>"
+    Then the result is "<text_output>"
+
+    Examples:
+      | arg_input     | pset_input              |  text_output        |
+      | hello_world   | test_psetC_untyped      |  hello_world        |
+'''
+
+# ***************************************************************************
+
+@given(parsers.cfparse('a specific test pset "{test_C_psets:String}"',
+                        extra_types=EXTRA_TYPES),
+                        target_fixture='test_C_psets')
+@given('a specific test pset "<test_C_psets>"')
+@pytest.mark.usefixtures("gpc")
+def setup_ready(gpc, test_C_psets):
+    ''' sets up gp as standard, then amends pset'''
+    gpc.setup_gp()
+    gpc.set_test_evaluator()
+    gpc.set_pset(test_C_psets)
+
+@when(parsers.cfparse('provided the "{arg_input:String}"',
+                        extra_types=EXTRA_TYPES),
+                        target_fixture='arg_input')
+@when('provided the "<arg_input>"',
+        target_fixture='arg_input')
+def provided_the(gpc, arg_input):
+    ''' runs gp with arg_input as given '''
+    gpc.set_population(100)
+    gpc.set_generations(5)
+    gpc.run_gp(arg_input)
+
+@then(parsers.cfparse('the result is "{text_output:String}"',
+                        extra_types=EXTRA_TYPES),
+                        target_fixture='text_output')
+@then('the result is "<text_output>"')
+def pset_contains(gpc, text_output):
+    pass
+    assert 1 == 1

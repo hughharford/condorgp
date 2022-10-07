@@ -21,7 +21,7 @@ class GpDeap(GpProvider):
         inputs: the functions and terminals by name, their arrity and function
         '''
 
-        if select_pset_name is '':
+        if select_pset_name == '':
             select_pset_name = 'default_untyped'
             self.pset = pset_obj.get_default_untyped()
         else:
@@ -103,8 +103,10 @@ class GpDeap(GpProvider):
     #                                         size=self.stats_size)
     #     self.mstats.register("max", numpy.max)
 
-    def run_gp(self):
+    def run_gp(self, inputs):
         ''' Do a GP run, with default 1 generation for testing '''
+        self.values = inputs
+
         self.pop, self.logbook = algorithms.eaSimple(self.pop,
                                                     self.toolbox,
                                                     0.5,

@@ -143,7 +143,7 @@ class Utils:
             if str(key) in line: return line, i
         return '', -1
 
-    def get_keyed_line_within_limits(self,
+    def get_keyed_line_in_limits(self,
             key,
             log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES'],
             limit_lines = util_dict['NO_LOG_LINES'],
