@@ -1541,3 +1541,218 @@
 2022-10-06 15:37:18,912 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
 2022-10-06 16:01:13,243 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
 2022-10-06 20:03:08,919 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 13:19:17,344 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 13:19:17,369 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 13:19:17,369 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 13:20:53,523 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 13:21:07,284 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-07 13:22:02,033 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 13:22:02,060 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 13:22:02,060 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:54:30,351 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:54:30,574 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:54:30,574 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:54:44,449 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:54:44,643 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:54:44,643 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:54:52,506 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:54:53,062 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:54:53,062 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:55:07,366 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:55:07,366 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:55:07,366 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:55:07,368 -  INFO - primitives_count = 6
+2022-10-07 15:55:07,368 -  INFO - primitives_count = 6
+2022-10-07 15:55:07,368 -  INFO - primitives_count = 6
+2022-10-07 15:55:07,368 -  INFO - terminals_count = 3
+2022-10-07 15:55:07,368 -  INFO - terminals_count = 3
+2022-10-07 15:55:07,368 -  INFO - terminals_count = 3
+2022-10-07 15:55:07,404 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:55:07,404 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:55:07,404 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:55:07,404 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:55:53,505 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:55:53,710 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:55:53,710 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:56:15,226 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:56:15,226 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:56:15,226 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:56:15,230 -  INFO - primitives_count = 6
+2022-10-07 15:56:15,230 -  INFO - primitives_count = 6
+2022-10-07 15:56:15,230 -  INFO - primitives_count = 6
+2022-10-07 15:56:15,231 -  INFO - terminals_count = 3
+2022-10-07 15:56:15,231 -  INFO - terminals_count = 3
+2022-10-07 15:56:15,231 -  INFO - terminals_count = 3
+2022-10-07 15:56:15,267 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:56:15,267 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:56:15,267 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:56:15,267 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:57:48,024 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:57:48,253 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:57:48,253 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:57:56,721 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:57:56,951 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:57:56,951 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:58:02,417 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:58:02,684 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:58:02,684 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:58:24,140 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:58:24,362 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 15:58:24,362 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:00:10,738 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:00:10,950 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:00:10,950 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:01:25,650 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:01:25,859 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:01:25,859 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:03:01,962 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:03:02,192 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:03:02,192 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:07:43,584 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:07:43,829 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:07:43,829 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:08:45,526 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:08:45,555 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:08:45,555 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:09:56,058 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:09:56,086 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:09:56,086 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:11:12,789 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:11:12,816 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:11:12,816 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:11:57,528 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:11:57,562 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:11:57,562 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:12:47,603 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:12:47,888 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:12:47,888 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:13:33,518 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:13:33,748 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:13:33,748 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:15:43,635 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:15:43,687 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:15:43,687 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:16:00,775 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:16:00,803 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:16:00,803 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:17:18,992 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:17:19,020 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:17:19,020 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:20:45,410 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:20:45,472 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:20:45,472 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:21:02,062 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:21:02,093 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:21:02,093 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:21:47,443 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:21:47,671 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:21:47,671 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:22:18,156 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:22:18,204 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 16:22:18,204 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:10:27,742 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:10:27,772 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:10:27,772 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:14:50,693 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:15:05,691 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:16:45,250 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:16:56,378 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:25:28,423 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:25:43,273 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-07 17:28:01,941 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:28:03,961 -  INFO - Hall of fame:
+2022-10-07 17:28:03,961 -  INFO - or_(False, False)
+2022-10-07 17:28:03,961 -  INFO - and_(lt(IN27, IN4), lt(IN32, IN42))
+2022-10-07 17:28:03,962 -  INFO - and_(False, False)
+2022-10-07 17:28:03,962 -  INFO - lt(mul(IN47, IN46), sub(IN54, IN26))
+2022-10-07 17:28:03,962 -  INFO - lt(IN10, IN42)
+2022-10-07 17:31:18,483 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:31:20,309 -  INFO - Hall of fame:
+2022-10-07 17:31:20,309 -  INFO - vmul(-2, -1)
+2022-10-07 17:31:20,310 -  INFO - baseSplit4(vsin(ARG3), vadd(ARG3, 1), vneg(ARG1), vsub(x, -1))
+2022-10-07 17:31:20,310 -  INFO - vcos(ARG2)
+2022-10-07 17:31:20,310 -  INFO - vneg(vmul(ARG3, ARG1))
+2022-10-07 17:31:20,310 -  INFO - vcos(vsub(1, ARG2))
+2022-10-07 17:31:20,310 -  INFO - primitives_count = 8
+2022-10-07 17:31:20,310 -  INFO - terminals_count = 6
+2022-10-07 17:32:10,751 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:32:12,909 -  INFO - Hall of fame:
+2022-10-07 17:32:12,909 -  INFO - or_(False, False)
+2022-10-07 17:32:12,909 -  INFO - and_(lt(IN27, IN4), lt(IN32, IN42))
+2022-10-07 17:32:12,909 -  INFO - and_(False, False)
+2022-10-07 17:32:12,909 -  INFO - lt(mul(IN47, IN46), sub(IN54, IN26))
+2022-10-07 17:32:12,909 -  INFO - lt(IN10, IN42)
+2022-10-07 17:32:12,909 -  INFO - primitives_count = 10
+2022-10-07 17:32:12,910 -  INFO - terminals_count = 59
+2022-10-07 17:33:01,312 -  INFO - >>>>>>>>>>, <class '__main__.CondorDeapLearning'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:33:03,091 -  INFO - Hall of fame:
+2022-10-07 17:33:03,091 -  INFO - vmul(-2, -1)
+2022-10-07 17:33:03,091 -  INFO - baseSplit4(vsin(ARG3), vadd(ARG3, 1), vneg(ARG1), vsub(x, -1))
+2022-10-07 17:33:03,091 -  INFO - vcos(ARG2)
+2022-10-07 17:33:03,091 -  INFO - vneg(vmul(ARG3, ARG1))
+2022-10-07 17:33:03,091 -  INFO - vcos(vsub(1, ARG2))
+2022-10-07 17:33:03,092 -  INFO - primitives_count = 8
+2022-10-07 17:33:03,092 -  INFO - terminals_count = 6
+2022-10-07 17:34:15,075 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:34:15,449 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:34:15,449 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:34:53,887 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:34:54,115 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:34:54,115 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:35:43,378 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:35:43,594 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:35:43,594 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:35:57,215 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:35:57,426 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:35:57,426 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:36:44,886 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:36:45,116 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:36:45,116 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:37:20,974 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:37:21,230 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:37:21,230 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:40:57,675 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:40:57,881 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:40:57,881 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:49:12,413 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:49:12,441 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:49:12,441 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:49:23,365 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:49:23,374 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:49:23,374 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:49:30,266 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:49:30,297 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:49:30,297 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:50:46,103 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:50:46,130 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:50:46,130 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:51:06,323 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:51:06,359 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:51:06,359 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:51:08,242 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:51:08,242 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:51:08,242 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:51:08,244 -  INFO - primitives_count = 6
+2022-10-07 17:51:08,244 -  INFO - primitives_count = 6
+2022-10-07 17:51:08,244 -  INFO - primitives_count = 6
+2022-10-07 17:51:08,245 -  INFO - terminals_count = 3
+2022-10-07 17:51:08,245 -  INFO - terminals_count = 3
+2022-10-07 17:51:08,245 -  INFO - terminals_count = 3
+2022-10-07 17:51:08,256 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:51:08,256 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:51:08,256 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:51:08,256 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:51:18,178 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-07 17:51:18,178 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-07 17:51:18,178 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-07 17:51:18,178 -  INFO - evalIntoAndFromLean, new fitness <*><*><*><*><*><*>74.891
+2022-10-07 17:51:55,568 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:55:54,469 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:56:02,935 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:56:02,935 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:56:40,450 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:56:40,479 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:56:40,479 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:57:09,404 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:57:09,756 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>
+2022-10-07 17:57:09,756 -  INFO - >>>>>>>>>>, <class 'condorgp.gp.gp_control.GpControl'> - DEAP gp - run began >>>>>>>>>>

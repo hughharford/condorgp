@@ -1,19 +1,3 @@
-#    This file is a copied example file from EAP.
-#
-#
-#    EAP is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Lesser General Public License as
-#    published by the Free Software Foundation, either version 3 of
-#    the License, or (at your option) any later version.
-#
-#    EAP is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-#    GNU Lesser General Public License for more details.
-#
-#    You should have received a copy of the GNU Lesser General Public
-#    License along with EAP. If not, see <http://www.gnu.org/licenses/>.
-
 import operator
 import math
 import random
@@ -31,7 +15,12 @@ class GpControl:
         '''
             Here is where the gp is controlled from:
 
-            Setup, sizing and initiation of gp runs
+            Setup, sizing and initiation of gp runs:
+                psets
+                operators
+                evaluator
+
+            The major dependency is DEAP.
         '''
         self.inject_gp()
         self.inject_utils()
@@ -43,7 +32,10 @@ class GpControl:
 
     def inject_gp(self):
         ''' dependency injection of gp '''
-        self.gp = LocalFactory().get_gp_provider()
+        lf = LocalFactory()
+        self.gp = lf.get_gp_provider()
+        self.gp_custom_funcs = lf.get_gp_custom_functions()
+        self.gp_psets = lf.get_gp_psets(self.gp_custom_funcs)
 
     def inject_utils(self):
         ''' dependency injection of utils '''
@@ -69,9 +61,9 @@ class GpControl:
         # Set: 1. additional functions & terminals
         additional_funcs = {'name': 'protectedDiv',
                             'arrity': 2,
-                            'method': self.protectedDiv}
+                            'method': self.gp_custom_funcs.protectedDiv}
         additional_terms = {}
-        self.gp.set_pset(additional_funcs, additional_terms)
+        self.gp.set_defined_pset(self.gp_psets, "", additional_funcs, additional_terms)
 
         # Set 2. major gp parameters
         params = {}
@@ -95,6 +87,10 @@ class GpControl:
         # Set 7: the stats feedback
         stat_params = {}
         self.gp.set_stats(stat_params)
+
+    def set_pset(self, pset_name = ''):
+        ''' sets' the pset to default, unless input != '' '''
+        return self.gp.set_defined_pset(self.gp_psets, pset_name)
 
     def set_population(self, pop_size = 2):
         self.gp.set_pop_size(pop_size)
@@ -127,16 +123,6 @@ class GpControl:
         #                               14736.68704775238,
         return new_fitness,
 
-    # Define new functions
-    def protectedDiv(left, right):
-        with numpy.errstate(divide='ignore',invalid='ignore'):
-            x = numpy.divide(left, right)
-            if isinstance(x, numpy.ndarray):
-                x[numpy.isinf(x)] = 1
-                x[numpy.isnan(x)] = 1
-            elif numpy.isinf(x) or numpy.isnan(x):
-                x = 1
-        return x
 
     def get_logbook(self):
         return self.gp.logbook
@@ -145,4 +131,3 @@ if __name__ == "__main__":
     c = GpControl()
     c.setup_gp()
     c.run_gp()
-

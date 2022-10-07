@@ -13,22 +13,30 @@ class GpDeap(GpProvider):
     def __init__(self):
         pass
 
-    def set_pset(self, functions: dict, terminals: dict):
+    def set_defined_pset(self, pset_obj,
+                 select_pset_name = '',
+                 functions: dict = '',
+                 terminals: dict = ''):
         ''' sets the population set for the gp run.
         inputs: the functions and terminals by name, their arrity and function
         '''
-        # primitive set, EXAMPLE from DEAP:
-        self.pset = gp.PrimitiveSet("MAIN", 1)
-        self.pset.addPrimitive(numpy.add, 2, name="vadd")
-        self.pset.addPrimitive(numpy.subtract, 2, name="vsub")
-        self.pset.addPrimitive(numpy.multiply, 2, name="vmul")
-        self.pset.addPrimitive(
-            functions['method'], functions['arrity'], functions['name'])
-        self.pset.addPrimitive(numpy.negative, 1, name="vneg")
-        self.pset.addPrimitive(numpy.cos, 1, name="vcos")
-        self.pset.addPrimitive(numpy.sin, 1, name="vsin")
-        self.pset.addEphemeralConstant("rand101", lambda: random.randint(-1,1))
-        self.pset.renameArguments(ARG0='x')
+
+        if select_pset_name is '':
+            select_pset_name = 'default_untyped'
+            self.pset = pset_obj.get_default_untyped()
+        else:
+            self.pset = pset_obj.get_named_pset(select_pset_name)
+
+
+        # if functions == '' and terminals == '':
+        #     return self.pset
+        # else:
+        #     print("need to do something to add primitives")
+            # self.pset.addPrimitive(
+            #     functions['method'], functions['arrity'], functions['name'])
+
+        return self.pset
+
 
     def set_gp_params(self, params: dict):
 
