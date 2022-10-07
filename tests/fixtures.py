@@ -9,7 +9,11 @@ def utils():
     return Utils()
 
 @pytest.fixture
-def deap_one():
+def deap_one(): # this needs to be updated in tests numbered < 5
+    return GpControl()
+
+@pytest.fixture
+def gpc():
     return GpControl()
 
 @pytest.fixture

@@ -48,12 +48,14 @@ def setup_ready():
                         extra_types=EXTRA_TYPES),
                         target_fixture='input_ind')
 @when('Deap specs Lean to run "<input_ind>"', target_fixture='input_ind')
+@pytest.mark.usefixtures("utils")
 def deap_sets_algo_to_Lean(utils, input_ind):
     ''' copies across config files and algorithms as needed '''
     utils.copy_config_in(input_ind)
     utils.copy_algo_in(input_ind)
 
 @when('a short Deap run is conducted')
+@pytest.mark.usefixtures("gpc")
 def short_deap_run(deap_one):
     assert deap_one is not None
     newpop = 1
