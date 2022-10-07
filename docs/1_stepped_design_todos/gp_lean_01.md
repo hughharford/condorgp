@@ -8,6 +8,9 @@
       # TODO: test that required functionality provided in lean-evaluated class
       # TODO: test that run is successful
 
+  # build error catching into lean_runner
+      # TODO: enable error checking from Lean logs
+      # TODO: report -99999 fitness when this happens
 
   # enable strongly-typed deap gp
       # use strongly typed gp to control the tree
@@ -18,9 +21,11 @@
 
       # seems like the most simple approach will be to customise the gp algo
           @ run X different primitive sets, each for a line of code required
+          @ cancel this, see below ADFs
 
       # ADFs, surely?
           @ an adfset is just a PrimitiveSetTyped
+          @ these can
 
       # Lean requires:
 

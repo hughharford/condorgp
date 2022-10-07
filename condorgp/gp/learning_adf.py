@@ -39,6 +39,8 @@ adfset2.addPrimitive(protectedDiv, 2)
 adfset2.addPrimitive(operator.neg, 1)
 adfset2.addPrimitive(math.cos, 1)
 adfset2.addPrimitive(math.sin, 1)
+adfset2.renameArguments(ARG0='x2')
+adfset2.renameArguments(ARG1='y2')
 
 adfset1 = gp.PrimitiveSet("ADF1", 2)
 adfset1.addPrimitive(operator.add, 2)
@@ -49,6 +51,8 @@ adfset1.addPrimitive(operator.neg, 1)
 adfset1.addPrimitive(math.cos, 1)
 adfset1.addPrimitive(math.sin, 1)
 adfset1.addADF(adfset2)
+adfset1.renameArguments(ARG0='x1')
+adfset1.renameArguments(ARG1='y1')
 
 adfset0 = gp.PrimitiveSet("ADF0", 2)
 adfset0.addPrimitive(operator.add, 2)
@@ -60,6 +64,8 @@ adfset0.addPrimitive(math.cos, 1)
 adfset0.addPrimitive(math.sin, 1)
 adfset0.addADF(adfset1)
 adfset0.addADF(adfset2)
+adfset0.renameArguments(ARG0='x0')
+adfset0.renameArguments(ARG1='y0')
 
 pset = gp.PrimitiveSet("MAIN", 1)
 pset.addPrimitive(operator.add, 2)
@@ -119,7 +125,7 @@ def main():
     random.seed(1024)
     ind = toolbox.individual()
 
-    pop = toolbox.population(n=10)
+    pop = toolbox.population(n=100)
     hof = tools.HallOfFame(5)
     stats = tools.Statistics(lambda ind: ind.fitness.values)
     stats.register("avg", numpy.mean)
@@ -163,8 +169,15 @@ def main():
 
         # Evaluate the individuals with an invalid fitness
         invalids = [ind for ind in offspring if not ind.fitness.valid]
+        print_inds = 0
         for ind in invalids:
             ind.fitness.values = toolbox.evaluate(ind)
+            if print_inds:
+                print('TRYING IND PRINT: ')
+                print('ind:')
+                print(ind[0])
+                print('adfs:')
+                print(ind[1])
 
         # Replacement of the population by the offspring
         pop = offspring
@@ -183,7 +196,7 @@ def main():
 
     for x, ind in enumerate(hof):
         print(f' for hof[{x}] _______________________')
-        print(' ADF 0 : ', hof[x][1])
+        print(' ADF 0 : ', hof[x][3])
         # print(' ADF 1 : ', hof[x][2])
         # print(' ADF 2 : ', hof[x][3])
 
@@ -191,10 +204,3 @@ def main():
 
 if __name__ == "__main__":
     pop, stats, hof = main()
-    for ind in pop:
-        pass
-        # print("ind[0] (ind in pop): ", ind[0])
-        # print()
-
-    # print("individuals from hof[0][0])", hof[0][0], '\n')
-    # print("pop[0][0]: ", pop[0][0])
