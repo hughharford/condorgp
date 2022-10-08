@@ -15,11 +15,22 @@ Feature: GpControl class achieves various functionality
       | test_psetA      |  vmul             |
       | test_psetB      |  vadd             |
 
-  Scenario Outline: test psets can output specific text
+  Scenario Outline: test psets can output specific text to condor log
     Given a specific test pset "<test_C_psets>"
     When provided the "<arg_input>"
     Then the result is "<text_output>"
 
     Examples:
-      | arg_input     | test_C_psets    |  text_output        |
-      | hello_world   | test_psetC      |  hello_world        |
+      | arg_input     | test_C_psets    |  text_output  |
+      | hello_world   | test_psetC      |  hello_world  |
+
+  # Scenario Outline: test pset D can output specific text
+  #   Given a specific test pset "<test_D_psets>"
+  #   When a run is done
+  #   Then 1st result is "<t1>"
+  #   And 2nd result is
+
+  #   Examples:
+  #     | test_D_psets    |  t1                 |
+  #     | test_psetC      |  hello_world        |
+  #     | test_psetCi     |  hi_hi_hi_hi        |

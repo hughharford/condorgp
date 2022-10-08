@@ -96,7 +96,7 @@ class GpControl:
     def set_test_evaluator(self):
         self.gp.set_evaluator(self.eval_test_C)
 
-    def run_gp(self, inputs = []):
+    def run_gp(self, inputs = [0,0,0]):
         ''' undertakes the run as specified'''
         self.gp.run_gp(inputs)
 
@@ -108,26 +108,20 @@ class GpControl:
         func = self.gp.toolbox.compile(expr=individual)
 
         check_text = 'hello_world'
-        fill = '<*>'*6
-
-        self.log.info(f'eval_test_C, PRINT INDIVIDUAL >>> \n {individual}')
-
+        self.log.info(f'eval_test_C, PRINT INDIVIDUAL >>> \n {individual} \n')
         try:
-            self.log.info(f'eval_test_C, RUN? >>> \n {func(check_text)}')
+            # self.log.info(f'eval_test_C, RUN? >>> \n {func(check_text)}')
+            func(check_text)
             log_file_n_path = util_dict['CONDOR_LOG']
             output = self.util.get_keyed_line_in_limits(check_text,
                                                 log_file_n_path = log_file_n_path)
-            print(output)
-            if check_text in output[0]:
-                new_fitness = 100
-            else:
-                new_fitness = 0
-        except:
-            self.log.info(f'eval_test_C, RUN? >>> \n {individual} failed')
+            new_fitness = 0
+            if check_text in output[0]: new_fitness = 100
+        except Exception as e:
+            self.log.info(f'eval_test_C, RUN FAILED >>> \n {e}')
             new_fitness = -10
-
-
-        self.log.info(f'eval_test_C, new fitness {fill}{new_fitness}')
+        self.log.info(f'eval_test_C, new fitness {new_fitness}')
+        self.log.info(f'\n\n')
         # returns a float in a tuple, i.e.
         #                               14736.68704775238,
         return new_fitness,

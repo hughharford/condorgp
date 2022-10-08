@@ -4,7 +4,7 @@ import os.path
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from tests.fixtures import gpc, utils # these go dark, but without
+from tests.fixtures import gpc, gpc2, utils # these go dark, but without
 from condorgp.params import lean_dict, test_dict, util_dict
 
 EXTRA_TYPES = {
@@ -22,7 +22,7 @@ CONVERTERS = {
 scenarios('../features/05_gp_control.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             GpControl can set different psets as needed
+#             1/3 GpControl can set different psets as needed
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
   Scenario Outline: GpControl can set different psets as needed
@@ -37,6 +37,7 @@ scenarios('../features/05_gp_control.feature')
       | psetA           |  mul          |
       | psetB           |  add          |
 """
+# ***************************************************************************
 
 @given('a specific pset is needed')
 def setup_ready():
@@ -49,11 +50,7 @@ def setup_ready():
         target_fixture='pset_input')
 @pytest.mark.usefixtures("gpc")
 def check_GpControl(gpc, pset_input):
-    '''  '''
-    # if hasattr(gpc, 'base_pset'):
-    #     assert 1 == 4
-    # else:
-    #     # assert 3 == 5
+    ''' sets 2 different psets '''
     gpc.base_pset = gpc.set_pset('test_base_pset')
     gpc.test_pset = gpc.set_pset(pset_input)
 
@@ -77,11 +74,11 @@ def pset_contains(gpc, primitive_name):
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             GpControl can set different psets as needed
+#             2/3 Running a pset can output log text
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 '''
-  Scenario Outline: test psets can output specific text
+  Scenario Outline: test psets can output specific text to condor log
     Given a specific test pset "<test_psetC_untyped>"
     When provided the "<arg_input>"
     Then the result is "<text_output>"
@@ -111,7 +108,7 @@ def setup_ready(gpc, test_C_psets):
         target_fixture='arg_input')
 def provided_the(gpc, arg_input):
     ''' runs gp with arg_input as given '''
-    gpc.set_population(100)
+    gpc.set_population(50)
     gpc.set_generations(5)
     gpc.run_gp(arg_input)
 
@@ -119,6 +116,57 @@ def provided_the(gpc, arg_input):
                         extra_types=EXTRA_TYPES),
                         target_fixture='text_output')
 @then('the result is "<text_output>"')
-def pset_contains(gpc, text_output):
+def condor_log_contains(gpc, text_output):
+    ''' checks condor log for text expected '''
+    log_file_n_path = util_dict['CONDOR_LOG']
+    output = gpc.util.get_keyed_line_in_limits(text_output,
+                                        log_file_n_path = log_file_n_path)
+    print(output)
+    assert text_output in output[0]
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#             3/3 Psets can output to Lean log, via lean algo
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+'''
+  Scenario Outline: test pset D can output specific text to Lean log
+    Given a specific test pset "<test_D_psets>"
+    When a run is done
+    Then 1st result is "<t1>"
+    And 2nd result is
+
+    Examples:
+      | test_D_psets    |  t1                 |
+      | test_psetC      |  hello_world        |
+      | test_psetCi     |  hi_hi_hi_hi        |
+'''
+
+# ***************************************************************************
+
+@given(parsers.cfparse('a specific test pset "{test_D_psets:String}"',
+                        extra_types=EXTRA_TYPES),
+                        target_fixture='test_D_psets')
+@given('a specific test pset "<test_C_psets>"')
+@pytest.mark.usefixtures("gpc2")
+def setup_ready(gpc2, test_C_psets):
+    ''' sets up gp as standard, then amends pset'''
+    gpc2.setup_gp()
+    gpc2.set_test_evaluator()
+    gpc2.set_pset(test_C_psets)
+
+@when('a run is done')
+def provided_the(gpc2):
+    ''' runs gp without input '''
+    gpc2.set_population(5)
+    gpc2.set_generations(5)
+    gpc2.run_gp()
+
+@then(parsers.cfparse('1st result is "{t1:String}"',
+                        extra_types=EXTRA_TYPES),
+                        target_fixture='t1')
+@then('the result is "<t1>"')
+def first_result(gpc2, t1):
+    assert gpc2.test_pset
     pass
     assert 1 == 1
