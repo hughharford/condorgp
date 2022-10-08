@@ -108,20 +108,23 @@ class GpControl:
         func = self.gp.toolbox.compile(expr=individual)
 
         check_text = 'hello_world'
-        self.log.info(f'eval_test_C, PRINT INDIVIDUAL >>> \n {individual} \n')
+        fill = '<*>'*6
+        self.log.info(f'eval_test_C, PRINT INDIVIDUAL >>> \n {individual}')
         try:
-            # self.log.info(f'eval_test_C, RUN? >>> \n {func(check_text)}')
-            func(check_text)
+            self.log.info(f'eval_test_C, RUN? >>> \n {func(check_text)}')
             log_file_n_path = util_dict['CONDOR_LOG']
             output = self.util.get_keyed_line_in_limits(check_text,
                                                 log_file_n_path = log_file_n_path)
-            new_fitness = 0
-            if check_text in output[0]: new_fitness = 100
-        except Exception as e:
-            self.log.info(f'eval_test_C, RUN FAILED >>> \n {e}')
+            # print(output)
+            if check_text in output[0]:
+                new_fitness = 100
+            else:
+                new_fitness = 0
+        except:
+            self.log.info(f'eval_test_C, RUN? >>> \n {individual} failed')
             new_fitness = -10
-        self.log.info(f'eval_test_C, new fitness {new_fitness}')
-        self.log.info(f'\n\n')
+
+        self.log.info(f'eval_test_C, new fitness {fill}{new_fitness}')
         # returns a float in a tuple, i.e.
         #                               14736.68704775238,
         return new_fitness,
