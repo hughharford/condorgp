@@ -13,7 +13,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/01_cell_basics.feature')
+scenarios('../../features/01_cell_basics.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             ADD CELLS
@@ -25,18 +25,21 @@ Scenario Outline: Add cells
     Then the nest contains "<total>" cells
 """
 
-@given(parsers.cfparse('the nest has "{initial:Number}" cells', extra_types=EXTRA_TYPES), target_fixture='cells')
+@given(parsers.cfparse('the nest has "{initial:Number}" cells',
+                       extra_types=EXTRA_TYPES), target_fixture='cells')
 @given('the next has "<initial>" cells', target_fixture='cells')
 def cells_add(initial):
     assert len(Cell.get_cell_list()) == initial
 
-@when(parsers.cfparse('"{some:Number}" cells are added to the nest', extra_types=EXTRA_TYPES))
+@when(parsers.cfparse('"{some:Number}" cells are added to the nest',
+                      extra_types=EXTRA_TYPES))
 @when('"<some>"  cells are added to the nest')
 def when_somecellsarecreated(some):
     for i in range(some):
         Cell(f'dummy_ref1 {i}','PROTOTYPE')
 
-@then(parsers.cfparse('the nest contains "{total:Number}" cells', extra_types=EXTRA_TYPES))
+@then(parsers.cfparse('the nest contains "{total:Number}" cells',
+                      extra_types=EXTRA_TYPES))
 @then('the nest contains "<total>" cells')
 def then_the_cell_list_is_incremented(total):
     assert len(Cell.get_cell_list()) == total

@@ -11,9 +11,10 @@ Feature: Lean tests each evolved individual
     And an evolved "<input_ind>" is specified
     When Lean runs the "<input_ind>" via the CLI
     Then the "<output_ind>" is found
+    And the result: "<ROI_over_MDD_value>" is reported
     And the "<input_ind>" algorithm is tidied away
 
     Examples:
-      | input_ind            |   output_ind              |
-      | IndBasicAlgo2        |   IndBasicAlgo2           |
-      | IndBasicAlgo1        |   IndBasicAlgo1           |
+      | input_ind       |   output_ind       |   ROI_over_MDD_value    |
+      | IndBasicAlgo2   |   IndBasicAlgo2    |   110.382               |
+      | IndBasicAlgo1   |   IndBasicAlgo1    |   74.891                |
