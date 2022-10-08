@@ -126,11 +126,11 @@ def condor_log_contains(gpc, text_output):
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             3/3 Psets can output to Lean log, via lean algo
+#             3/3 Psets can output specific inputted text to condor log
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 '''
-  Scenario Outline: test pset D can output specific text to Lean log
+  Scenario Outline: test pset D can output specific inputted text to Lean log
     Given a specific test pset "<test_D_psets>"
     When a run is done
     Then 1st result is "<t1>"
