@@ -93,8 +93,29 @@ class GpControl:
     def set_generations(self, no_g = 1):
         self.gp.set_gens(no_g)
 
-    def set_test_evaluator(self):
-        self.gp.set_evaluator(self.eval_test_C)
+    def set_test_evaluator(self, use_this_evaluator = ''):
+        '''
+        default to eval_test_C, but
+        can specify any evaluation function by string
+
+        provided named function is within gp_control...
+        '''
+        if use_this_evaluator != '':
+            new_evaluator = self.get_custom_evaluator(use_this_evaluator)
+            if new_evaluator:
+                print(new_evaluator, " type of this is: ", type(new_evaluator))
+            self.gp.set_evaluator(new_evaluator)
+        else:
+            self.gp.set_evaluator(self.eval_test_C)
+
+
+    def get_custom_evaluator(self, e_name):
+        try:
+            temp = eval('self.' + e_name)
+            return temp
+        except:
+            print("get_custom_evaluator ERROR")
+            return None
 
     def run_gp(self, inputs = [0,0,0]):
         ''' undertakes the run as specified'''
@@ -103,45 +124,20 @@ class GpControl:
     def get_logbook(self):
         return self.gp.logbook
 
-    def eval_test_C(self, individual):
-        # Transform the tree expression in a callable function
-        func = self.gp.toolbox.compile(expr=individual)
-
-        check_text = 'hello_world'
-        fill = '<*>'*6
-        self.log.info(f'eval_test_C, PRINT INDIVIDUAL >>> \n {individual}')
-        try:
-            self.log.info(f'eval_test_C, RUN? >>> \n {func(check_text)}')
-            log_file_n_path = util_dict['CONDOR_LOG']
-            output = self.util.get_keyed_line_in_limits(check_text,
-                                                log_file_n_path = log_file_n_path)
-            # print(output)
-            if check_text in output[0]:
-                new_fitness = 100
-            else:
-                new_fitness = 0
-        except:
-            self.log.info(f'eval_test_C, RUN? >>> \n {individual} failed')
-            new_fitness = -10
-
-        self.log.info(f'eval_test_C, new fitness {fill}{new_fitness}')
-        # returns a float in a tuple, i.e.
-        #                               14736.68704775238,
-        return new_fitness,
-
     def evalIntoAndFromLean(self, individual):
         # Transform the tree expression in a callable function
         func = self.gp.toolbox.compile(expr=individual)
         # output individual into Lean-ready class, for Lean evaluation
 
         # Lean evaluation: basic Lean run for now
+        #### HSTH 09 10 ###
         input_ind = 'IndBasicAlgo1'
         config_to_run = test_dict['CONDOR_TEST_CONFIG_FILE_1']
 
         self.util.copy_config_in(input_ind)
         self.util.copy_algo_in(input_ind)
 
-        self.lean.run_lean_via_CLI(input_ind+'.py', config_to_run)
+        self.lean.run_lean_via_CLI(input_ind, config_to_run)
 
         Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
         got = self.util.get_keyed_line_in_limits(Return_over_MDD)
@@ -153,10 +149,58 @@ class GpControl:
         #                               14736.68704775238,
         return new_fitness,
 
+    def eval_test_C(self, individual):
+        # Transform the tree expression in a callable function
+        func = self.gp.toolbox.compile(expr=individual)
+
+        check_text = 'hello_world'
+        self.log.info(f'eval_test_C, start: PRINT INDIVIDUAL >>> {individual}')
+        try:
+            self.log.info(f'eval_test_C, RUN? >>> {func(check_text)}')
+            # now look for the intended output:
+            log_file_path = util_dict['CONDOR_LOG']
+            output = self.util.get_keyed_line_in_limits(check_text,
+                                                log_file_n_path = log_file_path)
+            # print(output)
+            if check_text in output[0]:
+                new_fitness = 100
+            else:
+                new_fitness = 0
+        except BaseException as e:
+            self.log.info(f'eval_test_C, ERROR >>> {e}')
+            new_fitness = -10
+
+        self.log.info(f'eval_test_C, set fitness: {new_fitness}')
+        # returns a float in a tuple, i.e.
+        #                               14736.68704775238,
+        return new_fitness,
+
+    def eval_test_D(self, individual):
+        # Transform the tree expression in a callable function
+        func = self.gp.toolbox.compile(expr=individual)
+
+        self.log.info(f'eval_test_D, OUTPUTTING IND >>> \n {individual}')
+
+        config_to_run = test_dict['CONDOR_TEST_CONFIG_FILE_1']
+        config_to_run = 'config_test_algos_gpInjectAlgo.json'
+        self.util.cp_injected_algo_in_and_sort()
+        try:
+            # not specifying: 'gpInjectAlgo_done.py'
+            self.lean.run_lean_via_CLI('main.py', config_to_run)
+            # algo set to main.py in lean_runner
+        except BaseException as e:
+            self.log.error("eval_test_D, attempting Lean run", str(e))
+
+        new_fitness = 0
+        self.log.info(f'eval_test_D, new fitness {new_fitness}')
+        # returns a float in a tuple, i.e.
+        #                               14736.68704775238,
+        return new_fitness,
+
 if __name__ == "__main__":
     c = GpControl()
     c.setup_gp()
-    c.set_test_evaluator()
+    c.set_test_evaluator('eval_test_C') # eval_test_D
     c.set_pset('test_psetC')
     c.set_population(100)
     c.set_generations(5)

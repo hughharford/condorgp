@@ -75,7 +75,7 @@ class GpDeap(GpProvider):
                             + self.samples**2 \
                             + self.samples
 
-    def set_pop_size(self, pop_size: int):
+    def set_pop_size(self, pop_size: int = 2):
         ''' Sets population size as required '''
         self.pop = self.toolbox.population(n=pop_size)
 

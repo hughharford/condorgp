@@ -2,10 +2,13 @@ import os
 
 from condorgp.params import lean_dict, test_dict, highlevel_config_dict
 from condorgp.util.utils import Utils
+from condorgp.util.log import CondorLogger
+
 
 class RunLean():
     def __init__(self) -> None:
         self.util = Utils()
+        self.log = CondorLogger().get_logger()
 
     def adjust_config_specifics():
         '''
@@ -18,16 +21,13 @@ class RunLean():
     def run_lean_via_CLI(self, input_ind="set", input_json="set"):
         '''
         current Condorgp primary way to run lean fitness function.
-
             # this is the latest run format for Lean CLI
             # note how it runs in Lean/LocalPackages
-
         N.b. Can cut out use of Lean containers if required.
              In this case, tests will fail...
         Requires:
             1 - Algorithm to be set (manual .py name here for now)
             2 - Configuration json to be set (also manual for now)
-
         Both 1 & 2 are copied into place in the Lean package.
         Then the run command is made
         '''
@@ -43,37 +43,24 @@ class RunLean():
             ALGO_NAME = self.set_default_individual() # input_ind
         elif input_ind == "test":
             ALGO_NAME = self.set_test_individual()
+        elif input_ind == "":
+            ALGO_NAME = 'main.py'
+
         if input_json == "set" or input_ind == "test":
             JSON_CONFIG = self.set_default_config_json() # input_json
 
         if highlevel_config_dict['RUN_VERBOSE_FOR_DEBUG']:
             os. chdir("../Lean/LocalPackages/condorgp")
-            os.system(f"lean backtest {ALGO_PATH}{ALGO_NAME} \
+            run_string = f"lean backtest {ALGO_PATH}{ALGO_NAME} \
                         --lean-config {JSON_PATH}{JSON_CONFIG} \
-                        --verbose")
+                        --verbose"
+            self.log.info(f"RUNNING:  {run_string}")
+            os.system(run_string)
             os. chdir("../../../condorgp")
 
             # tidy and get what our needs from backtests / Results output
             self.util.cut_pys_from_latest_backtests_code_dir()
             self.util.pull_latest_log_into_overall_backtest_log()
-
-            # --output {BACKTEST_PATH_LOCALPACKAGES} \
-                # taking out output specification, to control output tree repetition
-            # BACKTEST_PATH_LOCALPACKAGES = 'Results'
-            # test_dict['CONDORGP_WITHIN_LEAN_DIR']
-            # tried the following:
-            #                   '../../LocalPackages/condorgp/Results/'
-            #                   '../../LocalPackages/condorgp/Results'
-            #                   'Results'
-            #                   './'
-            #                   '.'
-            #                   'Backtests'
-            #                   '/Backtests'
-            #                   '../../'
-            #                   '../..'
-            #                   ''
-
-
 
     def set_default_individual(self): # input_ind
         algo_name = test_dict['BASIC_TEST_ALGO_LEAN']

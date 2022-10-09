@@ -4,7 +4,7 @@ import os.path
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from tests.fixtures import gpc, gpc2, utils # these go dark, but without
+from tests.fixtures import gpc, gpc2, gpc3, utils # these go dark, but without
 from condorgp.params import lean_dict, test_dict, util_dict
 
 EXTRA_TYPES = {
@@ -37,7 +37,7 @@ scenarios('../features/05_gp_control.feature')
       | psetA           |  mul          |
       | psetB           |  add          |
 """
-# ***************************************************************************
+# 1/3 ***************************************************************************
 
 @given('a specific pset is needed')
 def setup_ready():
@@ -79,16 +79,16 @@ def pset_contains(gpc, primitive_name):
 
 '''
   Scenario Outline: test psets can output specific text to condor log
-    Given a specific test pset "<test_psetC_untyped>"
+    Given a specific test pset "<test_C_psets>"
     When provided the "<arg_input>"
     Then the result is "<text_output>"
 
     Examples:
-      | arg_input     | pset_input              |  text_output        |
-      | hello_world   | test_psetC_untyped      |  hello_world        |
+      | arg_input     | test_C_psets            |  text_output        |
+      | hello_world   | test_psetC              |  hello_world        |
 '''
 
-# ***************************************************************************
+# 2/3 ***************************************************************************
 
 @given(parsers.cfparse('a specific test pset "{test_C_psets:String}"',
                         extra_types=EXTRA_TYPES),
@@ -108,7 +108,7 @@ def setup_ready(gpc, test_C_psets):
         target_fixture='arg_input')
 def provided_the(gpc, arg_input):
     ''' runs gp with arg_input as given '''
-    gpc.set_population(50)
+    gpc.set_population(100)
     gpc.set_generations(5)
     gpc.run_gp(arg_input)
 
@@ -121,7 +121,6 @@ def condor_log_contains(gpc, text_output):
     log_file_n_path = util_dict['CONDOR_LOG']
     output = gpc.util.get_keyed_line_in_limits(text_output,
                                         log_file_n_path = log_file_n_path)
-    print(output)
     assert text_output in output[0]
 
 
@@ -138,35 +137,47 @@ def condor_log_contains(gpc, text_output):
 
     Examples:
       | test_D_psets    |  t1                 |
+      | test_psetC      |  injected_code_test |
+    ABOVE HERE PASSES...
       | test_psetC      |  hello_world        |
       | test_psetCi     |  hi_hi_hi_hi        |
 '''
 
-# ***************************************************************************
+# 3/3 ***************************************************************************
 
-@given(parsers.cfparse('a specific test pset "{test_D_psets:String}"',
+@given(parsers.cfparse('another specific test pset "{test_D_psets:String}"',
                         extra_types=EXTRA_TYPES),
                         target_fixture='test_D_psets')
-@given('a specific test pset "<test_C_psets>"')
-@pytest.mark.usefixtures("gpc2")
-def setup_ready(gpc2, test_C_psets):
+@given('another specific test pset "<test_D_psets>"')
+@pytest.mark.usefixtures("gpc3")
+def a_specific_test_pset(gpc3, test_D_psets):
     ''' sets up gp as standard, then amends pset'''
-    gpc2.setup_gp()
-    gpc2.set_test_evaluator()
-    gpc2.set_pset(test_C_psets)
+    gpc3.setup_gp()
+    gpc3.set_test_evaluator('eval_test_D')
+    gpc3.set_pset(test_D_psets)
 
 @when('a run is done')
-def provided_the(gpc2):
+@pytest.mark.usefixtures("gpc3")
+def a_run_is_done(gpc3):
     ''' runs gp without input '''
-    gpc2.set_population(5)
-    gpc2.set_generations(5)
-    gpc2.run_gp()
+    gpc3.set_population(1)
+    gpc3.set_generations(1)
+    gpc3.run_gp()
 
 @then(parsers.cfparse('1st result is "{t1:String}"',
                         extra_types=EXTRA_TYPES),
                         target_fixture='t1')
-@then('the result is "<t1>"')
-def first_result(gpc2, t1):
-    assert gpc2.test_pset
-    pass
+@then('1st result is "<t1>"')
+@pytest.mark.usefixtures("utils")
+def first_result_is(utils, t1):
+    key_req = 'TRACE:: Debug: eval_test_D:'
+    limit_lines = 125 # util_dict['NO_LOG_LINES']
+    got = utils.get_keyed_line_in_limits(key_req, limit_lines = limit_lines)
+
+    assert got[0] != 'not found'
+    assert got[1] > 0 and got[1] < limit_lines
+    assert t1 in got[0]
+
+@then('2nd result is')
+def second_result_is():
     assert 1 == 1
