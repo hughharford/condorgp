@@ -14,8 +14,8 @@ class GpPsets:
     def get_named_pset(self, named_pset):
         try:
             return eval('self.get_' + named_pset + '()')
-        except:
-            print("GpPsets ERROR")
+        except Exception as e:
+            print("GpPsets ERROR: " + str(e))
             return None
 
     def get_default_untyped(self):
@@ -47,26 +47,85 @@ class GpPsets:
         self.test_base.addPrimitive(numpy.sin, 1, name="vsin")
         return self.test_base
 
-    def get_test_psetA(self):
-        ''' test pset A '''
-        self.testA = gp.PrimitiveSet("test pset A", 0)
-        self.testA.addPrimitive(numpy.multiply, 2, name="vmul")
-        return self.testA
+    def get_test_pset5a(self):
+        ''' test pset 5a '''
+        self.test5a = gp.PrimitiveSet("test pset 5a", 0)
+        self.test5a.addPrimitive(numpy.multiply, 2, name="vmul")
+        return self.test5a
 
-    def get_test_psetB(self):
-        ''' test pset B '''
-        self.testB = gp.PrimitiveSet("test pset B", 0)
-        self.testB.addPrimitive(numpy.add, 2, name="vadd")
-        self.testB.addPrimitive(print, 1, name="print")
-        self.testB.addTerminal("***_***_***", "3x3")
-        return self.testB
+    def get_test_pset5b(self):
+        ''' test pset 5b '''
+        self.test5b = gp.PrimitiveSet("test pset 5b", 0)
+        self.test5b.addPrimitive(numpy.add, 2, name="vadd")
+        self.test5b.addPrimitive(print, 1, name="print")
+        self.test5b.addTerminal("***_***_***", "3x3")
+        return self.test5b
 
-    def get_test_psetC(self):
-        ''' test pset C '''
-        self.testC = gp.PrimitiveSet("test pset C", 1)
-        self.testC.addPrimitive(self.log.info, 1, name="self.log.info")
-        self.testC.renameArguments(ARG0='x0')
-        return self.testC
+    def get_test_pset5c(self):
+        ''' test pset 5c '''
+        self.test5c = gp.PrimitiveSet("test pset 5c", 1)
+        self.test5c.addPrimitive(self.log.info, 1, name="self.log.info")
+        self.test5c.renameArguments(ARG0='x0')
+        return self.test5c
+
+    def get_test_pset5d(self):
+        ''' test pset 5d '''
+        self.test5d = gp.PrimitiveSet("test pset 5d", 1)
+        self.test5d.addPrimitive(self.log.info, 1, name="self.log.info")
+        self.test5d.renameArguments(ARG0='x0')
+        return self.test5d
+
+    def get_test_pset6a(self):
+        ''' test pset 6a '''
+        self.test6a = gp.PrimitiveSet("test pset 6a", 1)
+        self.test6a.addTerminal(self.get_alpha_model_A, name='model_A')
+        # self.test6a.addTerminal(self.get_alpha_model_B, name='model_B')
+        # self.test6a.addTerminal(self.get_alpha_model_C, name='model_C')
+        # self.test6a.addTerminal(self.get_alpha_model_D, name='model_D')
+        return self.test6a
+
+    def get_test_pset6b(self):
+        ''' test pset 6b '''
+        self.test6b = gp.PrimitiveSet("test pset 6b", 1)
+        # self.test6b.addTerminal(self.get_alpha_model_A, name='model_A')
+        self.test6b.addTerminal(self.get_alpha_model_B, name='model_B')
+        # self.test6b.addTerminal(self.get_alpha_model_C, name='model_C')
+        # self.test6b.addTerminal(self.get_alpha_model_D, name='model_D')
+        return self.test6b
+
+    def get_extant_line(self):
+        extant_line = '''
+    def newly_injected_code(self):
+        return ConstantAlphaModel(InsightType.Price,
+                                  InsightDirection.Up,
+                                  timedelta(minutes = 20),
+                                  0.025, None
+                                  )'''
+        return extant_line
+
+    def get_alpha_model_A(self):
+        line = '''
+    def newly_injected_code(self):
+        return HistoricalReturnsAlphaModel()'''
+        return line
+
+    def get_alpha_model_B(self):
+        line = '''
+    def newly_injected_code(self):
+        return EmaCrossAlphaModel()'''
+        return line
+
+    def get_alpha_model_C(self):
+        line = '''
+    def newly_injected_code(self):
+        return MacdAlphaModel()'''
+        return line
+
+    def get_alpha_model_D(self):
+        line = '''
+    def newly_injected_code(self):
+        return RsiAlphaModel()'''
+        return line
 
     def get_adf2(self):
         self.adfset2 = gp.PrimitiveSet("ADF2", 2)

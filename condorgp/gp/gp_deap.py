@@ -25,7 +25,11 @@ class GpDeap(GpProvider):
             select_pset_name = 'default_untyped'
             self.pset = pset_obj.get_default_untyped()
         else:
-            self.pset = pset_obj.get_named_pset(select_pset_name)
+            try:
+                self.pset = pset_obj.get_named_pset(select_pset_name)
+            except Exception as e:
+                self.pset = pset_obj.get_default_untyped()
+                print("Gp_Deap ERROR, default untyped used instead: " + str(e))
 
 
         # if functions == '' and terminals == '':
@@ -77,7 +81,7 @@ class GpDeap(GpProvider):
 
     def set_pop_size(self, pop_size: int = 2):
         ''' Sets population size as required '''
-        self.pop = self.toolbox.population(n=pop_size)
+        self.pop = self.toolbox.population(pop_size)
 
     def set_evaluator(self, new_evaluator):
         ''' Sets evaluation function '''

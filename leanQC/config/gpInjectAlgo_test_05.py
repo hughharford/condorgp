@@ -25,9 +25,8 @@ class gpInjectAlgo(QCAlgorithm):
     '''Basic template framework algorithm uses framework components to define the algorithm.'''
 
     ## INJECT GP CODE HERE:
+    ## leave this line alone...
 
-    def newly_injected_code(self, data_in):
-        self.Debug("eval_test_XX: injected_code_test {data_in}")
 
     def Initialize(self):
         ''' Initialise the data and resolution required, as well as the cash and start-end dates for your algorithm. All algorithms must initialized.'''

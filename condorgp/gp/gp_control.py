@@ -3,6 +3,8 @@ from condorgp.params import util_dict, test_dict, lean_dict
 from condorgp.factories.initial_factory import InitialFactory
 from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
 
+from condorgp.gp.gp_evaluators import GpEvaluators
+
 class GpControl:
     def __init__(self):
         '''
@@ -21,7 +23,7 @@ class GpControl:
         self.inject_logger()
 
         filler_INIT = '>'*10
-        self.log.info(f"{filler_INIT}, {__class__} -  initialising {filler_INIT}")
+        self.log.info(f"{filler_INIT}, {__class__} Initialising {filler_INIT}")
 
     def inject_gp(self):
         ''' dependency injection of gp '''
@@ -58,7 +60,7 @@ class GpControl:
                             'arrity': 2,
                             'method': self.gp_custom_funcs.protectedDiv}
         additional_terms = {}
-        self.gp.set_defined_pset(self.gp_psets, "test_psetC", additional_funcs, additional_terms)
+        self.gp.set_defined_pset(self.gp_psets, "default_untyped", additional_funcs, additional_terms)
 
         # Set 2. major gp parameters
         params = {}
@@ -69,7 +71,7 @@ class GpControl:
         self.gp.set_inputs(inputs)
 
         # Sets 4: population size, defaults to 2 to test efficacy
-        self.pop_size = 1
+        self.pop_size = 2
         self.gp.set_pop_size(self.pop_size)
 
         # Set 5: the number of generations
@@ -106,7 +108,7 @@ class GpControl:
                 print(new_evaluator, " type of this is: ", type(new_evaluator))
             self.gp.set_evaluator(new_evaluator)
         else:
-            self.gp.set_evaluator(self.eval_test_C)
+            self.gp.set_evaluator(self.eval_test_5)
 
 
     def get_custom_evaluator(self, e_name):
@@ -131,7 +133,7 @@ class GpControl:
 
         # Lean evaluation: basic Lean run for now
         #### HSTH 09 10 ###
-        input_ind = 'IndBasicAlgo1'
+        input_ind = 'IndBasicAlgo1.py'
         config_to_run = test_dict['CONDOR_TEST_CONFIG_FILE_1']
 
         self.util.copy_config_in(input_ind)
@@ -149,14 +151,14 @@ class GpControl:
         #                               14736.68704775238,
         return new_fitness,
 
-    def eval_test_C(self, individual):
+    def eval_test_5_2(self, individual):
         # Transform the tree expression in a callable function
         func = self.gp.toolbox.compile(expr=individual)
 
         check_text = 'hello_world'
-        self.log.info(f'eval_test_C, start: PRINT INDIVIDUAL >>> {individual}')
+        self.log.info(f'eval_test_5_2, start: PRINT INDIVIDUAL >>> {individual}')
         try:
-            self.log.info(f'eval_test_C, RUN? >>> {func(check_text)}')
+            self.log.info(f'eval_test_5_2, RUN? >>> {func(check_text)}')
             # now look for the intended output:
             log_file_path = util_dict['CONDOR_LOG']
             output = self.util.get_keyed_line_in_limits(check_text,
@@ -167,41 +169,83 @@ class GpControl:
             else:
                 new_fitness = 0
         except BaseException as e:
-            self.log.info(f'eval_test_C, ERROR >>> {e}')
+            self.log.info(f'eval_test_5_2, ERROR >>> {e}')
             new_fitness = -10
 
-        self.log.info(f'eval_test_C, set fitness: {new_fitness}')
+        self.log.info(f'eval_test_5_2, set fitness: {new_fitness}')
         # returns a float in a tuple, i.e.
         #                               14736.68704775238,
         return new_fitness,
 
-    def eval_test_D(self, individual):
+    def eval_test_5(self, individual):
         # Transform the tree expression in a callable function
         func = self.gp.toolbox.compile(expr=individual)
 
-        self.log.info(f'eval_test_D, OUTPUTTING IND >>> \n {individual}')
+        self.log.info(f'eval_test_5, OUTPUTTING IND >>> \n {individual}')
 
-        config_to_run = test_dict['CONDOR_TEST_CONFIG_FILE_1']
-        config_to_run = 'config_test_algos_gpInjectAlgo.json'
-        self.util.cp_injected_algo_in_and_sort()
+        config_to_run = lean_dict['LEAN_INJECTED_ALGO_JSON']
+        self.util.cp_injected_algo_in_and_sort('_test_05.py','')
         try:
             # not specifying: 'gpInjectAlgo_done.py'
             self.lean.run_lean_via_CLI('main.py', config_to_run)
             # algo set to main.py in lean_runner
         except BaseException as e:
-            self.log.error("eval_test_D, attempting Lean run", str(e))
+            self.log.error("eval_test_5, attempting Lean run", str(e))
 
         new_fitness = 0
-        self.log.info(f'eval_test_D, new fitness {new_fitness}')
+        self.log.info(f'eval_test_5, new fitness {new_fitness}')
+        # returns a float in a tuple, i.e.
+        #                               14736.68704775238,
+        return new_fitness,
+
+    def eval_test_6(self, individual):
+        # Transform the tree expression in a callable function
+        func = self.gp.toolbox.compile(expr=individual)
+
+        self.log.info(f'eval_test_6, OUTPUTTING IND >>> \n {individual}')
+
+        # additional code to inject (approaching from individual...)
+        extant_line = '''
+    def newly_injected_code(self):
+        return ConstantAlphaModel(InsightType.Price,
+                                  InsightDirection.Up,
+                                  timedelta(minutes = 20),
+                                  0.025, None
+                                  )'''
+
+        injected_line = extant_line
+        if 'Alpha' in individual:
+            injected_line = individual
+
+        self.util.cp_injected_algo_in_and_sort('_test_06.py', str(individual))
+
+        config_to_run = lean_dict['LEAN_INJECTED_ALGO_JSON']
+        try:
+            self.lean.run_lean_via_CLI('main.py', config_to_run)
+        except BaseException as e:
+            self.log.error("eval_test_6, attempting Lean run")
+
+        # find fitness here:
+        new_fitness = 0
+        Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
+        got = self.util.get_keyed_line_in_limits(Return_over_MDD)
+        new_fitness = float(self.util.get_last_chars(got[0]))
+
+        self.log.info(f'eval_test_6, new fitness {new_fitness}')
         # returns a float in a tuple, i.e.
         #                               14736.68704775238,
         return new_fitness,
 
 if __name__ == "__main__":
+    eval_used = 'eval_test_5' # GpEvaluators().get_named_evaluator('eval_test_5') #
+    pset_used = 'test_pset5c'
     c = GpControl()
     c.setup_gp()
-    c.set_test_evaluator('eval_test_C') # eval_test_D
-    c.set_pset('test_psetC')
-    c.set_population(100)
-    c.set_generations(5)
+    c.set_test_evaluator(eval_used)
+    c.set_pset(pset_used)
+    c.set_population(1)
+    c.set_generations(1)
     c.run_gp()
+    # max_fitness_found = c.gp.logbook.select("max")[-1]
+    # print(max_fitness_found)
+    print(f"DIRECT GpControl run, using: evaluator: {eval_used} , and pset: {pset_used}")
