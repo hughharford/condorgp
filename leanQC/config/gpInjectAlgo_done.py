@@ -25,12 +25,11 @@ class gpInjectAlgo(QCAlgorithm):
     '''Basic template framework algorithm uses framework components to define the algorithm.'''
 
     ## INJECT GP CODE HERE:
-
-    def newly_injected_code(self, data_in):
-        self.Debug("eval_test_XX: injected_code_test {data_in}")
+vadd(vneg(-1), vneg(-1))
 
     def Initialize(self):
         ''' Initialise the data and resolution required, as well as the cash and start-end dates for your algorithm. All algorithms must initialized.'''
+
 
         # Set requested data resolution
         self.UniverseSettings.Resolution = Resolution.Hour
@@ -47,7 +46,10 @@ class gpInjectAlgo(QCAlgorithm):
 
         # set algorithm framework models
         self.SetUniverseSelection(ManualUniverseSelectionModel(symbols))
-        self.SetAlpha(ConstantAlphaModel(InsightType.Price, InsightDirection.Up, timedelta(minutes = 20), 0.025, None))
+
+        # PUT IN CODE HERE >>>>>>>>>>>>>>>>>>>>>>>
+        # self.SetAlpha(ConstantAlphaModel(InsightType.Price, InsightDirection.Up, timedelta(minutes = 20), 0.025, None))
+        self.SetAlpha(self.newly_injected_code())
 
         # We can define who often the EWPCM will rebalance if no new insight is submitted using:
         # Resolution Enum:
@@ -66,6 +68,6 @@ class gpInjectAlgo(QCAlgorithm):
         if orderEvent.Status == OrderStatus.Filled:
             self.Debug("Purchased Stock: {0}".format(orderEvent.Symbol))
 
-    def OnData(self, slice):
-        ''' trialling printing the incoming data slice'''
-        self.newly_injected_code(slice) # TEMP_LINE_test_05
+    # def OnData(self, slice):
+    #     ''' trialling printing the incoming data slice'''
+    #     self.newly_injected_code(slice) # TEMP_LINE_test_06

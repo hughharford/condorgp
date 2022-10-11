@@ -10,8 +10,8 @@ Feature: GpControl's evolved code must affect Lean functionality
 
     Examples:
       | pset_input       |  RoMDD      |
-      | test_psetEa      |  110.382    |
-      | test_psetEb      |  110.382    |
+      | test_pset6a      |  110.382    |
+      | test_pset6b      |  110.382    |
 
 # the prime one to alter is the:
 # self.SetAlpha()

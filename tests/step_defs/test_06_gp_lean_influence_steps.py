@@ -45,7 +45,7 @@ def gpcontrol_run_with(gpc, pset_input):
 
 @when('the injected algo is varied')
 def injected_algo_includes(gpc):
-    gpc.set_population(10)
+    gpc.set_population(1)
     gpc.set_generations(1)
     gpc.run_gp()
 

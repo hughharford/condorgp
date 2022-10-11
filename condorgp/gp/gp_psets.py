@@ -78,7 +78,9 @@ class GpPsets:
     def get_test_pset6a(self):
         ''' test pset 6a '''
         self.test6a = gp.PrimitiveSet("test pset 6a", 1)
-        self.test6a.addTerminal(self.get_alpha_model_A, name='model_A')
+        self.test6a.addTerminal(self.get_alpha_model_A, 'model_A')
+        self.test6a.renameArguments(ARG0='x0')
+
         # self.test6a.addTerminal(self.get_alpha_model_B, name='model_B')
         # self.test6a.addTerminal(self.get_alpha_model_C, name='model_C')
         # self.test6a.addTerminal(self.get_alpha_model_D, name='model_D')
@@ -87,8 +89,10 @@ class GpPsets:
     def get_test_pset6b(self):
         ''' test pset 6b '''
         self.test6b = gp.PrimitiveSet("test pset 6b", 1)
-        # self.test6b.addTerminal(self.get_alpha_model_A, name='model_A')
-        self.test6b.addTerminal(self.get_alpha_model_B, name='model_B')
+        self.test6b.addTerminal(self.get_alpha_model_A, 'model_A')
+        self.test6b.renameArguments(ARG0='x0')
+
+        # self.test6b.addTerminal(self.get_alpha_model_B, name='model_B')
         # self.test6b.addTerminal(self.get_alpha_model_C, name='model_C')
         # self.test6b.addTerminal(self.get_alpha_model_D, name='model_D')
         return self.test6b
@@ -103,13 +107,13 @@ class GpPsets:
                                   )'''
         return extant_line
 
-    def get_alpha_model_A(self):
+    def get_alpha_model_A(self, input):
         line = '''
     def newly_injected_code(self):
         return HistoricalReturnsAlphaModel()'''
         return line
 
-    def get_alpha_model_B(self):
+    def get_alpha_model_B(self, input):
         line = '''
     def newly_injected_code(self):
         return EmaCrossAlphaModel()'''
