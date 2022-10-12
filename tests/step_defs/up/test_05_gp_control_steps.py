@@ -96,7 +96,7 @@ def pset_contains(gpc, primitive_name):
 @pytest.mark.usefixtures("gpc")
 def setup_ready(gpc, test_5c_psets):
     ''' sets up gp as standard, then amends pset'''
-    gpc.setup_gp(test_5c_psets,1,5)
+    gpc.setup_gp(test_5c_psets,100,5)
     gpc.set_test_evaluator('eval_test_5_2')
 
 @when(parsers.cfparse('provided the "{arg_input:String}"',

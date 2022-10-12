@@ -19,7 +19,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/06_gp_lean_influence.feature')
+scenarios('../../features/06_gp_lean_influence.feature')
 
 """
   Scenario Outline: Evolved code shows Lean logged differences
