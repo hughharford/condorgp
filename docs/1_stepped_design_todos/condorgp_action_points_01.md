@@ -4,10 +4,6 @@
 ## REQUIREMENTS
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # setup gp structure to run effectively with lean
-      # TODO: test that required functionality provided in lean-evaluated class
-      # TODO: test that run is successful
-
   # build error catching into lean_runner
       # TODO: enable error checking from Lean logs
       # TODO: report -99999 fitness when this happens
@@ -28,12 +24,7 @@
           @ these can
 
       # Lean requires:
-
-
-  # vary the individuals for fitness evaluation
-      # ability to vary the individuals sent for fitness evaluation
-          # TODO: test checking func provision to vary individuals
-
+            alpha,
 
 
   # shows +ve fitness change, using fitness max
@@ -47,7 +38,8 @@
           # OR INCREASES
             # creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
             # creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
-
+      # PROGRESS ON THIS:
+          # see test_06b
 
 
   # logging functioning as intended
@@ -60,8 +52,25 @@
       # confirm can unpickle and run
     # REF: https://deap.readthedocs.io/en/master/tutorials/advanced/checkpoint.html
 
+  # make robust randomised fitness function
+    # TODO: take an algorithm with evolved and injected code, and vary dates
+    # TODO: ensure a range of randomised set of dates, aim for enough so that
+            'many' but 'randomised' tests are all "equivalent enough"
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # DONE
+
+  # setup gp structure to run effectively with lean
+      # DONE: test that required functionality provided in lean-evaluated class
+      # DONE: test that run is successful
+        # basic gp running is operational with Lean
+        # see tests 04-06
+
+  # vary the individuals for fitness evaluation
+      # ability to vary the individuals sent for fitness evaluation
+          # DONE: test checking func provision to vary individuals
+          # see test_06 for Lean influence based on psets and individuals
+
 
   # get out the python code for each individual
       # DONE: simple enough, just:
