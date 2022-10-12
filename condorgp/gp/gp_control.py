@@ -22,6 +22,8 @@ class GpControl:
         self.inject_lean_runner()
         self.inject_logger()
 
+        self.run_lean = 1 # 1 = run lean in evaluation func, 0 = don't
+
         filler_INIT = '>'*10
         self.log.info(f"{filler_INIT}, {__class__} Initialising {filler_INIT}")
 
@@ -46,7 +48,7 @@ class GpControl:
         ''' dependency injection of logger '''
         self.log = InitialFactory().get_logger()
 
-    def setup_gp(self):
+    def setup_gp(self, pset_specified = '', pop_size = 2, no_gens = 1):
         ''' sets: 1. additional functions & terminals
                   2. major gp parameters
                   3: inputs for fitness evaluation
@@ -55,39 +57,31 @@ class GpControl:
                   6: the evaluator
                   7: the stats feedback
         '''
-        # Set: 1. additional functions & terminals
-        additional_funcs = {'name': 'protectedDiv',
-                            'arrity': 2,
-                            'method': self.gp_custom_funcs.protectedDiv}
-        additional_terms = {}
-        self.gp.set_defined_pset(self.gp_psets, "default_untyped", additional_funcs, additional_terms)
+        # defaults
+        self.default_pset = 'default_untyped' # 'test_pset5a'
+        self.default_eval = self.evalIntoAndFromLean
 
-        # Set 2. major gp parameters
-        params = {}
+        if pset_specified == '': pset_specified = self.default_pset
+
+        more_funcs = {}     # Set: 1. additional functions & terminals
+        more_terms = {}
+        self.gp.set_defined_pset(self.gp_psets, pset_specified, more_funcs, more_terms)
+
+        params = {}     # Set 2. major gp parameters
         self.gp.set_gp_params(params)
 
-        # Sets 3: inputs for fitness evaluation
-        inputs = {}
+        inputs = {}     # Sets 3: inputs for fitness evaluation
         self.gp.set_inputs(inputs)
 
-        # Sets 4: population size, defaults to 2 to test efficacy
-        self.pop_size = 2
+        self.pop_size = pop_size # Sets 4: population size, defaults to 2 for efficacy
         self.gp.set_pop_size(self.pop_size)
 
-        # Set 5: the number of generations
-        no_gens = 1
-        self.gp.set_gens(no_gens)
+        self.gp.set_gens(no_gens)  # Set 5: the number of generations
 
-        # Set 6: the evaluator
-        self.gp.set_evaluator(self.evalIntoAndFromLean)
+        self.gp.set_evaluator(self.default_eval) # Set 6: the evaluator
 
-        # Set 7: the stats feedback
-        stat_params = {}
+        stat_params = {}        # Set 7: the stats feedback
         self.gp.set_stats(stat_params)
-
-    def set_pset(self, pset_name = ''):
-        ''' sets' the pset to default, unless input != '' '''
-        return self.gp.set_defined_pset(self.gp_psets, pset_name)
 
     def set_population(self, pop_size = 2):
         self.gp.set_pop_size(pop_size)
@@ -95,28 +89,24 @@ class GpControl:
     def set_generations(self, no_g = 1):
         self.gp.set_gens(no_g)
 
-    def set_test_evaluator(self, use_this_evaluator = ''):
+    def set_test_evaluator(self, new_eval = ''):
         '''
-        default to eval_test_C, but
-        can specify any evaluation function by string
-
+        default to eval_test_5, can spec any evaluation function by string
         provided named function is within gp_control...
         '''
-        if use_this_evaluator != '':
-            new_evaluator = self.get_custom_evaluator(use_this_evaluator)
-            if new_evaluator:
-                print(new_evaluator, " type of this is: ", type(new_evaluator))
-            self.gp.set_evaluator(new_evaluator)
+        if new_eval:
+            new_eval = self.get_custom_evaluator(new_eval)
+            if new_eval: self.log.debug(f'GpControl set evaluator: {new_eval}')
+            self.gp.set_evaluator(new_eval)
         else:
-            self.gp.set_evaluator(self.eval_test_5)
-
+            self.gp.set_evaluator(self.eval_test_6)
 
     def get_custom_evaluator(self, e_name):
         try:
             temp = eval('self.' + e_name)
             return temp
         except:
-            print("get_custom_evaluator ERROR")
+            self.log.error(f"GpControl get_custom_evaluator ERROR: {e_name}")
             return None
 
     def run_gp(self, inputs = [0,0,0]):
@@ -205,31 +195,27 @@ class GpControl:
         self.log.info(f'eval_test_6, OUTPUTTING IND >>> \n {individual}')
 
         # additional code to inject (approaching from individual...)
-        extant_line = '''
-    def newly_injected_code(self):
-        return ConstantAlphaModel(InsightType.Price,
-                                  InsightDirection.Up,
-                                  timedelta(minutes = 20),
-                                  0.025, None
-                                  )'''
+        new_fitness = 0
 
-        injected_line = extant_line
-        if 'Alpha' in individual:
-            injected_line = individual
-
-        self.util.cp_injected_algo_in_and_sort('_test_06.py', str(individual))
+        try:
+            self.util.cp_injected_algo_in_and_sort('_test_06.py', str(individual))
+        except:
+            self.log.debug(f'{individual} not wrapped')
 
         config_to_run = lean_dict['LEAN_INJECTED_ALGO_JSON']
         try:
-            self.lean.run_lean_via_CLI('main.py', config_to_run)
+            if self.run_lean:
+                self.log.debug("GpControl.eval_test_6 >>>> RUN LEAN >>>>")
+                self.lean.run_lean_via_CLI('main.py', config_to_run)
+
+                # find fitness here:
+                Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
+                got = self.util.get_keyed_line_in_limits(Return_over_MDD)
+                new_fitness = float(self.util.get_last_chars(got[0]))
+            else:
+                self.log.debug("<< WOULD RUN LEAN HERE >>>>>>>>>>>>>>>>>>>>>>>")
         except BaseException as e:
             self.log.error("eval_test_6, attempting Lean run")
-
-        # find fitness here:
-        new_fitness = 0
-        Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
-        got = self.util.get_keyed_line_in_limits(Return_over_MDD)
-        new_fitness = float(self.util.get_last_chars(got[0]))
 
         self.log.info(f'eval_test_6, new fitness {new_fitness}')
         # returns a float in a tuple, i.e.
@@ -237,15 +223,19 @@ class GpControl:
         return new_fitness,
 
 if __name__ == "__main__":
-    eval_used = 'eval_test_5' # GpEvaluators().get_named_evaluator('eval_test_5') #
-    pset_used = 'test_pset5c'
+
+    eval_used = 'eval_test_6'
+    pset_used = 'test_pset6b'
+    pop = 2
+    gens = 1
     c = GpControl()
-    c.setup_gp()
+    c.setup_gp(pset_used, pop, gens)
+    c.run_lean = 1
     c.set_test_evaluator(eval_used)
-    c.set_pset(pset_used)
-    c.set_population(1)
-    c.set_generations(1)
+    # c.set_pset(pset_used)
+    # c.set_population(1)
+    # c.set_generations(1)
     c.run_gp()
-    # max_fitness_found = c.gp.logbook.select("max")[-1]
-    # print(max_fitness_found)
-    print(f"DIRECT GpControl run, using: evaluator: {eval_used} , and pset: {pset_used}")
+
+    print(f"DIRECT GpControl run, using: \
+          evaluator: {eval_used} , and pset: {pset_used}")

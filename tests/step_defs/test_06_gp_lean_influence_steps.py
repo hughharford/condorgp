@@ -39,14 +39,11 @@ scenarios('../features/06_gp_lean_influence.feature')
 @pytest.mark.usefixtures("gpc")
 def gpcontrol_run_with(gpc, pset_input):
     ''' sets one of two different psets '''
-    gpc.setup_gp()
+    gpc.setup_gp(pset_input, 2, 1)
     gpc.set_test_evaluator('eval_test_6')
-    gpc.set_pset(pset_input)
 
 @when('the injected algo is varied')
 def injected_algo_includes(gpc):
-    gpc.set_population(1)
-    gpc.set_generations(1)
     gpc.run_gp()
 
 @then(parsers.cfparse('Lean o/p is NOT "{RoMDD:Float}"',

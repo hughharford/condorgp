@@ -8,7 +8,7 @@ from condorgp.util.log import CondorLogger
 
 class GpPsets:
     def __init__(self, custom_funcs):
-        self.custom_funcs = custom_funcs
+        self.cfs = custom_funcs
         self.log = CondorLogger().get_logger()
 
     def get_named_pset(self, named_pset):
@@ -20,7 +20,7 @@ class GpPsets:
 
     def get_default_untyped(self):
          # basic untyped deap.gp.PrimitiveSet:
-        self.default_untyped = gp.PrimitiveSet("MAIN", 1)
+        self.default_untyped = gp.PrimitiveSet("DEFAULT UNTYPED", 1)
         self.default_untyped.addPrimitive(numpy.add, 2, name="vadd")
         self.default_untyped.addPrimitive(numpy.subtract, 2, name="vsub")
         self.default_untyped.addPrimitive(numpy.multiply, 2, name="vmul")
@@ -42,7 +42,7 @@ class GpPsets:
 
     def get_test_base_pset(self):
         ''' test base pset '''
-        self.test_base = gp.PrimitiveSet("test_base", 1)
+        self.test_base = gp.PrimitiveSet("test_base_pset", 1)
         self.test_base.addPrimitive(numpy.cos, 1, name="vcos")
         self.test_base.addPrimitive(numpy.sin, 1, name="vsin")
         return self.test_base
@@ -77,59 +77,17 @@ class GpPsets:
 
     def get_test_pset6a(self):
         ''' test pset 6a '''
-        self.test6a = gp.PrimitiveSet("test pset 6a", 1)
-        self.test6a.addTerminal(self.get_alpha_model_A, 'model_A')
-        self.test6a.renameArguments(ARG0='x0')
-
-        # self.test6a.addTerminal(self.get_alpha_model_B, name='model_B')
-        # self.test6a.addTerminal(self.get_alpha_model_C, name='model_C')
-        # self.test6a.addTerminal(self.get_alpha_model_D, name='model_D')
+        self.test6a = gp.PrimitiveSet("test pset 6a", 0)
+        self.test6a.addTerminal(1)
+        self.test6a.addPrimitive(self.cfs.get_alpha_model_A,1)
         return self.test6a
 
     def get_test_pset6b(self):
         ''' test pset 6b '''
-        self.test6b = gp.PrimitiveSet("test pset 6b", 1)
-        self.test6b.addTerminal(self.get_alpha_model_A, 'model_A')
-        self.test6b.renameArguments(ARG0='x0')
-
-        # self.test6b.addTerminal(self.get_alpha_model_B, name='model_B')
-        # self.test6b.addTerminal(self.get_alpha_model_C, name='model_C')
-        # self.test6b.addTerminal(self.get_alpha_model_D, name='model_D')
+        self.test6b = gp.PrimitiveSet("test pset 6b", 0)
+        self.test6b.addTerminal(1)
+        self.test6b.addPrimitive(self.cfs.get_alpha_model_B,1)
         return self.test6b
-
-    def get_extant_line(self):
-        extant_line = '''
-    def newly_injected_code(self):
-        return ConstantAlphaModel(InsightType.Price,
-                                  InsightDirection.Up,
-                                  timedelta(minutes = 20),
-                                  0.025, None
-                                  )'''
-        return extant_line
-
-    def get_alpha_model_A(self, input):
-        line = '''
-    def newly_injected_code(self):
-        return HistoricalReturnsAlphaModel()'''
-        return line
-
-    def get_alpha_model_B(self, input):
-        line = '''
-    def newly_injected_code(self):
-        return EmaCrossAlphaModel()'''
-        return line
-
-    def get_alpha_model_C(self):
-        line = '''
-    def newly_injected_code(self):
-        return MacdAlphaModel()'''
-        return line
-
-    def get_alpha_model_D(self):
-        line = '''
-    def newly_injected_code(self):
-        return RsiAlphaModel()'''
-        return line
 
     def get_adf2(self):
         self.adfset2 = gp.PrimitiveSet("ADF2", 2)
@@ -186,9 +144,6 @@ if __name__ == '__main__':
     one = gpp.get_named_pset('test_psetC')
     # set_pset('test_psetC_untyped')
     print(type(one))
-    print('Pset name = ', one.name)
-    one.addPrimitive(operator.add, 2, name="NEW ONE, NEW ONE")
-    print(one.terminals)
 
     print('looking at terminals:')
     print('count of terminals: ', one.terms_count,

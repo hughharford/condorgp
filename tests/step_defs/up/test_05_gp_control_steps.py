@@ -96,9 +96,8 @@ def pset_contains(gpc, primitive_name):
 @pytest.mark.usefixtures("gpc")
 def setup_ready(gpc, test_5c_psets):
     ''' sets up gp as standard, then amends pset'''
-    gpc.setup_gp()
+    gpc.setup_gp(test_5c_psets,1,5)
     gpc.set_test_evaluator('eval_test_5_2')
-    gpc.set_pset(test_5c_psets)
 
 @when(parsers.cfparse('provided the "{arg_input:String}"',
                         extra_types=EXTRA_TYPES),
@@ -107,8 +106,6 @@ def setup_ready(gpc, test_5c_psets):
         target_fixture='arg_input')
 def provided_the(gpc, arg_input):
     ''' runs gp with arg_input as given '''
-    gpc.set_population(100)
-    gpc.set_generations(5)
     gpc.run_gp() # arg not inputted, hard coded in this test
 
 @then(parsers.cfparse('the result is "{text_output:String}"',

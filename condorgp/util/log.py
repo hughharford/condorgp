@@ -31,7 +31,7 @@ class CondorLogger:
         formatter = logging.Formatter('%(asctime)s -  %(levelname)s - %(message)s')
 
         # further log levels for different handlers - so far to match:
-        matching_level = logging.INFO
+        matching_level = logging.DEBUG # higher (less info): INFO
 
         # create console handler and set level
         ch = logging.StreamHandler(sys.stdout)

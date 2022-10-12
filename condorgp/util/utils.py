@@ -7,10 +7,11 @@ from datetime import datetime
 from file_read_backwards import FileReadBackwards
 
 from condorgp.params import lean_dict, test_dict, util_dict
+from condorgp.gp.gp_custom_functions import GpCustomFunctions
 
 class Utils:
     def __init__(self):
-        pass
+        self.cfs = GpCustomFunctions()
 
     def cp_ind_to_lean_algos(self, file_path, filename):
         '''
@@ -209,6 +210,10 @@ class Utils:
         '''
         done_injectedAlgo_to_copy_in = lean_dict['LEAN_INJECTED_ALGO']
 
+        # check and wrap evolved code if need be:
+        if 'def' not in injection_string:
+            injection_string = self.wrap_injection_str(injection_string)
+
         # inject evolved code into algo py file
         self.inject_evolved_func_in(base_algo_name_ext, injection_string)
 
@@ -220,6 +225,15 @@ class Utils:
 
         # go into gpInjectAlgo_done.py and rename class to condorgp:
         self.rename_main_class_as_condorgp(gpInjectAlgo_class_line = True)
+
+    def wrap_injection_str(self, injection_string):
+        content = eval(f'self.cfs.{injection_string}')
+    #     wrapped = f'''
+    # def newly_injected_code(self):
+    #     return {content}'''
+
+        print(' >>>>>>>>>>>>>>>>>> UTILS.wrap_injection_str: ', content)
+        return content
 
     def inject_evolved_func_in(self, base_algo_name_ext, str_for_injection = ''):
         '''
