@@ -61,6 +61,13 @@ class AnyAlgoName(QCAlgorithm):
 # Supported built in Alpha models:
 # see https://www.quantconnect.com/docs/v2/writing-algorithms/algorithm-framework/alpha/supported-models
 
+self.AddAlpha(NullAlphaModel())
+self.AddAlpha(ConstantAlphaModel(type, direction, period))
+self.AddAlpha(HistoricalReturnsAlphaModel())
+self.AddAlpha(EmaCrossAlphaModel())
+self.AddAlpha(MacdAlphaModel())
+self.AddAlpha(RsiAlphaModel())
+
 The Alpha model predicts market trends and signals the best moments to trade. These signals, or Insight objects, contain the Direction, Magnitude, and Confidence of a market prediction and the suggested portfolio Weight. You should generate insights on the set of assets provided by the Universe Selection model and only generate them when your predictions change.
 
   Multi-Alpha Algorithms
@@ -101,6 +108,21 @@ The Alpha model predicts market trends and signals the best moments to trade. Th
 # Supported PORTFOLIO CONSTRUCTION MODELS:
 # See _________ https://www.quantconnect.com/docs/v2/writing-algorithms/algorithm-framework/portfolio-construction/supported-models
 
+# these get fairly complex, with many parameters...
+
+self.SetPortfolioConstruction(NullPortfolioConstructionModel())
+self.SetPortfolioConstruction(EqualWeightingPortfolioConstructionModel())
+self.SetPortfolioConstruction(ConfidenceWeightedPortfolioConstructionModel())
+self.SetPortfolioConstruction(InsightWeightingPortfolioConstructionModel())
+self.SetPortfolioConstruction(SectorWeightingPortfolioConstructionModel())
+# this one likely useful for a multi-alpha model:
+self.SetPortfolioConstruction(AccumulativeInsightPortfolioConstructionModel())
+self.SetPortfolioConstruction(MeanVarianceOptimizationPortfolioConstructionModel())
+
+# designed for multi-alpha..
+self.SetPortfolioConstruction(BlackLittermanOptimizationPortfolioConstructionModel())
+self.SetPortfolioConstruction(MeanReversionPortfolioConstructionModel())
+self.SetPortfolioConstruction(RiskParityPortfolioConstructionModel())
 
 # RISK MANAGEMENT OPTIONS
 # SEE ____ https://www.quantconnect.com/docs/v2/writing-algorithms/algorithm-framework/risk-management/key-concepts
@@ -111,5 +133,3 @@ The Alpha model predicts market trends and signals the best moments to trade. Th
 # See ____ https://www.quantconnect.com/docs/v2/writing-algorithms/algorithm-framework/execution/key-concepts
 # Supported execution models:
 #                    https://www.quantconnect.com/docs/v2/writing-algorithms/algorithm-framework/execution/supported-models
-
-

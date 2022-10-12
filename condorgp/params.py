@@ -23,6 +23,7 @@ highlevel_config_dict = {
 
 LEAN_BASE_PATH = LOCAL_BASE_PATH + 'Lean/'
 LOCALPACKAGES_PATH = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
+CONDORGP_PATH = LOCAL_BASE_PATH + 'condorgp/'
 
 LEAN_ALGOS_DIR = LEAN_BASE_PATH + 'Algorithm.Python/'
 LEAN_LAUNCHER_DIR = 'Launcher/bin/Debug/'
@@ -45,11 +46,14 @@ FITNESS_BASE = 'STATISTICS:: '
 CURRENT_FITNESS_STAT = 'Return Over Maximum Drawdown'
 FITNESS_CRITERIA = FITNESS_BASE + CURRENT_FITNESS_STAT
 
-# ALGO_WRAPPER_SIN_PY = 'gpInjectAlgo' # checking for delete
+LEAN_TO_INJECT_TEMPLATE_ALGO = 'gpInjectAlgo.py'
+LEAN_INJECTED_ALGO = 'gpInjectAlgo_done.py'
+LEAN_INJECTED_ALGO_JSON = 'config_test_algos_gpInjectAlgo.json'
 
 lean_dict = {
     'LEAN_CONFIG_FILE': LEAN_CONFIG_FILE,
     'LEAN_CONFIG_DIR': LEAN_CONFIG_DIR,
+    'CONDOR_CONFIG_PATH': CONDOR_CONFIG_PATH,
 
     'LEAN_LAUNCHER_DIR': LEAN_LAUNCHER_DIR,
     'LEAN_ALGOS_FOLDER': LEAN_ALGOS_DIR,
@@ -61,7 +65,9 @@ lean_dict = {
 
     'FITNESS_CRITERIA': FITNESS_CRITERIA,
 
-    # 'ALGO_WRAPPER_SIN_PY': ALGO_WRAPPER_SIN_PY, # checking for delete
+    'LEAN_TO_INJECT_TEMPLATE_ALGO': LEAN_TO_INJECT_TEMPLATE_ALGO,
+    'LEAN_INJECTED_ALGO': LEAN_INJECTED_ALGO,
+    'LEAN_INJECTED_ALGO_JSON': LEAN_INJECTED_ALGO_JSON,
 
     }
 
@@ -86,7 +92,6 @@ CONDOR_TEST_ALGOS_DIR = 'leanQC/config/'
 CONDORGP_WITHIN_LEAN_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
 CONDORGP_IN_BACKTESTS_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/backtests/'
 
-V1_TEST_ALGO_LEAN = 'gpAlgo_trial01.py'
 
 test_dict = {
     'REASONABLE_FITNESS_SECS': 60,
@@ -107,7 +112,6 @@ test_dict = {
     'CONDORGP_WITHIN_LEAN_DIR': CONDORGP_WITHIN_LEAN_DIR,
     'CONDORGP_IN_BACKTESTS_DIR': CONDORGP_IN_BACKTESTS_DIR,
 
-    'V1_TEST_ALGO_LEAN': V1_TEST_ALGO_LEAN,
     }
 
 # ################################## ##################################

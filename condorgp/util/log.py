@@ -2,6 +2,9 @@ import logging
 import sys
 from condorgp.params import util_dict
 
+
+loggers = {}
+
 class CondorLogger:
     '''
         home grown logging, see examples below
@@ -18,13 +21,17 @@ class CondorLogger:
 
 
     def __init__(self):
+
         self.log = logging.getLogger(__name__)
+        if (self.log.hasHandlers()):
+            self.log.handlers.clear()
+
         self.log.level=logging.DEBUG # set overall level for logger
 
         formatter = logging.Formatter('%(asctime)s -  %(levelname)s - %(message)s')
 
         # further log levels for different handlers - so far to match:
-        matching_level = logging.INFO
+        matching_level = logging.DEBUG # higher (less info): INFO
 
         # create console handler and set level
         ch = logging.StreamHandler(sys.stdout)
@@ -33,10 +40,10 @@ class CondorLogger:
 
         # set basic file handler
         fh = logging.FileHandler(filename = util_dict['CONDOR_LOG'],
-                                 mode='a',
-                                 encoding=None,
-                                 delay=False,
-                                 )
+                                mode='a',
+                                encoding=None,
+                                delay=False,
+                                )
         fh.setFormatter(formatter)
         fh.setLevel(level=matching_level)
 

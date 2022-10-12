@@ -1,6 +1,5 @@
 import numpy
 from condorgp.params import test_dict
-from condorgp.factories.initial_factory import InitialFactory
 
 
 
@@ -22,3 +21,37 @@ class GpCustomFunctions:
 
     def test_C_func(x0):
         pass
+
+    def get_alpha_extant_line(self):
+        extant_line = '''
+    def cgp_set_alpha(self):
+        return ConstantAlphaModel(InsightType.Price,
+                                  InsightDirection.Up,
+                                  timedelta(minutes = 20),
+                                  0.025, None
+                                  )'''
+        return extant_line
+
+    def get_alpha_model_A(self, x0):
+        line = '''
+    def cgp_set_alpha(self):
+        return HistoricalReturnsAlphaModel()'''
+        return line
+
+    def get_alpha_model_B(self, x0):
+        line = '''
+    def cgp_set_alpha(self):
+        return EmaCrossAlphaModel()'''
+        return line
+
+    def get_alpha_model_C(self):
+        line = '''
+    def cgp_set_alpha(self):
+        return MacdAlphaModel()'''
+        return line
+
+    def get_alpha_model_D(self):
+        line = '''
+    def cgp_set_alpha(self):
+        return RsiAlphaModel()'''
+        return line

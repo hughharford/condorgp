@@ -8,24 +8,27 @@ from deap import tools
 from deap import gp
 
 from condorgp.interfaces.gp_provider import GpProvider
+from condorgp.util.log import CondorLogger
 
 class GpDeap(GpProvider):
     def __init__(self):
-        pass
+        self.log = CondorLogger().get_logger()
 
     def set_defined_pset(self, pset_obj,
-                 select_pset_name = '',
+                 new_pset_name = '',
                  functions: dict = '',
                  terminals: dict = ''):
         ''' sets the population set for the gp run.
         inputs: the functions and terminals by name, their arrity and function
         '''
 
-        if select_pset_name == '':
-            select_pset_name = 'default_untyped'
-            self.pset = pset_obj.get_default_untyped()
-        else:
-            self.pset = pset_obj.get_named_pset(select_pset_name)
+        if new_pset_name:
+            try:
+                self.log.debug(f"Gp_Deap SETTING pset: {new_pset_name}")
+                self.pset = pset_obj.get_named_pset(new_pset_name)
+            except Exception as e:
+                self.log.warn("Gp_Deap WARNING, default untyped used instead: " + str(e))
+                self.pset = pset_obj.get_default_untyped()
 
 
         # if functions == '' and terminals == '':
@@ -75,9 +78,9 @@ class GpDeap(GpProvider):
                             + self.samples**2 \
                             + self.samples
 
-    def set_pop_size(self, pop_size: int):
+    def set_pop_size(self, pop_size: int = 2):
         ''' Sets population size as required '''
-        self.pop = self.toolbox.population(n=pop_size)
+        self.pop = self.toolbox.population(pop_size)
 
     def set_evaluator(self, new_evaluator):
         ''' Sets evaluation function '''

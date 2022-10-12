@@ -59,8 +59,8 @@ def deap_sets_algo_to_Lean(utils, input_ind):
 def short_deap_run(deap_one):
     assert deap_one is not None
     newpop = 1
-    deap_one.setup_gp()
-    deap_one.set_population(newpop)
+    gens = 1
+    deap_one.setup_gp('', newpop, gens)
     deap_one.run_gp()
 
 @then(parsers.cfparse('the result: "{ROI_over_MDD_value:Float}" is found',
