@@ -26,7 +26,7 @@ class gpInjectAlgo(QCAlgorithm):
 
     ## INJECT GP CODE HERE:
 
-    def newly_injected_code(self):
+    def cgp_set_alpha(self):
         return EmaCrossAlphaModel()
 
     def Initialize(self):
@@ -51,7 +51,7 @@ class gpInjectAlgo(QCAlgorithm):
 
         # PUT IN CODE HERE >>>>>>>>>>>>>>>>>>>>>>>
         # self.SetAlpha(ConstantAlphaModel(InsightType.Price, InsightDirection.Up, timedelta(minutes = 20), 0.025, None))
-        self.SetAlpha(self.newly_injected_code())
+        self.SetAlpha(self.cgp_set_alpha())
 
         # We can define who often the EWPCM will rebalance if no new insight is submitted using:
         # Resolution Enum:

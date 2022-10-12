@@ -67,4 +67,4 @@ class gpInjectAlgo(QCAlgorithm):
 
     def OnData(self, slice):
         ''' trialling printing the incoming data slice'''
-        self.newly_injected_code(slice) # TEMP_LINE_test_05
+        self.cgp_set_alpha(slice) # TEMP_LINE_test_05

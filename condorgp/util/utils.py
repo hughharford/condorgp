@@ -203,7 +203,7 @@ class Utils:
         if src and dst:
             shutil.copy(src, dst, follow_symlinks=True)
 
-    def cp_injected_algo_in_and_sort(self, base_algo_name_ext, injection_string):
+    def cp_inject_algo_in_n_sort(self, base_algo_name_ext, injection_string):
         '''
         Take injected code, and inject. then copy across to
         localpackages, renamed file and class declaration.
