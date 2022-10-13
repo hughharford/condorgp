@@ -1,7 +1,4 @@
 import numpy
-from condorgp.params import test_dict
-
-
 
 class GpCustomFunctions:
     ''' keep custom functions in here. '''
@@ -44,14 +41,17 @@ class GpCustomFunctions:
         return EmaCrossAlphaModel()'''
         return line
 
-    def get_alpha_model_C(self):
+    def get_alpha_model_C(self, x0):
         line = '''
     def cgp_set_alpha(self):
         return MacdAlphaModel()'''
         return line
 
-    def get_alpha_model_D(self):
+    def get_alpha_model_D(self, x0):
         line = '''
     def cgp_set_alpha(self):
         return RsiAlphaModel()'''
         return line
+
+    def double(self, input):
+        return 2*input

@@ -14,6 +14,8 @@ import logging
 import numpy as np
 
 from AlgorithmImports import *
+from gp_custom_functions import GpCustomFunctions
+
 
 ### <summary>
 ### Basic template framework algorithm uses framework components to define the algorithm.
@@ -28,9 +30,11 @@ class gpInjectAlgo(QCAlgorithm):
     ## leave this line alone...
 
 
+
     def Initialize(self):
         ''' Initialise the data and resolution required, as well as the cash and start-end dates for your algorithm. All algorithms must initialized.'''
-
+        # Condorgp functions object:
+        self.cfs = GpCustomFunctions()
 
         # Set requested data resolution
         self.UniverseSettings.Resolution = Resolution.Hour
@@ -50,7 +54,10 @@ class gpInjectAlgo(QCAlgorithm):
 
         # PUT IN CODE HERE >>>>>>>>>>>>>>>>>>>>>>>
         # self.SetAlpha(ConstantAlphaModel(InsightType.Price, InsightDirection.Up, timedelta(minutes = 20), 0.025, None))
-        self.SetAlpha(self.cgp_set_alpha())
+        try:
+            self.SetAlpha(self.cgp_set_alpha())
+        except BaseException as e:
+            self.Error(f'<< CONDOR INJECT-CODE ERROR >> {str(e)}')
 
         # We can define who often the EWPCM will rebalance if no new insight is submitted using:
         # Resolution Enum:
