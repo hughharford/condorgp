@@ -31,52 +31,45 @@ class RunLean():
         Both 1 & 2 are copied into place in the Lean package.
         Then the run command is made
         '''
-
-        JSON_PATH = test_dict['CONDORGP_WITHIN_LEAN_DIR']
-        ALGO_PATH = test_dict['CONDORGP_WITHIN_LEAN_DIR']
-
+        PATH = test_dict['CONDORGP_WITHIN_LEAN_DIR']
         ALGO_NAME = input_ind
         JSON_CONFIG = input_json
+        try:
+            if input_ind == "set":  ALGO_NAME = self.set_default_ind()
+            elif input_ind == "test":   ALGO_NAME = self.set_test_ind()
+            elif input_ind == "":   ALGO_NAME = 'main.py'
 
+            if input_json == "set" or input_ind == "test":
+                JSON_CONFIG = self.set_default_config_json() # input_json
 
-        if input_ind == "set":
-            ALGO_NAME = self.set_default_individual() # input_ind
-        elif input_ind == "test":
-            ALGO_NAME = self.set_test_individual()
-        elif input_ind == "":
-            ALGO_NAME = 'main.py'
+            if highlevel_config_dict['RUN_VERBOSE_FOR_DEBUG']:
+                os. chdir("../Lean/LocalPackages/condorgp")
+                run_string = f"lean backtest {PATH}{ALGO_NAME} \
+                            --lean-config {PATH}{JSON_CONFIG} \
+                            --verbose"
+                self.log.info(f"RUNNING:  {run_string}")
+                os.system(run_string)
+                os. chdir("../../../condorgp")
+                self.util.cut_pys_in_backtest_code_dir() # tidy backtests / Results
+                self.util.pull_latest_log_into_overall_backtest_log()
+        except Exception as e:
+            self.log.error(f'ERROR, lean_runner: {run_string}')
 
-        if input_json == "set" or input_ind == "test":
-            JSON_CONFIG = self.set_default_config_json() # input_json
+    def set_default_ind(self): # input_ind
+        algo = test_dict['BASIC_TEST_ALGO_LEAN']
+        self.util.cp_ind_to_lean_algos(test_dict['CONDOR_CONFIG_PATH'], algo)
+        return algo
 
-        if highlevel_config_dict['RUN_VERBOSE_FOR_DEBUG']:
-            os. chdir("../Lean/LocalPackages/condorgp")
-            run_string = f"lean backtest {ALGO_PATH}{ALGO_NAME} \
-                        --lean-config {JSON_PATH}{JSON_CONFIG} \
-                        --verbose"
-            self.log.info(f"RUNNING:  {run_string}")
-            os.system(run_string)
-            os. chdir("../../../condorgp")
-
-            # tidy and get what our needs from backtests / Results output
-            self.util.cut_pys_from_latest_backtests_code_dir()
-            self.util.pull_latest_log_into_overall_backtest_log()
-
-    def set_default_individual(self): # input_ind
-        algo_name = test_dict['BASIC_TEST_ALGO_LEAN']
-        self.util.cp_ind_to_lean_algos(test_dict['CONDOR_CONFIG_PATH'], algo_name)
-        return algo_name
-
-    def set_test_individual(self): # input_ind
-        algo_name = test_dict['V1_TEST_ALGO_LEAN']
-        self.util.cp_ind_to_lean_algos(test_dict['CONDOR_CONFIG_PATH'], algo_name)
-        self.util.overwrite_main_with_input_ind(algo_name)
-        return algo_name
+    def set_test_ind(self): # input_ind
+        algo = test_dict['V1_TEST_ALGO_LEAN']
+        self.util.cp_ind_to_lean_algos(test_dict['CONDOR_CONFIG_PATH'], algo)
+        self.util.overwrite_main_with_input_ind(algo)
+        return algo
 
     def set_default_config_json(self): # input_json
-        f_json = test_dict['CONDOR_TEST_CONFIG_FILE_1']
-        self.util.cp_config_to_lean_launcher(test_dict['CONDOR_CONFIG_PATH'], f_json)
-        return f_json
+        json = test_dict['CONDOR_TEST_CONFIG_FILE_1']
+        self.util.cp_config_to_lean_launcher(test_dict['CONDOR_CONFIG_PATH'], json)
+        return json
 
 if __name__ == "__main__":
     lean = RunLean()

@@ -127,7 +127,7 @@ class CondorDeapLearning:
 
         # get fitness from the Lean log
         Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
-        got = self.util.get_keyed_line_in_limits(Return_over_MDD)
+        got = self.util.get_key_line_in_lim(Return_over_MDD)
         new_fitness = float(self.util.get_last_chars(got[0]))
 
         fill = '>'*17 + '_'*7

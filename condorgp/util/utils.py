@@ -61,15 +61,37 @@ class Utils:
         if count == 0: return False
         if recent > 0: return True
 
-    def pull_latest_log_into_overall_backtest_log(self):
+    def get_latest_log_dir(self):
+        latest = None
         backtestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR']
-        backtestlog = lean_dict['BACKTEST_LOG_LOCALPACKAGES']
-        foundfolders = [f for f in listdir(backtestfolder) if not isfile(join(backtestfolder, f))]
+        foundfolders = [f for f in listdir(backtestfolder) \
+                            if not isfile(join(backtestfolder, f))]
         if len(foundfolders) > 0:
             latest = ''
             for folder in foundfolders:
                 if folder > latest:
                     latest = folder
+        return latest
+
+    def get_log_filepath(self):
+        backtestdir = test_dict['CONDORGP_IN_BACKTESTS_DIR']
+        latest_folder = self.get_latest_log_dir()
+        return f'{backtestdir}{latest_folder}/log.txt'
+
+    def get_latest_log_content(self):
+        backtestdir = test_dict['CONDORGP_IN_BACKTESTS_DIR']
+        latest_folder = self.get_latest_log_dir()
+        if latest_folder:
+            # get contents
+            latestlogs = self.get_all_lines(backtestdir + latest_folder + '/log.txt')
+        else:
+            return []
+        return latestlogs
+
+    def pull_latest_log_into_overall_backtest_log(self):
+        backtestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR']
+        backtestlog = lean_dict['BACKTEST_LOG_LOCALPACKAGES']
+        latest = self.get_latest_log_dir()
         if latest != '':
             # open file, and append to existing log
             latestlogs = self.get_all_lines(backtestfolder + latest + '/log.txt')
@@ -80,7 +102,7 @@ class Utils:
             updatedlog.close()
         return latest
 
-    def cut_pys_from_latest_backtests_code_dir(self):
+    def cut_pys_in_backtest_code_dir(self):
         latestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR'] + \
             self.pull_latest_log_into_overall_backtest_log() + '/code/'
         onlyfiles = \
@@ -145,9 +167,9 @@ class Utils:
             if str(key) in line: return line, i
         return '', -1
 
-    def get_keyed_line_in_limits(self,
+    def get_key_line_in_lim(self,
             key,
-            log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES'],
+            log_filepath = lean_dict['BACKTEST_LOG_LOCALPACKAGES'],
             limit_lines = util_dict['NO_LOG_LINES'],
             start_line = 0)-> tuple:
         '''
@@ -158,7 +180,7 @@ class Utils:
         '''
         found_tuple = self.retrieve_log_line_with_key(
             key = key,
-            log_file_n_path = log_file_n_path)
+            log_file_n_path = log_filepath)
 
         line = found_tuple[0]
         no_lines_after_start = found_tuple[1]

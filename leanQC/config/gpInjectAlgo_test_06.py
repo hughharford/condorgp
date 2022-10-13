@@ -14,6 +14,20 @@ import logging
 import numpy as np
 
 from AlgorithmImports import *
+# both these imports work in theory, but CAUSES ERRORS WITH C# python wrapper:
+#### # AlgorithmFactory/Python/Wrappers/AlgorithmPythonWrapper.cs:line 74 in main.py: line 19
+#### #  No module named 'condorgp'
+# from condorgp.gp.gp_control import GpControl
+
+# this didn't work, condorgp path already in sys.path:
+# import site
+# import sys
+# site.addsitedir('../../condorgp')  # Always appends to end
+# # /home/hsth/code/hughharford/condorgp/condorgp
+# print(sys.path)
+
+# import condorgp.gp.gp_functions
+
 
 ### <summary>
 ### Basic template framework algorithm uses framework components to define the algorithm.
@@ -27,6 +41,9 @@ class gpInjectAlgo(QCAlgorithm):
     ## INJECT GP CODE HERE:
     ## leave this line alone...
 
+    def newly_injected_code(self):
+        gpf = GpFunctions()
+        gpf.print_out_please()
 
     def Initialize(self):
         ''' Initialise the data and resolution required, as well as the cash and start-end dates for your algorithm. All algorithms must initialized.'''
@@ -50,7 +67,10 @@ class gpInjectAlgo(QCAlgorithm):
 
         # PUT IN CODE HERE >>>>>>>>>>>>>>>>>>>>>>>
         # self.SetAlpha(ConstantAlphaModel(InsightType.Price, InsightDirection.Up, timedelta(minutes = 20), 0.025, None))
-        self.SetAlpha(self.cgp_set_alpha())
+        try:
+            self.SetAlpha(self.cgp_set_alpha())
+        except BaseException as e:
+            self.Error(f'<< CONDOR INJECT-CODE ERROR >> {str(e)}')
 
         # We can define who often the EWPCM will rebalance if no new insight is submitted using:
         # Resolution Enum:

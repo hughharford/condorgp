@@ -54,6 +54,6 @@ def injected_algo_includes(gpc):
 def output_isnt_mdd(utils, gpc, RoMDD):
     max_fitness_found = gpc.gp.logbook.select("max")[-1]
     print(max_fitness_found)
-    assert max_fitness_found
+    assert max_fitness_found == RoMDD
     # THEN TIDY UP TOO
     utils.del_pys_from_local_packages()
