@@ -89,6 +89,29 @@ class GpPsets:
         self.test6b.addPrimitive(self.cfs.get_alpha_model_B,1)
         return self.test6b
 
+
+    def get_test_pset7aTyped(self):
+        ''' test pset 7aTyped '''
+        self.test7a = gp.PrimitiveSetTyped("test pset 7aTyped",[object],str)
+        self.test7a.addTerminal(1, int)
+        self.test7a.addTerminal(0, int)
+        self.test7a.addPrimitive(self.cfs.get_alpha_model_A,[int],str)
+        self.test7a.addPrimitive(self.cfs.get_alpha_model_B,[int],str)
+        self.test7a.addPrimitive(self.cfs.get_alpha_model_C,[int],str)
+        self.test7a.addPrimitive(self.cfs.get_alpha_model_D,[int],str)
+        # dummy int primitive, with name "" to avoid func call
+        self.test7a.addPrimitive(self.cfs.double,[int],int, "")
+
+        return self.test7a
+
+    class pt_alpha: pass
+
+    def get_test_pset8a(self):
+        '''test_pset8a'''
+        self.test8a = gp.PrimitiveSetTyped("test_pset8a")
+
+        return self.test8a
+
     def get_adf2(self):
         self.adfset2 = gp.PrimitiveSet("ADF2", 2)
         self.adfset2.addPrimitive(operator.add, 2)

@@ -117,4 +117,5 @@ class GpDeap(GpProvider):
                                                     self.ngen,
                                                     self.stats,
                                                     halloffame=self.hof)
+        self.logbook.header = "gen", "nevals", "avg", "std", "min", "max"
         return self.pop, self.stats, self.hof, self.logbook

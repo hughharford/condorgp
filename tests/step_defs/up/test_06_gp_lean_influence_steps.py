@@ -39,7 +39,7 @@ scenarios('../../features/06_gp_lean_influence.feature')
 @pytest.mark.usefixtures("gpc")
 def gpcontrol_run_with(gpc, pset_input):
     ''' sets one of two different psets '''
-    gpc.setup_gp(pset_input, 2, 1)
+    gpc.setup_gp(pset_input, 4, 2)
     gpc.set_test_evaluator('eval_test_6')
 
 @when('the injected algo is varied')
@@ -50,10 +50,7 @@ def injected_algo_includes(gpc):
                         extra_types=EXTRA_TYPES),
                         target_fixture='RoMDD')
 @then('Lean o/p is NOT "<RoMDD>"', target_fixture='RoMDD')
-@pytest.mark.usefixtures("utils")
-def output_isnt_mdd(utils, gpc, RoMDD):
+def output_isnt_mdd(gpc, RoMDD):
     max_fitness_found = gpc.gp.logbook.select("max")[-1]
     print(max_fitness_found)
     assert max_fitness_found == RoMDD
-    # THEN TIDY UP TOO
-    utils.del_pys_from_local_packages()

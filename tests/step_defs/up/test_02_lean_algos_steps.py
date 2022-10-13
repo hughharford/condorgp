@@ -84,7 +84,7 @@ def results_files_are_updated(utils, output_ind):
 def check_results(ROI_over_MDD_value, utils):
     key_req = 'Return Over Maximum Drawdown'
     limit_lines = 25 # util_dict['NO_LOG_LINES']
-    got = utils.get_keyed_line_in_limits(key_req, limit_lines = limit_lines)
+    got = utils.get_key_line_in_lim(key_req, limit_lines = limit_lines)
 
     assert got[0] != 'not found'
     assert got[1] > 0 and got[1] < limit_lines

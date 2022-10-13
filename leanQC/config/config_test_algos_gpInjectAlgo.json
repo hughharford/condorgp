@@ -24,5 +24,7 @@
     "maximum-data-points-per-chart-series": 4000,
     "force-exchange-always-open": false,
     "transaction-log": "",
-    "local-id": 665721380
+    "local-id": 665721380,
+    "python-additional-paths": ["../../condorgp"]
+
 }

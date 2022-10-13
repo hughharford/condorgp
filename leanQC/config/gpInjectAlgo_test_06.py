@@ -14,19 +14,7 @@ import logging
 import numpy as np
 
 from AlgorithmImports import *
-# both these imports work in theory, but CAUSES ERRORS WITH C# python wrapper:
-#### # AlgorithmFactory/Python/Wrappers/AlgorithmPythonWrapper.cs:line 74 in main.py: line 19
-#### #  No module named 'condorgp'
-# from condorgp.gp.gp_control import GpControl
-
-# this didn't work, condorgp path already in sys.path:
-# import site
-# import sys
-# site.addsitedir('../../condorgp')  # Always appends to end
-# # /home/hsth/code/hughharford/condorgp/condorgp
-# print(sys.path)
-
-# import condorgp.gp.gp_functions
+from gp_custom_functions import GpCustomFunctions
 
 
 ### <summary>
@@ -41,13 +29,12 @@ class gpInjectAlgo(QCAlgorithm):
     ## INJECT GP CODE HERE:
     ## leave this line alone...
 
-    def newly_injected_code(self):
-        gpf = GpFunctions()
-        gpf.print_out_please()
+
 
     def Initialize(self):
         ''' Initialise the data and resolution required, as well as the cash and start-end dates for your algorithm. All algorithms must initialized.'''
-
+        # Condorgp functions object:
+        self.cfs = GpCustomFunctions()
 
         # Set requested data resolution
         self.UniverseSettings.Resolution = Resolution.Hour

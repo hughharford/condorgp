@@ -47,6 +47,7 @@ class RunLean():
                 run_string = f"lean backtest {PATH}{ALGO_NAME} \
                             --lean-config {PATH}{JSON_CONFIG} \
                             --verbose"
+                # N.B. runs defaults docker image: quantconnect/lean:latest
                 self.log.info(f"RUNNING:  {run_string}")
                 os.system(run_string)
                 os. chdir("../../../condorgp")
@@ -72,7 +73,60 @@ class RunLean():
         return json
 
 if __name__ == "__main__":
-    lean = RunLean()
-    lean.run_lean_via_CLI()
-
     # lean.run_lean_via_CLI('test')
+
+    config_to_run = lean_dict['LEAN_INJECTED_ALGO_JSON']
+    lean = RunLean()
+    lean.run_lean_via_CLI(input_ind='main.py', input_json=config_to_run)
+
+# NOTE:
+#       Trying to run an algo within Lean/LocalPackages that imports from condorgp doesn't seem easy.
+# # both these imports work in theory, but CAUSE ERRORS WITH C# python wrapper:
+#### # AlgorithmFactory/Python/Wrappers/AlgorithmPythonWrapper.cs:line 74 in main.py: line 19
+#### #  No module named 'condorgp'
+# from condorgp.gp.gp_control import GpControl
+
+# this didn't work, condorgp path already in sys.path:
+# import site
+# import sys
+# site.addsitedir('../../condorgp')  # Always appends to end
+# # /home/hsth/code/hughharford/condorgp/condorgp
+# print(sys.path)
+
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#       See error trace below on the import of main.py:
+
+#     20221013 13:57:31.179 ERROR:: Algorithm.Initialize() Error: During the algorithm initialization, the following
+# exception has occurred: Loader.TryCreatePythonAlgorithm(): Unable to import python module /LeanCLI/main.py.
+# AlgorithmPythonWrapper(): No module named 'condorgp'
+#   at <module>
+#     from condorgp.gp.gp_functions import GpFunctions
+#    at Python.Runtime.PythonException.ThrowLastAsClrException()
+#    at Python.Runtime.NewReferenceExtensions.BorrowOrThrow(NewReference& reference)
+#    at Python.Runtime.PyModule.Import(String name)
+#    at Python.Runtime.Py.Import(String name)
+#    at QuantConnect.AlgorithmFactory.Python.Wrappers.AlgorithmPythonWrapper..ctor(String moduleName) at
+# AlgorithmFactory/Python/Wrappers/AlgorithmPythonWrapper.cs:line 74 in main.py: line 29
+#  No module named 'condorgp' Stack Trace: During the algorithm initialization, the following exception has occurred:
+# Loader.TryCreatePythonAlgorithm(): Unable to import python module /LeanCLI/main.py. AlgorithmPythonWrapper(): No module named
+# 'condorgp'
+#   at <module>
+#     from condorgp.gp.gp_functions import GpFunctions
+#    at Python.Runtime.PythonException.ThrowLastAsClrException()
+#    at Python.Runtime.NewReferenceExtensions.BorrowOrThrow(NewReference& reference)
+#    at Python.Runtime.PyModule.Import(String name)
+#    at Python.Runtime.Py.Import(String name)
+#    at QuantConnect.AlgorithmFactory.Python.Wrappers.AlgorithmPythonWrapper..ctor(String moduleName) at
+# AlgorithmFactory/Python/Wrappers/AlgorithmPythonWrapper.cs:line 74 in main.py: line 29
+#  No module named 'condorgp'
+#  During the algorithm initialization, the following exception has occurred: Loader.TryCreatePythonAlgorithm(): Unable to import
+# python module /LeanCLI/main.py. AlgorithmPythonWrapper(): No module named 'condorgp'
+#   at <module>
+#     from condorgp.gp.gp_functions import GpFunctions
+#    at Python.Runtime.PythonException.ThrowLastAsClrException()
+#    at Python.Runtime.NewReferenceExtensions.BorrowOrThrow(NewReference& reference)
+#    at Python.Runtime.PyModule.Import(String name)
+#    at Python.Runtime.Py.Import(String name)
+#    at QuantConnect.AlgorithmFactory.Python.Wrappers.AlgorithmPythonWrapper..ctor(String moduleName) at
+# AlgorithmFactory/Python/Wrappers/AlgorithmPythonWrapper.cs:line 74 in main.py: line 29
+#  No module named 'condorgp'

@@ -3,10 +3,11 @@ from condorgp.params import util_dict, test_dict, lean_dict
 from condorgp.factories.initial_factory import InitialFactory
 from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
 
+
 class GpControl:
     def __init__(self):
         '''
-            Here is where the gp is controlled from.
+            Where the gp is controlled from.
             Setup, sizing, initiation of gp runs: psets, operators, evaluator
             The major dependency is DEAP.
         '''
@@ -19,6 +20,7 @@ class GpControl:
         # default population set and evaluator (fitness function)
         self.default_pset = 'default_untyped'
         self.default_eval = self.evalIntoAndFromLean
+        self.default_tidyup = 1
         self.run_lean = 1 # 1 = run lean in evaluation func, 0 = don't
 
     def inject_gp(self):
@@ -68,6 +70,9 @@ class GpControl:
         stat_params = {}        # Set 7: the stats feedback
         self.gp.set_stats(stat_params)
 
+        # additionally, copy gp_custom_functions to LocalPackages:
+        self.util.cp_custom_funcs_to_lp() # cf tidy up in run_gp, default on
+
     def set_population(self, pop_size):
         self.gp.set_pop_size(pop_size)
 
@@ -96,6 +101,7 @@ class GpControl:
     def run_gp(self, inputs = [0,0,0]):
         ''' undertakes the run as specified'''
         self.gp.run_gp(inputs)
+        if self.default_tidyup: self.util.del_pys_from_local_packages()
 
     def get_logbook(self):
         return self.gp.logbook
@@ -156,8 +162,8 @@ class GpControl:
         # additional code to inject (approaching from individual...)
         try:
             self.util.cp_inject_algo_in_n_sort('_test_06.py', str(individual))
-        except:
-            self.log.debug(f'{individual} not wrapped')
+        except Exception as e:
+            self.log.debug(f'{individual} not wrapped: {str(e)}')
             new_fitness = -100.0
         config_to_run = lean_dict['LEAN_INJECTED_ALGO_JSON']
         try:
@@ -176,14 +182,21 @@ class GpControl:
 if __name__ == "__main__":
 
     eval_used = 'eval_test_6'
-    pset_used = 'test_pset6b'
-    pop = 2
-    gens = 1
+    pset_used = 'test_pset7aTyped'
+    pop = 5
+    gens = 2
     c = GpControl()
     c.setup_gp(pset_used, pop, gens)
     c.run_lean = 1
+    c.default_tidyup = 1
     c.set_test_evaluator(eval_used)
     c.run_gp()
+
+    print('Hall of fame:')
+    for x, individual in enumerate(c.gp.hof):
+        print(c.gp.hof.items[x])
+
+    print(c.gp.logbook)
 
     print(f"DIRECT GpControl run, using: \
           evaluator: {eval_used} , and pset: {pset_used}")

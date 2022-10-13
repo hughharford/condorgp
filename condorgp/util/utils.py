@@ -225,7 +225,7 @@ class Utils:
         if src and dst:
             shutil.copy(src, dst, follow_symlinks=True)
 
-    def cp_inject_algo_in_n_sort(self, base_algo_name_ext, injection_string):
+    def cp_inject_algo_in_n_sort(self, base_algo_name_ext, inj_str):
         '''
         Take injected code, and inject. then copy across to
         localpackages, renamed file and class declaration.
@@ -233,11 +233,11 @@ class Utils:
         done_injectedAlgo_to_copy_in = lean_dict['LEAN_INJECTED_ALGO']
 
         # check and wrap evolved code if need be:
-        if 'def' not in injection_string:
-            injection_string = self.wrap_injection_str(injection_string)
+        if 'def' not in inj_str:
+            inj_str = self.wrap_injection_str(inj_str)
 
         # inject evolved code into algo py file
-        self.inject_evolved_func_in(base_algo_name_ext, injection_string)
+        self.inject_evolved_func_in(base_algo_name_ext, inj_str)
 
         # copy file across:
         self.copy_algo_in(done_injectedAlgo_to_copy_in)
@@ -248,14 +248,16 @@ class Utils:
         # go into gpInjectAlgo_done.py and rename class to condorgp:
         self.rename_main_class_as_condorgp(gpInjectAlgo_class_line = True)
 
-    def wrap_injection_str(self, injection_string):
-        content = eval(f'self.cfs.{injection_string}')
-    #     wrapped = f'''
-    # def newly_injected_code(self):
-    #     return {content}'''
+    def simple_eval(self, inj_str):
+        print(eval(f'self.cfs.{inj_str}'))
 
-        print(' >>>>>>>>>>>>>>>>>> UTILS.wrap_injection_str: ', content)
-        return content
+    def wrap_injection_str(self, inj_str):
+        try:
+            content = eval(f'self.cfs.{inj_str}')
+            print(' >>>>>>>>>>>>>>>>>> UTILS.wrap_injection_str: ', content)
+            return content
+        except Exception as e:
+            print(f'UTILS.wrap_injection_str FAILED: {inj_str}, {str(e)}')
 
     def inject_evolved_func_in(self, base_algo_name_ext, str_for_injection = ''):
         '''
@@ -267,10 +269,8 @@ class Utils:
         config_path = lean_dict['CONDOR_CONFIG_PATH']
         f_name_n_path = config_path + lean_dict['LEAN_TO_INJECT_TEMPLATE_ALGO']
         f_name_n_path = f_name_n_path[0:-3] + base_algo_name_ext
-
         f_new_file = config_path + lean_dict['LEAN_INJECTED_ALGO']
         key_line = '## INJECT GP CODE HERE:'
-
         # careful here, the indentation is crucial,
         # see initial replacement line string:
         replacement_line = '''
@@ -278,21 +278,15 @@ class Utils:
         self.Debug("eval_test_XX: injected_code_test {data_in}")'''
         if str_for_injection != '':
             replacement_line = str_for_injection
-
         with open(f_name_n_path, 'r') as f:
             lines = f.readlines()
-
         with open(f_new_file, 'w') as f:
             count = 0
             next = 0
             for line in lines:
-                if key_line in line and count == 0:
-                    count += 1
-                if next == 1:
-                    line = replacement_line
-                    # print(line)
-                if count > 0:
-                    next += 1
+                if key_line in line and count == 0: count += 1
+                if next == 1: line = replacement_line
+                if count > 0: next += 1
                 f.write(line)
 
 
@@ -351,6 +345,11 @@ class Utils:
         self.cp_ind_to_lean_algos(test_ind_path, input_ind)
         self.overwrite_main_with_input_ind(input_ind)
 
+    def cp_custom_funcs_to_lp(self):
+        file_path = lean_dict['GP_CONDORGP_PATH']
+        filename = 'gp_custom_functions.py'
+        self.cp_ind_to_lean_algos(file_path, filename)
+
     def list_pys_in_folder(self, folder):
         pys = []
         pys = [f for f in listdir(folder) if \
@@ -368,14 +367,17 @@ if __name__ == "__main__":
     pass
     print('going...')
     u = Utils()
-    u.del_pys_from_local_packages()
-    print(u.list_pys_in_folder(lean_dict['LOCALPACKAGES_PATH']))
+
+    u.cp_custom_funcs_to_lp()
+
+    # inj = 'get_alpha_model_B(double(double(0)))'
+    # u.simple_eval(inj)
 #    u.cp_injected_algo_in_and_sort('_test_06.py','')
 
 
     # key_req = 'Return Over Maximum Drawdown'
     # limit_lines = 25 # util_dict['NO_LOG_LINES']
-    # got = u.get_keyed_line_within_limits(key_req, limit_lines = limit_lines)
+    # got = u.get_key_line_in_lim(key_req, limit_lines = limit_lines)
 
     # print(u.get_last_chars(got[0]))
     # print(type(u.get_last_chars(got[0])))

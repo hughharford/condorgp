@@ -24,7 +24,7 @@ class GpFunctions:
             cgp_error_mark = '<< CONDOR INJECT-CODE ERROR >>' # check for error
             for line in latest_log:
                 if cgp_error_mark in line:
-                    self.log.warn(f'<<< gpf.get_fitness_6: inject error')
+                    self.log.warn(f'<<< gpf.get_fit_6: inject error')
                     return -9999.9
 
             # if no errors, retrieve fitness
@@ -34,11 +34,13 @@ class GpFunctions:
                                                 log_filepath = log,
                                                 limit_lines = lim)
             f = float(self.util.get_last_chars(got[0]))
-            self.log.debug(f'<<< gpf.get_fitness_6 fitness = {f}, from {log}')
-            # get_fitness_6
+            self.log.debug(f'<<< gpf.get_fit_6 fitness = {f}, from {log}')
         else:
             f = -8888.8 # no backtest folder found
-            self.log.warn(f'<<< gpf.get_fitness_6 fitness {f}, no folder found')
+            self.log.warn(f'<<< gpf.get_fit_6 fitness {f}, no folder found')
+        if f > 1_000_000:
+            f = -1111.1 # set low if actually 7.922e28!
+            self.log.warn(f'<<< gpf.get_fit_6 fitness = {f}, as 7.922e28!')
         return f
 
 if __name__ == "__main__":

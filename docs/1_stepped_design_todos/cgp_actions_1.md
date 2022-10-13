@@ -4,16 +4,9 @@
 ## REQUIREMENTS
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-check through new gp_functions.get_fit_6
-      # test_06 fails when it should pass...
-      # this is not simple...
-      # for a start:
-          # the gp outcomes are not always the same
-          # get_fit_6() now has logging to show where the fitness came from
-      # test_06 definitely passes sometimes
 
   # enable strongly-typed deap gp
-      # use strongly typed gp to control the tree
+      # DONE use first strongly typed gp to control the tree
 
       # design and build the trunk and branches to structure the output
           @ might be simpler to evolve as many adfs or trees as required?
@@ -25,8 +18,20 @@ check through new gp_functions.get_fit_6
 
       # ADFs, surely?
           @ an adfset is just a PrimitiveSetTyped
-          @ these can
+          @ these can be evolved alongside, and be accessed via a simple list
 
+      # TYPING REQUIREMENTS (given no import into Lean/LocalPackages yet):
+          # copy a .py with all functions into Lean/LocalPackages
+          # keep a dict: {'function_name':'replacement_string'}
+          # the replacement_string transforms from
+          #                     function name - e.g. 'double'
+          #                     to
+          #           referenced function name, e.g. 'cfs.double'
+          #           where
+          #           cfs is the object name for GpCustomFunctions
+
+
+  # set up condorgp STGP with Lean features we can vary:
       # Lean requires / can feature:
             initialise
             alpha models
@@ -56,7 +61,9 @@ check through new gp_functions.get_fit_6
             # creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
             # creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
       # PROGRESS ON THIS:
-          # see test_06b
+          # see test_07
+            # evaluator: eval_test_7 , and pset: test_pset7aTyped
+
 
 
   # logging functioning as intended
@@ -75,6 +82,16 @@ check through new gp_functions.get_fit_6
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # DONE
+
+  # check through new gp_functions.get_fit_6
+      # DONE Enough for now...
+
+      # test_06 fails when it should pass...
+      # this is not simple...
+      # for a start:
+          # the gp outcomes are not always the same
+          # get_fit_6() now has logging to show where the fitness came from
+      # test_06 definitely passes sometimes
 
   # build error catching into lean_runner
       # DONE: enable error checking from Lean logs

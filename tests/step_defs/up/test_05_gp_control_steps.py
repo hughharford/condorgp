@@ -115,8 +115,8 @@ def provided_the(gpc, arg_input):
 def condor_log_contains(gpc, text_output):
     ''' checks condor log for text expected '''
     log_file_n_path = util_dict['CONDOR_LOG']
-    output = gpc.util.get_keyed_line_in_limits(text_output,
-                                        log_file_n_path = log_file_n_path)
+    output = gpc.util.get_key_line_in_lim(text_output,
+                                        log_filepath = log_file_n_path)
     assert text_output in output[0]
 
 @then('the algorithm is tidied away')
@@ -172,7 +172,7 @@ def a_run_is_done(gpc3):
 def first_result_is(utils, t1):
     key_req = 'TRACE:: Debug: eval_test_5_3:'
     limit_lines = 125 # util_dict['NO_LOG_LINES']
-    got = utils.get_keyed_line_in_limits(key_req, limit_lines = limit_lines)
+    got = utils.get_key_line_in_lim(key_req, limit_lines = limit_lines)
 
     assert got[0] != 'not found'
     assert got[1] > 0 and got[1] < limit_lines
@@ -181,5 +181,3 @@ def first_result_is(utils, t1):
 @then('2nd result is')
 def second_result_is():
     assert 1 == 1
-        # THEN TIDY UP TOO
-    utils.del_pys_from_local_packages()
