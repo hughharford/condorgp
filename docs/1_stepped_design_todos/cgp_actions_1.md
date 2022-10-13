@@ -4,9 +4,13 @@
 ## REQUIREMENTS
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # build error catching into lean_runner
-      # TODO: enable error checking from Lean logs
-      # TODO: report -99999 fitness when this happens
+check through new gp_functions.get_fit_6
+      # test_06 fails when it should pass...
+      # this is not simple...
+      # for a start:
+          # the gp outcomes are not always the same
+          # get_fit_6() now has logging to show where the fitness came from
+      # test_06 definitely passes sometimes
 
   # enable strongly-typed deap gp
       # use strongly typed gp to control the tree
@@ -23,8 +27,21 @@
           @ an adfset is just a PrimitiveSetTyped
           @ these can
 
-      # Lean requires:
-            alpha,
+      # Lean requires / can feature:
+            initialise
+            alpha models
+            on_data
+            on_update (for stock changes)
+            portfolio construction
+            execution models
+            risk management
+
+
+  # Custom typing as part of strongly typed GP
+      # see DEAP Custom Typing ___ in Firefox bookmarks under: DEAP
+      #  primitive and a terminal for each type you defined, or else DEAP won't be able to generate arbitrarily shaped trees.
+      # REF: https://groups.google.com/g/deap-users/c/NgL8_rYr4MI/m/-rg4LJJgAAAJ
+
 
 
   # shows +ve fitness change, using fitness max
@@ -43,8 +60,8 @@
 
 
   # logging functioning as intended
-      # logging to: /home/hsth/code/hughharford/condorgp/condorgp/util/logs/condor_log.txt
-      # logging to localpackages/condorgp
+      # DONE: logging to: /home/hsth/code/hughharford/condorgp/condorgp/util/logs/condor_log.txt
+      # TODO: logging to localpackages/condorgp
 
 
   # ability to set, run, and restart a pickled population (checkpointing)
@@ -52,13 +69,19 @@
       # confirm can unpickle and run
     # REF: https://deap.readthedocs.io/en/master/tutorials/advanced/checkpoint.html
 
-  # make robust randomised fitness function
-    # TODO: take an algorithm with evolved and injected code, and vary dates
-    # TODO: ensure a range of randomised set of dates, aim for enough so that
-            'many' but 'randomised' tests are all "equivalent enough"
+
+
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # DONE
+
+  # build error catching into lean_runner
+      # DONE: enable error checking from Lean logs
+        # search for, see examples of:
+            ERROR:: << CONDOR INJECT-CODE ERROR >>
+      # DONE: report -99999 fitness when this happens
+          see gp_functions.get_fit_6 and related
 
   # setup gp structure to run effectively with lean
       # DONE: test that required functionality provided in lean-evaluated class
