@@ -3,21 +3,118 @@ import numpy
 import random
 import operator
 import math
+from datetime import timedelta
 
 from condorgp.util.log import CondorLogger
+# from AlgorithmImports import *
+from QuantConnect.Algorithm.Framework.Alphas import *
+    # MacdAlphaModel, EmaCrossAlphaModel, BasePairsTradingAlphaModel
+from QuantConnect import Resolution
+from QuantConnect.Indicators import *
+from QuantConnect.Algorithm import QCAlgorithm
+# fails: from QuantConnnect.Common import *
 
+
+class pt_alpha():
+    def __init__(self) -> None:
+        # see Lean/Algorithm.Framework/Alphas
+        # self.MACD = MacdAlphaModel(fastPeriod = 12,
+        #         slowPeriod = 26,
+        #         signalPeriod = 9,
+        #         movingAverageType = MovingAverageType.Exponential,
+        #         resolution = Resolution.Daily)
+        self.EMA = EmaCrossAlphaModel(fastPeriod = 12,
+                slowPeriod = 26,
+                resolution = Resolution.Daily)
+        self.BPTA = BasePairsTradingAlphaModel(
+                lookback = 1,
+                resolution = Resolution.Daily,
+                threshold = 1)
+        # for later...
+        # self.BPTA_0 = BasePairsTradingAlphaModel()
+
+class pt_method():
+    # def __init__(self) -> None:
+    #     # takes IAlphaModel or just AlphaModel?
+    #     self.AddAlpha = QCAlgorithm.AddAlpha() # P, ret: AlphaModel
+    #     self.SetAlpha = QCAlgorithm.SetAlpha(RsiAlphaModel()) # T, None
+    AddAlpha = QCAlgorithm.AddAlpha() # P, ret: AlphaModel
+
+
+class pt_indicator():
+    def __init__(self):
+        self.sma = QCAlgorithm.SMA("SPY", 60, Resolution.Minute())
+
+class pt_resolution():
+    def __init__(self):
+        self.Daily = Resolution.Daily
+        self.Hour = Resolution.Hour
+        self.Minute = Resolution.Minute
+        self.Hour_0 = timedelta(minutes=60)
+        # self.x = Resolution(4)
+
+
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 class GpPsets:
     def __init__(self, custom_funcs):
         self.cfs = custom_funcs
         self.log = CondorLogger().get_logger()
+        # self.pt_method = pt_method()
+        self.pt_alpha = pt_alpha()
+        # self.pt_indicator = pt_indicator()
+        self.pt_resolution = pt_resolution()
 
     def get_named_pset(self, named_pset):
         try:
             return eval('self.get_' + named_pset + '()')
-        except Exception as e:
+        except BaseException as e:
             print("GpPsets ERROR: " + str(e))
             return None
 
+    def get_test_pset8aTyped(self):
+        '''test_pset8aTyped'''
+        self.test8a = gp.PrimitiveSetTyped("test_pset8aTyped",[pt_method],None)
+
+        # pt_method (P and T)
+        # EXPECT TO CUT THIS OUT AND REPLACE pset in-type with pt_alpha
+        self.test8a.addPrimitive(
+            pt_method.AddAlpha, [pt_alpha], pt_method)
+        self.test8a.addTerminal(
+            QCAlgorithm.SetAlpha(RsiAlphaModel()),
+            [pt_method],
+            name = "self.SetAlpha(RsiAlphaModel()")
+
+        # pt_alpha (P and T)
+        self.test8a.addTerminal(pt_alpha.EMA, pt_alpha)
+        self.test8a.addTerminal(pt_alpha.MACD, pt_alpha)
+        self.test8a.addTerminal(pt_alpha.BPTA, pt_alpha)
+        self.test8a.addPrimitive(
+            EmaCrossAlphaModel, [int, int, Resolution], pt_alpha)
+        # self.test8a.addPrimitive()
+
+        # pt_resolution (P and T)
+        self.test8a.addPrimitive(Resolution, str)
+        self.test8a.addTerminal(Resolution.Hour, Resolution)
+        self.test8a.addTerminal(Resolution.Minute, Resolution)
+        self.test8a.addTerminal(Resolution.Second, Resolution)
+
+        self.test8a.addTerminal("Hourly", str, name=".Hour")
+        self.test8a.addTerminal("Minute", str, name=".Minute")
+
+        # int (P and T)
+        self.test8a.addTerminal(1, int)
+        self.test8a.addTerminal(2, int)
+        self.test8a.addTerminal(3, int)
+        self.test8a.addTerminal(5, int)
+        self.test8a.addTerminal(10, int)
+        self.test8a.addTerminal(20, int)
+        self.test8a.addPrimitive(operator.add, [int, int], int)
+        self.test8a.addPrimitive(operator.sub, [int, int], int)
+        self.test8a.addPrimitive(operator.mul, [int, int], int)
+        self.test8a.addPrimitive(self.cfs.protectedDiv, [int, int], int)
+        self.test8a.addPrimitive(operator.neg, [int], int)
+
+        return self.test823
     def get_default_untyped(self):
          # basic untyped deap.gp.PrimitiveSet:
         self.default_untyped = gp.PrimitiveSet("DEFAULT UNTYPED", 1)
@@ -104,20 +201,13 @@ class GpPsets:
 
         return self.test7a
 
-    class pt_alpha: pass
-
-    def get_test_pset8a(self):
-        '''test_pset8a'''
-        self.test8a = gp.PrimitiveSetTyped("test_pset8a")
-
-        return self.test8a
 
     def get_adf2(self):
         self.adfset2 = gp.PrimitiveSet("ADF2", 2)
         self.adfset2.addPrimitive(operator.add, 2)
         self.adfset2.addPrimitive(operator.sub, 2)
         self.adfset2.addPrimitive(operator.mul, 2)
-        self.adfset2.addPrimitive(self.custom_funcs.protectedDiv, 2)
+        self.adfset2.addPrimitive(self.cfs.protectedDiv, 2)
         self.adfset2.addPrimitive(operator.neg, 1)
         self.adfset2.addPrimitive(math.cos, 1)
         self.adfset2.addPrimitive(math.sin, 1)
@@ -130,7 +220,7 @@ class GpPsets:
         self.adfset1.addPrimitive(operator.add, 2)
         self.adfset1.addPrimitive(operator.sub, 2)
         self.adfset1.addPrimitive(operator.mul, 2)
-        self.adfset1.addPrimitive(self.custom_funcs.protectedDiv, 2)
+        self.adfset1.addPrimitive(self.cfs.protectedDiv, 2)
         self.adfset1.addPrimitive(operator.neg, 1)
         self.adfset1.addPrimitive(math.cos, 1)
         self.adfset1.addPrimitive(math.sin, 1)
@@ -144,7 +234,7 @@ class GpPsets:
         self.adfset0.addPrimitive(operator.add, 2)
         self.adfset0.addPrimitive(operator.sub, 2)
         self.adfset0.addPrimitive(operator.mul, 2)
-        self.adfset0.addPrimitive(self.custom_funcs.protectedDiv, 2)
+        self.adfset0.addPrimitive(self.cfs.protectedDiv, 2)
         self.adfset0.addPrimitive(operator.neg, 1)
         self.adfset0.addPrimitive(math.cos, 1)
         self.adfset0.addPrimitive(math.sin, 1)

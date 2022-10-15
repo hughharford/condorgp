@@ -1,0 +1,150 @@
+INITIAL ISSUE:
+          ModuleNotFoundError: No module named 'clr'
+
+See trace:
+
+Traceback (most recent call last):
+  File "/home/hsth/code/hughharford/condorgp/condorgp/gp/gp_advanced_con.py", line 1, in <module>
+    from gp_control import GpControl
+  File "/home/hsth/code/hughharford/condorgp/condorgp/gp/gp_control.py", line 3, in <module>
+    from condorgp.factories.initial_factory import InitialFactory
+  File "/home/hsth/code/hughharford/condorgp/condorgp/factories/initial_factory.py", line 3, in <module>
+    from condorgp.gp.gp_psets import GpPsets
+  File "/home/hsth/code/hughharford/condorgp/condorgp/gp/gp_psets.py", line 10, in <module>
+    from QuantConnect.Algorithm.Framework.Alphas import *
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/QuantConnect/__init__.py", line 27, in <module>
+    from clr import AddReference
+ModuleNotFoundError: No module named 'clr'
+
+after installing mono and pythonnet (see requirements.txt)
+and
+#                       export PYTHONNET_PYDLL=libpython3.8.so
+
+This worked, briefly, and got the error below...
+
+Things done that might have changed things...(!)
+*******************************************************************************************************************************
+
+ALL IN LEAN FOLDER:
+    git pull
+
+    sudo dotnet build QuantConnect.Lean.sln
+
+cd Launcher/bin/Debug                                               [🐍 lewagon]
+    dotnet QuantConnect.Lean.Launcher.dll
+
+
+TRYING PREVIOUS STEPS TO OVERWRITE THE STEPS ABOVE
+
+pip install lean
+
+NOTE: version: Python 3.8.12
+
+Cannot find libpython3.8.so
+  whereis python3.8.12
+
+/home/hsth/.pyenv/shims/python3.8
+/usr/bin/python3.8
+/bin/python3.8
+
+*************
+NEED TO SET PYTHONNET_PYDLL CORRECTLY
+*************
+trying:
+      export PYTHONNET_PYDLL=/home/hsth/.pyenv/versions/3.8.12/lib/python3.8
+      - obviously, this didn't work...!
+
+      CORRECT PATH:
+      export PYTHONNET_PYDLL=/usr/lib/python3.8/config-3.8-x86_64-linux-gnu/libpython3.8.so
+        didn't work either
+        tried added the above path to the sys.path - but no...
+        trying copying in the .so into (there are a few other .so files):
+                              /home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages
+        NOPE...
+
+      Going to try establishing:
+          a) what the .sln build did
+          b) how to confirm pythonnet is correctly set up
+
+      b)
+        The pythonnet site recommends running a .cs file, i've saved as
+            leanQC/0_issues/sample.cs
+            this should do some simple maths using Python
+            # Trying with
+                        dotnet leanQC/0_issues/sample.cs
+                this didn't immediately work
+
+              dotnet --list-runtimes does not list a python runtime
+TO SEE THE SYSPATH:
+**************************************
+python -c "import sys; print(sys.path)"
+
+POSSIBLE WAYS FORWARD:
+
+  https://stackoverflow.com/questions/48230027/unable-to-restore-nuget-packages-on-vs17-and-vs15/48258151#48258151
+This shows the line:
+  >     2>CSC : error CS0006: Metadata file 'C:\Users\Work\QuantConnect\Lean-master\Common\bin\Debug\QuantConnect.Common.dll'
+
+THEREFORE...?
+QuantConnect\Lean-master\packages is missing
+
+Lean/Common/obj/Debug/QuantConnect.Common.dll'
+
+FOUND DLL: and all sorts of other bits at:
+/home/hsth/code/hughharford/Lean/Common/bin/Debug
+
+CONSIDER THEREFORE, ADDING THE FOLLOWING TO THE PYTHONPATH:
+/home/hsth/code/hughharford/Lean/Common/bin/Debug
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+      Adding the above path to the sys.path seemed to ruin the above step
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+/home/hsth/code/hughharford/condorgp/condorgp/util
+/home/hsth/code/hughharford/data-challenges/04-Decision-Science
+/home/hsth/code/hughharford/condorgp
+/home/hsth/.pyenv/versions/3.8.12/lib/python38.zip
+/home/hsth/.pyenv/versions/3.8.12/lib/python3.8
+/home/hsth/.pyenv/versions/3.8.12/lib/python3.8/lib-dynload
+/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages
+/home/hsth/code/hughharford/mlproject
+/home/hsth/code/hughharford/TFM_scaleGCP
+/home/hsth/code/hughharford/smr
+/home/hsth/code/hughharford/util_funcs
+/home/hsth/code/hughharford/lwb_smr
+/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/deap-1.3.3-py3.8-linux-x86_64.egg
+
+
+
+ERROR TRACE BELOW:
+
+HIGHLIGHT:
+    AddReference("QuantConnect.Common")
+System.IO.FileNotFoundException: Could not load the file 'QuantConnect.Common'.
+File name: 'QuantConnect.Common'
+
+
+Traceback (most recent call last):
+  File "/home/hsth/code/hughharford/condorgp/condorgp/gp/gp_advanced_con.py", line 1, in <module>
+    from gp_control import GpControl
+  File "/home/hsth/code/hughharford/condorgp/condorgp/gp/gp_control.py", line 3, in <module>
+    from condorgp.factories.initial_factory import InitialFactory
+  File "/home/hsth/code/hughharford/condorgp/condorgp/factories/initial_factory.py", line 3, in <module>
+    from condorgp.gp.gp_psets import GpPsets
+  File "/home/hsth/code/hughharford/condorgp/condorgp/gp/gp_psets.py", line 10, in <module>
+    from QuantConnect.Algorithm.Framework.Alphas import *
+  File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/QuantConnect/__init__.py", line 28, in <module>
+    AddReference("QuantConnect.Common")
+System.IO.FileNotFoundException: Could not load the file 'QuantConnect.Common'.
+File name: 'QuantConnect.Common'
+  at System.AppDomain.Load (System.Reflection.AssemblyName assemblyRef, System.Security.Policy.Evidence assemblySecurity) [0x0007a] in <de882a77e7c14f8ba5d298093dde82b2>:0
+  at (wrapper remoting-invoke-with-check) System.AppDomain.Load(System.Reflection.AssemblyName,System.Security.Policy.Evidence)
+  at System.AppDomain.Load (System.Reflection.AssemblyName assemblyRef) [0x00000] in <de882a77e7c14f8ba5d298093dde82b2>:0
+  at (wrapper remoting-invoke-with-check) System.AppDomain.Load(System.Reflection.AssemblyName)
+  at System.Reflection.Assembly.Load (System.Reflection.AssemblyName assemblyRef) [0x00005] in <de882a77e7c14f8ba5d298093dde82b2>:0
+  at Python.Runtime.AssemblyManager.LoadAssembly (System.Reflection.AssemblyName name) [0x00000] in <5af7325af00a4606830af952d4178e2b>:0
+  at Python.Runtime.CLRModule.AddReference (System.String name) [0x00035] in <5af7325af00a4606830af952d4178e2b>:0
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <de882a77e7c14f8ba5d298093dde82b2>:0

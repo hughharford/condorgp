@@ -32,3 +32,6 @@ pytest-bdd
 
 # lean dotnet build requirements
 # libicu-dev # apt get install instead
+pythonnet # and then run:
+#                       export PYTHONNET_PYDLL=libpython3.8.so 
+mono-complete

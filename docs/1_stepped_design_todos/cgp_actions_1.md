@@ -4,6 +4,29 @@
 ## REQUIREMENTS
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  # enable imports of Lean classes into Condorgp and vice versa
+      # TODO: fix this, without it things are complex
+      # OPTIONS:
+          1. Fix both ways import
+             1. condorgp imports of Lean (fails: DETAIL)
+             2. Lean imports of condorgp (fails: algorithm wrapper error)
+             3. NOTE: there might be a way to only run with 2 solved
+          2. Port condorgp into Lean/LocalPackages
+             1. deal with git interaction, two way thing Lean / condorgp
+
+      # ACTION:
+          a) read up about what Lean recommend, condorgp isn't the only project
+            SUGGESTED: https://pypi.org/project/quantconnect-stubs/
+                  install: pip install quantconnect-stubs
+                  use: include in all py files: from AlgorithmImports import *
+                  quantconnect-stubs already installed!
+            FOUND in QUANTCONNECT/LEAN:
+                  PythonToolbox
+                      worth looking at...
+                  Visualizer
+                      also worth looking at:
+                      /home/hsth/code/hughharford/Lean/ToolBox/Visualizer
+          b) consider other backtesting and finance options
 
   # enable strongly-typed deap gp
       # DONE use first strongly typed gp to control the tree

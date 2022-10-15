@@ -1,4 +1,5 @@
 import os
+import sys
 from os import listdir
 from os.path import isfile, join
 import shutil
@@ -9,9 +10,13 @@ from file_read_backwards import FileReadBackwards
 from condorgp.params import lean_dict, test_dict, util_dict
 from condorgp.gp.gp_custom_functions import GpCustomFunctions
 
+import sys
+
+
 class Utils:
     def __init__(self):
         self.cfs = GpCustomFunctions()
+
 
     def cp_ind_to_lean_algos(self, file_path, filename):
         '''
@@ -363,12 +368,23 @@ class Utils:
             for py in pys:
                 self.delete_file_from_path(test_algos_path, py)
 
+    def print_sys_path(self):
+        # Common_bin_Debug = '/home/hsth/code/hughharford/Lean/Common/bin/Debug/'
+        Linux_config_3_8 = '/usr/lib/python3.8/config-3.8-x86_64-linux-gnu/'
+        snap_dotnet_sdk_183 = '/snap/dotnet-sdk/183/shared/'
+        # sys.path.append(Common_bin_Debug)
+        sys.path.append(snap_dotnet_sdk_183)
+        for p in sys.path:
+            print(p)
+
 if __name__ == "__main__":
     pass
     print('going...')
     u = Utils()
 
-    u.cp_custom_funcs_to_lp()
+    u.print_sys_path()
+
+    # u.cp_custom_funcs_to_lp()
 
     # inj = 'get_alpha_model_B(double(double(0)))'
     # u.simple_eval(inj)

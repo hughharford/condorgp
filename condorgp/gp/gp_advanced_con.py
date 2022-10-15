@@ -1,5 +1,7 @@
 from gp_control import GpControl
 
+
+
 class GpAdvancedControl(GpControl):
     def __init__(self, pset_name=''):
         super().__init__()
@@ -24,7 +26,7 @@ class GpAdvancedControl(GpControl):
 
 if __name__ == "__main__":
     eval_used = 'eval_test_6'
-    pset_used = '' # 'test_pset8a'
+    pset_used = 'test_pset8aTyped' # 'test_pset8aTyped'
     gp_ac = GpAdvancedControl()
     p = 2
     g = 1
