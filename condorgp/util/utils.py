@@ -369,11 +369,18 @@ class Utils:
                 self.delete_file_from_path(test_algos_path, py)
 
     def print_sys_path(self):
-        # Common_bin_Debug = '/home/hsth/code/hughharford/Lean/Common/bin/Debug/'
+        import os
+
+        os.environ['PYTHONNET_PYDLL'] = '/home/hsth/python38shared_install/lib/libpython3.8.so'
+
+        Common_bin_Debug = '/home/hsth/code/hughharford/Lean/Common/bin/Debug/'
         Linux_config_3_8 = '/usr/lib/python3.8/config-3.8-x86_64-linux-gnu/'
         snap_dotnet_sdk_183 = '/snap/dotnet-sdk/183/shared/'
-        # sys.path.append(Common_bin_Debug)
+        python38custom = '/home/hsth/python38shared_install/lib/' # for libpython3.8.so'
+        sys.path.append(Common_bin_Debug)
         sys.path.append(snap_dotnet_sdk_183)
+        sys.path.append(Linux_config_3_8)
+        sys.path.append(python38custom)
         for p in sys.path:
             print(p)
 

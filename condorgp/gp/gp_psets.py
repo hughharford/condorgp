@@ -8,11 +8,13 @@ from datetime import timedelta
 from condorgp.util.log import CondorLogger
 # from AlgorithmImports import *
 from QuantConnect.Algorithm.Framework.Alphas import *
-    # MacdAlphaModel, EmaCrossAlphaModel, BasePairsTradingAlphaModel
+    # RsiAlphaModel, MacdAlphaModel, EmaCrossAlphaModel, BasePairsTradingAlphaModel
 from QuantConnect import Resolution
 from QuantConnect.Indicators import *
 from QuantConnect.Algorithm import QCAlgorithm
 # fails: from QuantConnnect.Common import *
+import clr
+from clr import AddReference
 
 
 class pt_alpha():

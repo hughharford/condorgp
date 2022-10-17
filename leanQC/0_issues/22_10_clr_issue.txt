@@ -75,6 +75,109 @@ trying:
                 this didn't immediately work
 
               dotnet --list-runtimes does not list a python runtime
+
+
+      TRYING A hello world C# app run via VS code
+      *******************************************
+      DOTNET_ROOT not set, according to Omnisharp C# extension
+
+      trying: - based on
+        terminal command:
+                        dotnet --list-sdks
+        Omnisharp: Sdk Path
+                            /snap/dotnet-sdk/183/shared/
+        Omnisharp: Sdk Version
+                            6.0.402
+
+      DOTNET_ROOT
+        export DOTNET_ROOT=/snap/dotnet-sdk/183/sdk/
+        echo $PATH then shows the above
+
+      &&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&&
+        MIGHT HAVE WORKED
+      &&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&&
+
+        Debug Console now reads the "hello world ____ 2" as expected
+
+        scriptcs basic run (CTRL+ALT+N) still fails, it's not installed after all
+
+        GOING BACK TO condorgp:
+            still getting:
+                  ModuleNotFoundError: No module named 'clr'
+            even after
+            sys.path includes: (added programatically by utils.py)
+                        Common_bin_Debug = '/home/hsth/code/hughharford/Lean/Common/bin/Debug/'
+                        Linux_config_3_8 = '/usr/lib/python3.8/config-3.8-x86_64-linux-gnu/'
+                        snap_dotnet_sdk_183 = '/snap/dotnet-sdk/183/shared/'
+              ls says this path doesn't exist...
+                  /usr/lib/python3.8/config-3.8-x86_64-linux-gnu/libpython3.8.so
+                  looking in the folder, the .so is no longer there...
+                  trying the .a
+                  /usr/lib/python3.8/config-3.8-x86_64-linux-gnu/libpython3.8.a
+            export PYTHONNET_PYDLL=/usr/lib/python3.8/config-3.8-x86_64-linux-gnu/libpython3.8.a
+
+        Confirming shared runtime library installed:
+              sudo apt-get install libpython3.8
+              reads:
+                    libpython3.8 is already the newest version (3.8.10-0ubuntu1~20.04.5).
+                    libpython3.8 set to manually installed.
+                    0 to upgrade, 0 to newly install, 0 to remove and 0 not to upgrade.
+
+        Maybe this would work....
+                    "You need to configure Python with --enable-shared."
+              from ref: https://github.com/rstudio/reticulate/issues/615
+                    which is pretty detailed! but talks about no .so only .a
+
+        configuring Python with --enable-shared:
+        see REFS:
+            http://cdsarc.u-strasbg.fr/doc/man/gildas/html/gildas-python-html/node36.html
+              has instructions
+            https://linuxtut.com/en/bf0b74550bee125cdea4/
+              has some notes, warnings etc
+
+          The way to do it is:
+              cd Python-2.7 (to our folder...)
+              ./configure --enable-shared [--prefix=/your/custom/installation/path]
+              make
+              make test
+              make install
+
+          CUSTOM INSTALL OF PYTHON 3.8
+              @ /home/hsth/python38shared_install/
+
+              NOTE: test_gdb failed...
+
+              .so for python3.8:
+              @ /home/hsth/python38shared_install/lib/libpython3.8.so
+
+          export PYTHONNET_PYDLL=/home/hsth/python38shared_install/lib/libpython3.8.so
+
+        This didn't make any difference...
+        BUT, adding back in the Lean/Common/bin/Debug path back in did
+        Then also
+        Add back in the isite-packages so it can reach clr_loader
+
+        ### hsth additions 17 10 22 - keeping track here
+        # LINE 25 in __init__.py
+              /home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/QuantConnect/__init__.py
+
+        Common_bin_Debug = '/home/hsth/code/hughharford/Lean/Common/bin/Debug/'
+        clr_loader_path = '/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages'
+        sys.path.append(Common_bin_Debug)
+        sys.path.append(clr_loader_path)
+
+        Pythonnet then seems to have a problem
+
+            func = _LOADER_ASSEMBLY["Python.Runtime.Loader.Initialize"]
+            TypeError: 'Assembly' object is not subscriptable
+
+        Trying:
+          https://github.com/r0x0r/pywebview/issues/952
+          setting specific versions of pythonnet and clr_loader...
+        pythonnet 3.1.0.dev0 - removed this
+
+
+
 TO SEE THE SYSPATH:
 **************************************
 python -c "import sys; print(sys.path)"
