@@ -19,7 +19,12 @@ from nautilus_trader.persistence.catalog import ParquetDataCatalog
 from nautilus_trader.persistence.external.core import process_files, write_objects
 from nautilus_trader.persistence.external.readers import TextReader
 
-DATA_DIR = "condorgp/data/"
+# addition
+from nautilus_trader.examples.strategies import ema_cross
+
+#/home/hsth/code/hughharford/nautilus/condorgp/data
+# DATA_DIR = "/home/hsth/code/hughharford/nautilus/condorgp/data/"
+DATA_DIR = "data/"
 
 fs = fsspec.filesystem('file')
 raw_files = fs.glob(f"{DATA_DIR}/naut_fx/HISTDATA*")
@@ -59,6 +64,7 @@ process_files(
     catalog=catalog,
 )
 
+
 # Also manually write the EUR v GBP fx instrument to the catalog
 write_objects(catalog, [EUR_GBP])
 
@@ -66,11 +72,67 @@ catalog.instruments()
 
 import pandas as pd
 from nautilus_trader.core.datetime import dt_to_unix_nanos
-
-
 start = dt_to_unix_nanos(pd.Timestamp('2008-01-01', tz='UTC'))
-end =  dt_to_unix_nanos(pd.Timestamp('2008-01-02', tz='UTC'))
+end =  dt_to_unix_nanos(pd.Timestamp('2008-01-30', tz='UTC'))
 
 
 # catalog.quote_ticks(catalog.instruments())
-catalog.quote_ticks(instruments=catalog.instruments(), start=start, end=end, path=CATALOG_PATH)
+# catalog.quote_ticks(instruments=catalog.instruments(), start=start, end=end, path=CATALOG_PATH)
+# catalog.quote_ticks(EUR_GBP, start=start, end=end)
+# catalog.quote_ticks(['currency_pair'], start=start, end=end)
+
+if catalog.list_data_types():
+    print('catalog.instruments() is POPULATED \n')
+else:
+    print('catalog.instruments() is STILL empty \n')
+
+# print(catalog.__dict__, '\n\n')
+print('list_data_types: ', catalog.list_data_types())
+
+
+
+instrument = catalog.instruments(as_nautilus=True)[0]
+
+venues_config=[
+    BacktestVenueConfig(
+        name="SIM",
+        oms_type="HEDGING",
+        account_type="MARGIN",
+        base_currency="USD",
+        starting_balances=["1000000 USD"],
+    )
+]
+
+data_config=[
+    BacktestDataConfig(
+        catalog_path=CATALOG_PATH,
+        data_cls=QuoteTick,
+        instrument_id=instrument.id.value,
+        start_time=start,
+        end_time=end,
+    )
+]
+
+strategies = [
+    ImportableStrategyConfig(
+        strategy_path="nautilus_trader.examples.strategies.ema_cross:EMACross",
+        config_path="nautilus_trader.examples.strategies.ema_cross:EMACrossConfig",
+        config=ema_cross.EMACrossConfig(
+            instrument_id=instrument.id.value,
+            bar_type="EUR/GBP.SIM-15-MINUTE-BID-INTERNAL",
+            fast_ema=10,
+            slow_ema=20,
+            trade_size=Decimal(1_000_000),
+        ),
+    ),
+]
+
+config = BacktestRunConfig(
+    engine=BacktestEngineConfig(strategies=strategies),
+    data=data_config,
+    venues=venues_config,
+)
+
+node = BacktestNode(configs=[config])
+
+results = node.run()
