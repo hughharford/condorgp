@@ -175,8 +175,85 @@ trying:
           https://github.com/r0x0r/pywebview/issues/952
           setting specific versions of pythonnet and clr_loader...
         pythonnet 3.1.0.dev0 - removed this
+        and
+        Successfully uninstalled clr-loader-0.2.3
 
+        Installed:
+            Successfully installed pythonnet-3.0.0a2
+            &
+            Successfully installed clr-loader-0.1.7
 
+        Moved onto the next issue...
+        Actually back, now having trouble loading with clr-loader
+
+                  from clr import AddReference
+        File "/home/hsth/code/hughharford/Lean/Common/bin/Debug/clr.py", line 6, in <module>
+          load()
+        File "/home/hsth/code/hughharford/Lean/Common/bin/Debug/pythonnet/__init__.py", line 43, in load
+          if func(b"") != 0:
+        File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/clr_loader/wrappers.py", line 20, in __call__
+          return self._callable(ffi.cast("void*", buf_arr), len(buf_arr))
+        File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/clr_loader/mono.py", line 92, in __call__
+          _check_result(res, "Failed to call method")
+        File "/home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/python3.8/site-packages/clr_loader/mono.py", line 145, in _check_result
+          raise RuntimeError(msg)
+      RuntimeError: Failed to call method
+
+      @ HERE - that didn't do it, so back to previous versions
+        pythonnet 3.1.0.dev0
+        clr-loader-0.2.4 (was 0.2.3 before...)
+
+      @ ANOTHER POSSIBILITY 22 10 17:
+      Noticed Lean/Common/bin/Debug has the following:
+        /home/hsth/code/hughharford/Lean/Common/bin/Debug/pythonnet/runtime/Python.Runtime.dll
+
+      So try pointing PYTHONNET_PYDLL at that...
+        export PYTHONNET_PYDLL=/home/hsth/code/hughharford/Lean/Common/bin/Debug/pythonnet/runtime/Python.Runtime.dll
+
+        NOPE
+
+      @ NEW POSSIBILITY 22 10 17:
+        Note here (https://github.com/QuantConnect/Lean/tree/master/Algorithm.Python)
+          that there is an advanced pythonnet from QuantConnect
+          see:
+              https://github.com/QuantConnect/pythonnet/
+
+          Trying this:
+              Successfully installed pythonnet-3.0.0.dev1
+
+          Result
+              No difference
+
+      @ ###################### ###################### #########################
+      @ TRYING TO PREVENT THE usage of Pythonnet entirely
+          C# projects need pythonnet etc, but this project is already in Python
+          So, essentially, have been trying it all the wrong way around...
+      @ ###################### ###################### #########################
+
+        # So trying:
+            Commenting out __init__
+                /home/hsth/.pyenv/versions/3.8.12/envs/lewagon/lib/...
+                  .../python3.8/site-packages/QuantConnect/__init__.py
+                  .../python3.8/site-packages/QuantConnect/Algorithm/__init__.py
+                  .../python3.8/site-packages/QuantConnect/Algorithm/Framework/__init__.py
+                  .../python3.8/site-packages/QuantConnect/Algorithm/Framework/Alphas/__init__.py
+                No dice
+            Uninstalled quantconnect_stubs (renamed the folder in site packages...)
+        # Working step by step to reinstate imports...
+
+          Starting with:
+
+            from AlgorithmImports import *
+                which invokes .../python3.8/site-packages/AlgorithmImports/__init__.pyi
+                but doesn't complain.
+                this __init__.py has a different setup to the others commented out above
+
+            anything more than the above (via quantconnect_stubs) doesn't work.
+
+          have also tried their python instructions:
+              https://github.com/QuantConnect/Lean/blob/master/Algorithm.Python/readme.md
+
+          
 
 TO SEE THE SYSPATH:
 **************************************

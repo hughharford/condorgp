@@ -26,12 +26,12 @@ class GpAdvancedControl(GpControl):
 
 if __name__ == "__main__":
     eval_used = 'eval_test_6'
-    pset_used = 'test_pset8aTyped' # 'test_pset8aTyped'
+    pset_used = 'test_pset8aTyped' # 'test_pset6' # 'test_pset_7aTyped' # 'test_pset8aTyped'
     gp_ac = GpAdvancedControl()
     p = 2
     g = 1
     gp_ac.setup(pset_used, p, g)
-    gp_ac.run_lean = 0
+    gp_ac.run_backtest = 0
     gp_ac.default_tidyup = 0
     gp_ac.set_test_evaluator(eval_used)
     gp_ac.run_gp()
