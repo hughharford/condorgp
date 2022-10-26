@@ -7,3 +7,4 @@ condorgp/util/logs/condor_log.txt
 # big files
 data/*
 .vscode/*
+.TEMP
