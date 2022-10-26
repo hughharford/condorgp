@@ -21,7 +21,7 @@ class InitialFactory:
     def get_gp_funcs(self):
         return GpFunctions()
 
-    def get_lean_runner(self):
+    def get_backtest_runner(self):
         return RunLean()
 
     def get_logger(self):

@@ -1,4 +1,5 @@
 import os
+import sys
 from os import listdir
 from os.path import isfile, join
 import shutil
@@ -9,9 +10,13 @@ from file_read_backwards import FileReadBackwards
 from condorgp.params import lean_dict, test_dict, util_dict
 from condorgp.gp.gp_custom_functions import GpCustomFunctions
 
+import sys
+
+
 class Utils:
     def __init__(self):
         self.cfs = GpCustomFunctions()
+
 
     def cp_ind_to_lean_algos(self, file_path, filename):
         '''
@@ -363,12 +368,40 @@ class Utils:
             for py in pys:
                 self.delete_file_from_path(test_algos_path, py)
 
+    def print_sys_path(self):
+
+        # don't think this operates:
+        # os.environ['PYTHONNET_PYDLL'] = '/home/hsth/python38shared_install/lib/libpython3.8.so'
+
+        # Common_bin_Debug = '/home/hsth/code/hughharford/Lean/Common/bin/Debug/'
+        # sys.path.append(Common_bin_Debug)
+        # Linux_config_3_8 = '/usr/lib/python3.8/config-3.8-x86_64-linux-gnu/'
+        # sys.path.append(Linux_config_3_8)
+        # snap_dotnet_sdk_183 = '/snap/dotnet-sdk/183/shared/'
+        # sys.path.append(snap_dotnet_sdk_183)
+        # python38custom = '/home/hsth/python38shared_install/lib/' # for libpython3.8.so'
+        # sys.path.append(python38custom)
+
+        a = '/home/hsth/.pyenv/versions/nautilus/bin'
+        b = '/home/hsth/.pyenv/versions/3.10.8/bin/python3.10'
+
+        naut = '/home/hsth/.pyenv/versions/nautilus/lib/python3.10/site-packages/nautilus_trader'
+        # for nautilus, from other venv
+        sys.path.append(naut)
+        sys.path.append(a)
+        sys.path.append(b)
+        
+        for p in sys.path:
+            print(p)
+
 if __name__ == "__main__":
     pass
     print('going...')
     u = Utils()
 
-    u.cp_custom_funcs_to_lp()
+    u.print_sys_path()
+
+    # u.cp_custom_funcs_to_lp()
 
     # inj = 'get_alpha_model_B(double(double(0)))'
     # u.simple_eval(inj)

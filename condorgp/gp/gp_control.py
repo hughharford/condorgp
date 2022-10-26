@@ -13,7 +13,7 @@ class GpControl:
         '''
         self.inject_gp() # inject dependencies
         self.inject_utils()
-        self.inject_lean_runner()
+        self.inject_backtest_runner()
         self.inject_logger()
 
         self.log.info(f"{'>'*10}, GpControl Initialising {'>'*10}")
@@ -21,7 +21,7 @@ class GpControl:
         self.default_pset = 'default_untyped'
         self.default_eval = self.evalIntoAndFromLean
         self.default_tidyup = 1
-        self.run_lean = 1 # 1 = run lean in evaluation func, 0 = don't
+        self.run_backtest = 1 # 1 = run lean in evaluation func, 0 = don't
 
     def inject_gp(self):
         ''' dependency injection of gp '''
@@ -37,9 +37,10 @@ class GpControl:
         ''' dependency injection of utils '''
         self.util = self.factory.get_utils()
 
-    def inject_lean_runner(self):
-        ''' dependency injection of lean runner '''
-        self.lean = self.factory.get_lean_runner()
+    def inject_backtest_runner(self):
+        ''' dependency injection of backtest runner '''
+        # was lean, now moving to Nautilus
+        self.lean = self.factory.get_backtest_runner()
 
     def inject_logger(self):
         ''' dependency injection of logger '''
@@ -167,7 +168,7 @@ class GpControl:
             new_fitness = -100.0
         config_to_run = lean_dict['LEAN_INJECTED_ALGO_JSON']
         try:
-            if self.run_lean:
+            if self.run_backtest:
                 self.log.debug("GpControl.eval_test_6 >>>> RUN LEAN >>>>")
                 self.lean.run_lean_via_CLI('main.py', config_to_run)
                 new_fitness = self.gpf.get_fit_6()
@@ -187,7 +188,7 @@ if __name__ == "__main__":
     gens = 2
     c = GpControl()
     c.setup_gp(pset_used, pop, gens)
-    c.run_lean = 1
+    c.run_backtest = 1
     c.default_tidyup = 1
     c.set_test_evaluator(eval_used)
     c.run_gp()

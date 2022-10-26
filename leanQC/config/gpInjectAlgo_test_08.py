@@ -27,9 +27,8 @@ class gpInjectAlgo(QCAlgorithm):
     '''Basic template framework algorithm uses framework components to define the algorithm.'''
 
     ## INJECT GP CODE HERE:
+    ## leave this line alone...
 
-    def cgp_set_alpha(self):
-        return EmaCrossAlphaModel()
 
 
     def Initialize(self):
