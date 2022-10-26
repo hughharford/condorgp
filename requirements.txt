@@ -27,11 +27,14 @@ joblib
 memoized-property
 termcolor
 
-# condorgp utilities etc
+# condorgp, utilities etc
 pytest-bdd
+file-read-backwards # utils
 
-# lean dotnet build requirements
-# libicu-dev # apt get install instead
-pythonnet # and then run:
-#                       export PYTHONNET_PYDLL=libpython3.8.so 
-mono-complete
+# # OUTDATED ____ OUTDATED ____ OUTDATED ____ OUTDATED ____ OUTDATED ____
+# #       # lean dotnet build requirements
+# # OUTDATED ____ OUTDATED ____ OUTDATED ____ OUTDATED ____ OUTDATED ____
+# # libicu-dev # apt get install instead
+# pythonnet # and then run:
+#                      # export PYTHONNET_PYDLL=pathto/../libpython3.8.so
+# mono-complete
