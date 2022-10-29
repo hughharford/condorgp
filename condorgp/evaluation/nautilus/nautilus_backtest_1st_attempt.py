@@ -1,5 +1,5 @@
 # copied from Nautilus site:
-#
+# https://docs.nautilustrader.io/getting_started/quick_start.html
 
 import datetime
 import os
@@ -23,8 +23,8 @@ from nautilus_trader.persistence.external.readers import TextReader
 from nautilus_trader.examples.strategies import ema_cross
 
 #/home/hsth/code/hughharford/nautilus/condorgp/data
-# DATA_DIR = "/home/hsth/code/hughharford/nautilus/condorgp/data/"
-DATA_DIR = "data/"
+DATA_DIR = "/home/hsth/code/hughharford/nautilus/condorgp/data/"
+#  DATA_DIR = "data/"
 
 fs = fsspec.filesystem('file')
 raw_files = fs.glob(f"{DATA_DIR}/naut_fx/HISTDATA*")
@@ -58,40 +58,45 @@ os.mkdir(CATALOG_PATH)
 
 catalog = ParquetDataCatalog(CATALOG_PATH)
 
-process_files(
-    glob_path=f"{DATA_DIR}/HISTDATA*.zip",
-    reader=TextReader(line_parser=parser),
-    catalog=catalog,
-)
+print(catalog)
 
+def run_process_files():
+    process_files(
+        glob_path=f"{DATA_DIR}/HISTDATA*.zip",
+        reader=TextReader(line_parser=parser),
+        catalog=catalog,
+    )
+    write_objects(catalog, [EUR_GBP])
+
+run_process_files()
+
+print(catalog)
 
 # Also manually write the EUR v GBP fx instrument to the catalog
-write_objects(catalog, [EUR_GBP])
 
-catalog.instruments()
 
-import pandas as pd
-from nautilus_trader.core.datetime import dt_to_unix_nanos
 start = dt_to_unix_nanos(pd.Timestamp('2008-01-01', tz='UTC'))
 end =  dt_to_unix_nanos(pd.Timestamp('2008-01-30', tz='UTC'))
 
+# catalog.quote_ticks(start=start, end=end)
 
 # catalog.quote_ticks(catalog.instruments())
 # catalog.quote_ticks(instruments=catalog.instruments(), start=start, end=end, path=CATALOG_PATH)
-# catalog.quote_ticks(EUR_GBP, start=start, end=end)
 # catalog.quote_ticks(['currency_pair'], start=start, end=end)
+# catalog.quote_ticks(EUR_GBP, start=start, end=end)
+
+# qt = catalog.quote_ticks(['EUR_GBP'])
+# print(qt)
+instruments = catalog.instruments(as_nautilus=True)
 
 if catalog.list_data_types():
-    print('catalog.instruments() is POPULATED \n')
+    print('catalog.instruments() is POPULATED \n', catalog.list_data_types())
 else:
     print('catalog.instruments() is STILL empty \n')
 
 # print(catalog.__dict__, '\n\n')
-print('list_data_types: ', catalog.list_data_types())
+# print('list_data_types: ', catalog.list_data_types())
 
-
-
-instrument = catalog.instruments(as_nautilus=True)[0]
 
 venues_config=[
     BacktestVenueConfig(
@@ -106,8 +111,8 @@ venues_config=[
 data_config=[
     BacktestDataConfig(
         catalog_path=CATALOG_PATH,
-        data_cls=QuoteTick,
-        instrument_id=instrument.id.value,
+        data_cls=instruments[0], # QuoteTick, # NOPE< DIDN@T WORK
+        instrument_id = str(instruments[0].id), # instrument_id=instrument.id.value,
         start_time=start,
         end_time=end,
     )
@@ -118,7 +123,7 @@ strategies = [
         strategy_path="nautilus_trader.examples.strategies.ema_cross:EMACross",
         config_path="nautilus_trader.examples.strategies.ema_cross:EMACrossConfig",
         config=ema_cross.EMACrossConfig(
-            instrument_id=instrument.id.value,
+            instrument_id=instruments[0].id.value, # =instrument.id.value,
             bar_type="EUR/GBP.SIM-15-MINUTE-BID-INTERNAL",
             fast_ema=10,
             slow_ema=20,
