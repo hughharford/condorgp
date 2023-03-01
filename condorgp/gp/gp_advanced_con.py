@@ -1,5 +1,6 @@
 from gp_control import GpControl
-
+from io import StringIO  # Python 3
+import sys
 
 
 class GpAdvancedControl(GpControl):
@@ -25,8 +26,22 @@ class GpAdvancedControl(GpControl):
         pass
 
 if __name__ == "__main__":
-    eval_used = 'eval_test_6'
-    pset_used = 'test_pset8aTyped' # 'test_pset6' # 'test_pset_7aTyped' # 'test_pset8aTyped'
+    # # Create the in-memory "file"
+    # condor_log = "/home/hsth/code/hughharford/nautilus/condorgp/condorgp/util/logs/condor_log.txt"
+    # temp_out = StringIO(condor_log)
+
+    # # Replace default stdout (terminal) with our stream
+    # sys.stdout = temp_out
+
+    # print("This is going in to the memory stream")
+    # temp_out.write("Can be written to like normal.\n")
+
+    # now setup
+    eval_used = 'eval_nautilus' # 'eval_test_6' 6 == last Lean evaluation
+    # all these were Lean based psets:
+    #   'test_pset8aTyped', 'test_pset6',
+    #   'test_pset_7aTyped', 'test_pset8aTyped'
+    pset_used = 'default_untyped' #
     gp_ac = GpAdvancedControl()
     p = 2
     g = 1
@@ -35,3 +50,12 @@ if __name__ == "__main__":
     gp_ac.default_tidyup = 0
     gp_ac.set_test_evaluator(eval_used)
     gp_ac.run_gp()
+
+    # The original `sys.stdout` is kept in a special
+    # # dunder named `sys.__stdout__`. So you can restore
+    # # the original output stream to the terminal.
+
+    # print("setting stdout back to original")
+    # sys.stdout = sys.__stdout__
+    # temp_out.close()
+    # print("done...")

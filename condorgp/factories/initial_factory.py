@@ -1,8 +1,11 @@
 from condorgp.util.utils import Utils
 from condorgp.gp.gp_deap import GpDeap
+
+
 from condorgp.gp.gp_psets import GpPsets
 from condorgp.gp.gp_functions import GpFunctions
-from condorgp.evaluation.lean_runner import RunLean
+from condorgp.evaluation.nautilus.nautilus_bt_base import NautilusBTBase
+from condorgp.evaluation.lean.lean_runner import RunLean
 from condorgp.util.log import CondorLogger
 
 class InitialFactory:
@@ -22,7 +25,8 @@ class InitialFactory:
         return GpFunctions()
 
     def get_backtest_runner(self):
-        return RunLean()
+        return NautilusBTBase()
+        # OLD return RunLean()
 
     def get_logger(self):
         return CondorLogger().get_logger()

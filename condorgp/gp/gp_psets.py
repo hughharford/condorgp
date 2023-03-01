@@ -5,22 +5,20 @@ import operator
 import math
 from datetime import timedelta
 
-from clr import AddReference
-AddReference("System.Core")
-AddReference("System.Collections")
-AddReference("QuantConnect.Common")
-AddReference("QuantConnect.Algorithm")
+# ALL LEAN BITS >> REMOVE
+# from clr import AddReference
+# AddReference("System.Core")
+# AddReference("System.Collections")
+# AddReference("QuantConnect.Common")
+# AddReference("QuantConnect.Algorithm")
 
-from System import *
-from System.Collections.Generic import List
-from QuantConnect import *
-from QuantConnect.Algorithm import QCAlgorithm
-from QuantConnect.Data.UniverseSelection import *
+# from System import *
+# from System.Collections.Generic import List
+# from QuantConnect import *
+# from QuantConnect.Algorithm import QCAlgorithm
+# from QuantConnect.Data.UniverseSelection import *
 
-
-from condorgp.util.log import CondorLogger
-from AlgorithmImports import *
-
+# from AlgorithmImports import *
 # from QuantConnect import *
 
 # from QuantConnect import QCAlgorithm
@@ -31,7 +29,7 @@ from AlgorithmImports import *
 # from QuantConnect.Python import *
 # from QuantConnect.Python import PythonData
 
-from QuantConnect.Algorithm.Framework.Alphas import *
+# from QuantConnect.Algorithm.Framework.Alphas import *
 # from QuantConnect.Algorithm.Framework.Alphas import MacdAlphaModel
 #     # RsiAlphaModel, MacdAlphaModel, EmaCrossAlphaModel, BasePairsTradingAlphaModel
 # from QuantConnect import Resolution
@@ -40,33 +38,42 @@ from QuantConnect.Algorithm.Framework.Alphas import *
 # fails, not in site-packages
 # from QuantConnnect.Common import *
 
-
+from condorgp.util.log import CondorLogger
 
 class pt_alpha():
+    '''
+    very Lean focused and coupled,
+    must adjust style as well as backtester
+    '''
     def __init__(self) -> None:
-        # see Lean/Algorithm.Framework/Alphas
-        self.MACD = MacdAlphaModel(fastPeriod = 12,
-                slowPeriod = 26,
-                signalPeriod = 9,
-                movingAverageType = MovingAverageType.Exponential,
-                resolution = Resolution.Daily)
-        self.EMA = EmaCrossAlphaModel(fastPeriod = 12,
-                slowPeriod = 26,
-                resolution = Resolution.Daily)
-        self.BPTA = BasePairsTradingAlphaModel(
-                lookback = 1,
-                resolution = Resolution.Daily,
-                threshold = 1)
+        pass
+        # # see Lean/Algorithm.Framework/Alphas
+        # self.MACD = MacdAlphaModel(fastPeriod = 12,
+        #         slowPeriod = 26,
+        #         signalPeriod = 9,
+        #         movingAverageType = MovingAverageType.Exponential,
+        #         resolution = Resolution.Daily)
+        # self.EMA = EmaCrossAlphaModel(fastPeriod = 12,
+        #         slowPeriod = 26,
+        #         resolution = Resolution.Daily)
+        # self.BPTA = BasePairsTradingAlphaModel(
+        #         lookback = 1,
+        #         resolution = Resolution.Daily,
+        #         threshold = 1)
         # for later...
         # self.BPTA_0 = BasePairsTradingAlphaModel()
 
 class pt_method():
+    '''
+    very Lean focused and coupled,
+    must adjust style as well as backtester
+    '''
     def __init__(self) -> None:
         # takes IAlphaModel or just AlphaModel?
-        self.AddAlpha = QCAlgorithm.AddAlpha() # P, ret: AlphaModel
-        self.SetAlpha = QCAlgorithm.SetAlpha(RsiAlphaModel()) # T, None
-    # AddAlpha = QCAlgorithm.AddAlpha() # P, ret: AlphaModel
-    pass
+    #     self.AddAlpha = QCAlgorithm.AddAlpha() # P, ret: AlphaModel
+    #     self.SetAlpha = QCAlgorithm.SetAlpha(RsiAlphaModel()) # T, None
+    # # AddAlpha = QCAlgorithm.AddAlpha() # P, ret: AlphaModel
+        pass
 
 # class pt_indicator():
 #     def __init__(self):
@@ -74,12 +81,17 @@ class pt_method():
 #         # self.sma = QCAlgorithm.SMA("SPY", 60, Resolution.Minute())
 
 class pt_resolution():
+    '''
+    very Lean focused and coupled,
+    must adjust style as well as backtester
+    '''
     def __init__(self):
-        self.Daily = Resolution.Daily
-        self.Hour = Resolution.Hour
-        self.Minute = Resolution.Minute
-        self.Hour_0 = timedelta(minutes=60)
-        # self.x = Resolution(4)
+        pass
+        # self.Daily = Resolution.Daily
+        # self.Hour = Resolution.Hour
+        # self.Minute = Resolution.Minute
+        # self.Hour_0 = timedelta(minutes=60)
+        # # self.x = Resolution(4)
 
 
 # # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -88,7 +100,7 @@ class GpPsets:
         self.cfs = custom_funcs
         self.log = CondorLogger().get_logger()
         # self.pt_method = pt_method()
-        self.pt_alpha = pt_alpha()
+        # self.pt_alpha = pt_alpha()
         # self.pt_indicator = pt_indicator()
         # self.pt_resolution = pt_resolution()
 
@@ -106,48 +118,19 @@ class GpPsets:
 
         # pt_method (P and T)
         # EXPECT TO CUT THIS OUT AND REPLACE pset in-type with pt_alpha
-        self.test8a.addPrimitive(
-            pt_method.AddAlpha, [pt_alpha], pt_method)
+        # self.test8a.addPrimitive(
+        #     pt_method.AddAlpha, [pt_alpha], pt_method)
 
         # TAKEN OUT WHILE TESTING pythonnet...
-        self.test8a.addTerminal(
-             QCAlgorithm.SetAlpha(RsiAlphaModel()),
-                                [pt_method],
-                                name = "self.SetAlpha(RsiAlphaModel()")
+        # self.test8a.addTerminal(
+        #      QCAlgorithm.SetAlpha(RsiAlphaModel()),
+        #                         [pt_method],
+        #                         name = "self.SetAlpha(RsiAlphaModel()")
 
-        # # pt_alpha (P and T)
-        # self.test8a.addTerminal(pt_alpha.EMA, pt_alpha)
-        # self.test8a.addTerminal(pt_alpha.MACD, pt_alpha)
-        # self.test8a.addTerminal(pt_alpha.BPTA, pt_alpha)
-        # self.test8a.addPrimitive(
-        #     EmaCrossAlphaModel, [int, int, Resolution], pt_alpha)
-
-#         # pt_resolution (P and T)
-#         self.test8a.addPrimitive(Resolution, str)
-#         self.test8a.addTerminal(Resolution.Hour, Resolution)
-#         self.test8a.addTerminal(Resolution.Minute, Resolution)
-#         self.test8a.addTerminal(Resolution.Second, Resolution)
-
-#         self.test8a.addTerminal("Hourly", str, name=".Hour")
-#         self.test8a.addTerminal("Minute", str, name=".Minute")
-
-#         # int (P and T)
-#         self.test8a.addTerminal(1, int)
-#         self.test8a.addTerminal(2, int)
-#         self.test8a.addTerminal(3, int)
-#         self.test8a.addTerminal(5, int)
-#         self.test8a.addTerminal(10, int)
-#         self.test8a.addTerminal(20, int)
-#         self.test8a.addPrimitive(operator.add, [int, int], int)
-#         self.test8a.addPrimitive(operator.sub, [int, int], int)
-#         self.test8a.addPrimitive(operator.mul, [int, int], int)
-#         self.test8a.addPrimitive(self.cfs.protectedDiv, [int, int], int)
-#         self.test8a.addPrimitive(operator.neg, [int], int)
-#         return self.test8a
 
     def get_default_untyped(self):
          # basic untyped deap.gp.PrimitiveSet:
-        self.default_untyped = gp.PrimitiveSet("DEFAULT UNTYPED", 1)
+        self.default_untyped = gp.PrimitiveSet("default_untyped", 1)
         self.default_untyped.addPrimitive(numpy.add, 2, name="vadd")
         self.default_untyped.addPrimitive(numpy.subtract, 2, name="vsub")
         self.default_untyped.addPrimitive(numpy.multiply, 2, name="vmul")

@@ -27,7 +27,10 @@ joblib
 memoized-property
 termcolor
 
-# condorgp, utilities etc
+# condorgp,
+deap
+
+# condorgp utilities etc
 pytest-bdd
 file-read-backwards # utils
 

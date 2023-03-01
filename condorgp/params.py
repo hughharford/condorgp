@@ -2,7 +2,8 @@
 #       LOCAL BASE PATH
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Set here only:
-LOCAL_BASE_PATH = '/home/hsth/code/hughharford/'
+LOCAL_BASE_PATH = '/home/hsth/code/hughharford/nautilus/'
+#                   "/home/hsth/code/hughharford/nautilus/"
 
 # HIGH LEVEL CONFIGURATION OPTIONS:
 ####################################################
@@ -16,6 +17,15 @@ highlevel_config_dict = {
     'RUN_VERBOSE_FOR_DEBUG': RUN_VERBOSE_FOR_DEBUG,
 }
 
+# ################################## ##################################
+#           MAIN NAUTILUS PARAMS
+# ################################## ##################################
+
+#                                   "condorgp/condorgp/util/logs"
+NAUT_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/condorgp/util/logs/nautilus_log.txt'
+naut_dict = {
+    'NAUT_LOG_FILE': NAUT_LOG_FILE,
+}
 
 # ################################## ##################################
 #           MAIN LEAN PARAMS
@@ -50,6 +60,8 @@ FITNESS_CRITERIA = FITNESS_BASE + CURRENT_FITNESS_STAT
 LEAN_TO_INJECT_TEMPLATE_ALGO = 'gpInjectAlgo.py'
 LEAN_INJECTED_ALGO = 'gpInjectAlgo_done.py'
 LEAN_INJECTED_ALGO_JSON = 'config_test_algos_gpInjectAlgo.json'
+
+
 
 lean_dict = {
     'LEAN_CONFIG_FILE': LEAN_CONFIG_FILE,

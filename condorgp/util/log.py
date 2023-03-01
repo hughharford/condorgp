@@ -5,52 +5,94 @@ from condorgp.params import util_dict
 
 loggers = {}
 
+
+import logging
+from contextlib import redirect_stdout
+
+import traceback
+
+
 class CondorLogger:
     '''
         home grown logging, see examples below
     '''
-    #   # filler_WARN = '&'*15
-        # log.warning(f"{filler_WARN}: deap_with_lean, a WARNING message: {__name__}")
-        # filler_CRITICAL = '££'*15
-        # log.critical(f"{filler_CRITICAL}: deap_with_lean, a WARNING message: {__name__}")
-        # log.debug(f"{filler_DEBUG},  DEBUG message: {__name__} - DEAP gp - run began {filler_INIT}")
-        # log.info(f"{filler_DEBUG}, INFO message: {__name__} - DEAP gp - run began {filler_INIT}")
-        # log.warning(f"{filler_DEBUG}, WARNING message: {__name__} - DEAP gp - run began {filler_INIT}")
-        # log.error(f"{filler_DEBUG}, ERROR message: {__name__} - DEAP gp - run began {filler_INIT}")
-        # log.critical(f"{filler_DEBUG}, CRITICAL message: {__name__} - DEAP gp - run began {filler_INIT}")
-
+    def get_logger(self):
+        return self.log
 
     def __init__(self):
 
-        self.log = logging.getLogger(__name__)
-        if (self.log.hasHandlers()):
-            self.log.handlers.clear()
+        sys.stdout = open(util_dict['CONDOR_LOG'], "a")
+        e_type, e_val, e_tb = sys.exc_info()
+        traceback.print_exception(e_type, e_val, e_tb, file = sys.stdout)
 
-        self.log.level=logging.DEBUG # set overall level for logger
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-        formatter = logging.Formatter('%(asctime)s -  %(levelname)s - %(message)s')
+        self.log = logging.getLogger()
+        self.log.setLevel(logging.DEBUG)
 
-        # further log levels for different handlers - so far to match:
-        matching_level = logging.DEBUG # higher (less info): INFO
+        out = logging.StreamHandler(sys.stdout)
+        out.setLevel(logging.DEBUG)
+        out.setFormatter(formatter)
+        self.log.addHandler(out)
 
-        # create console handler and set level
-        ch = logging.StreamHandler(sys.stdout)
-        ch.setFormatter(formatter)
-        ch.setLevel(level=matching_level)
+        # err = logging.StreamHandler(sys.stderr)
+        # err.setLevel(logging.DEBUG)
+        # err.setFormatter(formatter)
+        # self.log.addHandler(err)
 
-        # set basic file handler
-        fh = logging.FileHandler(filename = util_dict['CONDOR_LOG'],
-                                mode='a',
-                                encoding=None,
-                                delay=False,
-                                )
-        fh.setFormatter(formatter)
-        fh.setLevel(level=matching_level)
-
-        # add handlers to logger
-        self.log.addHandler(ch)
-        self.log.addHandler(fh)
+        # consoleHandler = logging.StreamHandler()
+        # self.log.addHandler(consoleHandler)
 
 
-    def get_logger(self):
-        return self.log
+
+        # self.log = logging.getLogger()
+        # self.log.setLevel(logging.DEBUG)
+        # print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TEST >>>>>>>>>>>>> ")
+        # for m in self.log.handlers:
+        #     print(m.get_name())
+
+        # # # remove extant loggers
+        # # # self.log = logging.getLogger('BACKTESTER-001') #.setLevel(logging.CRITICAL)
+        # # theirlogger = logging.getLogger('BACKTESTER-001')
+        # # # did not yield any handlers:
+        # # #                           # nautilus_trader
+        # # for l in theirlogger.handlers:
+        # #     print("Their logger handler: " & str(l.get_name()))
+
+        # #     # theirlogger.removeHandler(l)
+
+        # # # logging.getLogger('BACKTESTER-001').setLevel(logging.INFO)
+
+
+        # formatter = logging.Formatter('%(asctime)s -  %(levelname)s - %(message)s')
+
+        # # further log levels for diff)erent handlers - so far to match:
+        # # matching_level = logging.INFO # higher (less info): INFO
+        # # REPLACED BY: self.log.level USE THIS INSTEAD
+        # matching_level = self.log.level
+
+        # # create console handler and set level
+        # sh_out = logging.StreamHandler(stream=sys.stdout)
+        # sh_out.setFormatter(formatter)
+        # sh_out.setLevel(level=matching_level)
+
+        # sh_err = logging.StreamHandler(stream=sys.stderr)
+        # sh_err.setFormatter(formatter)
+        # sh_err.setLevel(level=matching_level)
+
+        # # set basic file handler
+        # fh = logging.FileHandler(filename = util_dict['CONDOR_LOG'],
+        #                         mode='a',
+        #                         encoding=None,
+        #                         delay=False,
+        #                         )
+        # fh.setFormatter(formatter)
+        # fh.setLevel(level=matching_level)
+
+        # # consoleHandler = logging.StreamHandler()
+        # # self.log.addHandler(consoleHandler)
+
+        # # add handlers to logger
+        # self.log.addHandler(sh_out)
+        # self.log.addHandler(sh_err)
+        # self.log.addHandler(fh)

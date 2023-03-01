@@ -395,6 +395,17 @@ class Utils:
         for p in sys.path:
             print(p)
 
+    def write_to_file(self, filename_n_path, inputtext, mode = "a"):
+        # utils method to enable writing to sourced file wherever, AWS, local...
+        try:
+            f = open(filename_n_path, mode)
+            f.write(inputtext)
+            f.close()
+        except:
+            self.log.error(f"utils.write_to_file: \
+                           filename n path: {filename_n_path}")
+            return None
+
 if __name__ == "__main__":
     pass
     print('going...')

@@ -3,6 +3,10 @@ from condorgp.params import util_dict, test_dict, lean_dict
 from condorgp.factories.initial_factory import InitialFactory
 from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
 
+from condorgp.evaluation.nautilus.run_naut import RunNautilus
+
+# NB
+# TODO:below, search for: "### HACK HERE HACK HERE ###"
 
 class GpControl:
     def __init__(self):
@@ -40,7 +44,12 @@ class GpControl:
     def inject_backtest_runner(self):
         ''' dependency injection of backtest runner '''
         # was lean, now moving to Nautilus
-        self.lean = self.factory.get_backtest_runner()
+        # this returns a Nautilus backtest base object, but below
+        # this will be run via a hack command line script to capture
+        # logs - as the core of Nautilus is in Rust (and logging connections)
+        # are currently beyond me
+        ### HACK HERE HACK HERE ###
+        self.backtester = self.factory.get_backtest_runner()
 
     def inject_logger(self):
         ''' dependency injection of logger '''
@@ -71,8 +80,9 @@ class GpControl:
         stat_params = {}        # Set 7: the stats feedback
         self.gp.set_stats(stat_params)
 
-        # additionally, copy gp_custom_functions to LocalPackages:
-        self.util.cp_custom_funcs_to_lp() # cf tidy up in run_gp, default on
+        # LEAN:
+        # additionally, copy gp_custom_functions to LEAN LocalPackages:
+        # self.util.cp_custom_funcs_to_lp() # cf tidy up in run_gp, default on
 
     def set_population(self, pop_size):
         self.gp.set_pop_size(pop_size)
@@ -115,7 +125,7 @@ class GpControl:
         config_to_run = test_dict['CONDOR_TEST_CONFIG_FILE_1']
         self.util.copy_config_in(input_ind)
         self.util.copy_algo_in(input_ind)
-        self.lean.run_lean_via_CLI(input_ind, config_to_run)
+        self.backtester.run_lean_via_CLI(input_ind, config_to_run)
         # get fitness
         Return_over_MDD = 'STATISTICS:: Return Over Maximum Drawdown'
         got = self.util.get_key_line_in_lim(Return_over_MDD)
@@ -149,7 +159,7 @@ class GpControl:
         config_to_run = lean_dict['LEAN_INJECTED_ALGO_JSON']
         self.util.cp_inject_algo_in_n_sort('_test_05.py','')
         try:
-            self.lean.run_lean_via_CLI('main.py', config_to_run)
+            self.backtester.run_lean_via_CLI('main.py', config_to_run)
         except BaseException as e:
             self.log.error("eval_test_5, attempting Lean run", str(e))
         self.log.info(f'eval_test_5, new fitness {new_fitness}')
@@ -170,7 +180,7 @@ class GpControl:
         try:
             if self.run_backtest:
                 self.log.debug("GpControl.eval_test_6 >>>> RUN LEAN >>>>")
-                self.lean.run_lean_via_CLI('main.py', config_to_run)
+                self.backtester.run_lean_via_CLI('main.py', config_to_run)
                 new_fitness = self.gpf.get_fit_6()
             else:
                 self.log.debug("<< WOULD RUN LEAN HERE >>>>>>>>>>>>>>>>>>>>>>>")
@@ -180,9 +190,45 @@ class GpControl:
         self.log.info(f'eval_test_6, new fitness {new_fitness}')
         return new_fitness, # returns a float in a tuple, i.e.  14736.68,
 
+    def eval_nautilus(self, individual):
+        ''' First inclusion of Nautilus in evaluation function '''
+            # nbt = NautilusBTBase()
+            # nbt.basic_run_through()
+        evalf_name = 'eval_nautilus'
+
+        # Transform the tree expression in a callable function
+        func = self.gp.toolbox.compile(expr=individual) # Deap requires this
+        self.log.info(f'{evalf_name}, OUTPUTTING IND >>> \n {individual}')
+        new_fitness = 0.0
+        # additional code to inject evolved code individual
+        try:
+            # self.util.cp_inject_algo_in_n_sort('_test_06.py', str(individual))
+            pass
+            n = RunNautilus()
+            # would do something here, but kept out for now
+        except Exception as e:
+            self.log.debug(f'{individual} not wrapped: {str(e)}')
+            new_fitness = -100.0
+        # no longer relevant:
+        # config_to_run = lean_dict['LEAN_INJECTED_ALGO_JSON']
+        try:
+            if self.run_backtest:
+                self.log.debug(f"GpControl.{evalf_name} >>>> RUN NAUTILUS >>>>")
+                self.backtester.basic_run_through()
+                new_fitness = self.gpf.get_fit_6()
+            else:
+                self.log.debug("<< WOULD RUN NAUTILUS HERE >>>>>>>>>>>>>>>>>>>")
+        except BaseException as e:
+            self.log.error(f"ERROR {evalf_name}, attempting Nautilus run")
+
+        self.log.info(f'{evalf_name}, new fitness {new_fitness}')
+        return new_fitness, # returns a float in a tuple, i.e.  14736.68,
+
+
+
 if __name__ == "__main__":
 
-    eval_used = 'eval_test_6'
+    eval_used = 'eval_nautilus' # 'eval_test_6'
     pset_used = 'test_pset7aTyped'
     pop = 5
     gens = 2
