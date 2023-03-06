@@ -7,7 +7,7 @@ from datetime import datetime
 
 from file_read_backwards import FileReadBackwards
 
-from condorgp.params import lean_dict, test_dict, util_dict
+from condorgp.params import naut_dict, test_dict, util_dict, lean_dict
 from condorgp.gp.gp_custom_functions import GpCustomFunctions
 
 import sys
@@ -68,52 +68,71 @@ class Utils:
 
     def get_latest_log_dir(self):
         latest = None
-        backtestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR']
-        foundfolders = [f for f in listdir(backtestfolder) \
-                            if not isfile(join(backtestfolder, f))]
-        if len(foundfolders) > 0:
-            latest = ''
-            for folder in foundfolders:
-                if folder > latest:
-                    latest = folder
-        return latest
+        # backtestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR']
+        # foundfolders = [f for f in listdir(backtestfolder) \
+        #                     if not isfile(join(backtestfolder, f))]
+        # if len(foundfolders) > 0:
+        #     latest = ''
+        #     for folder in foundfolders:
+        #         if folder > latest:
+        #             latest = folder
+        # return latest
+        return naut_dict['LOGS_FOLDER']
 
-    def get_log_filepath(self):
-        backtestdir = test_dict['CONDORGP_IN_BACKTESTS_DIR']
-        latest_folder = self.get_latest_log_dir()
-        return f'{backtestdir}{latest_folder}/log.txt'
-
-    def get_latest_log_content(self):
-        backtestdir = test_dict['CONDORGP_IN_BACKTESTS_DIR']
-        latest_folder = self.get_latest_log_dir()
-        if latest_folder:
-            # get contents
-            latestlogs = self.get_all_lines(backtestdir + latest_folder + '/log.txt')
+    def get_log_filepath(self, specific_log = 'condor_log'):
+        # backtestdir = test_dict['CONDORGP_IN_BACKTESTS_DIR']
+        # latest_folder = self.get_latest_log_dir()
+        # return f'{backtestdir}{latest_folder}/log.txt'
+        if specific_log == 'condor_log':
+            return naut_dict['CONDOR_LOG_FILE']
+        elif specific_log == 'nautilus_log':
+            return naut_dict['NAUTILUS_LOG_FILE']
         else:
-            return []
-        return latestlogs
+            return "No specific log provided: use either 'condor_log' or 'nautilus_log'"
 
-    def pull_latest_log_into_overall_backtest_log(self):
-        backtestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR']
-        backtestlog = lean_dict['BACKTEST_LOG_LOCALPACKAGES']
-        latest = self.get_latest_log_dir()
-        if latest != '':
-            # open file, and append to existing log
-            latestlogs = self.get_all_lines(backtestfolder + latest + '/log.txt')
-            # Open a file with access mode 'a'
-            updatedlog = open(backtestlog, 'a')
-            for line in latestlogs:
-                updatedlog.write(line)
-            updatedlog.close()
-        return latest
 
-    def cut_pys_in_backtest_code_dir(self):
-        latestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR'] + \
-            self.pull_latest_log_into_overall_backtest_log() + '/code/'
-        onlyfiles = \
-            [f for f in listdir(latestfolder) if isfile(join(latestfolder, f))]
-        for file in onlyfiles:
-            os.rename(latestfolder+file, latestfolder+file[:-3])
+
+    def get_latest_log_content(self, specific_log = 'condor_log'):
+        # backtestdir = test_dict['CONDORGP_IN_BACKTESTS_DIR']
+        # latest_folder = self.get_latest_log_dir()
+        # if latest_folder:
+        #     # get contents
+        #     latestlogs = self.get_all_lines(backtestdir + latest_folder + '/log.txt')
+        # else:
+        #     return []
+        # return latestlogs
+
+        if specific_log == 'condor_log':
+            log_file = naut_dict['CONDOR_LOG_FILE']
+        elif specific_log == 'nautilus_log':
+            log_file = naut_dict['NAUTILUS_LOG_FILE']
+        else:
+            return "No specific log provided: use either 'condor_log' or 'nautilus_log'"
+        return self.get_all_lines(log_file)
+
+    # LEAN HANGOVER
+    # def pull_latest_log_into_overall_backtest_log(self):
+    #     backtestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR']
+    #     backtestlog = lean_dict['BACKTEST_LOG_LOCALPACKAGES']
+    #     latest = self.get_latest_log_dir()
+    #     if latest != '':
+    #         # open file, and append to existing log
+    #         latestlogs = self.get_all_lines(backtestfolder + latest + '/log.txt')
+    #         # Open a file with access mode 'a'
+    #         updatedlog = open(log_file, 'a')
+    #         for line in latestlogs:
+    #             updatedlog.write(line)
+    #         updatedlog.close()
+    #     return latest
+
+    # LEAN HANGOVER
+    # def cut_pys_in_backtest_code_dir(self):
+    #     latestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR'] + \
+    #         self.pull_latest_log_into_overall_backtest_log() + '/code/'
+    #     onlyfiles = \
+    #         [f for f in listdir(latestfolder) if isfile(join(latestfolder, f))]
+    #     for file in onlyfiles:
+    #         os.rename(latestfolder+file, latestfolder+file[:-3])
 
     def get_all_lines(self, file_input):
         try:
@@ -125,7 +144,7 @@ class Utils:
 
     def get_last_x_log_lines(self,
                 lines = 150,
-                log_file_n_path = lean_dict['BACKTEST_LOG_LOCALPACKAGES']):
+                log_file_n_path = naut_dict['CONDOR_LOG_FILE']):
         '''
         Get from the (default) log the last X lines
         '''
@@ -198,7 +217,9 @@ class Utils:
             return f'past limit given: {limit_lines}', -3
         return line, no_lines_after_start
 
-    def get_last_chars(self, line):
+    def get_last_chars(self, line, ignore_last_chars = 0):
+        if ignore_last_chars:
+            line = line[0:-ignore_last_chars] # remove last chars to ignore
         temp = str.split(line,' ')
         return temp[-1]
 

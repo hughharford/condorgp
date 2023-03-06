@@ -2,8 +2,8 @@
 #       LOCAL BASE PATH
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Set here only:
-LOCAL_BASE_PATH = '/home/hsth/code/hughharford/nautilus/'
-#                   "/home/hsth/code/hughharford/nautilus/"
+LOCAL_BASE_PATH = '/home/hsth/code/hughharford/nautilus/condorgp/'
+#                   "/home/hsth/code/hughharford/nautilus/condorgp/"
 
 # HIGH LEVEL CONFIGURATION OPTIONS:
 ####################################################
@@ -22,9 +22,14 @@ highlevel_config_dict = {
 # ################################## ##################################
 
 #                                   "condorgp/condorgp/util/logs"
-NAUT_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/condorgp/util/logs/nautilus_log.txt'
+NAUTILUS_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/nautilus_log.txt'
+CONDOR_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/condor_log.txt'
+LOGS_FOLDER = 'condorgp/util/logs/'
+
 naut_dict = {
-    'NAUT_LOG_FILE': NAUT_LOG_FILE,
+    'LOGS_FOLDER': LOGS_FOLDER,
+    'NAUTILUS_LOG_FILE': NAUTILUS_LOG_FILE,
+    'CONDOR_LOG_FILE': CONDOR_LOG_FILE,
 }
 
 # ################################## ##################################
@@ -106,7 +111,7 @@ BASIC_TEST_ALGO_LEAN = 'BasicTemplateFrameworkAlgorithm.py'
 CONDOR_TEST_ALGOS_DIR = 'leanQC/config/'
 
 CONDORGP_WITHIN_LEAN_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
-CONDORGP_IN_BACKTESTS_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/backtests/'
+# CONDORGP_IN_BACKTESTS_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/backtests/'
 
 
 test_dict = {
@@ -125,7 +130,7 @@ test_dict = {
     'CONDOR_CONFIG_PATH': CONDOR_CONFIG_PATH,
 
     'CONDORGP_WITHIN_LEAN_DIR': CONDORGP_WITHIN_LEAN_DIR,
-    'CONDORGP_IN_BACKTESTS_DIR': CONDORGP_IN_BACKTESTS_DIR,
+    # 'CONDORGP_IN_BACKTESTS_DIR': CONDORGP_IN_BACKTESTS_DIR,
 
     }
 

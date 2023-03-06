@@ -1,6 +1,6 @@
 import logging
 import sys
-from condorgp.params import util_dict
+from condorgp.params import util_dict, naut_dict
 
 
 loggers = {}
@@ -21,7 +21,7 @@ class CondorLogger:
 
     def __init__(self):
 
-        sys.stdout = open(util_dict['CONDOR_LOG'], "a")
+        sys.stdout = open(naut_dict['CONDOR_LOG_FILE'], "a")
         e_type, e_val, e_tb = sys.exc_info()
         traceback.print_exception(e_type, e_val, e_tb, file = sys.stdout)
 
