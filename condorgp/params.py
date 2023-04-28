@@ -39,7 +39,6 @@ class Params:
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         # Set here only:
         LOCAL_BASE_PATH = '/home/hsth/code/hughharford/nautilus/condorgp/'
-        #                   "/home/hsth/code/hughharford/nautilus/condorgp/"
 
         # HIGH LEVEL CONFIGURATION OPTIONS:
         ####################################################
@@ -51,6 +50,7 @@ class Params:
         self.highlevel_config_dict = {
             # TODO: Delete __ 'RUN_WITH_LEAN_CONTAINERS': RUN_WITH_LEAN_CONTAINERS,
             'RUN_VERBOSE_FOR_DEBUG': RUN_VERBOSE_FOR_DEBUG,
+            'LOCAL_BASE_PATH': LOCAL_BASE_PATH,
         }
 
         # ################################## ##################################
