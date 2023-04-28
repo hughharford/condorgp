@@ -191,7 +191,7 @@ class GpControl:
 
 if __name__ == "__main__":
 
-    eval_used = 'eval_nautilus' # 'eval_test_6'
+    eval_used = 'eval_nautilus'
     pset_used = 'test_pset7aTyped'
     pop = 5
     gens = 2

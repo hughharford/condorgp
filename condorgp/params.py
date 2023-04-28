@@ -8,7 +8,7 @@ class Params:
         self.add_dict_params(self.naut_dict)
         self.add_dict_params(self.test_dict)
         self.add_dict_params(self.highlevel_config_dict)
-
+        
 
     def add_dict_params(self, params_dict):
         self.params_list.append(params_dict)

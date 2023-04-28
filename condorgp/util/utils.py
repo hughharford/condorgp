@@ -7,14 +7,10 @@ from datetime import datetime
 
 from file_read_backwards import FileReadBackwards
 
-from condorgp.params import Params # naut_dict, test_dict, util_dict, lean_dict
+from condorgp.params import Params
 from condorgp.gp.gp_custom_functions import GpCustomFunctions
 
 import sys
-# global NAUT_DICT
-# global LEAN_DICT
-# global TEST_DICT
-# global UTIL_DICT
 
 class Utils():
     '''

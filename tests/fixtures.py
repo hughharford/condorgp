@@ -1,8 +1,14 @@
 import pytest
+from condorgp.params import Params
 from condorgp.util.utils import Utils
 from condorgp.gp.gp_control import GpControl
 from condorgp.learning.dependency_factory import DependencyFactory
 from condorgp.learning.dependency_factory_overridden import DependencyFactoryOverridden
+
+
+@pytest.fixture
+def these_params():
+    return Params()
 
 @pytest.fixture
 def utils():
