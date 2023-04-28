@@ -1,11 +1,15 @@
-from condorgp.params import util_dict, test_dict, lean_dict
+from condorgp.params import Params #, util_dict, test_dict, lean_dict
 
 from condorgp.factories.initial_factory import InitialFactory
 from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
 
+# NB
+# TODO:below, search for: "### HACK HERE HACK HERE ###"
 
 class GpControl:
     def __init__(self):
+        # get params object:
+        self.p = Params()
         '''
             Where the gp is controlled from.
             Setup, sizing, initiation of gp runs: psets, operators, evaluator
@@ -13,8 +17,8 @@ class GpControl:
         '''
         self.inject_gp() # inject dependencies
         self.inject_utils()
-        self.inject_backtest_runner()
         self.inject_logger()
+        self.inject_backtest_runner()
 
         self.log.info(f"{'>'*10}, GpControl Initialising {'>'*10}")
         # default population set and evaluator (fitness function)
@@ -40,7 +44,12 @@ class GpControl:
     def inject_backtest_runner(self):
         ''' dependency injection of backtest runner '''
         # was lean, now moving to Nautilus
-        self.lean = self.factory.get_backtest_runner()
+        # this returns a Nautilus backtest base object, but below
+        # this will be run via a hack command line script to capture
+        # logs - as the core of Nautilus is in Rust (and logging connections)
+        # are currently beyond me
+        ### HACK HERE HACK HERE ###
+        self.backtester = self.factory.get_backtest_runner(self.log)
 
     def inject_logger(self):
         ''' dependency injection of logger '''
@@ -71,8 +80,9 @@ class GpControl:
         stat_params = {}        # Set 7: the stats feedback
         self.gp.set_stats(stat_params)
 
-        # additionally, copy gp_custom_functions to LocalPackages:
-        self.util.cp_custom_funcs_to_lp() # cf tidy up in run_gp, default on
+        # LEAN:
+        # additionally, copy gp_custom_functions to LEAN LocalPackages:
+        # self.util.cp_custom_funcs_to_lp() # cf tidy up in run_gp, default on
 
     def set_population(self, pop_size):
         self.gp.set_pop_size(pop_size)
@@ -102,7 +112,8 @@ class GpControl:
     def run_gp(self, inputs = [0,0,0]):
         ''' undertakes the run as specified'''
         self.gp.run_gp(inputs)
-        if self.default_tidyup: self.util.del_pys_from_local_packages()
+        # LEAN HANGOVER:
+        # # # # # if self.default_tidyup: self.util.del_pys_from_local_packages()
 
     def get_logbook(self):
         return self.gp.logbook
@@ -119,9 +130,13 @@ class GpControl:
             self.log.debug(f'{individual} not wrapped: {str(e)}')
             new_fitness = -100.0
         config_to_run = self.p.lean_dict['LEAN_INJECTED_ALGO_JSON']
+        config_to_run = self.p.lean_dict['LEAN_INJECTED_ALGO_JSON']
         try:
             if self.run_backtest:
                 self.log.debug("GpControl.eval_test_6 >>>> RUN LEAN >>>>")
+            # LEAN HANGOVER:
+            # # # # # # # #
+                self.backtester.run_lean_via_CLI('main.py', config_to_run)
             # LEAN HANGOVER:
             # # # # # # # #
                 self.backtester.run_lean_via_CLI('main.py', config_to_run)
@@ -176,7 +191,7 @@ class GpControl:
 
 if __name__ == "__main__":
 
-    eval_used = 'eval_test_6'
+    eval_used = 'eval_nautilus' # 'eval_test_6'
     pset_used = 'test_pset7aTyped'
     pop = 5
     gens = 2
