@@ -25,10 +25,15 @@ class CondorLogger:
         self.test_dict = p.get_params("test_dict")
         self.naut_dict = p.get_params("naut_dict")
 
-
+        # this captures to file the Condor logs
         sys.stdout = open(self.naut_dict['CONDOR_LOG_FILE'], "a")
         e_type, e_val, e_tb = sys.exc_info()
         traceback.print_exception(e_type, e_val, e_tb, file = sys.stdout)
+
+        # looking to get the Nautilus logs also to a file...
+        sys.stderr = open(self.naut_dict['NAUTILUS_LOG_FILE'], "a")
+        e_type, e_val, e_tb = sys.exc_info()
+        traceback.print_exception(e_type, e_val, e_tb, file = sys.stderr)
 
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
@@ -40,10 +45,10 @@ class CondorLogger:
         out.setFormatter(formatter)
         self.log.addHandler(out)
 
-        # err = logging.StreamHandler(sys.stderr)
-        # err.setLevel(logging.DEBUG)
-        # err.setFormatter(formatter)
-        # self.log.addHandler(err)
+        err = logging.StreamHandler(sys.stderr)
+        err.setLevel(logging.DEBUG)
+        err.setFormatter(formatter)
+        self.log.addHandler(err)
 
         # consoleHandler = logging.StreamHandler()
         # self.log.addHandler(consoleHandler)
