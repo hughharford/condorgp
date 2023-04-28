@@ -44,14 +44,12 @@ condorgp/interfaces/__init__.py
 condorgp/interfaces/gp_provider.py
 condorgp/util/__init__.py
 condorgp/util/log.py
-condorgp/util/util_funcs.py
+condorgp/util/utils.py
 notebooks/.keep
 raw_data/.keep
 scripts/condorgp-run
-tests/__init__.py
 tests/fixtures.py
 tests/features/00_cell_bbd.feature
 tests/features/01_cell_basics.feature
 tests/step_defs/__init__.py
 tests/step_defs/t_e_s_t__BDDtemplate.py
-tests/step_defs/test_02_lean_algos_steps.py

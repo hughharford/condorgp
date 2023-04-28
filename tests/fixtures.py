@@ -6,34 +6,34 @@ from condorgp.learning.dependency_factory import DependencyFactory
 from condorgp.learning.dependency_factory_overridden import DependencyFactoryOverridden
 
 
-@pytest.fixture
-def these_params():
-    return Params()
+# @pytest.fixture
+# def params():
+#   return Params()
 
-@pytest.fixture
-def utils():
-    return Utils()
+# @pytest.fixture
+# def utils():
+#   return Utils()
 
 @pytest.fixture
 def deap_one(): # this needs to be updated in tests numbered < 5
-    return GpControl()
+  return GpControl()
 
 @pytest.fixture
 def gpc():
-    return GpControl()
+  return GpControl()
 
 @pytest.fixture
 def gpc2():
-    return GpControl()
+  return GpControl()
 
 @pytest.fixture
 def gpc3():
-    return GpControl()
+  return GpControl()
 
 @pytest.fixture
 def dep_di():
-    return DependencyFactory().get_dependency()
+  return DependencyFactory().get_dependency()
 
 @pytest.fixture
 def dep_di_mock():
-    return DependencyFactoryOverridden().get_dependency()
+  return DependencyFactoryOverridden().get_dependency()

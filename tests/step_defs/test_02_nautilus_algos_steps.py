@@ -1,20 +1,21 @@
 import os.path
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from tests.fixtures import utils
+# from tests.fixtures import utils
+# from tests.fixtures import params
 from tests.fixtures import *
 
 EXTRA_TYPES = {
     'Number': int,
     'String': str,
     'Float': float,
-}
+    }
 
 CONVERTERS = {
     'initial': int,
     'some': int,
     'total': int,
-}
+    }
 
 scenarios('../features/02_nautilus_algos.feature')
 
@@ -29,14 +30,15 @@ scenarios('../features/02_nautilus_algos.feature')
 '''
 
 @given('a Nautilus setup ready to run')
-def nautilus_setup_is_ready(params):
+def nautilus_setup_is_ready():
     pass # assumption for now
-    x = params.util_dict
+
+
 
 @given(parsers.cfparse('an evolved "{input_ind:String}" is specified',
                        extra_types=EXTRA_TYPES), target_fixture='input_ind')
 @given('an evolved "<input_ind>" is specified', target_fixture='input_ind')
-def input_evolved_code(utils, input_ind):
+def input_evolved_code(input_ind):
     '''
     copies across config files and algorithms as needed
     '''
@@ -74,7 +76,7 @@ def run_nautilus_and_evaluator(input_ind):
 @then(parsers.cfparse('the "{output_ind:String}" is found',
                        extra_types=EXTRA_TYPES), target_fixture='output_ind')
 @then('the "<output_ind>" is found', target_fixture='output_ind')
-def results_files_are_updated(utils, output_ind):
+def results_files_are_updated(output_ind):
     '''
     checks in the log file that the algo name is found
     only uses the last X lines of the log file
@@ -85,7 +87,7 @@ def results_files_are_updated(utils, output_ind):
 @then(parsers.cfparse('the result: "{expected_value:Float}" is reported',
                        extra_types=EXTRA_TYPES), target_fixture='expected_value')
 @then('the result: "<expected_value>" is reported', target_fixture='expected_value')
-def check_results(expected_value, utils):
+def check_results(expected_value):
     key_req = 'Return Over Maximum Drawdown'
     limit_lines = 25 # util_dict['NO_LOG_LINES']
     # got = utils.get_key_line_in_lim(key_req, limit_lines = limit_lines)

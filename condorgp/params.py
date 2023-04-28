@@ -1,6 +1,13 @@
 # params class defined here to hold many dicts of parameter values
 
 class Params:
+    '''
+    To hold all the parameters needed, and master them.
+
+    Util (util_dict), Test (test_dict)
+    Nautilus (naut_dict), High Level Config (highlevelconfig_dict)
+    '''
+
     def __init__(self):
         self.params_list = []
         self.collect_params()
@@ -8,7 +15,7 @@ class Params:
         self.add_dict_params(self.naut_dict)
         self.add_dict_params(self.test_dict)
         self.add_dict_params(self.highlevel_config_dict)
-        
+
 
     def add_dict_params(self, params_dict):
         self.params_list.append(params_dict)

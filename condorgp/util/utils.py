@@ -12,7 +12,7 @@ from condorgp.gp.gp_custom_functions import GpCustomFunctions
 
 import sys
 
-class Utils():
+class Utils:
     '''
         Various utility functions, hold all place for now
     '''
