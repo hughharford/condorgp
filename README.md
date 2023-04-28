@@ -1,13 +1,12 @@
-# Data analysis
-- Document here the project: condorgp
-- Description: Project Description
-- Data Source:
-- Type of analysis:
+[![Build Status](https://dev.azure.com/hughharford/CONDOR_GP/_apis/build/status%2Fhughharford.condorgp?branchName=refs%2Fpull%2F17%2Fmerge)](https://dev.azure.com/hughharford/CONDOR_GP/_build/latest?definitionId=1&branchName=refs%2Fpull%2F17%2Fmerge)
 
-Please document the project the better you can.
+# About CondorGP
+- This is a highly ambitious Fintech AI project. 
+- Description: genetic programming
+- Data Source: various tbc, expected quant market history only, for initial hypothesis
+- Type of analysis: backtested evolving algorithms created by DEAP, with fitness function specified by us.
 
 # Startup the project
-
 The initial setup.
 
 Create virtualenv and install the project:
@@ -16,11 +15,13 @@ sudo apt-get install virtualenv python-pip python-dev
 deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
     pip install pip -U; pip install -r requirements.txt
 ```
-
 Unittest test:
 ```bash
 make clean install test
 ```
+
+STANDARD BOILERPLATE FROM HERE DOWN >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 Check for condorgp in gitlab.com/{group}.
 If your project is not set please add it:
