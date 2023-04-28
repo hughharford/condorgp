@@ -1,12 +1,10 @@
 import os
 import os.path
-
-import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
 from tests.fixtures import utils
 from condorgp.params import lean_dict, test_dict, util_dict
-from condorgp.evaluation.lean_runner import RunLean
+from condorgp.evaluation.lean.lean_runner import RunLean
 
 EXTRA_TYPES = {
     'Number': int,
@@ -20,7 +18,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../../features/02_lean_algos.feature')
+scenarios('../features/02_lean_algos.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             Lean tests each evolved individual

@@ -1,4 +1,4 @@
-from condorgp.params import util_dict, test_dict, lean_dict
+from condorgp.params import Params #, util_dict, test_dict, lean_dict
 
 from condorgp.factories.initial_factory import InitialFactory
 from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
@@ -8,6 +8,8 @@ from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
 
 class GpControl:
     def __init__(self):
+        # get params object:
+        self.p = Params()
         '''
             Where the gp is controlled from.
             Setup, sizing, initiation of gp runs: psets, operators, evaluator
@@ -121,7 +123,7 @@ class GpControl:
         func = self.gp.toolbox.compile(expr=individual)
         # run Lean with algo and config:
         input_ind = 'IndBasicAlgo1.py'
-        config_to_run = test_dict['CONDOR_TEST_CONFIG_FILE_1']
+        config_to_run = self.p.test_dict['CONDOR_TEST_CONFIG_FILE_1']
         self.util.copy_config_in(input_ind)
         self.util.copy_algo_in(input_ind)
         self.backtester.run_lean_via_CLI(input_ind, config_to_run)
@@ -140,7 +142,7 @@ class GpControl:
         self.log.info(f'eval_test_5_2, PRINT INDIVIDUAL >>> {individual}')
         try:
             self.log.info(f'eval_test_5_2, RUN? >>> {func(check)}')
-            log_file_path = util_dict['CONDOR_LOG']
+            log_file_path = self.p.util_dict['CONDOR_LOG']
             out = self.util.get_key_line_in_lim(
                                     check, log_filepath = log_file_path)
             if check in out[0]: new_fitness = 100
@@ -155,7 +157,7 @@ class GpControl:
         func = self.gp.toolbox.compile(expr=individual)
         self.log.info(f'eval_test_5, OUTPUTTING IND >>> \n {individual}')
         new_fitness = 0
-        config_to_run = lean_dict['LEAN_INJECTED_ALGO_JSON']
+        config_to_run = self.p.lean_dict['LEAN_INJECTED_ALGO_JSON']
         self.util.cp_inject_algo_in_n_sort('_test_05.py','')
         try:
             self.backtester.run_lean_via_CLI('main.py', config_to_run)
@@ -175,7 +177,7 @@ class GpControl:
         except Exception as e:
             self.log.debug(f'{individual} not wrapped: {str(e)}')
             new_fitness = -100.0
-        config_to_run = lean_dict['LEAN_INJECTED_ALGO_JSON']
+        config_to_run = self.p.lean_dict['LEAN_INJECTED_ALGO_JSON']
         try:
             if self.run_backtest:
                 self.log.debug("GpControl.eval_test_6 >>>> RUN LEAN >>>>")
@@ -210,15 +212,14 @@ class GpControl:
         except Exception as e:
             self.log.debug(f'eval_nautilus: {individual} not wrapped: {str(e)}')
             new_fitness = -100.0
-            # LEAN HANGOVER:
-            # # # # # # # #
-            # config_to_run = lean_dict['LEAN_INJECTED_ALGO_JSON']
+
         try:
             if self.run_backtest:
                 self.log.debug(f"GpControl.{evalf_name} >>>> RUN NAUTILUS >>>>")
                 self.backtester.basic_run_through()
                 new_fitness = self.gpf.get_fit_nautilus_1()
-                # new_fitness = 9898
+                self.log.debug(f"GpControl.{evalf_name} >>>> NAUTILUS fitness {new_fitness} >>>>")
+
             else:
                 self.log.debug(f"<< ERROR eval_nautilus >>> RUN NAUTILUS HERE >>>>>>>>>>> {new_fitness}")
         except BaseException as e:

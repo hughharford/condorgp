@@ -1,5 +1,5 @@
 import subprocess
-from condorgp.params import naut_dict
+from condorgp.params import Params
 from condorgp.util.utils import Utils
 # from condorgp.factories.initial_factory import InitialFactory
 
@@ -10,8 +10,12 @@ class RunNautilus():
         # self.log = self.factory.get_logger()
         self.log = logger
         self.utils = Utils()
+        p = Params()
+        self.util_dict = p.get_params("util_dict")
+        self.test_dict = p.get_params("test_dict")
+        self.naut_dict = p.get_params("naut_dict")
 
-        self.naut_log = naut_dict['NAUTILUS_LOG_FILE']
+        self.naut_log = self.naut_dict['NAUTILUS_LOG_FILE']
 
         self.cmd_str = "/home/hsth/.pyenv/versions/3.10.8/envs/nautilus/bin/python"
         self.script_str = f"/home/hsth/code/hughharford/nautilus/condorgp/condorgp/evaluation/nautilus/nautilus_bt_base.py"

@@ -1,9 +1,9 @@
-from condorgp.params import util_dict, test_dict, naut_dict #, lean_dict
+from condorgp.params import Params
 from condorgp.util.utils import Utils
 from condorgp.util.log import CondorLogger
 
 
-class GpFunctions:
+class GpFunctions():
     '''
     Support functions for gp activities.
     '''
@@ -11,6 +11,11 @@ class GpFunctions:
     def __init__(self):
         self.util = Utils()
         self.log = CondorLogger().get_logger()
+
+        p = Params()
+        self.util_dict = p.get_params("util_dict")
+        self.test_dict = p.get_params("test_dict")
+        self.naut_dict = p.get_params("naut_dict")
 
     def print_out_please(self):
         print(f'{"print_out_please___"*5}')
@@ -46,9 +51,8 @@ class GpFunctions:
     def get_fit_nautilus_1(self):
         # self.log.info(f'<<< RUNNING gpf.get_fit_nautilus_1')
         f = 0.0
-        # find latest log, open log file
         lines_to_check = 1500
-        log_file = naut_dict['NAUTILUS_LOG_FILE'] # check the Nautilus log!
+        log_file = self.naut_dict['NAUTILUS_LOG_FILE'] # check the Nautilus log!
 
         latest_log = self.util.get_last_x_log_lines(lines = lines_to_check,
                                                     log_file_n_path = log_file)
@@ -66,10 +70,6 @@ class GpFunctions:
                                                 log_filepath = log_file,
                                                 limit_lines = lim)
             f = float(self.util.get_last_chars(got[0], ignore_last_chars = 4))
-            #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            # HERE HERE HERE HERE
-            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
             self.log.debug(f'<<< gpf.get_fit_nautilus_1 fitness = {f}, from {log_file}')
         else:
             f = -8888.8 # no backtest folder found

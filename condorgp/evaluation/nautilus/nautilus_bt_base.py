@@ -31,7 +31,7 @@ from nautilus_trader.persistence.external.readers import CSVReader
 from nautilus_trader.examples.strategies import ema_cross
 
 from condorgp.util.log import CondorLogger
-from condorgp.params import util_dict
+from condorgp.params import Params
 import sys
 
 class NautilusBTBase():
@@ -42,9 +42,13 @@ class NautilusBTBase():
     '''
 
     def __init__(self):
-
-
         ''' most basic start'''
+
+        p = Params()
+        self.util_dict = p.get_params("util_dict")
+        self.test_dict = p.get_params("test_dict")
+        self.naut_dict = p.get_params("naut_dict")
+
         #/home/hsth/code/hughharford/nautilus/condorgp/data
         self.DATA_DIR = "/home/hsth/code/hughharford/nautilus/condorgp/data/"
         self.CATALOG_PATH = self.DATA_DIR + "/naut_catalog/"
