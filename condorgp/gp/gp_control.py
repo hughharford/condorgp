@@ -154,10 +154,11 @@ class GpControl:
         Set as the default evaluator, see gp_control.__init__
         Moving gradually from Lean over to Nautilus
         '''
+        # TODO:
         evalf_name = 'eval_nautilus'
 
         # Transform the tree expression in a callable function
-        func = self.gp.toolbox.compile(expr=individual) # Deap requires this
+        func = self.gp.toolbox.compile(expr=individual) # Deap reqmt, not used
         self.log.info(f'{evalf_name}, OUTPUTTING IND >>> \n {individual}')
         new_fitness = 0.0
         # additional code to inject evolved code individual
