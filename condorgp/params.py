@@ -64,6 +64,8 @@ class Params:
         #           MAIN NAUTILUS PARAMS
         # ################################## ##################################
 
+        # /home/hsth/code/hughharford/nautilus/condorgp/condorgp/util/logs/nautilus_log.txt
+
         #                                   "condorgp/condorgp/util/logs"
         NAUTILUS_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/nautilus_log.txt'
         CONDOR_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/condor_log.txt'

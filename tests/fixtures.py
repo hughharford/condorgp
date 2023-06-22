@@ -6,13 +6,13 @@ from condorgp.learning.dependency_factory import DependencyFactory
 from condorgp.learning.dependency_factory_overridden import DependencyFactoryOverridden
 
 
-# @pytest.fixture
-# def params():
-#   return Params()
+@pytest.fixture
+def params(): # these weren't being picked up by pytest at one point. v annoying
+  return Params()
 
-# @pytest.fixture
-# def utils():
-#   return Utils()
+@pytest.fixture
+def utils(): # these weren't being picked up by pytest at one point. v annoying
+  return Utils()
 
 @pytest.fixture
 def deap_one(): # this needs to be updated in tests numbered < 5

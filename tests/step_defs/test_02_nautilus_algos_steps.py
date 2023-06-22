@@ -1,7 +1,9 @@
 import os.path
 from pytest_bdd import scenarios, given, when, then, parsers
 
-# from tests.fixtures import utils
+from condorgp.params import Params
+
+from tests.fixtures import utils
 # from tests.fixtures import params
 from tests.fixtures import *
 
@@ -87,12 +89,14 @@ def results_files_are_updated(output_ind):
 @then(parsers.cfparse('the result: "{expected_value:Float}" is reported',
                        extra_types=EXTRA_TYPES), target_fixture='expected_value')
 @then('the result: "<expected_value>" is reported', target_fixture='expected_value')
-def check_results(expected_value):
-    key_req = 'Return Over Maximum Drawdown'
-    limit_lines = 25 # util_dict['NO_LOG_LINES']
-    # got = utils.get_key_line_in_lim(key_req, limit_lines = limit_lines)
+def check_results(expected_value, utils):
+    key_req = 'Sharpe Ratio (252 days)' # 'Return Over Maximum Drawdown'
+    limit_lines = 225 # util_dict['NO_LOG_LINES']
+    got = ""
+    got = utils.get_key_line_in_lim(key_req, limit_lines = limit_lines)
 
-    assert 2 == 2
+    assert got[0] == "hi there"
+    found = '2023-06-18T18:44:57.361531725Z [INF] BACKTESTER-001.BacktestEngine: Sharpe Ratio (252 days):        6.778'
 
     # assert got[0] != 'not found'
     # assert got[1] > 0 and got[1] < limit_lines

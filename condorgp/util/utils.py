@@ -21,7 +21,8 @@ class Utils:
         self.cfs = GpCustomFunctions()
         self.p = Params()
         self.NAUT_DICT = self.p.naut_dict
-        LEAN_DICT = self.p.lean_dict
+        NAUT_DICT = self.p.naut_dict
+        # LEAN_DICT = self.p.lean_dict
         TEST_DICT = self.p.test_dict
         UTIL_DICT = self.p.util_dict
 
@@ -177,8 +178,7 @@ class Utils:
                 But taken in reverse order, last first as end of the log file
         '''
         # HACK HACK HACK
-        if log_file_n_path == "":
-            log_file_n_path = self.LEAN_DICT['BACKTEST_LOG_LOCALPACKAGES']
+        log_file_n_path = self.NAUT_DICT['NAUTILUS_LOG_FILE']
 
         log_to_search_list = self.get_last_x_log_lines(lines, log_file_n_path)
         # return both the line and it's index, to indicate where it was found
@@ -198,11 +198,10 @@ class Utils:
             How many lines after the start_line is found
         '''
         # HACK HACK HACK
-        if log_file_n_path == "":
-            log_file_n_path = self.LEAN_DICT['BACKTEST_LOG_LOCALPACKAGES']
+        log_file_n_path = self.NAUT_DICT['NAUTILUS_LOG_FILE']
         # HACK HACK HACK
         if limit_lines == 0:
-            limit_lines = self.LEAN_DICT['BACKTEST_LOG_LOCALPACKAGES']
+            limit_lines = self.NAUT_DICT['BACKTEST_LOG_LOCALPACKAGES']
 
 
         found_tuple = self.retrieve_log_line_with_key(
@@ -311,10 +310,10 @@ class Utils:
         N.B.
         This then needs copying across into Local Packages, renaming etc
         '''
-        config_path = LEAN_DICT['CONDOR_CONFIG_PATH']
-        f_name_n_path = config_path + LEAN_DICT['LEAN_TO_INJECT_TEMPLATE_ALGO']
+        config_path = self.NAUT_DICT['CONDOR_CONFIG_PATH']
+        f_name_n_path = config_path + self.NAUT_DICT['LEAN_TO_INJECT_TEMPLATE_ALGO']
         f_name_n_path = f_name_n_path[0:-3] + base_algo_name_ext
-        f_new_file = config_path + LEAN_DICT['LEAN_INJECTED_ALGO']
+        f_new_file = config_path + self.NAUT_DICT['LEAN_INJECTED_ALGO']
         key_line = '## INJECT GP CODE HERE:'
         # careful here, the indentation is crucial,
         # see initial replacement line string:
@@ -374,17 +373,17 @@ class Utils:
 
     # TODO
     # REWORK (LEAN HANGOVER, but functionality likely still required)
-    def copy_config_in(self, input_ind):
-        # copy config.json across before container launch
-        if input_ind[-3:] == '.py':
-            input_ind = input_ind[0:-3]
-        if input_ind[-1] == '1':
-            config_to_copy = TEST_DICT['CONDOR_TEST_CONFIG_FILE_1']
-        elif input_ind[-1] == '2':
-            config_to_copy = TEST_DICT['CONDOR_TEST_CONFIG_FILE_2']
+    # def copy_config_in(self, input_ind):
+    #     # copy config.json across before container launch
+    #     if input_ind[-3:] == '.py':
+    #         input_ind = input_ind[0:-3]
+    #     if input_ind[-1] == '1':
+    #         config_to_copy = TEST_DICT['CONDOR_TEST_CONFIG_FILE_1']
+    #     elif input_ind[-1] == '2':
+    #         config_to_copy = TEST_DICT['CONDOR_TEST_CONFIG_FILE_2']
 
-        config_from_path = TEST_DICT['CONDOR_CONFIG_PATH']
-        self.cp_config_to_lean_launcher(config_from_path, config_to_copy)
+    #     config_from_path = TEST_DICT['CONDOR_CONFIG_PATH']
+    #     self.cp_config_to_lean_launcher(config_from_path, config_to_copy)
 
     # TODO
     # READY TO DELETE tbc  (LEAN HANGOVER)
