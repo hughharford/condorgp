@@ -6,7 +6,7 @@ wheel>=0.29
 
 # data science
 numpy
-
+pandas
 
 # tests/linter
 black
