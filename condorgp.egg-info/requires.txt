@@ -3,6 +3,7 @@ setuptools>=26
 twine
 wheel>=0.29
 numpy
+pandas
 black
 coverage
 flake8
