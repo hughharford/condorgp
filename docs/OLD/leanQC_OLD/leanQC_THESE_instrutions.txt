@@ -1,0 +1,15 @@
+# LEAN INSTALLATION ON LOCAL MACHINE (required)
+# ensure git clone is alongside condorgp folder
+
+# CLONE FROM GIT
+git clone git@github.com:QuantConnect/Lean.git # for SSH on your local
+# Or
+# git clone https://github.com/QuantConnect/Lean.git # for lesser & docker
+
+# BUILD LEAN (required dotnet)
+dotnet build QuantConnect.Lean.sln
+
+# INSTALL AND INITIALISE LEAN
+pip install lean
+lean create-project condorgpLEAN
+lean init

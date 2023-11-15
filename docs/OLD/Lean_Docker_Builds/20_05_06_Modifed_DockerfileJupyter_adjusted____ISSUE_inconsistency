@@ -1,0 +1,262 @@
+hsth@hsthYOGA-13IKB:~/git/Lean$ sudo docker build -t quantconnect/jupyter -f 20_05_06_Modifed_DockerfileJupyter_adjusted  .
+Sending build context to Docker daemon  2.079GB
+Step 1/17 : FROM quantconnect/lean:foundation
+ ---> dd468869eec3
+Step 2/17 : MAINTAINER QuantConnect <contact@quantconnect.com>
+ ---> Running in b80268193ba9
+Removing intermediate container b80268193ba9
+ ---> 126f2e850f1e
+Step 3/17 : RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini &&     echo "1361527f39190a7338a0b434bd8c88ff7233ce7b9a4876f3315c22fce7eca1b0 *tini" | sha256sum -c - &&     mv tini /usr/local/bin/tini &&     chmod +x /usr/local/bin/tini
+ ---> Running in 98d1820556f7
+tini: OK
+Removing intermediate container 98d1820556f7
+ ---> b26906de63ef
+Step 4/17 : RUN git clone https://github.com/QuantConnect/pythonnet &&     cd pythonnet && cp src/runtime/interop36.cs src/runtime/interop36m.cs &&     python setup.py install && cd .. && rm -irf pythonnet
+ ---> Running in 2c17737ad5d9
+Cloning into 'pythonnet'...
+running install
+running build
+running build_ext
+Checking for updates from https://www.nuget.org/api/v2/.
+Currently running NuGet.exe 4.1.0.
+Updating NuGet.exe to 5.5.1.
+Update successful.
+MSBuild auto-detection: using msbuild version '15.0' from '/usr/lib/mono/msbuild/15.0/bin'.
+Restoring NuGet package NUnit.ConsoleRunner.3.7.0.
+Restoring NuGet package UnmanagedExports.1.2.7.
+Restoring NuGet package NUnit.3.7.1.
+  GET https://dotnetmyget.blob.core.windows.net/artifacts/dotnet-core/nuget/v3/flatcontainer/nunit.consolerunner/3.7.0/nunit.consolerunner.3.7.0.nupkg
+  GET https://dotnetmyget.blob.core.windows.net/artifacts/dotnet-core/nuget/v3/flatcontainer/nunit/3.7.1/nunit.3.7.1.nupkg
+  GET https://dotnetmyget.blob.core.windows.net/artifacts/dotnet-core/nuget/v3/flatcontainer/unmanagedexports/1.2.7/unmanagedexports.1.2.7.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/unmanagedexports/1.2.7/unmanagedexports.1.2.7.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/nunit/3.7.1/nunit.3.7.1.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/nunit/3.7.1/nunit.3.7.1.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/nunit.consolerunner/3.7.0/nunit.consolerunner.3.7.0.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/unmanagedexports/1.2.7/unmanagedexports.1.2.7.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/nunit.consolerunner/3.7.0/nunit.consolerunner.3.7.0.nupkg
+  OK https://api.nuget.org/v3-flatcontainer/unmanagedexports/1.2.7/unmanagedexports.1.2.7.nupkg 58ms
+Installing UnmanagedExports 1.2.7.
+  OK https://api.nuget.org/v3-flatcontainer/nunit/3.7.1/nunit.3.7.1.nupkg 455ms
+Installing NUnit 3.7.1.
+  OK https://api.nuget.org/v3-flatcontainer/nunit/3.7.1/nunit.3.7.1.nupkg 518ms
+  NotFound https://dotnetmyget.blob.core.windows.net/artifacts/dotnet-core/nuget/v3/flatcontainer/unmanagedexports/1.2.7/unmanagedexports.1.2.7.nupkg 1071ms
+  NotFound https://dotnetmyget.blob.core.windows.net/artifacts/dotnet-core/nuget/v3/flatcontainer/nunit.consolerunner/3.7.0/nunit.consolerunner.3.7.0.nupkg 1453ms
+  OK https://api.nuget.org/v3-flatcontainer/unmanagedexports/1.2.7/unmanagedexports.1.2.7.nupkg 1280ms
+Adding package 'UnmanagedExports.1.2.7' to folder '/pythonnet/packages'
+Added package 'UnmanagedExports.1.2.7' to folder '/pythonnet/packages'
+Adding package 'NUnit.3.7.1' to folder '/pythonnet/packages'
+Added package 'NUnit.3.7.1' to folder '/pythonnet/packages'
+  OK https://api.nuget.org/v3-flatcontainer/nunit.consolerunner/3.7.0/nunit.consolerunner.3.7.0.nupkg 1512ms
+Installing NUnit.ConsoleRunner 3.7.0.
+  OK https://api.nuget.org/v3-flatcontainer/nunit.consolerunner/3.7.0/nunit.consolerunner.3.7.0.nupkg 1593ms
+Adding package 'NUnit.ConsoleRunner.3.7.0' to folder '/pythonnet/packages'
+Added package 'NUnit.ConsoleRunner.3.7.0' to folder '/pythonnet/packages'
+
+NuGet Config files used:
+    /pythonnet/NuGet.config
+    /root/.config/NuGet/NuGet.Config
+
+Feeds used:
+    https://dotnet.myget.org/F/dotnet-core/api/v3/index.json
+    https://api.nuget.org/v3/index.json
+
+Installed:
+    3 package(s) to packages.config projects
+
+>>>> xbuild tool is deprecated and will be removed in future updates, use msbuild instead <<<<
+
+XBuild Engine Version 14.0
+Mono, Version 5.12.0.301
+Copyright (C) 2005-2013 Various Mono authors
+
+>>>> xbuild tool is deprecated and will be removed in future updates, use msbuild instead <<<<
+
+XBuild Engine Version 14.0
+Mono, Version 5.12.0.301
+Copyright (C) 2005-2013 Various Mono authors
+		Configuration: ReleaseMono Platform: x64
+runtime.cs(340,17): warning CS0162: Unreachable code detected
+finalizer.cs(67,45): warning CS0067: The event 'Finalizer.IncorrectRefCntResolver' is never used
+Configuration: ReleaseMono Platform: x64
+Configuration: ReleaseMono Platform: x64
+dynamic.cs(121,28): warning CS0618: 'PythonEngine.RunString(string, IntPtr?, IntPtr?)' is obsolete: 'RunString is deprecated and will be removed. Use Exec/Eval/RunSimpleString instead.'
+Configuration: ReleaseMono Platform: x64
+building 'clr' extension
+creating build/temp.linux-x86_64-3.6
+creating build/temp.linux-x86_64-3.6/src
+creating build/temp.linux-x86_64-3.6/src/monoclr
+gcc -pthread -B /opt/miniconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/opt/miniconda3/include/python3.6m -c src/monoclr/pynetinit.c -o build/temp.linux-x86_64-3.6/src/monoclr/pynetinit.o -D_REENTRANT -I/usr/lib/pkgconfig/../../include/mono-2.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
+src/monoclr/pynetinit.c: In function ‘main_thread_handler’:
+src/monoclr/pynetinit.c:143:19: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+         if (mblen > wlen)
+                   ^
+gcc -pthread -B /opt/miniconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/opt/miniconda3/include/python3.6m -c src/monoclr/clrmod.c -o build/temp.linux-x86_64-3.6/src/monoclr/clrmod.o -D_REENTRANT -I/usr/lib/pkgconfig/../../include/mono-2.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
+src/monoclr/clrmod.c:31:18: warning: function declaration isn’t a prototype [-Wstrict-prototypes]
+ static PyObject *_initclr()
+                  ^
+gcc -pthread -shared -B /opt/miniconda3/compiler_compat -L/opt/miniconda3/lib -Wl,-rpath=/opt/miniconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/src/monoclr/pynetinit.o build/temp.linux-x86_64-3.6/src/monoclr/clrmod.o -o build/lib.linux-x86_64-3.6/clr.cpython-36m-x86_64-linux-gnu.so -L/usr/lib/pkgconfig/../../lib -lmono-2.0 -lm -lrt -ldl -lpthread -lglib-2.0
+running install_lib
+copying build/lib.linux-x86_64-3.6/clr.cpython-36m-x86_64-linux-gnu.so -> /opt/miniconda3/lib/python3.6/site-packages
+running install_data
+copying /pythonnet/build/lib.linux-x86_64-3.6/Python.Runtime.dll -> /opt/miniconda3/lib/python3.6/site-packages
+running install_egg_info
+running egg_info
+creating pythonnet.egg-info
+writing pythonnet.egg-info/PKG-INFO
+writing dependency_links to pythonnet.egg-info/dependency_links.txt
+writing top-level names to pythonnet.egg-info/top_level.txt
+writing manifest file 'pythonnet.egg-info/SOURCES.txt'
+writing manifest file 'pythonnet.egg-info/SOURCES.txt'
+Copying pythonnet.egg-info to /opt/miniconda3/lib/python3.6/site-packages/pythonnet-1.0.5.30-py3.6.egg-info
+Removing intermediate container 2c17737ad5d9
+ ---> c0033ba3b681
+Step 5/17 : RUN git clone https://github.com/QuantConnect/Lean.git && cd Lean/PythonToolbox &&     python setup.py install && cd ../.. && rm -irf Lean
+ ---> Running in 66a4d4789d4a
+Cloning into 'Lean'...
+running install
+running bdist_egg
+running egg_info
+creating quantconnect.egg-info
+writing quantconnect.egg-info/PKG-INFO
+writing dependency_links to quantconnect.egg-info/dependency_links.txt
+writing requirements to quantconnect.egg-info/requires.txt
+writing top-level names to quantconnect.egg-info/top_level.txt
+writing manifest file 'quantconnect.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+warning: no files found matching 'LICENSE'
+writing manifest file 'quantconnect.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+warning: install_lib: 'build/lib' does not exist -- no Python modules to install
+
+creating build
+creating build/bdist.linux-x86_64
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+copying quantconnect.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying quantconnect.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying quantconnect.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying quantconnect.egg-info/requires.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying quantconnect.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+zip_safe flag not set; analyzing archive contents...
+creating dist
+creating 'dist/quantconnect-0.2-py3.6.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing quantconnect-0.2-py3.6.egg
+Copying quantconnect-0.2-py3.6.egg to /opt/miniconda3/lib/python3.6/site-packages
+Adding quantconnect 0.2 to easy-install.pth file
+
+Installed /opt/miniconda3/lib/python3.6/site-packages/quantconnect-0.2-py3.6.egg
+Processing dependencies for quantconnect==0.2
+Searching for requests==2.23.0
+Best match: requests 2.23.0
+Adding requests 2.23.0 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for pandas==0.25.3
+Best match: pandas 0.25.3
+Adding pandas 0.25.3 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for matplotlib==3.1.1
+Best match: matplotlib 3.1.1
+Adding matplotlib 3.1.1 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for urllib3==1.25.8
+Best match: urllib3 1.25.8
+Adding urllib3 1.25.8 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for idna==2.9
+Best match: idna 2.9
+Adding idna 2.9 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for certifi==2020.4.5.1
+Best match: certifi 2020.4.5.1
+Adding certifi 2020.4.5.1 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for chardet==3.0.4
+Best match: chardet 3.0.4
+Adding chardet 3.0.4 to easy-install.pth file
+Installing chardetect script to /opt/miniconda3/bin
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for pytz==2019.3
+Best match: pytz 2019.3
+Adding pytz 2019.3 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for numpy==1.18.1
+Best match: numpy 1.18.1
+Adding numpy 1.18.1 to easy-install.pth file
+Installing f2py script to /opt/miniconda3/bin
+Installing f2py3 script to /opt/miniconda3/bin
+Installing f2py3.6 script to /opt/miniconda3/bin
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for python-dateutil==2.8.0
+Best match: python-dateutil 2.8.0
+Adding python-dateutil 2.8.0 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for cycler==0.10.0
+Best match: cycler 0.10.0
+Adding cycler 0.10.0 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for pyparsing==2.4.7
+Best match: pyparsing 2.4.7
+Adding pyparsing 2.4.7 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for kiwisolver==1.2.0
+Best match: kiwisolver 1.2.0
+Adding kiwisolver 1.2.0 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Searching for six==1.14.0
+Best match: six 1.14.0
+Adding six 1.14.0 to easy-install.pth file
+
+Using /opt/miniconda3/lib/python3.6/site-packages
+Finished processing dependencies for quantconnect==0.2
+Removing intermediate container 66a4d4789d4a
+ ---> dcc48f1760f0
+Step 6/17 : RUN conda update -y conda &&     conda install -c conda-forge jupyterlab
+ ---> Running in ddbd8f4867f2
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... 
+The environment is inconsistent, please check the package plan carefully
+The following packages are causing the inconsistency:
+
+  - defaults/linux-64::matplotlib==3.1.3=py36_0
+  - fastai/noarch::fastai==1.0.60=1
+  - conda-forge/noarch::lunarcalendar==0.0.9=py_0
+  - conda-forge/noarch::arviz==0.7.0=py_0
+  - conda-forge/noarch::tsfresh==0.15.1=py_0
+  - conda-forge/noarch::scikit-optimize==0.7.4=py_0
+  - conda-forge/linux-64::fbprophet==0.6=py36he1b5a44_0
+  - conda-forge/linux-64::scikit-multiflow==0.4.1=py36h9de70de_1
+  - conda-forge/noarch::copulae==0.3.1=py_0
+  - conda-forge/linux-64::statsmodels==0.11.1=py36h8c4c3a4_1
+  - conda-forge/linux-64::pystan==2.19.1.1=py36hb3f55d8_1
+  - conda-forge/noarch::pymc3==3.8=py_0
+  - conda-forge/noarch::featuretools==0.13.4=py_0
+  - defaults/noarch::smart_open==1.11.1=py_0
+  - defaults/linux-64::gensim==3.8.0=py36h962f231_0
+  - conda-forge/noarch::jupyterlab_server==1.1.1=py_0
+  - conda-forge/noarch::jupyter_client==6.1.3=py_0
+  - conda-forge/noarch::jupyterlab==2.1.0=py_1
+  - conda-forge/linux-64::ipykernel==5.2.1=py36h95af2a2_0
+  - conda-forge/linux-64::notebook==6.0.3=py36_0
+  - defaults/linux-64::blaze==0.11.3=py36_0
+  - defaults/linux-64::bokeh==2.0.2=py36_0
+  - defaults/noarch::xarray==0.15.1=py_0
+  - defaults/noarch::dask==2.15.0=py_0
+  - defaults/linux-64::distributed==2.15.2=py36_0
+  - defaults/linux-64::datashape==0.5.4=py36_1
+  - defaults/linux-64::pandas==0.25.3=py36he6710b0_0
+

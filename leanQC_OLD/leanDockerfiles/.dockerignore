@@ -1,6 +1,0 @@
-packages/*
-.git/*
-.github/*
-.vs/*
-.nuget/*
-Tests/*

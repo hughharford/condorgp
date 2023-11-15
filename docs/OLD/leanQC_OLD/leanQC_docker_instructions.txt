@@ -1,0 +1,76 @@
+1. Need to clone Lean repo:
+  git clone git@github.com:QuantConnect/Lean.git
+  >> suggest strongly for path-hell reasons that this git clone command is
+  run one folder 'back', i.e. alongside the condorgp repo
+
+2. Build the container for LeanFoundation
+  sudo docker build -f DockerfileLeanFoundation -t quantconnect/lean:foundation .
+
+  >> n.b. you will need to be in the file location for the
+    docker file DockerfileLeanFoundation, i.e. Lean
+  >> n.b. this will take a seriously long time! circa 1 hour or so. Once
+    the image is built, it can be used repeatedly, so fine provided it works.
+  >> expected image size of 13.1gb
+  >> skip this build, if downloading 13gb is your preference (see 4. below)
+
+3. Install Lean
+  >> Install dotnet5:
+      https://docs.microsoft.com/en-us/dotnet/core/install/linux
+     Or pick your os etc
+
+    # @@@ see Lean/Readme.md
+    # for linux or CI builds, the script file runs nicely:
+    leanQC/installation/dotnet-install.sh
+    # Ran:
+    #     sudo bash leanQC/installation/dotnet-install.sh/dotnet-install.sh -c Current
+    # BUT failed to install dotnet
+    # Trying snap (this won't work with WSL)
+    sudo snap install dotnet-sdk --classic --channel=6.0
+    # .zshrc now recognises 'dotnet'
+
+  >> then install:
+    dotnet build QuantConnect.Lean.sln
+    # @@@@@@@                         NB. run in the Lean root folder
+  >> took 1m23s, with 0 errors, but 9434 warnings. fun.
+
+
+4. Build the subsequent docker for Lean, using the LeanFoundation image
+***********************************
+  >> Navigate to Lean/
+  >> run:
+    sudo docker build . -t quantconnect/lean:latest
+    # quantconnect/lean:latest
+
+  >> likely have errors:
+  >>> so
+      Edit the cloned Dockerfile found there:
+
+  >>>> Needs the following adjustment to build
+    # adjusted from line 23 in the Dockerfile to:
+    # i.e. comment out 2 lines, and leave 3 lines:
+
+    # COPY ./DataLibraries /Lean/Launcher/bin/Debug/
+    # COPY ./AlphaStreams/QuantConnect.AlphaStream/bin/Debug/ /Lean/Launcher/bin/Debug/
+    COPY ./Launcher/bin/Debug/ /Lean/Launcher/bin/Debug/
+    COPY ./Optimizer.Launcher/bin/Debug/ /Lean/Optimizer.Launcher/bin/Debug/
+    COPY ./Report/bin/Debug/ /Lean/Report/bin/Debug/
+
+  ###
+  #
+  # @@@ the above builds correctly (and quickly)
+  #
+  ###
+
+5. Test run of the lean_runner.py:
+***********************************
+    from condorgp.lean_runner import RunLean
+    r = RunLean()
+    r.run_lean_via_CLI()
+
+6. Test
+***********************************
+    See BBD tests 02-05 and probably further
+
+7. Follow the installation instructions in
+***********************************
+    'leanQC_THESE_instructions.txt'

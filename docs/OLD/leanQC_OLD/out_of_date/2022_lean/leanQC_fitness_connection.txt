@@ -1,0 +1,33 @@
+@ to connect gp run fitness functions, and have them run by Lean:
+# _______________________________________________________________
+
+1. need to output the deap func that is the compiled gp individual
+
+2 save that output as a useful function by Lean
+  ## where - paths and outputs etc
+  Lean config.json (see leanQC/run_docker.sh)
+    default_config_file=/home/hsth/code/hughharford/Lean/Launcher/bin/Debug/config.json
+
+    see leanQC/lean_detail/config_json.md - this is a copy of the .json above:
+    lines       note on alteration
+    -----------------------------------------------
+    12          algorithm class name
+    15          language selection
+    18-19       physical location of class
+
+    >>@ Just adjusting those, we could feed in a specified .py
+
+    A. Adjust to using our config
+        /home/hsth/code/hughharford/condorgp/leanQC/config/config.json
+        # have set to the above file in run_docker.sh
+        >>>@ seems to work: test_02_lean_steps.py passes
+
+    B. Leave fitness function alone, but change language:
+        Attempt change to Python on line 15
+        Alongside, uncomment line 19, comment line 18
+
+
+  ## specification to Lean of our custom function
+  ## requirements, e.g. top and tail or class signature etc
+
+3 confirm this work

@@ -45,7 +45,7 @@ class Params:
         #       LOCAL BASE PATH
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         # Set here only:
-        LOCAL_BASE_PATH = '/home/hsth/code/hughharford/nautilus/condorgp/'
+        LOCAL_BASE_PATH = '/home/hughharford/code/hughharford/condorgp/'
 
         # HIGH LEVEL CONFIGURATION OPTIONS:
         ####################################################
@@ -93,50 +93,49 @@ class Params:
 
         LOCALPACKAGES_BACKTEST_OUTPUTS_DIR = LOCALPACKAGES_PATH + 'backtests/'
 
+        # TO BE DELETED:
+        # ~~~~~~~~~#########################~~~~~~~~~~~~~~~~~~~~~~~~~~~~#######
         # outputs here:
-        LEAN_RESULTS_DIR = LOCALPACKAGES_BACKTEST_OUTPUTS_DIR
+        # LEAN_RESULTS_DIR = LOCALPACKAGES_BACKTEST_OUTPUTS_DIR
 
-        LEAN_CONFIG_DIR = LEAN_BASE_PATH + LEAN_LAUNCHER_DIR
-        LEAN_CONFIG_FILE = 'config.json'
+        # LEAN_CONFIG_DIR = LEAN_BASE_PATH + LEAN_LAUNCHER_DIR
+        # LEAN_CONFIG_FILE = 'config.json'
 
-        CONDOR_CONFIG_PATH = 'leanQC/config/'
-        # /home/hsth/code/hughharford/condorgp/leanQC/config/config_test_algos_2.json
+        # CONDOR_CONFIG_PATH = 'leanQC/config/'
 
-        BACKTEST_LOG_LOCALPACKAGES = LOCALPACKAGES_BACKTEST_OUTPUTS_DIR + 'log.txt'
+        # BACKTEST_LOG_LOCALPACKAGES = LOCALPACKAGES_BACKTEST_OUTPUTS_DIR + 'log.txt'
 
-        FITNESS_BASE = 'STATISTICS:: '
-        CURRENT_FITNESS_STAT = 'Return Over Maximum Drawdown'
-        FITNESS_CRITERIA = FITNESS_BASE + CURRENT_FITNESS_STAT
+        # FITNESS_BASE = 'STATISTICS:: '
+        # CURRENT_FITNESS_STAT = 'Return Over Maximum Drawdown'
+        # FITNESS_CRITERIA = FITNESS_BASE + CURRENT_FITNESS_STAT
 
-        LEAN_TO_INJECT_TEMPLATE_ALGO = 'gpInjectAlgo.py'
-        LEAN_INJECTED_ALGO = 'gpInjectAlgo_done.py'
-        LEAN_INJECTED_ALGO_JSON = 'config_test_algos_gpInjectAlgo.json'
+        # LEAN_TO_INJECT_TEMPLATE_ALGO = 'gpInjectAlgo.py'
+        # LEAN_INJECTED_ALGO = 'gpInjectAlgo_done.py'
+        # LEAN_INJECTED_ALGO_JSON = 'config_test_algos_gpInjectAlgo.json'
 
+        # self.lean_dict = {
+        #     'LEAN_CONFIG_FILE': LEAN_CONFIG_FILE,
+        #     'LEAN_CONFIG_DIR': LEAN_CONFIG_DIR,
+        #     'CONDOR_CONFIG_PATH': CONDOR_CONFIG_PATH,
 
+        #     'CONDORGP_PATH': CONDORGP_PATH,
+        #     'GP_CONDORGP_PATH': GP_CONDORGP_PATH,
 
-        self.lean_dict = {
-            'LEAN_CONFIG_FILE': LEAN_CONFIG_FILE,
-            'LEAN_CONFIG_DIR': LEAN_CONFIG_DIR,
-            'CONDOR_CONFIG_PATH': CONDOR_CONFIG_PATH,
+        #     'LEAN_LAUNCHER_DIR': LEAN_LAUNCHER_DIR,
+        #     'LEAN_ALGOS_FOLDER': LEAN_ALGOS_DIR,
 
-            'CONDORGP_PATH': CONDORGP_PATH,
-            'GP_CONDORGP_PATH': GP_CONDORGP_PATH,
+        #     'LEAN_RESULTS_FOLDER': LEAN_RESULTS_DIR,
 
-            'LEAN_LAUNCHER_DIR': LEAN_LAUNCHER_DIR,
-            'LEAN_ALGOS_FOLDER': LEAN_ALGOS_DIR,
+        #     'BACKTEST_LOG_LOCALPACKAGES': BACKTEST_LOG_LOCALPACKAGES,
+        #     'LOCALPACKAGES_PATH': LOCALPACKAGES_PATH,
 
-            'LEAN_RESULTS_FOLDER': LEAN_RESULTS_DIR,
+        #     'FITNESS_CRITERIA': FITNESS_CRITERIA,
 
-            'BACKTEST_LOG_LOCALPACKAGES': BACKTEST_LOG_LOCALPACKAGES,
-            'LOCALPACKAGES_PATH': LOCALPACKAGES_PATH,
+        #     'LEAN_TO_INJECT_TEMPLATE_ALGO': LEAN_TO_INJECT_TEMPLATE_ALGO,
+        #     'LEAN_INJECTED_ALGO': LEAN_INJECTED_ALGO,
+        #     'LEAN_INJECTED_ALGO_JSON': LEAN_INJECTED_ALGO_JSON,
 
-            'FITNESS_CRITERIA': FITNESS_CRITERIA,
-
-            'LEAN_TO_INJECT_TEMPLATE_ALGO': LEAN_TO_INJECT_TEMPLATE_ALGO,
-            'LEAN_INJECTED_ALGO': LEAN_INJECTED_ALGO,
-            'LEAN_INJECTED_ALGO_JSON': LEAN_INJECTED_ALGO_JSON,
-
-            }
+        #     }
 
         # ################################## ##################################
         #           TESTING PARAMS
@@ -173,7 +172,8 @@ class Params:
             'CONDOR_TEST_CONFIG_FILE_1': CONDOR_TEST_CONFIG_FILE_1,
             'CONDOR_TEST_CONFIG_FILE_2': CONDOR_TEST_CONFIG_FILE_2,
 
-            'CONDOR_CONFIG_PATH': CONDOR_CONFIG_PATH,
+            # TO BE DELETED
+            # 'CONDOR_CONFIG_PATH': CONDOR_CONFIG_PATH,
 
             'CONDORGP_WITHIN_LEAN_DIR': CONDORGP_WITHIN_LEAN_DIR,
             # 'CONDORGP_IN_BACKTESTS_DIR': CONDORGP_IN_BACKTESTS_DIR,

@@ -16,9 +16,9 @@ class RunNautilus():
         self.naut_dict = p.get_params("naut_dict")
 
         self.naut_log = self.naut_dict['NAUTILUS_LOG_FILE']
-
-        self.cmd_str = "/home/hsth/.pyenv/versions/3.10.8/envs/nautilus/bin/python"
-        self.script_str = f"/home/hsth/code/hughharford/nautilus/condorgp/condorgp/evaluation/nautilus/nautilus_bt_base.py"
+        # was: "/home/hsth/.pyenv/versions/3.10.6/envs/nautilus/bin/python"
+        self.cmd_str = "/home/hughharford/.pyenv/versions/3.10.6/envs/condorgp/bin/python"
+        self.script_str = f"/home/hughharford/code/hughharford/condorgp/condorgp/evaluation/nautilus/nautilus_bt_base.py"
 
         self.log.info(">>>> >>>> RunNautilus.__init__ >>>> evaluating NAUTILUS >>>> ")
 
@@ -38,5 +38,6 @@ class RunNautilus():
 if __name__ == "__main__":
     from condorgp.factories.initial_factory import InitialFactory
     logger = InitialFactory().get_logger()
+    print("Running RunNautilus")
     n = RunNautilus(logger)
     n.basic_run_through()
