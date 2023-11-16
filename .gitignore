@@ -11,4 +11,4 @@ data/*
 .zip
 
 # ignore logs
-/logs/*
+condorgp/util/logs/*

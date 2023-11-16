@@ -67,12 +67,14 @@ class Params:
         # /home/hsth/code/hughharford/nautilus/condorgp/condorgp/util/logs/nautilus_log.txt
 
         #                                   "condorgp/condorgp/util/logs"
-        NAUTILUS_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/nautilus_log.txt'
+        NAUTILUS_EVALUATION_PATH = LOCAL_BASE_PATH + "condorgp/evaluation/nautilus/"
+        NAUTILUS_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/nautilus_log.json'
         CONDOR_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/condor_log.txt'
         LOGS_FOLDER = 'condorgp/util/logs/'
         FITNESS_CRITERIA = 'TBC SAMPLE'
 
         self.naut_dict = {
+            'NAUTILUS_EVALUATION_PATH': NAUTILUS_EVALUATION_PATH,
             'LOGS_FOLDER': LOGS_FOLDER,
             'NAUTILUS_LOG_FILE': NAUTILUS_LOG_FILE,
             'CONDOR_LOG_FILE': CONDOR_LOG_FILE,
@@ -83,18 +85,20 @@ class Params:
         #           MAIN LEAN PARAMS
         # ################################## ##################################
 
-        LEAN_BASE_PATH = LOCAL_BASE_PATH + 'Lean/'
-        LOCALPACKAGES_PATH = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
-        CONDORGP_PATH = LOCAL_BASE_PATH + 'condorgp/'
-        GP_CONDORGP_PATH = CONDORGP_PATH + 'condorgp/gp/'
-
-        LEAN_ALGOS_DIR = LEAN_BASE_PATH + 'Algorithm.Python/'
-        LEAN_LAUNCHER_DIR = 'Launcher/bin/Debug/'
-
-        LOCALPACKAGES_BACKTEST_OUTPUTS_DIR = LOCALPACKAGES_PATH + 'backtests/'
 
         # TO BE DELETED:
         # ~~~~~~~~~#########################~~~~~~~~~~~~~~~~~~~~~~~~~~~~#######
+
+        # LEAN_BASE_PATH = LOCAL_BASE_PATH + 'Lean/'
+        # LOCALPACKAGES_PATH = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
+        # CONDORGP_PATH = LOCAL_BASE_PATH + 'condorgp/'
+        # GP_CONDORGP_PATH = CONDORGP_PATH + 'condorgp/gp/'
+
+        # LEAN_ALGOS_DIR = LEAN_BASE_PATH + 'Algorithm.Python/'
+        # LEAN_LAUNCHER_DIR = 'Launcher/bin/Debug/'
+
+        # LOCALPACKAGES_BACKTEST_OUTPUTS_DIR = LOCALPACKAGES_PATH + 'backtests/'
+
         # outputs here:
         # LEAN_RESULTS_DIR = LOCALPACKAGES_BACKTEST_OUTPUTS_DIR
 
@@ -155,7 +159,7 @@ class Params:
 
         CONDOR_TEST_ALGOS_DIR = 'leanQC/config/'
 
-        CONDORGP_WITHIN_LEAN_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
+        # CONDORGP_WITHIN_LEAN_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
         # CONDORGP_IN_BACKTESTS_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/backtests/'
 
 
@@ -175,7 +179,7 @@ class Params:
             # TO BE DELETED
             # 'CONDOR_CONFIG_PATH': CONDOR_CONFIG_PATH,
 
-            'CONDORGP_WITHIN_LEAN_DIR': CONDORGP_WITHIN_LEAN_DIR,
+            # 'CONDORGP_WITHIN_LEAN_DIR': CONDORGP_WITHIN_LEAN_DIR,
             # 'CONDORGP_IN_BACKTESTS_DIR': CONDORGP_IN_BACKTESTS_DIR,
 
             }
@@ -188,6 +192,7 @@ class Params:
         CONDOR_LOG = LOCAL_BASE_PATH + 'condorgp/condorgp/util/logs/condor_log.txt'
 
         self.util_dict = {
+            'LOCAL_BASE_PATH': LOCAL_BASE_PATH,
             'NO_LOG_LINES': NO_LOG_LINES,
             'CONDOR_LOG': CONDOR_LOG,
         }

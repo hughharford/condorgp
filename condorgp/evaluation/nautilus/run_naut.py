@@ -16,9 +16,10 @@ class RunNautilus():
         self.naut_dict = p.get_params("naut_dict")
 
         self.naut_log = self.naut_dict['NAUTILUS_LOG_FILE']
-        # was: "/home/hsth/.pyenv/versions/3.10.6/envs/nautilus/bin/python"
-        self.cmd_str = "/home/hughharford/.pyenv/versions/3.10.6/envs/condorgp/bin/python"
-        self.script_str = f"/home/hughharford/code/hughharford/condorgp/condorgp/evaluation/nautilus/nautilus_bt_base.py"
+
+        self.cmd_str = "python"
+        evaluation_path = self.naut_dict['NAUTILUS_EVALUATION_PATH']
+        self.script_str = f"{evaluation_path}/naut_runner_03_egFX.py"
 
         self.log.info(">>>> >>>> RunNautilus.__init__ >>>> evaluating NAUTILUS >>>> ")
 
