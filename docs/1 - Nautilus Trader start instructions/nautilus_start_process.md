@@ -42,3 +42,7 @@ pip install pre-commit
 
 # install pre-commit hook
 pre-commit install
+
+
+### THE ABOVE ALL SEEMED TO WORK WITHOUT HITCH
+## Proof will be in whether Nautilus runs 
