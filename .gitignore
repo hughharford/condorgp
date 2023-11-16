@@ -9,3 +9,6 @@ data/*
 .vscode/*
 
 .zip
+
+# ignore logs
+/logs/*
