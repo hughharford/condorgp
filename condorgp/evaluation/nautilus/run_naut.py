@@ -5,7 +5,7 @@ from condorgp.util.utils import Utils
 
 
 class RunNautilus():
-    def __init__(self, logger) -> None:
+    def __init__(self, logger, script_to_run = "") -> None:
         # self.factory = InitialFactory()
         # self.log = self.factory.get_logger()
         self.log = logger
@@ -19,21 +19,27 @@ class RunNautilus():
 
         self.cmd_str = "python"
         evaluation_path = self.naut_dict['NAUTILUS_EVALUATION_PATH']
-        self.script_str = f"{evaluation_path}/naut_runner_03_egFX.py"
+        if script_to_run:
+            self.script_str = f"{evaluation_path}/{script_to_run}"
+        else: # default if required:
+            self.script_str = "" #f"{evaluation_path}/naut_runner_03_egFX.py"
 
-        self.log.info(">>>> >>>> RunNautilus.__init__ >>>> evaluating NAUTILUS >>>> ")
+        if hasattr(self.log,'info'):
+             self.log.info(">>>> >>>> RunNautilus.__init__ >>>> evaluating NAUTILUS >>>> ")
 
 
     def basic_run_through(self):
-        result = subprocess.run([self.cmd_str, self.script_str],
-                                stdout=subprocess.PIPE)
-        formatted_result = result.stdout.decode('utf-8')
+        '''
+            Runs Nautilus script in a basically separated process.
+        '''
+        if self.script_str:
+            result = subprocess.run([self.cmd_str, self.script_str],
+                                    stdout=subprocess.PIPE)
+        elif hasattr(self.log,'error'):
+            self.log.error("No Nautilus script provided")
 
-        self.utils.write_to_file(self.naut_log, formatted_result, mode = "a")
-        # self.log.info(formatted_result) # no need for this, Nautilus log goes
-            # to nautilus_log.txt see utils.write_to_file
-            # instead:
-        self.log.info(">>>> >>>> RunNautilus.basic_run_through > DONE evaluating NAUTILUS >>>> ")
+        if hasattr(self.log,'info'):
+            self.log.info(">>>> >>>> RunNautilus.basic_run_through > DONE evaluating NAUTILUS >>>> ")
 
 
 if __name__ == "__main__":

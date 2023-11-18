@@ -50,8 +50,8 @@ if __name__ == "__main__":
         logging=LoggingConfig(log_level="ERROR",
             log_level_file="INFO",
             log_file_format="json",
-            log_file_name="condorgp/util/logs/nautilus_log",
-            log_directory="condorgp/logs",
+            log_file_name="nautilus_log",
+            log_directory="condorgp/util/logs/",
             log_component_levels={ "Portfolio": "ERROR" }),
         risk_engine=RiskEngineConfig(
             bypass=True,  # Example of bypassing pre-trade risk checks for backtests

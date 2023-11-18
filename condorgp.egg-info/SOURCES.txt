@@ -18,11 +18,9 @@ condorgp.egg-info/not-zip-safe
 condorgp.egg-info/requires.txt
 condorgp.egg-info/top_level.txt
 condorgp/evaluation/__init__.py
-condorgp/evaluation/lean/__init__.py
-condorgp/evaluation/lean/lean_first_pass.py
-condorgp/evaluation/lean/lean_runner.py
 condorgp/evaluation/nautilus/__init__.py
-condorgp/evaluation/nautilus/nautilus_bt_base.py
+condorgp/evaluation/nautilus/naut_runner_03_egFX.py
+condorgp/evaluation/nautilus/naut_runner_04_egFX.py
 condorgp/evaluation/nautilus/run_naut.py
 condorgp/factories/__init__.py
 condorgp/factories/custom_funcs_factory.py

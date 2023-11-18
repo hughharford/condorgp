@@ -68,10 +68,11 @@ class Params:
 
         #                                   "condorgp/condorgp/util/logs"
         NAUTILUS_EVALUATION_PATH = LOCAL_BASE_PATH + "condorgp/evaluation/nautilus/"
+                                            # "condorgp/util/logs/nautilus_log.json"
         NAUTILUS_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/nautilus_log.json'
         CONDOR_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/condor_log.txt'
         LOGS_FOLDER = 'condorgp/util/logs/'
-        FITNESS_CRITERIA = 'TBC SAMPLE'
+        FITNESS_CRITERIA = 'Sharpe Ratio (252 days)'
 
         self.naut_dict = {
             'NAUTILUS_EVALUATION_PATH': NAUTILUS_EVALUATION_PATH,
@@ -188,7 +189,7 @@ class Params:
         #           UTIL PARAMS
         # ################################## ##################################
 
-        NO_LOG_LINES = 300
+        NO_LOG_LINES = 2000
         CONDOR_LOG = LOCAL_BASE_PATH + 'condorgp/condorgp/util/logs/condor_log.txt'
 
         self.util_dict = {

@@ -127,14 +127,12 @@ class Utils:
             return []
         return lines
 
-    def get_last_x_log_lines(self, lines = 150, log_file_n_path = ""):
+    def get_last_x_log_lines(self, lines = 400, log_file_n_path = ""):
         '''
         Get from the (default) log the last X lines
         '''
-        # HACK HACK HACK massive assumption here...
-        # setting this way to avoid setting in the method parameters as self
-        # not yet available
-        if log_file_n_path == "": log_file_n_path = self.NAUT_DICT['CONDOR_LOG_FILE']
+        if log_file_n_path == "":
+            log_file_n_path = self.NAUT_DICT['NAUTILUS_LOG_FILE']
 
         list_lines = []
         count = 0
@@ -143,18 +141,22 @@ class Utils:
                 count += 1
                 if count > lines: break
                 # print(l)
-                list_lines.append(l)
+                list_lines.append(str(l))
         return list_lines
 
-    def confirm_ind_name_in_log_lines(self,output_ind):
+    def confirm_ind_name_in_log_lines(self,output_ind, log_file_n_path = ""):
         '''
         To identify if the named evolved individual is found in
         the specified log within the specified lines
         '''
+        if log_file_n_path == "":
+            log_file_n_path = self.p.naut_dict['NAUTILUS_LOG_FILE']
+
         print(output_ind)
         results_list = self.get_last_x_log_lines(
-                    lines =  self.p.util_dict['NO_LOG_LINES'],
-                    log_file_n_path = self.p.lean_dict['BACKTEST_LOG_LOCALPACKAGES'])
+                    log_file_n_path,
+                    lines =  self.p.util_dict['NO_LOG_LINES']
+                    )
         found_algo_name = False
         for line in results_list:
             if output_ind in line:
@@ -164,7 +166,7 @@ class Utils:
 
     def retrieve_log_line_with_key(self,
             key,
-            lines = 150,
+            lines = 0,
             log_file_n_path = ""):
         '''
         Get the X lines of a log
@@ -177,19 +179,22 @@ class Utils:
             N.B. First from the last X lines of the log...
                 But taken in reverse order, last first as end of the log file
         '''
-        # HACK HACK HACK
-        log_file_n_path = self.NAUT_DICT['NAUTILUS_LOG_FILE']
+        if log_file_n_path == "":
+            log_file_n_path = self.NAUT_DICT['NAUTILUS_LOG_FILE']
+        if lines == 0:
+            lines = self.p.util_dict['NO_LOG_LINES']
 
         log_to_search_list = self.get_last_x_log_lines(lines, log_file_n_path)
         # return both the line and it's index, to indicate where it was found
         for i, line in enumerate(log_to_search_list):
+            # print(line)
             if str(key) in line: return line, i
         return '', -1
 
     def get_key_line_in_lim(self,
             key,
             log_filepath = "",
-            limit_lines = 0,
+            lines = 0,
             start_line = 0)-> tuple:
         '''
         TO DO: Return a tuple of:
@@ -197,27 +202,26 @@ class Utils:
             Provided within the limit_lines after Z found
             How many lines after the start_line is found
         '''
-        # HACK HACK HACK
-        log_file_n_path = self.NAUT_DICT['NAUTILUS_LOG_FILE']
-        # HACK HACK HACK
-        if limit_lines == 0:
-            limit_lines = self.NAUT_DICT['BACKTEST_LOG_LOCALPACKAGES']
-
+        if log_filepath == "":
+            log_filepath = self.NAUT_DICT['NAUTILUS_LOG_FILE']
+        if lines == 0:
+            lines = self.p.util_dict['NO_LOG_LINES']
 
         found_tuple = self.retrieve_log_line_with_key(
             key = key,
-            log_file_n_path = log_filepath)
+            log_file_n_path = log_filepath,
+            lines = lines)
 
-        line = found_tuple[0]
+        found_line = found_tuple[0]
         no_lines_after_start = found_tuple[1]
 
-        if line == '' and no_lines_after_start == -1:
+        if found_line == '' and no_lines_after_start == -1:
             return 'not found', -1
         elif no_lines_after_start < start_line:
-            return f'below limit given: {limit_lines}', -2
-        elif no_lines_after_start > limit_lines:
-            return f'past limit given: {limit_lines}', -3
-        return line, no_lines_after_start
+            return f'below limit given: {lines}', -2
+        elif no_lines_after_start > lines:
+            return f'past limit given: {lines}', -3
+        return found_line, no_lines_after_start
 
     def get_last_chars(self, line, ignore_last_chars = 0):
         if ignore_last_chars:
@@ -225,195 +229,17 @@ class Utils:
         temp = str.split(line,' ')
         return temp[-1]
 
-    def get_fitness_from_log(self,
-            key = "",
-            log_file_n_path = ""):
-        # HACK HACK HACK
-        if log_file_n_path == "":
-            log_file_n_path = self.LEAN_DICT['BACKTEST_LOG_LOCALPACKAGES']
-        # HACK HACK HACK
-        if key == "":
-            key = self.NAUT_DICT['FITNESS_CRITERIA']
+    def get_fitness_from_log(self, key = "", log_file_n_path = ""):
         '''
         Is this being used?
 
         To get the fitness from the log specified
         '''
 
-    def overwrite_main_with_input_ind(self,input_ind):
-        '''
-        Replace main.py with our algorithm, from an existing .py file
-        '''
-        if input_ind[-3:] != '.py':
-            input_ind = input_ind + '.py'
-        self.cp_rename_algo_file_to_main(input_ind)
-        self.rename_main_class_as_condorgp()
-
-    # TODO
-    # READY TO DELETE  (LEAN HANGOVER)
-    # def cp_rename_algo_file_to_main(self, input_ind):
-    #     '''
-    #     Rename file to main.py
-
-    #     Requires our algo to be in the localpackages path
-    #     '''
-    #     f_path = LEAN_DICT['LOCALPACKAGES_PATH']
-    #     if input_ind[-3:] != '.py':
-    #         input_ind = input_ind + '.py'
-    #     src = f_path + input_ind
-    #     dst = f_path + 'main.py'
-    #     if src and dst:
-    #         shutil.copy(src, dst, follow_symlinks=True)
-
-    # TODO
-    # READY TO DELETE (LEAN HANGOVER)
-    # def cp_inject_algo_in_n_sort(self, base_algo_name_ext, inj_str):
-    #     '''
-    #     Take injected code, and inject. then copy across to
-    #     localpackages, renamed file and class declaration.
-    #     '''
-    #     done_injectedAlgo_to_copy_in = LEAN_DICT['LEAN_INJECTED_ALGO']
-
-    #     # check and wrap evolved code if need be:
-    #     if 'def' not in inj_str:
-    #         inj_str = self.wrap_injection_str(inj_str)
-
-    #     # inject evolved code into algo py file
-    #     self.inject_evolved_func_in(base_algo_name_ext, inj_str)
-
-    #     # copy file across:
-    #     self.copy_algo_in(done_injectedAlgo_to_copy_in)
-
-    #     # rename 'gpInjectAlgo_done.py' to main.py
-    #     self.cp_rename_algo_file_to_main('gpInjectAlgo_done.py')
-
-    #     # go into gpInjectAlgo_done.py and rename class to condorgp:
-    #     self.rename_main_class_as_condorgp(gpInjectAlgo_class_line = True)
-
-    def simple_eval(self, inj_str):
-        print(eval(f'self.cfs.{inj_str}'))
-
-    def wrap_injection_str(self, inj_str):
-        try:
-            content = eval(f'self.cfs.{inj_str}')
-            print(' >>>>>>>>>>>>>>>>>> UTILS.wrap_injection_str: ', content)
-            return content
-        except Exception as e:
-            print(f'UTILS.wrap_injection_str FAILED: {inj_str}, {str(e)}')
-
-    # TODO
-    # REWORK  (LEAN HANGOVER but functionality still expected to be useful)
-    def inject_evolved_func_in(self, base_algo_name_ext, str_for_injection = ''):
-        '''
-        Inject the evolved function into the local:
-            class gpInjectAlgo(QCAlgorithm)
-        N.B.
-        This then needs copying across into Local Packages, renaming etc
-        '''
-        config_path = self.NAUT_DICT['CONDOR_CONFIG_PATH']
-        f_name_n_path = config_path + self.NAUT_DICT['LEAN_TO_INJECT_TEMPLATE_ALGO']
-        f_name_n_path = f_name_n_path[0:-3] + base_algo_name_ext
-        f_new_file = config_path + self.NAUT_DICT['LEAN_INJECTED_ALGO']
-        key_line = '## INJECT GP CODE HERE:'
-        # careful here, the indentation is crucial,
-        # see initial replacement line string:
-        replacement_line = '''
-    def newly_injected_code(self, data_in):
-        self.Debug("eval_test_XX: injected_code_test {data_in}")'''
-        if str_for_injection != '':
-            replacement_line = str_for_injection
-        with open(f_name_n_path, 'r') as f:
-            lines = f.readlines()
-        with open(f_new_file, 'w') as f:
-            count = 0
-            next = 0
-            for line in lines:
-                if key_line in line and count == 0: count += 1
-                if next == 1: line = replacement_line
-                if count > 0: next += 1
-                f.write(line)
-
-    # READY TO DELETE (LEAN HANGOVER)
-    # def rename_main_class_as_condorgp(self, gpInjectAlgo_class_line = False):
-    #     '''
-    #     Rename the class in the main.py to:
-    #         class condorgp(QCAlgorithm)
-
-    #     NB. Requires:
-    #         1. file to be main.py
-    #         2. in the Lean localpackages folder
-    #     '''
-    #     f_path = LEAN_DICT['LOCALPACKAGES_PATH']
-    #     key_line = 'class'
-    #     replacement_line = "class condorgp(QCAlgorithm): \n"
-    #     if gpInjectAlgo_class_line:
-    #         replacement_line = "class gpInjectAlgo(QCAlgorithm): \n"
-
-    #     main_py_for_class_rename = f_path + 'main.py'
-
-    #     with open(main_py_for_class_rename, 'r') as f:
-    #         lines = f.readlines()
-
-    #     with open(main_py_for_class_rename, 'w') as f:
-    #         count = 0
-    #         for line in lines:
-    #             if key_line in line and count == 0:
-    #                 line = replacement_line
-    #                 count += 1
-    #             f.write(line)
-
-    # def delete_file_from_path(self, filepath, complete_filename):
-
-    #     file_to_del = f'{filepath}{complete_filename}'
-
-    #     if os.path.exists(file_to_del):
-    #         os.remove(file_to_del)
-    #     else:
-    #         print(f"The file specified: {file_to_del} does not exist")
-
-    # TODO
-    # REWORK (LEAN HANGOVER, but functionality likely still required)
-    # def copy_config_in(self, input_ind):
-    #     # copy config.json across before container launch
-    #     if input_ind[-3:] == '.py':
-    #         input_ind = input_ind[0:-3]
-    #     if input_ind[-1] == '1':
-    #         config_to_copy = TEST_DICT['CONDOR_TEST_CONFIG_FILE_1']
-    #     elif input_ind[-1] == '2':
-    #         config_to_copy = TEST_DICT['CONDOR_TEST_CONFIG_FILE_2']
-
-    #     config_from_path = TEST_DICT['CONDOR_CONFIG_PATH']
-    #     self.cp_config_to_lean_launcher(config_from_path, config_to_copy)
-
-    # TODO
-    # READY TO DELETE tbc  (LEAN HANGOVER)
-    # def copy_algo_in(self, input_ind):
-    #     # copy algo.py across before container launch
-    #     test_ind_path = LEAN_DICT['CONDOR_CONFIG_PATH']
-    #     self.cp_ind_to_lean_algos(test_ind_path, input_ind)
-    #     self.overwrite_main_with_input_ind(input_ind)
-
-    # TODO
-    # READY TO DELETE tbc  (LEAN HANGOVER)
-    # def cp_custom_funcs_to_lp(self):
-    #     file_path = LEAN_DICT['GP_CONDORGP_PATH']
-    #     filename = 'gp_custom_functions.py'
-    #     self.cp_ind_to_lean_algos(file_path, filename)
-
-    # def list_pys_in_folder(self, folder):
-    #     pys = []
-    #     pys = [f for f in listdir(folder) if \
-    #             isfile(join(folder, f)) and f[-3:] == '.py']
-    #     return pys
-
-    # TODO
-    # READY TO DELETE  (LEAN HANGOVER)
-    # def del_pys_from_local_packages(self):
-    #     test_algos_path = LEAN_DICT['LOCALPACKAGES_PATH']
-    #     pys = self.list_pys_in_folder(test_algos_path)
-    #     if pys:
-    #         for py in pys:
-    #             self.delete_file_from_path(test_algos_path, py)
+        if log_file_n_path == "":
+            log_file_n_path = self.NAUT_DICT['NAUTILUS_LOG_FILE']
+        if key == "":
+            key = self.NAUT_DICT['FITNESS_CRITERIA']
 
     def print_sys_path(self):
 
@@ -457,5 +283,24 @@ if __name__ == "__main__":
     pass
     print('going...')
     u = Utils()
+    key_req = 'Sharpe Ratio (252 days)'
+    key3 = "Sharpe Ratio"
+    key2 = "EMACross-000"
+    lines = 2000
 
-    u.print_sys_path()
+    # no error here, just need to provide lines = X enough to find it...
+    # found2 = u.retrieve_log_line_with_key(
+    #     key = key_req,
+    #     lines = lines)
+    # print(f"found2 = {found2[0]}")
+
+    # actually a key finding issue
+    found3 = u.get_key_line_in_lim(
+        key = key_req,
+        lines = lines)
+    # print(f"found3 = {found3}")
+
+    expected = -21.49663142709111
+
+    here = float(u.get_last_chars(found3[0],2))
+    assert here == expected

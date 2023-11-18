@@ -11,6 +11,6 @@ Feature: Nautilus tests each evolved individual
     And the result: "<expected_value>" is reported
 
     Examples:
-      | input_ind       |   output_ind       |   expected_value    |
-      | IndBasicAlgo2   |   IndBasicAlgo2    |   110.382           |
-      | IndBasicAlgo1   |   IndBasicAlgo1    |   74.891            |
+      | input_ind               |   output_ind      |   expected_value      |
+      | naut_runner_03_egFX.py  |   naut-runner-03  |   -21.49663142709111  |
+      | naut_runner_04_egFX.py  |   naut-runner-03  |   15.966514528587545  |

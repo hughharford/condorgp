@@ -37,7 +37,7 @@ class GpFunctions():
             lim = 10000
             got = self.util.get_key_line_in_lim(key = RoMDD_line,
                                                 log_filepath = log,
-                                                limit_lines = lim)
+                                                lines = lim)
             f = float(self.util.get_last_chars(got[0]))
             self.log.debug(f'<<< gpf.get_fit_6 fitness = {f}, from {log}')
         else:
@@ -68,7 +68,7 @@ class GpFunctions():
             lim = lines_to_check - 1
             got = self.util.get_key_line_in_lim(key = RoMDD_line,
                                                 log_filepath = log_file,
-                                                limit_lines = lim)
+                                                lines = lim)
             f = float(self.util.get_last_chars(got[0], ignore_last_chars = 4))
             self.log.debug(f'<<< gpf.get_fit_nautilus_1 fitness = {f}, from {log_file}')
         else:
