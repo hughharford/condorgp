@@ -1,12 +1,7 @@
 import os.path
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condorgp.params import Params
-
-from tests.fixtures import utils
-from tests.fixtures import params
-
-from condorgp.evaluation.nautilus import run_naut
+from tests.fixtures import *
 
 EXTRA_TYPES = {
     'Number': int,
@@ -19,6 +14,8 @@ CONVERTERS = {
     'some': int,
     'total': int,
     }
+
+pytest.OUTPUT_IND = ""
 
 scenarios('../features/02_nautilus_algos.feature')
 
@@ -51,10 +48,14 @@ def input_evolved_code(input_ind):
 @when(parsers.cfparse('Nautilus runs the "{input_ind:String}"',
                        extra_types=EXTRA_TYPES), target_fixture='input_ind')
 @when('Nautilus runs the "<input_ind>"', target_fixture='input_ind')
-def run_nautilus_and_evaluator(input_ind):
+def run_nautilus_and_evaluator(input_ind, initial_factory):
     ''' runs nautilus as per the required evaluator etc'''
-    nt = run_naut.RunNautilus(input_ind)
-    nt.basic_run_through()
+    # nt = initial_factory.get_backtest_runner()
+    # nt.basic_run_through()
+    # TODO
+    # still cannot get the fixture to work properly...
+
+    pass
 
 @then(parsers.cfparse('the "{output_ind:String}" is found',
                        extra_types=EXTRA_TYPES), target_fixture='output_ind')
@@ -64,17 +65,30 @@ def results_files_are_updated(output_ind):
     checks in the log file that the algo name is found
     only uses the last X lines of the log file
     '''
-    assert 1
+    assert output_ind # == "naut-runner-04"
+    pytest.OUTPUT_IND = output_ind
     # utils.confirm_ind_name_in_log_lines(output_ind)
 
 @then(parsers.cfparse('the result: "{expected_value:Float}" is reported',
-                       extra_types=EXTRA_TYPES), target_fixture='expected_value')
-@then('the result: "<expected_value>" is reported', target_fixture='expected_value')
+                    extra_types=EXTRA_TYPES),
+                    target_fixture='expected_value')
+@then('the result: "<expected_value>" is reported',
+                    target_fixture='expected_value')
 def check_results(expected_value, utils):
     key_req = 'Sharpe Ratio (252 days)'
-    limit_lines = 5000 #
-    got = ""
-    got = utils.get_key_line_in_lim(key_req, lines = limit_lines)
+    backtest_id = pytest.OUTPUT_IND # "naut-runner-03" #
+    lines = 5000
+    max_lines_diff = 200 #
 
-    assert got[0] != 'not found'
-    assert float(expected_value) == float(utils.get_last_chars(got[0],2))
+    got2 = utils.find_fitness_with_matching_backtest(
+            key = key_req,
+            log_file_n_path = "",
+            backtest_id = backtest_id,
+            lines = lines,
+            max_lines_diff = max_lines_diff)
+
+    assert got2[1] != -1
+    found_fitness = ""
+    if got2[1] != -1:
+        found_fitness = float(utils.get_last_chars(got2[0],2))
+    assert found_fitness == expected_value

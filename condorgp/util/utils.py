@@ -223,6 +223,61 @@ class Utils:
             return f'past limit given: {lines}', -3
         return found_line, no_lines_after_start
 
+    def find_fitness_with_matching_backtest(self,
+            key,
+            log_file_n_path = "",
+            backtest_id = "",
+            lines = 0,
+            max_lines_diff = 0):
+        '''
+            This requires finding two bits "near" each other in the log
+
+            e.g.
+            log line | text found
+            _____________________
+            54532: 'BACKTESTER-001-naut-runner-04","message":"STOPPED."'
+            54554: '\u001b[36m BACKTEST POST-RUN'
+            54620: 'Sharpe Ratio (252 days):        15.966514528587545'
+
+        '''
+
+        if log_file_n_path == "":
+            log_file_n_path = self.NAUT_DICT['NAUTILUS_LOG_FILE']
+        if lines == 0:
+            lines = self.p.util_dict['NO_LOG_LINES']
+
+        log_as_list = self.get_last_x_log_lines(lines, log_file_n_path)
+
+        first_key_for_backtest = f'{backtest_id}","message":"STOPPED."'
+        second_key_for_run_end = "BACKTEST POST-RUN"
+
+
+        line_count = 0
+        now_searching_for_key = 0
+        if log_as_list is None:
+            print("didn't find log list")
+            return "nope", -1
+
+        print(first_key_for_backtest)
+        print(second_key_for_run_end)
+
+        # go through reversed list (it was read from the back of the log)
+        log_as_list.reverse()
+        for i, line in enumerate(log_as_list):
+            # print(line)
+            if str(first_key_for_backtest) in line:
+                now_searching_for_key = 1 # now know where to start
+            if now_searching_for_key == 1:
+                if str(second_key_for_run_end) in line:
+                    now_searching_for_key = 2
+                    print(now_searching_for_key)
+            if now_searching_for_key == 2:
+                if str(key) in line: return line, i
+                line_count += 1
+            if line_count > max_lines_diff:
+                 return "too many lines", -1
+        return 'nothing found here', -1
+
     def get_last_chars(self, line, ignore_last_chars = 0):
         if ignore_last_chars:
             line = line[0:-ignore_last_chars] # remove last chars to ignore
@@ -243,22 +298,9 @@ class Utils:
 
     def print_sys_path(self):
 
-        # don't think this operates:
-        # os.environ['PYTHONNET_PYDLL'] = '/home/hsth/python38shared_install/lib/libpython3.8.so'
-
-        # Common_bin_Debug = '/home/hsth/code/hughharford/Lean/Common/bin/Debug/'
-        # sys.path.append(Common_bin_Debug)
-        # Linux_config_3_8 = '/usr/lib/python3.8/config-3.8-x86_64-linux-gnu/'
-        # sys.path.append(Linux_config_3_8)
-        # snap_dotnet_sdk_183 = '/snap/dotnet-sdk/183/shared/'
-        # sys.path.append(snap_dotnet_sdk_183)
-        # python38custom = '/home/hsth/python38shared_install/lib/' # for libpython3.8.so'
-        # sys.path.append(python38custom)
-
         a = '/home/hsth/.pyenv/versions/nautilus/bin'
         b = '/home/hsth/.pyenv/versions/3.10.8/bin/python3.10'
 
-        naut = '/home/hsth/.pyenv/versions/nautilus/lib/python3.10/site-packages/nautilus_trader'
         naut_venv_s_packages = '/home/hsth/.pyenv/versions/nautilus/lib'
         # for nautilus, from other venv
         sys.path.append(naut_venv_s_packages)
@@ -295,12 +337,27 @@ if __name__ == "__main__":
     # print(f"found2 = {found2[0]}")
 
     # actually a key finding issue
-    found3 = u.get_key_line_in_lim(
-        key = key_req,
-        lines = lines)
-    # print(f"found3 = {found3}")
+    # found3 = u.get_key_line_in_lim(
+    #     key = key_req,
+    #     lines = lines)
+    # # print(f"found3 = {found3}")
+
+    # expected = -21.49663142709111
+
+    # here = float(u.get_last_chars(found3[0],2))
+    # assert here == expected
 
     expected = -21.49663142709111
+    # for dev only:
+    backtest_id = "naut-runner-03"
 
-    here = float(u.get_last_chars(found3[0],2))
+
+    found4 = u.find_fitness_with_matching_backtest(
+            key = 'Sharpe Ratio (252 days):',
+            log_file_n_path = "",
+            backtest_id = backtest_id,
+            lines = 5000,
+            max_lines_diff = 2000)
+    print(found4[0])
+    here = float(u.get_last_chars(found4[0],2))
     assert here == expected

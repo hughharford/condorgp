@@ -15,25 +15,29 @@
 # -------------------------------------------------------------------------------------------------
 
 # copied in full directly from:
-# https://github.com/nautechsystems/nautilus_trader/blob/master/examples/backtest/fx_ema_cross_audusd_bars_from_ticks.py
+# https://github.com/nautechsystems/nautilus_trader/blob/master/examples/backtest/fx_ema_cross_bracket_gbpusd_bars_external.py
 
 import time
 from decimal import Decimal
 
 import pandas as pd
 
-from nautilus_trader.backtest.node import BacktestEngine
-from nautilus_trader.backtest.node import BacktestEngineConfig
+from nautilus_trader.backtest.engine import BacktestEngine
+from nautilus_trader.backtest.engine import BacktestEngineConfig
+from nautilus_trader.backtest.models import FillModel
 from nautilus_trader.backtest.modules import FXRolloverInterestConfig
 from nautilus_trader.backtest.modules import FXRolloverInterestModule
-from nautilus_trader.examples.strategies.ema_cross import EMACross
-from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
+from nautilus_trader.config.common import LoggingConfig
+from nautilus_trader.config.common import RiskEngineConfig
+from nautilus_trader.examples.strategies.ema_cross_bracket import EMACrossBracket
+from nautilus_trader.examples.strategies.ema_cross_bracket import EMACrossBracketConfig
 from nautilus_trader.model.currencies import USD
+from nautilus_trader.model.data import BarType
 from nautilus_trader.model.enums import AccountType
 from nautilus_trader.model.enums import OmsType
 from nautilus_trader.model.identifiers import Venue
 from nautilus_trader.model.objects import Money
-from nautilus_trader.persistence.wranglers import QuoteTickDataWrangler
+from nautilus_trader.persistence.wranglers import BarDataWrangler
 from nautilus_trader.test_kit.providers import TestDataProvider
 from nautilus_trader.test_kit.providers import TestInstrumentProvider
 
@@ -46,12 +50,15 @@ if __name__ == "__main__":
         logging=LoggingConfig(log_level="ERROR",
             log_level_file="INFO",
             log_file_format="json",
-            log_file_name="nautilus_log",
+            log_file_name="nautilus_log_naut_runner_04",
             log_directory="condorgp/util/logs/",
             log_component_levels={ "Portfolio": "ERROR" }),
+        risk_engine=RiskEngineConfig(
+            bypass=True,  # Example of bypassing pre-trade risk checks for backtests
+        ),
     )
 
-    # Build the backtest engine
+    # Build backtest engine
     engine = BacktestEngine(config=config)
 
     # Optional plug in module to simulate rollover interest,
@@ -61,6 +68,14 @@ if __name__ == "__main__":
     config = FXRolloverInterestConfig(interest_rate_data)
     fx_rollover_interest = FXRolloverInterestModule(config=config)
 
+    # Create a fill model (optional)
+    fill_model = FillModel(
+        prob_fill_on_limit=0.2,
+        prob_fill_on_stop=0.95,
+        prob_slippage=0.5,
+        random_seed=42,
+    )
+
     # Add a trading venue (multiple venues possible)
     SIM = Venue("SIM")
     engine.add_venue(
@@ -68,30 +83,47 @@ if __name__ == "__main__":
         oms_type=OmsType.HEDGING,  # Venue will generate position IDs
         account_type=AccountType.MARGIN,
         base_currency=USD,  # Standard single-currency account
-        starting_balances=[Money(1_000_000, USD)],  # Single-currency or multi-currency accounts
+        starting_balances=[Money(100_000, USD)],  # Single-currency or multi-currency accounts
+        fill_model=fill_model,
         modules=[fx_rollover_interest],
+        bar_execution=True,  # If bar data should move the market (True by default)
     )
 
     # Add instruments
-    AUDUSD_SIM = TestInstrumentProvider.default_fx_ccy("AUD/USD", SIM)
-    engine.add_instrument(AUDUSD_SIM)
+    GBPUSD_SIM = TestInstrumentProvider.default_fx_ccy("GBP/USD", SIM)
+    engine.add_instrument(GBPUSD_SIM)
 
-    # Add data
-    wrangler = QuoteTickDataWrangler(instrument=AUDUSD_SIM)
-    ticks = wrangler.process(provider.read_csv_ticks("truefx/audusd-ticks.csv"))
-    engine.add_data(ticks)
-
-    # Configure your strategy
-    config = EMACrossConfig(
-        instrument_id=str(AUDUSD_SIM.id),
-        bar_type="AUD/USD.SIM-1-MINUTE-MID-INTERNAL",
-        fast_ema_period=100,
-        slow_ema_period=200,
-        trade_size=Decimal(1_000_000),
+    # Setup wranglers
+    bid_wrangler = BarDataWrangler(
+        bar_type=BarType.from_str("GBP/USD.SIM-1-MINUTE-BID-EXTERNAL"),
+        instrument=GBPUSD_SIM,
+    )
+    ask_wrangler = BarDataWrangler(
+        bar_type=BarType.from_str("GBP/USD.SIM-1-MINUTE-ASK-EXTERNAL"),
+        instrument=GBPUSD_SIM,
     )
 
+    # Add data
+    bid_bars = bid_wrangler.process(
+        data=provider.read_csv_bars("fxcm/gbpusd-m1-bid-2012.csv")[:10_000],
+    )
+    ask_bars = ask_wrangler.process(
+        data=provider.read_csv_bars("fxcm/gbpusd-m1-ask-2012.csv")[:10_000],
+    )
+    engine.add_data(bid_bars)
+    engine.add_data(ask_bars)
+
+    # Configure your strategy
+    config = EMACrossBracketConfig(
+        instrument_id=str(GBPUSD_SIM.id),
+        bar_type="GBP/USD.SIM-1-MINUTE-BID-EXTERNAL",
+        fast_ema_period=10,
+        slow_ema_period=20,
+        bracket_distance_atr=3.0,
+        trade_size=Decimal(1_000),
+    )
     # Instantiate and add your strategy
-    strategy = EMACross(config=config)
+    strategy = EMACrossBracket(config=config)
     engine.add_strategy(strategy=strategy)
 
     # time.sleep(0.1)
