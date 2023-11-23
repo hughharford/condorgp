@@ -19,7 +19,7 @@ class RunNautilus():
 
         self.cmd_str = "python"
         evaluation_path = self.naut_dict['NAUTILUS_EVALUATION_PATH']
-        if script_to_run:
+        if script_to_run != "":
             self.script_str = f"{evaluation_path}/{script_to_run}"
         else: # default if required:
             self.script_str = "" #f"{evaluation_path}/naut_runner_03_egFX.py"
@@ -44,7 +44,10 @@ class RunNautilus():
 
 if __name__ == "__main__":
     from condorgp.factories.initial_factory import InitialFactory
-    logger = InitialFactory().get_logger()
+    factory = InitialFactory()
+    logger = factory.get_logger()
+
     print("Running RunNautilus")
-    n = RunNautilus(logger)
+    script_to_run = "naut_runner_03_egFX.py"
+    n = RunNautilus(logger = logger, script_to_run = script_to_run)
     n.basic_run_through()

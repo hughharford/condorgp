@@ -1,6 +1,6 @@
 # params class defined here to hold many dicts of parameter values
 
-class Params:
+class Params():
     '''
     To hold all the parameters needed, and master them.
 

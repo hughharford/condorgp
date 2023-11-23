@@ -38,9 +38,8 @@ def nautilus_setup_is_ready():
 @given('an evolved "<input_ind>" is specified', target_fixture='input_ind')
 def input_evolved_code(input_ind):
     '''
-    copies across config files and algorithms as needed
+        not operational for now
     '''
-    # TODO:
     pass # not required, as can now run from:
          # condorgp/evaluation/nautilus using run_naut.py
 
@@ -50,10 +49,12 @@ def input_evolved_code(input_ind):
 @when('Nautilus runs the "<input_ind>"', target_fixture='input_ind')
 def run_nautilus_and_evaluator(input_ind, initial_factory):
     ''' runs nautilus as per the required evaluator etc'''
-    # nt = initial_factory.get_backtest_runner()
-    # nt.basic_run_through()
-    # TODO
-    # still cannot get the fixture to work properly...
+
+    script_to_run = input_ind # "naut_runner_03_egFX.py"
+    nt = initial_factory.get_backtest_runner(script_to_run = script_to_run)
+
+    print("Running RunNautilus")
+    nt.basic_run_through()
 
     pass
 
@@ -77,8 +78,8 @@ def results_files_are_updated(output_ind):
 def check_results(expected_value, utils):
     key_req = 'Sharpe Ratio (252 days)'
     backtest_id = pytest.OUTPUT_IND # "naut-runner-03" #
-    lines = 5000
-    max_lines_diff = 200 #
+    lines = 10000
+    max_lines_diff = 300 #
 
     got2 = utils.find_fitness_with_matching_backtest(
             key = key_req,
