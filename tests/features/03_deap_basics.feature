@@ -6,11 +6,5 @@ Feature: Deap basic operations
   Scenario Outline: Deap instanciation includes functions
     Given Deap is setup
     When an instance of Deap is instantiated
-    And the functions are listed
+    And the functions are added
     Then the fundamental functions are found
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Examples:
-    #   | input_ind       |   output_ind       |   ROI_over_MDD_value    |
-    #   | IndBasicAlgo2   |   IndBasicAlgo2    |   110.382               |
-    #   | IndBasicAlgo1   |   IndBasicAlgo1    |   74.891                |
