@@ -25,11 +25,10 @@ class InitialFactory():
         return GpFunctions()
 
     def get_backtest_runner(self, script_to_run = ""):
-        logger = InitialFactory().get_logger()
-        return RunNautilus(logger, script_to_run)
+        return RunNautilus(script_to_run)
 
-    def get_logger(self):
-        return CondorLogger().get_logger()
+    def start_logger(self):
+        CondorLogger()
 
     def get_params(self):
         return Params()

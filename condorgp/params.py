@@ -1,4 +1,4 @@
-# params class defined here to hold many dicts of parameter values
+# params class defined here to hold dicts of parameter values
 
 class Params():
     '''
@@ -83,66 +83,6 @@ class Params():
         }
 
         # ################################## ##################################
-        #           MAIN LEAN PARAMS
-        # ################################## ##################################
-
-
-        # TO BE DELETED:
-        # ~~~~~~~~~#########################~~~~~~~~~~~~~~~~~~~~~~~~~~~~#######
-
-        # LEAN_BASE_PATH = LOCAL_BASE_PATH + 'Lean/'
-        # LOCALPACKAGES_PATH = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
-        # CONDORGP_PATH = LOCAL_BASE_PATH + 'condorgp/'
-        # GP_CONDORGP_PATH = CONDORGP_PATH + 'condorgp/gp/'
-
-        # LEAN_ALGOS_DIR = LEAN_BASE_PATH + 'Algorithm.Python/'
-        # LEAN_LAUNCHER_DIR = 'Launcher/bin/Debug/'
-
-        # LOCALPACKAGES_BACKTEST_OUTPUTS_DIR = LOCALPACKAGES_PATH + 'backtests/'
-
-        # outputs here:
-        # LEAN_RESULTS_DIR = LOCALPACKAGES_BACKTEST_OUTPUTS_DIR
-
-        # LEAN_CONFIG_DIR = LEAN_BASE_PATH + LEAN_LAUNCHER_DIR
-        # LEAN_CONFIG_FILE = 'config.json'
-
-        # CONDOR_CONFIG_PATH = 'leanQC/config/'
-
-        # BACKTEST_LOG_LOCALPACKAGES = LOCALPACKAGES_BACKTEST_OUTPUTS_DIR + 'log.txt'
-
-        # FITNESS_BASE = 'STATISTICS:: '
-        # CURRENT_FITNESS_STAT = 'Return Over Maximum Drawdown'
-        # FITNESS_CRITERIA = FITNESS_BASE + CURRENT_FITNESS_STAT
-
-        # LEAN_TO_INJECT_TEMPLATE_ALGO = 'gpInjectAlgo.py'
-        # LEAN_INJECTED_ALGO = 'gpInjectAlgo_done.py'
-        # LEAN_INJECTED_ALGO_JSON = 'config_test_algos_gpInjectAlgo.json'
-
-        # self.lean_dict = {
-        #     'LEAN_CONFIG_FILE': LEAN_CONFIG_FILE,
-        #     'LEAN_CONFIG_DIR': LEAN_CONFIG_DIR,
-        #     'CONDOR_CONFIG_PATH': CONDOR_CONFIG_PATH,
-
-        #     'CONDORGP_PATH': CONDORGP_PATH,
-        #     'GP_CONDORGP_PATH': GP_CONDORGP_PATH,
-
-        #     'LEAN_LAUNCHER_DIR': LEAN_LAUNCHER_DIR,
-        #     'LEAN_ALGOS_FOLDER': LEAN_ALGOS_DIR,
-
-        #     'LEAN_RESULTS_FOLDER': LEAN_RESULTS_DIR,
-
-        #     'BACKTEST_LOG_LOCALPACKAGES': BACKTEST_LOG_LOCALPACKAGES,
-        #     'LOCALPACKAGES_PATH': LOCALPACKAGES_PATH,
-
-        #     'FITNESS_CRITERIA': FITNESS_CRITERIA,
-
-        #     'LEAN_TO_INJECT_TEMPLATE_ALGO': LEAN_TO_INJECT_TEMPLATE_ALGO,
-        #     'LEAN_INJECTED_ALGO': LEAN_INJECTED_ALGO,
-        #     'LEAN_INJECTED_ALGO_JSON': LEAN_INJECTED_ALGO_JSON,
-
-        #     }
-
-        # ################################## ##################################
         #           TESTING PARAMS
         # ################################## ##################################
 
@@ -160,9 +100,6 @@ class Params():
 
         CONDOR_TEST_ALGOS_DIR = 'leanQC/config/'
 
-        # CONDORGP_WITHIN_LEAN_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/'
-        # CONDORGP_IN_BACKTESTS_DIR = LEAN_BASE_PATH + 'LocalPackages/condorgp/backtests/'
-
 
         self.test_dict = {
             'REASONABLE_FITNESS_SECS': 60,
@@ -176,13 +113,6 @@ class Params():
             'CONDOR_TEST_CONFIG_FILE': CONDOR_TEST_CONFIG_FILE,
             'CONDOR_TEST_CONFIG_FILE_1': CONDOR_TEST_CONFIG_FILE_1,
             'CONDOR_TEST_CONFIG_FILE_2': CONDOR_TEST_CONFIG_FILE_2,
-
-            # TO BE DELETED
-            # 'CONDOR_CONFIG_PATH': CONDOR_CONFIG_PATH,
-
-            # 'CONDORGP_WITHIN_LEAN_DIR': CONDORGP_WITHIN_LEAN_DIR,
-            # 'CONDORGP_IN_BACKTESTS_DIR': CONDORGP_IN_BACKTESTS_DIR,
-
             }
 
         # ################################## ##################################

@@ -1,14 +1,13 @@
 import subprocess
+import logging
 from condorgp.params import Params
 from condorgp.util.utils import Utils
-# from condorgp.factories.initial_factory import InitialFactory
-
+from condorgp.util.log import CondorLogger
 
 class RunNautilus():
-    def __init__(self, logger, script_to_run = "") -> None:
-        # self.factory = InitialFactory()
-        # self.log = self.factory.get_logger()
-        self.log = logger
+    def __init__(self, script_to_run = "") -> None:
+        CondorLogger()
+
         self.utils = Utils()
         p = Params()
         self.util_dict = p.get_params("util_dict")
@@ -22,32 +21,27 @@ class RunNautilus():
         if script_to_run != "":
             self.script_str = f"{evaluation_path}/{script_to_run}"
         else: # default if required:
-            self.script_str = "" #f"{evaluation_path}/naut_runner_03_egFX.py"
+            self.script_str = f"{evaluation_path}/naut_runner_03_egFX.py"
 
-        if hasattr(self.log,'info'):
-             self.log.info(">>>> >>>> RunNautilus.__init__ >>>> evaluating NAUTILUS >>>> ")
+        logging.info(">> RunNautilus evaluation ready NAUTILUS >> ")
 
 
     def basic_run_through(self):
         '''
             Runs Nautilus script in a basically separated process.
         '''
+
+        result = ""
         if self.script_str:
             result = subprocess.run([self.cmd_str, self.script_str],
                                     stdout=subprocess.PIPE)
-        elif hasattr(self.log,'error'):
-            self.log.error("No Nautilus script provided")
-
-        if hasattr(self.log,'info'):
-            self.log.info(">>>> >>>> RunNautilus.basic_run_through > DONE evaluating NAUTILUS >>>> ")
-
+        else:
+            logging.error("No Nautilus script provided")
+        logging.info(">>> RunNautilus.basic_run_through DONE evaluating >>>")
+        return result
 
 if __name__ == "__main__":
-    from condorgp.factories.initial_factory import InitialFactory
-    factory = InitialFactory()
-    logger = factory.get_logger()
-
-    print("Running RunNautilus")
+    logging.info("Running RunNautilus")
     script_to_run = "naut_runner_03_egFX.py"
-    n = RunNautilus(logger = logger, script_to_run = script_to_run)
+    n = RunNautilus(script_to_run = script_to_run)
     n.basic_run_through()

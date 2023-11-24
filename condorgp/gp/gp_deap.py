@@ -1,5 +1,6 @@
 import numpy
 import random
+import logging
 
 from deap import algorithms
 from deap import base
@@ -12,7 +13,8 @@ from condorgp.util.log import CondorLogger
 
 class GpDeap(GpProvider):
     def __init__(self):
-        self.log = CondorLogger().get_logger()
+        pass
+        # CondorLogger()
 
     def set_defined_pset(self, pset_obj,
                  new_pset_name = '',
@@ -24,10 +26,10 @@ class GpDeap(GpProvider):
 
         if new_pset_name:
             try:
-                self.log.debug(f"Gp_Deap SETTING pset: {new_pset_name}")
+                logging.debug(f"Gp_Deap SETTING pset: {new_pset_name}")
                 self.pset = pset_obj.get_named_pset(new_pset_name)
             except Exception as e:
-                self.log.warn("Gp_Deap WARNING, default untyped used instead: " + str(e))
+                logging.warn("Gp_Deap WARNING, default untyped used instead: " + str(e))
                 self.pset = pset_obj.get_default_untyped()
 
 

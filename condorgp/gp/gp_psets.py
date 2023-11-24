@@ -5,39 +5,7 @@ import operator
 import math
 from datetime import timedelta
 
-# ALL LEAN BITS >> REMOVE
-# from clr import AddReference
-# AddReference("System.Core")
-# AddReference("System.Collections")
-# AddReference("QuantConnect.Common")
-# AddReference("QuantConnect.Algorithm")
-
-# from System import *
-# from System.Collections.Generic import List
-# from QuantConnect import *
-# from QuantConnect.Algorithm import QCAlgorithm
-# from QuantConnect.Data.UniverseSelection import *
-
-# from AlgorithmImports import *
-# from QuantConnect import *
-
-# from QuantConnect import QCAlgorithm
-
-# from QuantConnect.Algorithm.Python.Alphas import *
-# actual path: /home/hsth/code/hughharford/Lean/Algorithm.Python/Alphas
-
-# from QuantConnect.Python import *
-# from QuantConnect.Python import PythonData
-
-# from QuantConnect.Algorithm.Framework.Alphas import *
-# from QuantConnect.Algorithm.Framework.Alphas import MacdAlphaModel
-#     # RsiAlphaModel, MacdAlphaModel, EmaCrossAlphaModel, BasePairsTradingAlphaModel
-# from QuantConnect import Resolution
-# from QuantConnect.Indicators import *
-
-# fails, not in site-packages
-# from QuantConnnect.Common import *
-
+import logging
 from condorgp.util.log import CondorLogger
 
 class pt_alpha():
@@ -98,7 +66,7 @@ class pt_resolution():
 class GpPsets:
     def __init__(self, custom_funcs):
         self.cfs = custom_funcs
-        self.log = CondorLogger().get_logger()
+        # self.log = CondorLogger().get_logger()
         # self.pt_method = pt_method()
         # self.pt_alpha = pt_alpha()
         # self.pt_indicator = pt_indicator()
@@ -174,14 +142,14 @@ class GpPsets:
     def get_test_pset5c(self):
         ''' test_pset5c '''
         self.test5c = gp.PrimitiveSet("test_pset5c", 1)
-        self.test5c.addPrimitive(self.log.info, 1, name="self.log.info")
+        self.test5c.addPrimitive(logging.info, 1, name="logging.info")
         self.test5c.renameArguments(ARG0='x0')
         return self.test5c
 
     def get_test_pset5d(self):
         ''' test_pset5d '''
         self.test5d = gp.PrimitiveSet("test_pset5d", 1)
-        self.test5d.addPrimitive(self.log.info, 1, name="self.log.info")
+        self.test5d.addPrimitive(logging.info, 1, name="logging.info")
         self.test5d.renameArguments(ARG0='x0')
         return self.test5d
 

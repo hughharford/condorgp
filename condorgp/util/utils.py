@@ -4,6 +4,7 @@ from os import listdir
 from os.path import isfile, join
 import shutil
 from datetime import datetime
+import logging
 
 from file_read_backwards import FileReadBackwards
 
@@ -76,41 +77,19 @@ class Utils:
         if recent > 0: return True
 
     def get_latest_log_dir(self):
-        latest = None
-        # backtestfolder = test_dict['CONDORGP_IN_BACKTESTS_DIR']
-        # foundfolders = [f for f in listdir(backtestfolder) \
-        #                     if not isfile(join(backtestfolder, f))]
-        # if len(foundfolders) > 0:
-        #     latest = ''
-        #     for folder in foundfolders:
-        #         if folder > latest:
-        #             latest = folder
-        # return latest
         return self.NAUT_DICT['LOGS_FOLDER']
 
     def get_log_filepath(self, specific_log = 'condor_log'):
-        # backtestdir = test_dict['CONDORGP_IN_BACKTESTS_DIR']
-        # latest_folder = self.get_latest_log_dir()
-        # return f'{backtestdir}{latest_folder}/log.txt'
         if specific_log == 'condor_log':
             return self.NAUT_DICT['CONDOR_LOG_FILE']
         elif specific_log == 'nautilus_log':
             return self.NAUT_DICT['NAUTILUS_LOG_FILE']
         else:
-            return "No specific log provided: use either 'condor_log' or 'nautilus_log'"
+            return "Specify log: use either 'condor_log' or 'nautilus_log'"
 
 
 
     def get_latest_log_content(self, specific_log = 'condor_log'):
-        # backtestdir = test_dict['CONDORGP_IN_BACKTESTS_DIR']
-        # latest_folder = self.get_latest_log_dir()
-        # if latest_folder:
-        #     # get contents
-        #     latestlogs = self.get_all_lines(backtestdir + latest_folder + '/log.txt')
-        # else:
-        #     return []
-        # return latestlogs
-
         if specific_log == 'condor_log':
             log_file = self.NAUT_DICT['CONDOR_LOG_FILE']
         elif specific_log == 'nautilus_log':
@@ -152,7 +131,7 @@ class Utils:
         if log_file_n_path == "":
             log_file_n_path = self.p.naut_dict['NAUTILUS_LOG_FILE']
 
-        print(output_ind)
+        # print(output_ind)
         results_list = self.get_last_x_log_lines(
                     log_file_n_path,
                     lines =  self.p.util_dict['NO_LOG_LINES']
@@ -160,7 +139,7 @@ class Utils:
         found_algo_name = False
         for line in results_list:
             if output_ind in line:
-                print(line)
+                # print(line)
                 found_algo_name = True
         return found_algo_name
 
@@ -270,7 +249,7 @@ class Utils:
             if now_searching_for_key == 1:
                 if str(second_key_for_run_end) in line:
                     now_searching_for_key = 2
-                    print(now_searching_for_key)
+                    # print(now_searching_for_key)
             if now_searching_for_key == 2:
                 if str(key) in line: return line, i
                 line_count += 1
@@ -317,7 +296,7 @@ class Utils:
             f.write(inputtext)
             f.close()
         except:
-            self.log.error(f"utils.write_to_file: \
+            logging.error(f"utils.write_to_file: \
                            filename n path: {filename_n_path}")
             return None
 
