@@ -67,6 +67,7 @@ class Params():
         # /home/hsth/code/hughharford/nautilus/condorgp/condorgp/util/logs/nautilus_log.txt
 
         #                                   "condorgp/condorgp/util/logs"
+        NAUTILUS_BASE_PATH = '/home/hughharford/code/hughharford/nautilus_trader/'
         NAUTILUS_EVALUATION_PATH = LOCAL_BASE_PATH + "condorgp/evaluation/nautilus/"
                                             # "condorgp/util/logs/nautilus_log.json"
         NAUTILUS_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/nautilus_log.json'
@@ -75,6 +76,7 @@ class Params():
         FITNESS_CRITERIA = 'Sharpe Ratio (252 days)'
 
         self.naut_dict = {
+            'NAUTILUS_BASE_PATH': NAUTILUS_BASE_PATH,
             'NAUTILUS_EVALUATION_PATH': NAUTILUS_EVALUATION_PATH,
             'LOGS_FOLDER': LOGS_FOLDER,
             'NAUTILUS_LOG_FILE': NAUTILUS_LOG_FILE,
@@ -97,9 +99,9 @@ class Params():
         CONFIG_TEST_ALGOS_FILE_2 = 'IndBasicAlgo2.py'
         BASIC_TEST_ALGO_LEAN = 'BasicTemplateFrameworkAlgorithm.py'
 
-
         CONDOR_TEST_ALGOS_DIR = 'leanQC/config/'
 
+        NAUTILUS_TEST_DATA_PATH = NAUTILUS_BASE_PATH + 'tests/test_data/'
 
         self.test_dict = {
             'REASONABLE_FITNESS_SECS': 60,
@@ -113,6 +115,8 @@ class Params():
             'CONDOR_TEST_CONFIG_FILE': CONDOR_TEST_CONFIG_FILE,
             'CONDOR_TEST_CONFIG_FILE_1': CONDOR_TEST_CONFIG_FILE_1,
             'CONDOR_TEST_CONFIG_FILE_2': CONDOR_TEST_CONFIG_FILE_2,
+
+            'NAUTILUS_TEST_DATA_PATH': NAUTILUS_TEST_DATA_PATH,
             }
 
         # ################################## ##################################

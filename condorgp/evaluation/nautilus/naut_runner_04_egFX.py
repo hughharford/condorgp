@@ -38,6 +38,7 @@ from nautilus_trader.test_kit.providers import TestDataProvider
 from nautilus_trader.test_kit.providers import TestInstrumentProvider
 
 from nautilus_trader.config import LoggingConfig
+from condorgp.evaluation.nautilus.overloaded_nt.cgp_providers import *
 
 if __name__ == "__main__":
     # Configure backtest engine
@@ -56,7 +57,7 @@ if __name__ == "__main__":
 
     # Optional plug in module to simulate rollover interest,
     # the data is coming from packaged test data.
-    provider = TestDataProvider()
+    provider = CondorGPTestDataProvider()
     interest_rate_data = provider.read_csv("short-term-interest.csv")
     config = FXRolloverInterestConfig(interest_rate_data)
     fx_rollover_interest = FXRolloverInterestModule(config=config)
