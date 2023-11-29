@@ -6,7 +6,6 @@ from pytest_bdd import scenarios, given, when, then, parsers
 
 from tests.fixtures import deap_one, utils
 from condorgp.params import lean_dict, test_dict, util_dict
-from condorgp.evaluation.lean_runner import RunLean
 
 EXTRA_TYPES = {
     'Number': int,
@@ -23,7 +22,7 @@ CONVERTERS = {
 scenarios('../../features/04_deap_runs_lean.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             Lean tests each evolved individual
+#        Deap runs Nautilus tests each evolved individual
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
   Scenario Outline: Lean is run and reports success and fitness

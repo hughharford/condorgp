@@ -2,7 +2,7 @@ from pytest_bdd import scenarios, given, when, then, parsers
 
 from tests.fixtures import *
 
-scenarios('../../../tests/features/00_learning_di.feature')
+scenarios('../../features/00_learning_di.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             REAL AND MOCK DEPENDENCIES

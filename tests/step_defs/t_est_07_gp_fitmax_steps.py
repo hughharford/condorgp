@@ -19,7 +19,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../../features/07_gp_fitmax.feature')
+scenarios('../../tests/features/07_gp_fitmax.feature')
 
 """
   Scenario Outline: Evolved code shows fitness improvement
