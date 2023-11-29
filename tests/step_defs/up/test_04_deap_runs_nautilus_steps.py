@@ -19,7 +19,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/04_deap_runs_nautilus.feature')
+scenarios('../../features/04_deap_runs_nautilus.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #    Deap runs Nautilus tests for each evolved individual
@@ -56,7 +56,6 @@ def deap_sets_algo_to_nautilus(utils, input_ind):
     pass # nothing to do, no longer pass across algorithms
 
 @when('a short Deap run is conducted')
-@pytest.mark.usefixtures("gpc")
 def short_deap_run(deap_one):
     assert deap_one is not None
     newpop = 1

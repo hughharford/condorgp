@@ -3,9 +3,10 @@ import os.path
 
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
+from tests.fixtures import *
+from condorgp.params import Params
 
-from tests.fixtures import gpc, gpc2, gpc3, utils # these go dark, but without
-from condorgp.params import lean_dict, test_dict, util_dict
+pytest.DEAP_ONE = ""
 
 EXTRA_TYPES = {
     'Number': int,
@@ -19,7 +20,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../../features/05_gp_control.feature')
+scenarios('../features/05_gp_control.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             1/3 GpControl can set different psets as needed
@@ -44,32 +45,29 @@ def setup_ready():
     pass # assumes, rest of test to prove
 
 @when(parsers.cfparse('GpControl gets a requirement for "{pset_input:String}"',
-                        extra_types=EXTRA_TYPES),
-                        target_fixture='pset_input')
+      extra_types=EXTRA_TYPES), target_fixture='pset_input')
 @when('GpControl gets a requirement for "<pset_input>"',
-        target_fixture='pset_input')
-@pytest.mark.usefixtures("gpc")
-def check_GpControl(gpc, pset_input):
+      target_fixture='pset_input')
+def check_GpControl(deap_one, pset_input):
     ''' sets 2 different psets '''
-    gpc.base_pset = gpc.set_pset('test_base_pset')
-    gpc.test_pset = gpc.set_pset(pset_input)
+    deap_one.base_pset = deap_one.set_pset('test_base_pset')
+    deap_one.test_pset = deap_one.set_pset(pset_input)
 
 @when('GpControl is checked')
-def check_gp_control(gpc):
-    assert type(gpc.base_pset) is not None
-    assert type(gpc.test_pset) is not None
+def check_gp_control(deap_one):
+    assert type(deap_one.base_pset) is not None
+    assert type(deap_one.test_pset) is not None
 
 @then('the pset returned is not the same as the base_pset')
-def pset_returned_is(gpc):
-    assert gpc.base_pset != gpc.test_pset
+def pset_returned_is(deap_one):
+    assert deap_one.base_pset != deap_one.test_pset
 
 @then(parsers.cfparse('the pset returns contains "{primitive_name:String}"',
-                        extra_types=EXTRA_TYPES),
-                        target_fixture='primitive_name')
+                      extra_types=EXTRA_TYPES), target_fixture='primitive_name')
 @then('the pset returns contains "<primitive_name>"')
-def pset_contains(gpc, primitive_name):
-    assert gpc.test_pset
-    prim_names = list(gpc.test_pset.context.keys())
+def pset_contains(deap_one, primitive_name):
+    assert deap_one.test_pset
+    prim_names = list(deap_one.test_pset.context.keys())
     assert primitive_name in prim_names
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,53 +76,44 @@ def pset_contains(gpc, primitive_name):
 
 '''
   Scenario Outline: test psets can output specific text to condor log
-    Given a specific test pset "<test_5c_psets>"
+    Given a specific test pset "<test_5_2_psets>"
     When provided the "<arg_input>"
     Then the result is "<text_output>"
 
     Examples:
-      | arg_input     | test_5c_psets            |  text_output        |
-      | hello_world   | test_pset5c             |  hello_world        |
+      | arg_input     | test_5_2_psets           |  text_output        |
+      | hello_world   | test_pset5c              |  hello_world        |
 '''
 
 # 2/3 ***************************************************************************
 
-@given(parsers.cfparse('a specific test pset "{test_5c_psets:String}"',
-                        extra_types=EXTRA_TYPES),
-                        target_fixture='test_5c_psets')
-@given('a specific test pset "<test_5c_psets>"')
-@pytest.mark.usefixtures("gpc")
-def setup_ready(gpc, test_5c_psets):
+@given(parsers.cfparse('a specific test pset "{test_5_2_psets:String}"',
+                    extra_types=EXTRA_TYPES),target_fixture='test_5_2_psets')
+@given('a specific test pset "<test_5_2_psets>"')
+def setup_ready(deap_one, test_5_2_psets):
     ''' sets up gp as standard, then amends pset'''
-    gpc.setup_gp(test_5c_psets,100,5)
-    gpc.set_test_evaluator('eval_test_5_2')
+    pytest.DEAP_ONE = deap_one
+    pytest.DEAP_ONE.setup_gp(test_5_2_psets,1,1)
+    pytest.DEAP_ONE.set_test_evaluator('eval_nautilus')
 
 @when(parsers.cfparse('provided the "{arg_input:String}"',
-                        extra_types=EXTRA_TYPES),
-                        target_fixture='arg_input')
+                    extra_types=EXTRA_TYPES), target_fixture='arg_input')
 @when('provided the "<arg_input>"',
         target_fixture='arg_input')
-def provided_the(gpc, arg_input):
+def provided_the(arg_input):
     ''' runs gp with arg_input as given '''
-    gpc.run_gp() # arg not inputted, hard coded in this test
+    pytest.DEAP_ONE.run_gp() # arg not inputted, hard coded in this test
 
 @then(parsers.cfparse('the result is "{text_output:String}"',
-                        extra_types=EXTRA_TYPES),
-                        target_fixture='text_output')
+                    extra_types=EXTRA_TYPES), target_fixture='text_output')
 @then('the result is "<text_output>"')
-def condor_log_contains(gpc, text_output):
+def condor_log_contains(text_output):
     ''' checks condor log for text expected '''
-    log_file_n_path = util_dict['CONDOR_LOG']
-    output = gpc.util.get_key_line_in_lim(text_output,
+    p = Params()
+    log_file_n_path = p.naut_dict['CONDOR_LOG_FILE']
+    output = pytest.DEAP_ONE.util.get_key_line_in_lim(text_output,
                                         log_filepath = log_file_n_path)
     assert text_output in output[0]
-
-@then('the algorithm is tidied away')
-def output_ind_found(utils, input_ind):
-    ''' deletes algorithms on path as found.'''
-    test_algos_path = lean_dict['LOCALPACKAGES_PATH']
-    utils.delete_file_from_path(test_algos_path, input_ind+'.py')
-    assert not os.path.exists(f"{test_algos_path}{input_ind}.py")
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

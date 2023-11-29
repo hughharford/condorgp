@@ -13,7 +13,7 @@ Feature: GpControl class achieves various functionality
   #   And the pset returns contains "<primitive_name>"
 
   #   Examples:
-  #     | pset_input      |  primitive_name   |
+  #     | pset_input       |  primitive_name   |
   #     | test_pset5a      |  vmul             |
   #     | test_pset5b      |  vadd             |
 

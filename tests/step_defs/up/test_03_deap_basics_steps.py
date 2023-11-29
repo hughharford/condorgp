@@ -21,7 +21,6 @@ scenarios('../../features/03_deap_basics.feature')
     And the functions are added
     Then the fundamental functions are found
 """
-@pytest.mark.usefixtures("deap_one")
 @given('Deap is setup')
 def deap_ready(deap_one):
     InitialFactory().start_logger()
