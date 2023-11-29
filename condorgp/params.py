@@ -124,10 +124,8 @@ class Params():
         # ################################## ##################################
 
         NO_LOG_LINES = 2000
-        CONDOR_LOG = LOCAL_BASE_PATH + 'condorgp/condorgp/util/logs/condor_log.txt'
 
         self.util_dict = {
             'LOCAL_BASE_PATH': LOCAL_BASE_PATH,
             'NO_LOG_LINES': NO_LOG_LINES,
-            'CONDOR_LOG': CONDOR_LOG,
         }

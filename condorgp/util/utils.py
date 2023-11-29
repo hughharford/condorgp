@@ -23,7 +23,6 @@ class Utils:
         self.p = Params()
         self.NAUT_DICT = self.p.naut_dict
         NAUT_DICT = self.p.naut_dict
-        # LEAN_DICT = self.p.lean_dict
         TEST_DICT = self.p.test_dict
         UTIL_DICT = self.p.util_dict
 
@@ -263,18 +262,6 @@ class Utils:
         temp = str.split(line,' ')
         return temp[-1]
 
-    def get_fitness_from_log(self, key = "", log_file_n_path = ""):
-        '''
-        Is this being used?
-
-        To get the fitness from the log specified
-        '''
-
-        if log_file_n_path == "":
-            log_file_n_path = self.NAUT_DICT['NAUTILUS_LOG_FILE']
-        if key == "":
-            key = self.NAUT_DICT['FITNESS_CRITERIA']
-
     def print_sys_path(self):
 
         a = '/home/hsth/.pyenv/versions/nautilus/bin'
@@ -329,7 +316,6 @@ if __name__ == "__main__":
     expected = -21.49663142709111
     # for dev only:
     backtest_id = "naut-runner-03"
-
 
     found4 = u.find_fitness_with_matching_backtest(
             key = 'Sharpe Ratio (252 days):',

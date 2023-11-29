@@ -25,14 +25,12 @@ class GpControl:
         # default population set and evaluator (fitness function)
         self.default_pset = 'default_untyped'
         self.default_eval = self.eval_nautilus
-        self.default_tidyup = 1
         self.run_backtest = 1 # 1 = run lean in evaluation func, 0 = don't
 
     def inject_gp(self):
         ''' dependency injection of gp '''
         cf = CustomFuncsFactory()
         self.gp_custom_funcs = cf.get_gp_custom_functions()
-
         self.factory = InitialFactory()
         self.gp = self.factory.get_gp_provider()
         self.gp_psets = self.factory.get_gp_psets(self.gp_custom_funcs)
@@ -77,10 +75,6 @@ class GpControl:
         stat_params = {}        # Set 7: the stats feedback
         self.gp.set_stats(stat_params)
 
-        # LEAN:
-        # additionally, copy gp_custom_functions to LEAN LocalPackages:
-        # self.util.cp_custom_funcs_to_lp() # cf tidy up in run_gp, default on
-
     def set_population(self, pop_size):
         self.gp.set_pop_size(pop_size)
 
@@ -89,7 +83,7 @@ class GpControl:
 
     def set_test_evaluator(self, new_eval = ''):
         '''
-        default to eval_test_5, can spec any evaluation function by string
+        default to eval_test_6, can spec any evaluation function by string
         provided named function is within gp_control...
         '''
         if new_eval:
@@ -141,13 +135,12 @@ class GpControl:
 if __name__ == "__main__":
 
     eval_used = 'eval_nautilus'
-    pset_used = 'test_pset7aTyped'
+    pset_used = 'test_pset5c'
     pop = 1
     gens = 1
     c = GpControl()
     c.setup_gp(pset_used, pop, gens)
     c.run_backtest = 1
-    c.default_tidyup = 1
     c.set_test_evaluator(eval_used)
     c.run_gp()
 

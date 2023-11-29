@@ -16,19 +16,22 @@ class RunNautilus():
         self.naut_log = self.naut_dict['NAUTILUS_LOG_FILE']
 
         self.cmd_str = "python"
-        evaluation_path = self.naut_dict['NAUTILUS_EVALUATION_PATH']
+        self.eval_path = self.naut_dict['NAUTILUS_EVALUATION_PATH']
         if script_to_run != "":
-            self.script_str = f"{evaluation_path}/{script_to_run}"
+            self.script_str = f"{self.eval_path}/{script_to_run}"
         else: # default if required:
-            self.script_str = f"{evaluation_path}/naut_runner_03_egFX.py"
+            self.script_str = f"{self.eval_path}/naut_runner_03_egFX.py"
 
         logging.info(">> RunNautilus evaluation ready NAUTILUS >> ")
 
 
-    def basic_run_through(self):
+    def basic_run_through(self, specified_script: str = ""):
         '''
             Runs Nautilus script in a basically separated process.
         '''
+        if specified_script != "": # use specified script for further runs
+            self.script_str = f"{self.eval_path}/{specified_script}"
+            
         result = ""
         if self.script_str:
             result = subprocess.run([self.cmd_str, self.script_str],
