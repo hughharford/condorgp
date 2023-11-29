@@ -2,8 +2,6 @@ from condorgp.params import Params #, util_dict, test_dict, lean_dict
 import logging
 from condorgp.factories.initial_factory import InitialFactory
 from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
-
-
 from condorgp.util.log import CondorLogger
 
 # NB
@@ -11,19 +9,19 @@ from condorgp.util.log import CondorLogger
 
 class GpControl:
     def __init__(self):
-        # get params object:
-        self.p = Params()
         '''
             Where the gp is controlled from.
             Setup, sizing, initiation of gp runs: psets, operators, evaluator
             The major dependency is DEAP.
         '''
+        # get params object:
+        self.p = Params()
         self.inject_gp() # inject dependencies
         self.inject_utils()
         self.initiate_logger()
         self.inject_backtest_runner()
 
-        logging.info(f"{'>'*10}, GpControl Initialising {'>'*10}")
+        logging.info(f"{'>'*5}, GpControl Initialising {'>'*5}")
         # default population set and evaluator (fitness function)
         self.default_pset = 'default_untyped'
         self.default_eval = self.eval_nautilus
@@ -47,13 +45,12 @@ class GpControl:
     def inject_backtest_runner(self):
         ''' dependency injection of backtest runner '''
         ### HACK HERE HACK HERE ###
-        script_to_run = "naut_runner_04_egFX.py"
-        self.backtester = self.factory.get_backtest_runner(script_to_run)
+        default_script = "naut_runner_03_egFX.py"
+        self.backtester = self.factory.get_backtest_runner(default_script)
 
     def initiate_logger(self):
         ''' dependency injection of logger '''
         self.factory.start_logger()
-
 
     def setup_gp(self, pset_spec = '', pop_size=2, no_gens=1):
         ''' sets: 1. additional functions & terminals
@@ -116,71 +113,25 @@ class GpControl:
     def get_logbook(self):
         return self.gp.logbook
 
-    def eval_test_6(self, individual):
-        # Transform the tree expression in a callable function
-        func = self.gp.toolbox.compile(expr=individual)
-        logging.info(f'eval_test_6, OUTPUTTING IND >>> \n {individual}')
-        new_fitness = 0.0
-        # additional code to inject (approaching from individual...)
-        try:
-            self.util.cp_inject_algo_in_n_sort('_test_06.py', str(individual))
-        except Exception as e:
-            logging.debug(f'{individual} not wrapped: {str(e)}')
-            new_fitness = -100.0
-        config_to_run = self.p.lean_dict['LEAN_INJECTED_ALGO_JSON']
-        config_to_run = self.p.lean_dict['LEAN_INJECTED_ALGO_JSON']
-        try:
-            if self.run_backtest:
-                logging.debug("GpControl.eval_test_6 >>>> RUN LEAN >>>>")
-            # LEAN HANGOVER:
-            # # # # # # # #
-                self.backtester.run_lean_via_CLI('main.py', config_to_run)
-            # LEAN HANGOVER:
-            # # # # # # # #
-                self.backtester.run_lean_via_CLI('main.py', config_to_run)
-                new_fitness = self.gpf.get_fit_6()
-            else:
-                logging.debug("<< WOULD RUN LEAN HERE >>>>>>>>>>>>>>>>>>>>>>>")
-        except BaseException as e:
-            logging.error("ERROR eval_test_6, attempting Lean run")
-
-        logging.info(f'eval_test_6, new fitness {new_fitness}')
-        return new_fitness, # returns a float in a tuple, i.e.  14736.68,
-
     def eval_nautilus(self, individual):
         '''
         First inclusion of Nautilus in evaluation function
         Set as the default evaluator, see gp_control.__init__
-        Moving gradually from Lean over to Nautilus
         '''
-        # TODO:
         evalf_name = 'eval_nautilus'
-
         # Transform the tree expression in a callable function
         func = self.gp.toolbox.compile(expr=individual) # Deap reqmt, not used
-        logging.info(f'{evalf_name}, OUTPUTTING IND >>> \n {individual}')
         new_fitness = 0.0
-        # additional code to inject evolved code individual
-        try:
-            # LEAN HANGOVER:
-            # # # # # # # #
-            # #
-            # self.util.cp_inject_algo_in_n_sort('_test_06.py', str(individual))
-            pass
-            # TODO: something here, but kept out for now
-        except Exception as e:
-            logging.debug(f'eval_nautilus: {individual} not wrapped: {str(e)}')
-            new_fitness = -100.0
-
         try:
             if self.run_backtest:
-                logging.debug(f"GpControl.{evalf_name} >>>> RUN NAUTILUS >>>>")
-                # self.backtester.basic_run_through()
+                logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
+                self.backtester.basic_run_through()
                 new_fitness = self.gpf.get_fit_nautilus_1()
-                logging.debug(f"GpControl.{evalf_name} >>>> NAUTILUS fitness {new_fitness} >>>>")
-
+                logging.debug(f"GpControl.{evalf_name} {'>'*2} "+
+                              f"NAUTILUS fitness {new_fitness}")
             else:
-                logging.debug(f"<< ERROR eval_nautilus >>> RUN NAUTILUS HERE >>>>>>>>>>> {new_fitness}")
+                logging.debug(f"ERROR {evalf_name} {'>'*2} "+
+                              f"NAUTILUS {'>'*4} {new_fitness}")
         except BaseException as e:
             logging.error(f"ERROR {evalf_name}, attempting Nautilus run: {e}")
 

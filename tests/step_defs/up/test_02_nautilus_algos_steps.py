@@ -1,5 +1,6 @@
 import os.path
 from pytest_bdd import scenarios, given, when, then, parsers
+import logging
 
 from tests.fixtures import *
 
@@ -63,14 +64,10 @@ def input_evolved_code(input_ind):
 @when('Nautilus runs the "<input_ind>"', target_fixture='input_ind')
 def run_nautilus_and_evaluator(input_ind, initial_factory):
     ''' runs nautilus as per the required evaluator etc'''
-
     script_to_run = input_ind # "naut_runner_03_egFX.py"
     nt = initial_factory.get_backtest_runner(script_to_run = script_to_run)
-
-    print("Running RunNautilus")
+    logging.info("test_02 >> Running RunNautilus")
     nt.basic_run_through()
-
-    pass
 
 @then(parsers.cfparse('the "{output_ind:String}" is found',
                        extra_types=EXTRA_TYPES), target_fixture='output_ind')

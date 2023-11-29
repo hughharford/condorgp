@@ -57,16 +57,10 @@ class GpFunctions():
         latest_log = self.util.get_last_x_log_lines(lines = lines_to_check,
                                                     log_file_n_path = log_file)
         if latest_log:
-            cgp_error_mark = '<< CONDOR INJECT-CODE ERROR >>' # check for error
-            for line in latest_log:
-                if cgp_error_mark in line:
-                    logging.warn(f'<<< gpf.get_fit_nautilus_1: inject error')
-                    return -9999.9
-
             # if no errors, retrieve fitness
-            RoMDD_line = 'Risk Return Ratio: '
+            fitness_line = self.naut_dict['FITNESS_CRITERIA']
             lim = lines_to_check - 1
-            got = self.util.get_key_line_in_lim(key = RoMDD_line,
+            got = self.util.get_key_line_in_lim(key = fitness_line,
                                                 log_filepath = log_file,
                                                 lines = lim)
             f = float(self.util.get_last_chars(got[0], ignore_last_chars = 4))

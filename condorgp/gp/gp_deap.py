@@ -13,6 +13,9 @@ from condorgp.util.log import CondorLogger
 
 class GpDeap(GpProvider):
     def __init__(self):
+        '''
+            Provides the workings for Deap to operate.
+        '''
         pass
         # CondorLogger()
 
@@ -44,6 +47,12 @@ class GpDeap(GpProvider):
 
 
     def set_gp_params(self, params: dict):
+        '''
+        Set the major parameters for genetic programming with Deap.
+
+        Fitness function, Individual and GP tree base classes. Population,
+        genetic operators, initiation of population mechanism.
+        '''
 
         # fundamentals for the gp tree
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))

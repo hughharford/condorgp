@@ -6,7 +6,6 @@ from condorgp.util.log import CondorLogger
 
 class RunNautilus():
     def __init__(self, script_to_run = "") -> None:
-        CondorLogger()
 
         self.utils = Utils()
         p = Params()
@@ -30,7 +29,6 @@ class RunNautilus():
         '''
             Runs Nautilus script in a basically separated process.
         '''
-
         result = ""
         if self.script_str:
             result = subprocess.run([self.cmd_str, self.script_str],
