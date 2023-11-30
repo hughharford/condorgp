@@ -68,20 +68,22 @@ class Params():
 
         #                                   "condorgp/condorgp/util/logs"
         NAUTILUS_BASE_PATH = '/home/hughharford/code/hughharford/nautilus_trader/'
-        NAUTILUS_EVALUATION_PATH = LOCAL_BASE_PATH + "condorgp/evaluation/nautilus/"
+        NAUTILUS_EVAL_PATH = LOCAL_BASE_PATH + "condorgp/evaluation/nautilus/"
                                             # "condorgp/util/logs/nautilus_log.json"
         NAUTILUS_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/nautilus_log.json'
         CONDOR_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/condor_log.txt'
         LOGS_FOLDER = 'condorgp/util/logs/'
         FITNESS_CRITERIA = 'Sharpe Ratio (252 days)'
+        CGP_NAUT_STRATEGIES = NAUTILUS_EVAL_PATH + "cgp_naut_strategies.py"
 
         self.naut_dict = {
             'NAUTILUS_BASE_PATH': NAUTILUS_BASE_PATH,
-            'NAUTILUS_EVALUATION_PATH': NAUTILUS_EVALUATION_PATH,
+            'NAUTILUS_EVAL_PATH': NAUTILUS_EVAL_PATH,
             'LOGS_FOLDER': LOGS_FOLDER,
             'NAUTILUS_LOG_FILE': NAUTILUS_LOG_FILE,
             'CONDOR_LOG_FILE': CONDOR_LOG_FILE,
             'FITNESS_CRITERIA': FITNESS_CRITERIA,
+            'CGP_NAUT_STRATEGIES': CGP_NAUT_STRATEGIES,
         }
 
         # ################################## ##################################

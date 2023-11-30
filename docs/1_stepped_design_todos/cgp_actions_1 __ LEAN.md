@@ -4,6 +4,7 @@
 ## REQUIREMENTS
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  # THIS FAILED > MOVED AWAY FROM LEAN AND NOW USE NAUTILUS
   # enable imports of Lean classes into Condorgp and vice versa
       # TODO: fix this, without it things are complex
       # OPTIONS:

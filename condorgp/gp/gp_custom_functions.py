@@ -2,10 +2,11 @@ import numpy
 
 class GpCustomFunctions:
     ''' keep custom functions in here. '''
+    
     def __init__(self):
         pass
 
-        # Define new functions
+    # Define new functions
     def protectedDiv(left, right):
         with numpy.errstate(divide='ignore',invalid='ignore'):
             x = numpy.divide(left, right)

@@ -119,7 +119,10 @@ class GpControl:
         try:
             if self.run_backtest:
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
-                self.backtester.basic_run_through()
+                #  self.backtester.basic_run_through()
+
+                logging.info(individual)
+
                 new_fitness = self.gpf.get_fit_nautilus_1()
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} "+
                               f"NAUTILUS fitness {new_fitness}")
