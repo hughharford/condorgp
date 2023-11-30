@@ -43,7 +43,7 @@ from condorgp.evaluation.nautilus.overloaded_nt.cgp_providers import *
 if __name__ == "__main__":
     # Configure backtest engine
     config = BacktestEngineConfig(
-        trader_id="BACKTESTER-001-naut-runner-04",
+        trader_id="BACKTESTER-001-naut-runner-05",
         logging=LoggingConfig(log_level="ERROR",
             log_level_file="INFO",
             log_file_format="json",
@@ -87,25 +87,30 @@ if __name__ == "__main__":
     # TODO: NEXT STEP:
     #       Between the ~~~ lines can be evolved easily
     #       So, initially, extract to seperate module and inject into here to
-    #       to run. 
+    #       to run.
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     # Configure your strategy
-    config = EMACrossConfig(
-        instrument_id=str(AUDUSD_SIM.id),
-        bar_type="AUD/USD.SIM-1-MINUTE-MID-INTERNAL",
-        fast_ema_period=100,
-        slow_ema_period=200,
-        trade_size=Decimal(1_000_000),
-    )
+
+    from naut_strategies import CGPNautilusStrategies
+    gp_strategy = CGPNautilusStrategies(
+        instrument = AUDUSD_SIM).get_strategy()
+
+    # config = EMACrossConfig(
+    #     instrument_id=str(AUDUSD_SIM.id),
+    #     bar_type="AUD/USD.SIM-1-MINUTE-MID-INTERNAL",
+    #     fast_ema_period=100,
+    #     slow_ema_period=200,
+    #     trade_size=Decimal(1_000_000),
+    # )
 
     # Instantiate and add your strategy
-    strategy = EMACross(config=config)
+    # strategy = EMACross(config=config)
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    engine.add_strategy(strategy=strategy)
+    engine.add_strategy(strategy=gp_strategy)
 
     # time.sleep(0.1)
     # input("Press Enter to continue...")
