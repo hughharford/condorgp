@@ -16,7 +16,7 @@ class RunNautilus():
         self.naut_log = self.naut_dict['NAUTILUS_LOG_FILE']
 
         self.cmd_str = "python"
-        self.eval_path = self.naut_dict['NAUTILUS_EVALUATION_PATH']
+        self.eval_path = self.naut_dict['NAUTILUS_EVAL_PATH']
         if script_to_run != "":
             self.script_str = f"{self.eval_path}/{script_to_run}"
         else: # default if required:
@@ -31,7 +31,7 @@ class RunNautilus():
         '''
         if specified_script != "": # use specified script for further runs
             self.script_str = f"{self.eval_path}/{specified_script}"
-            
+
         result = ""
         if self.script_str:
             result = subprocess.run([self.cmd_str, self.script_str],
