@@ -8,19 +8,19 @@ from condorgp.factories.initial_factory import InitialFactory
 
 
 @pytest.fixture
-def initial_factory(): # these weren't being picked up by pytest at one point. v annoying
+def initial_factory():
     return InitialFactory()
 
 @pytest.fixture
-def params(): # these weren't being picked up by pytest at one point. v annoying
+def params():
     return Params()
 
 @pytest.fixture
-def utils(): # these weren't being picked up by pytest at one point. v annoying
+def utils():
     return Utils()
 
 @pytest.fixture
-def gp_control(): # this needs to be updated in tests numbered < 5
+def gp_control(): 
     return GpControl()
 
 @pytest.fixture

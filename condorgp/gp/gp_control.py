@@ -80,7 +80,7 @@ class GpControl:
         self.gp.set_stats(stat_params)
 
     def set_and_get_pset(self, pset_spec = ""):
-        ''' sets a tailored pset '''
+        ''' get and set a tailored pset '''
         if pset_spec == '': pset_spec = self.default_pset
         funcs = {}     # Set: 1. additional functions & terminals
         terms = {}
@@ -126,13 +126,13 @@ class GpControl:
         '''
         evalf_name = 'eval_nautilus'
         # Transform the tree expression in a callable function
-        func = self.gp.toolbox.compile(expr=individual) # Deap reqmt, not used
+        config_func = self.gp.toolbox.compile(expr=individual) # Deap reqmt, not used
         new_fitness = 0.0
         try:
             if self.run_backtest:
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
 
-                self.backtester.basic_run_through()
+                self.backtester.basic_run_through(config_func)
                 new_fitness = self.gpf.get_fit_nautilus_1()
 
                 # # logging.info(individual)

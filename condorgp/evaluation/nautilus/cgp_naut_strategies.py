@@ -15,7 +15,7 @@ class CGPNautilusStrategies():
 
     def get_strategy(self):
 #        config = self.get_config_strategy()
-        config = self.get_config_strategy_without_full_declaration()
+        config = self.get_injected_config()
         strategy = EMACross(config=config)
         return strategy
 
@@ -37,6 +37,13 @@ class CGPNautilusStrategies():
             100,
             200,
             )
+        return config
+
+    def get_injected_config(self, injected_config=""):
+        if injected_config == "":
+            config = self.get_config_strategy_without_full_declaration()
+        else:
+            config = injected_config
         return config
 
 if __name__ == "__main__":

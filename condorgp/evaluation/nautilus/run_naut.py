@@ -25,10 +25,14 @@ class RunNautilus():
         logging.info(">> RunNautilus evaluation ready NAUTILUS >> ")
 
 
-    def basic_run_through(self, specified_script: str = ""):
+    def basic_run_through(self, specified_script: str="", config_func=""):
         '''
             Runs Nautilus script in a basically separated process.
         '''
+        # enable config_func into 
+
+
+
         if specified_script != "": # use specified script for further runs
             self.script_str = f"{self.eval_path}/{specified_script}"
 
