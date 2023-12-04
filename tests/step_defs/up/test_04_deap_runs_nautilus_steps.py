@@ -4,8 +4,7 @@ import os.path
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from tests.fixtures import deap_one, utils
-# from condorgp.params import test_dict, util_dict
+from tests.fixtures import gp_control, utils
 
 EXTRA_TYPES = {
     'Number': int,
@@ -56,16 +55,16 @@ def deap_sets_algo_to_nautilus(utils, input_ind):
     pass # nothing to do, no longer pass across algorithms
 
 @when('a short Deap run is conducted')
-def short_deap_run(deap_one):
-    assert deap_one is not None
+def short_deap_run(gp_control):
+    assert gp_control is not None
     newpop = 1
     gens = 1
-    deap_one.setup_gp('', newpop, gens)
-    deap_one.run_gp()
+    gp_control.setup_gp('', newpop, gens)
+    gp_control.run_gp()
 
 @then(parsers.cfparse('the result: "{expected_value:Float}" is found',
                        extra_types=EXTRA_TYPES), target_fixture='expected_value')
 @then('the result: "<expected_value>" is found')
-def find_results(expected_value, deap_one):
-    max_fitness_found = deap_one.gp.logbook.select("max")[-1]
+def find_results(expected_value, gp_control):
+    max_fitness_found = gp_control.gp.logbook.select("max")[-1]
     assert expected_value >= max_fitness_found
