@@ -43,7 +43,7 @@ from condorgp.evaluation.nautilus.overloaded_nt.cgp_providers import *
 if __name__ == "__main__":
     # Configure backtest engine
     config = BacktestEngineConfig(
-        trader_id="BACKTESTER-001-naut-runner-05",
+        trader_id="BACKTESTER-001-naut-run-04",
         logging=LoggingConfig(log_level="ERROR",
             log_level_file="INFO",
             log_file_format="json",
@@ -82,16 +82,19 @@ if __name__ == "__main__":
     ticks = wrangler.process(provider.read_csv_ticks("truefx/audusd-ticks.csv"))
     engine.add_data(ticks)
 
-    # CGP CHANGE HERE
-    # Configure your strategy - seperated out - see naut_strategies.py
-    from condorgp.evaluation.nautilus.cgp_naut_strategies import CGPNautilusStrategies
-    gp_strategy = CGPNautilusStrategies(
-        instrument = AUDUSD_SIM).get_strategy()
+    # Configure your strategy
+    config = EMACrossConfig(
+        instrument_id=str(AUDUSD_SIM.id),
+        bar_type="AUD/USD.SIM-1-MINUTE-MID-INTERNAL",
+        fast_ema_period=100,
+        slow_ema_period=200,
+        trade_size=Decimal(1_000_000),
+    )
 
-    # add the strategy
-    engine.add_strategy(strategy=gp_strategy)
+    # Instantiate and add your strategy
+    strategy = EMACross(config=config)
+    engine.add_strategy(strategy=strategy)
 
-    # CGP COMMENTED HERE
     # time.sleep(0.1)
     # input("Press Enter to continue...")
 

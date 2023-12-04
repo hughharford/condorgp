@@ -38,9 +38,9 @@ Feature: Nautilus tests each evolved individual
     And the result: "<expected_value>" is reported
 
     Examples:
-      | input_ind               |   output_ind      |   expected_value      |
-      | naut_runner_03_egFX.py  |   naut-runner-03  |   -21.49663142709111  |
-      | naut_runner_04_egFX.py  |   naut-runner-04  |   -16.160361991815254 |
+      | input_ind            |   output_ind      |   expected_value      |
+      | naut_run_03_egFX.py  |   naut-run-03  |   -21.49663142709111  |
+      | naut_run_04_egFX.py  |   naut-run-04  |   -16.160361991815254 |
 
 '''
 
@@ -64,7 +64,7 @@ def input_evolved_code(input_ind):
 @when('Nautilus runs the "<input_ind>"', target_fixture='input_ind')
 def run_nautilus_and_evaluator(input_ind, initial_factory):
     ''' runs nautilus as per the required evaluator etc'''
-    script_to_run = input_ind # "naut_runner_03_egFX.py"
+    script_to_run = input_ind
     nt = initial_factory.get_backtest_runner(script_to_run = script_to_run)
     logging.info("test_02 >> Running RunNautilus")
     nt.basic_run_through()
@@ -77,18 +77,18 @@ def results_files_are_updated(output_ind):
     checks in the log file that the algo name is found
     only uses the last X lines of the log file
     '''
-    assert output_ind # == "naut-runner-04"
+    assert output_ind
     pytest.OUTPUT_IND = output_ind
-    # utils.confirm_ind_name_in_log_lines(output_ind)
 
 @then(parsers.cfparse('the result: "{expected_value:Float}" is reported',
                     extra_types=EXTRA_TYPES),
                     target_fixture='expected_value')
 @then('the result: "<expected_value>" is reported',
                     target_fixture='expected_value')
-def check_results(expected_value, utils):
-    key_req = 'Sharpe Ratio (252 days)'
-    backtest_id = pytest.OUTPUT_IND # "naut-runner-03" #
+def check_results(expected_value, utils, params):
+    key_req = params.naut_dict['FITNESS_CRITERIA']
+    logging.info(key_req)
+    backtest_id = pytest.OUTPUT_IND
     lines = 10000
     max_lines_diff = 300 #
 

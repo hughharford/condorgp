@@ -4,7 +4,7 @@ from decimal import Decimal
 from nautilus_trader.examples.strategies.ema_cross import EMACross
 from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
 
-class CGPNautilusStrategies():
+class GetStrategies():
 
     def __init__(self, instrument, bar_type = ""):
         self.instrument = instrument
@@ -13,9 +13,11 @@ class CGPNautilusStrategies():
         self.bar_type = bar_type
         logging.info(f"{__name__} init: {self.instrument} {self.bar_type}")
 
-    def get_strategy(self):
-#        config = self.get_config_strategy()
-        config = self.get_injected_config()
+    def get_strategy(self, config_func=""):
+        if config_func:
+            config = self.get_injected_config(injected_config=config_func)
+        else:
+            config = self.get_config_strategy_without_full_declaration()
         strategy = EMACross(config=config)
         return strategy
 
@@ -53,6 +55,6 @@ if __name__ == "__main__":
     SIM = Venue("SIM")
     AUDUSD_SIM = TestInstrumentProvider.default_fx_ccy("AUD/USD", SIM)
 
-    ns = CGPNautilusStrategies(instrument = AUDUSD_SIM)
+    ns = GetStrategies(instrument = AUDUSD_SIM)
     config = ns.get_config_strategy_without_full_declaration()
     print(type(config))

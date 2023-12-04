@@ -38,12 +38,14 @@ from nautilus_trader.test_kit.providers import TestDataProvider
 from nautilus_trader.test_kit.providers import TestInstrumentProvider
 
 from nautilus_trader.config import LoggingConfig
+
+from condorgp.params import Params
 from condorgp.evaluation.nautilus.overloaded_nt.cgp_providers import *
 
 if __name__ == "__main__":
     # Configure backtest engine
     config = BacktestEngineConfig(
-        trader_id="BACKTESTER-001-naut-runner-04",
+        trader_id="BACKTESTER-001-naut-run-03",
         logging=LoggingConfig(log_level="ERROR",
             log_level_file="INFO",
             log_file_format="json",
@@ -86,8 +88,8 @@ if __name__ == "__main__":
     config = EMACrossConfig(
         instrument_id=str(AUDUSD_SIM.id),
         bar_type="AUD/USD.SIM-1-MINUTE-MID-INTERNAL",
-        fast_ema_period=100,
-        slow_ema_period=200,
+        fast_ema_period=10,
+        slow_ema_period=20,
         trade_size=Decimal(1_000_000),
     )
 

@@ -46,11 +46,14 @@ Feature: GpControl's evolved code must affect Nautilus functionality
 @given('GpControl is run with  "<pset_input>"',
                         target_fixture='pset_input')
 def gpcontrol_run_with(gp_control, pset_input):
-    ''' sets one of two different psets '''
-    gp_control.setup_gp(pset_spec=pset_input, pop_size=1, no_gens=1)
+    ''' sets psets for nautilus 1st config setup '''
+    gp_control.setup_gp(pset_spec=pset_input,
+                        pop_size=1,
+                        no_gens=1)
 
 @when('the evolved code is used')
 def injected_algo_includes(gp_control):
+    ''' starts gp run with set parameters '''
     gp_control.run_gp()
 
 @then(parsers.cfparse('Nautilus o/p is NEITHER "{expected_A:Float}"',
@@ -59,6 +62,7 @@ def injected_algo_includes(gp_control):
 @then('Nautilus o/p is NEITHER "<expected_A>"',
                         target_fixture='expected_A')
 def output_isnt_mdd(gp_control, expected_A):
+    ''' confirms a different fitness to A '''
     pytest.MAXFITNESS = gp_control.gp.logbook.select("max")[-1]
     print(pytest.MAXFITNESS)
     assert pytest.MAXFITNESS != expected_A
@@ -68,7 +72,8 @@ def output_isnt_mdd(gp_control, expected_A):
                         target_fixture='expected_B')
 @then('NOR is the Nautilus o/p "<expected_B>"',
                         target_fixture='expected_B')
-def output_isnt_mdd(gp_control, expected_B):
+def output_isnt_mdd(expected_B):
+    ''' confirms a different fitness to B '''
     # max_fitness_found = gp_control.gp.logbook.select("max")[-1]
     # print(max_fitness_found)
     assert pytest.MAXFITNESS != expected_B

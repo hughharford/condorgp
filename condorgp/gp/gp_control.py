@@ -47,7 +47,7 @@ class GpControl:
     def inject_backtest_runner(self):
         ''' dependency injection of backtest runner '''
         ### HACK HERE HACK HERE ###
-        default_script = "naut_runner_03_egFX.py"
+        default_script = "naut_03_egFX.py"
         self.backtester = self.factory.get_backtest_runner(default_script)
 
     def initiate_logger(self):
@@ -159,7 +159,7 @@ if __name__ == "__main__":
 
     eval_used = 'eval_nautilus'
     pset_used = 'naut_pset_01' # 'test_pset5c'
-    pop = 2
+    pop = 1
     gens = 1
     c = GpControl()
     c.setup_gp(pset_used, pop, gens)

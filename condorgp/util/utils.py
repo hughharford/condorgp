@@ -292,8 +292,8 @@ if __name__ == "__main__":
     print('going...')
     u = Utils()
     key_req = 'Sharpe Ratio (252 days)'
-    key3 = "Sharpe Ratio"
-    key2 = "EMACross-000"
+    # key3 = "Sharpe Ratio"
+    # key2 = "EMACross-000"
     lines = 2000
 
     # no error here, just need to provide lines = X enough to find it...
@@ -316,13 +316,14 @@ if __name__ == "__main__":
     expected = -21.49663142709111
     # for dev only:
     backtest_id = "naut-runner-03"
-
+    key_fitness = Params().naut_dict['FITNESS_CRITERIA']
+    print(key_fitness)
     found4 = u.find_fitness_with_matching_backtest(
-            key = 'Sharpe Ratio (252 days):',
+            key = key_fitness,
             log_file_n_path = "",
             backtest_id = backtest_id,
-            lines = 5000,
-            max_lines_diff = 2000)
+            lines = 55000,
+            max_lines_diff = 22000)
     print(found4[0])
     here = float(u.get_last_chars(found4[0],2))
     assert here == expected
