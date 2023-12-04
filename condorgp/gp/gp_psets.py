@@ -5,61 +5,67 @@ import operator
 import math
 from datetime import timedelta
 
+from decimal import Decimal
+
+from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
+from nautilus_trader.test_kit.providers import TestInstrumentProvider
+from nautilus_trader.model.identifiers import Venue
+
 import logging
 from condorgp.util.log import CondorLogger
 
-class pt_alpha():
-    '''
-    very Lean focused and coupled,
-    must adjust style as well as backtester
-    '''
-    def __init__(self) -> None:
-        pass
-        # # see Lean/Algorithm.Framework/Alphas
-        # self.MACD = MacdAlphaModel(fastPeriod = 12,
-        #         slowPeriod = 26,
-        #         signalPeriod = 9,
-        #         movingAverageType = MovingAverageType.Exponential,
-        #         resolution = Resolution.Daily)
-        # self.EMA = EmaCrossAlphaModel(fastPeriod = 12,
-        #         slowPeriod = 26,
-        #         resolution = Resolution.Daily)
-        # self.BPTA = BasePairsTradingAlphaModel(
-        #         lookback = 1,
-        #         resolution = Resolution.Daily,
-        #         threshold = 1)
-        # for later...
-        # self.BPTA_0 = BasePairsTradingAlphaModel()
+# class pt_alpha():
+#     '''
+#     very Lean focused and coupled,
+#     must adjust style as well as backtester
+#     '''
+#     def __init__(self) -> None:
+#         pass
+#         # # see Lean/Algorithm.Framework/Alphas
+#         # self.MACD = MacdAlphaModel(fastPeriod = 12,
+#         #         slowPeriod = 26,
+#         #         signalPeriod = 9,
+#         #         movingAverageType = MovingAverageType.Exponential,
+#         #         resolution = Resolution.Daily)
+#         # self.EMA = EmaCrossAlphaModel(fastPeriod = 12,
+#         #         slowPeriod = 26,
+#         #         resolution = Resolution.Daily)
+#         # self.BPTA = BasePairsTradingAlphaModel(
+#         #         lookback = 1,
+#         #         resolution = Resolution.Daily,
+#         #         threshold = 1)
+#         # for later...
+#         # self.BPTA_0 = BasePairsTradingAlphaModel()
 
-class pt_method():
-    '''
-    very Lean focused and coupled,
-    must adjust style as well as backtester
-    '''
-    def __init__(self) -> None:
-        # takes IAlphaModel or just AlphaModel?
-    #     self.AddAlpha = QCAlgorithm.AddAlpha() # P, ret: AlphaModel
-    #     self.SetAlpha = QCAlgorithm.SetAlpha(RsiAlphaModel()) # T, None
-    # # AddAlpha = QCAlgorithm.AddAlpha() # P, ret: AlphaModel
-        pass
+# class pt_method():
+#     '''
+#     very Lean focused and coupled,
+#     must adjust style as well as backtester
+#     '''
+#     def __init__(self) -> None:
+#         # takes IAlphaModel or just AlphaModel?
+#     #     self.AddAlpha = QCAlgorithm.AddAlpha() # P, ret: AlphaModel
+#     #     self.SetAlpha = QCAlgorithm.SetAlpha(RsiAlphaModel()) # T, None
+#     # # AddAlpha = QCAlgorithm.AddAlpha() # P, ret: AlphaModel
+#         pass
 
-# class pt_indicator():
+# # class pt_indicator():
+# #     def __init__(self):
+# #         pass
+# #         # self.sma = QCAlgorithm.SMA("SPY", 60, Resolution.Minute())
+
+# class pt_resolution():
+#     '''
+#     very Lean focused and coupled,
+#     must adjust style as well as backtester
+#     '''
 #     def __init__(self):
 #         pass
-#         # self.sma = QCAlgorithm.SMA("SPY", 60, Resolution.Minute())
-
-class pt_resolution():
-    '''
-    very Lean focused and coupled,
-    must adjust style as well as backtester
-    '''
-    def __init__(self):
-        pass
-        # self.Daily = Resolution.Daily
-        # self.Hour = Resolution.Hour
-        # self.Minute = Resolution.Minute
-        # self.Hour_0 = timedelta(minutes=60)
-        # # self.x = Resolution(4)
+#         # self.Daily = Resolution.Daily
+#         # self.Hour = Resolution.Hour
+#         # self.Minute = Resolution.Minute
+#         # self.Hour_0 = timedelta(minutes=60)
+#         # # self.x = Resolution(4)
 
 
 # # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -79,21 +85,21 @@ class GpPsets:
             print("GpPsets ERROR: " + str(e))
             return None
 
-    def get_test_pset8aTyped(self):
-        '''test_pset8aTyped'''
-        self.test8a = gp.PrimitiveSetTyped("test_pset8aTyped",[pt_method],None)
-                                                        # aiming for pt_method
+    # def get_test_pset8aTyped(self):
+    #     '''test_pset8aTyped'''
+    #     self.test8a = gp.PrimitiveSetTyped("test_pset8aTyped",[pt_method],None)
+    #                                                     # aiming for pt_method
 
-        # pt_method (P and T)
-        # EXPECT TO CUT THIS OUT AND REPLACE pset in-type with pt_alpha
-        # self.test8a.addPrimitive(
-        #     pt_method.AddAlpha, [pt_alpha], pt_method)
+    #     # pt_method (P and T)
+    #     # EXPECT TO CUT THIS OUT AND REPLACE pset in-type with pt_alpha
+    #     # self.test8a.addPrimitive(
+    #     #     pt_method.AddAlpha, [pt_alpha], pt_method)
 
-        # TAKEN OUT WHILE TESTING pythonnet...
-        # self.test8a.addTerminal(
-        #      QCAlgorithm.SetAlpha(RsiAlphaModel()),
-        #                         [pt_method],
-        #                         name = "self.SetAlpha(RsiAlphaModel()")
+    #     # TAKEN OUT WHILE TESTING pythonnet...
+    #     # self.test8a.addTerminal(
+    #     #      QCAlgorithm.SetAlpha(RsiAlphaModel()),
+    #     #                         [pt_method],
+    #     #                         name = "self.SetAlpha(RsiAlphaModel()")
 
 
     def get_default_untyped(self):
@@ -223,6 +229,52 @@ class GpPsets:
 #         self.adfset0.renameArguments(ARG0='x0')
 #         self.adfset0.renameArguments(ARG1='y0')
 #         return self.adfset0
+
+    def get_naut_pset_01(self):
+        ''' naut_pset_01 '''
+        self.bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+        self.SIM = Venue("SIM")
+        self.instrument = TestInstrumentProvider.default_fx_ccy(
+            "AUD/USD",
+            self.SIM)
+        # a first basic primitive set for strongly typed GP using Nautilus
+        self.pset = gp.PrimitiveSetTyped("CGPNAUT01",
+                                         [], EMACrossConfig, "ARG")
+
+        # first pset terminals:
+        self.pset.addTerminal(str(self.instrument.id), str)
+        self.pset.addTerminal(self.bar_type, str)
+        self.pset.addTerminal(100, int)
+        self.pset.addTerminal(200, int)
+        self.pset.addTerminal(1_000_000, int)
+
+        self.pset.addPrimitive(Decimal, [int], Decimal)
+        self.pset.addPrimitive(EMACrossConfig,
+                               [str, str, Decimal, int, int],
+                               EMACrossConfig)
+
+        # below here were added to allow DEAP to populate
+        self.pset.addPrimitive(str, [int], str)
+        self.pset.addPrimitive(int, [int], int)
+
+        self.pset.addTerminal(Decimal(1_000_000), Decimal)
+        self.pset.addTerminal("EMACrossConfig", EMACrossConfig)
+
+
+        return self.pset
+
+        #   def get_config_strategy_without_full_declaration(self):
+        #     config = EMACrossConfig(
+        #         str(self.instrument.id),
+        #         self.bar_type,
+        #         Decimal(1_000_000),
+        #         100,
+        #         200,
+        #         )
+        #     return config
+
+        # first attempt at Nautilus - looking to evolve the above
+
 
 if __name__ == '__main__':
     pass

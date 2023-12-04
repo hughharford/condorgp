@@ -3,6 +3,7 @@ from condorgp.util.utils import Utils
 from condorgp.gp.gp_deap import GpDeap
 
 from condorgp.gp.gp_psets import GpPsets
+from condorgp.gp.gp_psets_nautilus_SUPERSEDED import GpPsetsNautilus
 from condorgp.gp.gp_functions import GpFunctions
 from condorgp.evaluation.nautilus.run_naut import RunNautilus
 
@@ -20,6 +21,9 @@ class InitialFactory():
 
     def get_gp_psets(self, customfuncs):
         return GpPsets(customfuncs)
+
+    def get_gp_naut_psets(self, customfuncs):
+        return GpPsetsNautilus(customfuncs)
 
     def get_gp_funcs(self):
         return GpFunctions()

@@ -4,6 +4,9 @@ from condorgp.factories.initial_factory import InitialFactory
 from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
 from condorgp.util.log import CondorLogger
 
+from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
+
+
 # NB
 # TODO:below, search for: "### HACK HERE HACK HERE ###"
 
@@ -34,6 +37,7 @@ class GpControl:
         self.factory = InitialFactory()
         self.gp = self.factory.get_gp_provider()
         self.gp_psets = self.factory.get_gp_psets(self.gp_custom_funcs)
+        #  not using get_gp_naut_psets - separating out creates complications
         self.gpf = self.factory.get_gp_funcs()
 
     def inject_utils(self):
@@ -75,6 +79,14 @@ class GpControl:
         stat_params = {}        # Set 7: the stats feedback
         self.gp.set_stats(stat_params)
 
+    def set_and_get_pset(self, pset_spec = ""):
+        ''' sets a tailored pset '''
+        if pset_spec == '': pset_spec = self.default_pset
+        funcs = {}     # Set: 1. additional functions & terminals
+        terms = {}
+        self.gp.set_defined_pset(self.gp_psets, pset_spec, funcs, terms)
+        return self.gp.pset
+
     def set_population(self, pop_size):
         self.gp.set_pop_size(pop_size)
 
@@ -102,7 +114,7 @@ class GpControl:
 
     def run_gp(self, inputs = [0,0,0]):
         ''' undertakes the run as specified'''
-        self.gp.run_gp(inputs)
+        self.pop, self.stats, self.hof, self.logbook = self.gp.run_gp(inputs)
 
     def get_logbook(self):
         return self.gp.logbook
@@ -119,11 +131,19 @@ class GpControl:
         try:
             if self.run_backtest:
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
-                #  self.backtester.basic_run_through()
 
-                logging.info(individual)
-
+                self.backtester.basic_run_through()
                 new_fitness = self.gpf.get_fit_nautilus_1()
+
+                # # logging.info(individual)
+                # func = self.gp.toolbox.compile(expr=individual)
+                # type_return = str(type(func))
+                # # logging.info(type_return)
+                # if 'nautilus_trader.examples.strategies.ema_cross.EMACrossConfig' in type_return:
+                #     new_fitness = 100091
+                # else:
+                #     new_fitness = 191
+
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} "+
                               f"NAUTILUS fitness {new_fitness}")
             else:
@@ -138,8 +158,8 @@ class GpControl:
 if __name__ == "__main__":
 
     eval_used = 'eval_nautilus'
-    pset_used = 'test_pset5c'
-    pop = 1
+    pset_used = 'naut_pset_01' # 'test_pset5c'
+    pop = 2
     gens = 1
     c = GpControl()
     c.setup_gp(pset_used, pop, gens)

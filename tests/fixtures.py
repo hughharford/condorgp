@@ -20,20 +20,8 @@ def utils(): # these weren't being picked up by pytest at one point. v annoying
     return Utils()
 
 @pytest.fixture
-def deap_one(): # this needs to be updated in tests numbered < 5
+def gp_control(): # this needs to be updated in tests numbered < 5
     return GpControl()
-
-# @pytest.fixture
-# def gpc():
-#     return GpControl()
-
-# @pytest.fixture
-# def gpc2():
-#     return GpControl()
-
-# @pytest.fixture
-# def gpc3():
-#     return GpControl()
 
 @pytest.fixture
 def dep_di():
