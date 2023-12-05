@@ -10,6 +10,7 @@ from decimal import Decimal
 from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
 from nautilus_trader.test_kit.providers import TestInstrumentProvider
 from nautilus_trader.model.identifiers import Venue
+from nautilus_trader.model.identifiers import InstrumentId
 
 import logging
 from condorgp.util.log import CondorLogger
@@ -112,8 +113,8 @@ class GpPsets:
         self.default_untyped.addPrimitive(numpy.cos, 1, name="vcos")
         self.default_untyped.addPrimitive(numpy.sin, 1, name="vsin")
         self.default_untyped.addEphemeralConstant(
-                                                "rand101",
-                                                lambda: random.randint(-1,1))
+                                                "number78",
+                                                78)
         self.default_untyped.renameArguments(ARG0='x')
         return self.default_untyped
 
@@ -232,21 +233,47 @@ class GpPsets:
 
     def get_naut_pset_01(self):
         ''' naut_pset_01 '''
-        self.bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+        bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+        bar_type2 = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+        bar_type3 = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+
         self.SIM = Venue("SIM")
-        self.instrument = TestInstrumentProvider.default_fx_ccy(
+        instrument = TestInstrumentProvider.default_fx_ccy(
             "AUD/USD",
             self.SIM)
+        instrument2 = TestInstrumentProvider.default_fx_ccy(
+            "AUD/USD",
+            self.SIM)
+        instrument3 = TestInstrumentProvider.default_fx_ccy(
+            "AUD/USD",
+            self.SIM)
+        # print(f"type(instrument) = {type(instrument)}")
+        # print(f"type(instrument.id) = {type(instrument.id)}")
+        # print(f"type(str(instrument.id)) = {type(str(instrument.id))}")
+        print(f"str(instrument.id) = {str(instrument.id)}")
+
+
         # a first basic primitive set for strongly typed GP using Nautilus
         self.pset = gp.PrimitiveSetTyped("CGPNAUT01",
                                          [], EMACrossConfig, "ARG")
 
         # first pset terminals:
-        self.pset.addTerminal(str(self.instrument.id), str)
-        self.pset.addTerminal(self.bar_type, str)
+        self.pset.addTerminal(str(instrument.id), str)
+        self.pset.addTerminal(str(instrument2.id), str)
+        self.pset.addTerminal(str(instrument3.id), str)
+
+        self.pset.addTerminal(bar_type, str)
+        self.pset.addTerminal(bar_type2, str)
+        self.pset.addTerminal(bar_type3, str)
+
         self.pset.addTerminal(100, int)
         self.pset.addTerminal(200, int)
+        self.pset.addTerminal(500, int)
+        self.pset.addTerminal(1000, int)
         self.pset.addTerminal(1_000_000, int)
+        self.pset.addTerminal(1_500_000, int)
+        self.pset.addTerminal(2_000_000, int)
+
 
         self.pset.addPrimitive(Decimal, [int], Decimal)
         self.pset.addPrimitive(EMACrossConfig,
@@ -275,28 +302,35 @@ class GpPsets:
 
         # first attempt at Nautilus - looking to evolve the above
 
+class StrInstrumentId():
+    def __init__():
+        pass
+
+class StrBarType():
+    def __init__():
+        pass
 
 if __name__ == '__main__':
     pass
 
-#     # uncomment the below and run to have a look into a pset created above:
+    # uncomment the below and run to have a look into a pset created above:
 
-#     from deap import gp
-#     from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
-#     cf = CustomFuncsFactory()
-#     gp_custom_funcs = cf.get_gp_custom_functions()
-#     gpp = GpPsets(gp_custom_funcs)
-#     one = gpp.get_named_pset('test_psetC')
-#     # set_pset('test_psetC_untyped')
-#     print(type(one))
+    from deap import gp
+    from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
+    cf = CustomFuncsFactory()
+    gp_custom_funcs = cf.get_gp_custom_functions()
+    gpp = GpPsets(gp_custom_funcs)
+    one = gpp.get_named_pset('naut_pset_01')
+    # set_pset('test_psetC_untyped')
+    # print(type(one))
 
-#     print('looking at terminals:')
-#     print('count of terminals: ', one.terms_count,
-#           ' ... n.b. always one more than actual, due to base class')
-#     term_keys = list(one.terminals.keys())
-#     print(term_keys)
-#     list_terminals = one.terminals.get(term_keys[0])
-#     print(list_terminals)
+    # print('looking at terminals:')
+    print('count of terminals: ', one.terms_count,
+          ' ... n.b. always one more than actual, due to base class')
+    term_keys = list(one.terminals.keys())
+    print(term_keys)
+    # list_terminals = one.terminals.get(term_keys[0])
+    # print(list_terminals)
 
-#     prim_names = list(one.context.keys())
-#     print(prim_names)
+    # prim_names = list(one.context.keys())
+    # print(prim_names)

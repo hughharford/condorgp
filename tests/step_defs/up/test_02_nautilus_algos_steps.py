@@ -38,9 +38,9 @@ Feature: Nautilus tests each evolved individual
     And the result: "<expected_value>" is reported
 
     Examples:
-      | input_ind            |   output_ind      |   expected_value      |
-      | naut_run_03_egFX.py  |   naut-run-03  |   -21.49663142709111  |
-      | naut_run_04_egFX.py  |   naut-run-04  |   -16.160361991815254 |
+      | input_ind        |   output_ind   |   expected_value      |
+      | naut_03_egFX.py  |   naut-run-03  |   -21.49663142709111  |
+      | naut_04_egFX.py  |   naut-run-04  |   -16.160361991815254 |
 
 '''
 
@@ -65,9 +65,9 @@ def input_evolved_code(input_ind):
 def run_nautilus_and_evaluator(input_ind, initial_factory):
     ''' runs nautilus as per the required evaluator etc'''
     script_to_run = input_ind
-    nt = initial_factory.get_backtest_runner(script_to_run = script_to_run)
+    nt = initial_factory.get_backtest_runner()
     logging.info("test_02 >> Running RunNautilus")
-    nt.basic_run_through()
+    nt.basic_run(specified_script=script_to_run)
 
 @then(parsers.cfparse('the "{output_ind:String}" is found',
                        extra_types=EXTRA_TYPES), target_fixture='output_ind')

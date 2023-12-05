@@ -40,7 +40,7 @@ from nautilus_trader.test_kit.providers import TestInstrumentProvider
 from nautilus_trader.config import LoggingConfig
 
 from condorgp.params import Params
-from condorgp.evaluation.nautilus.overloaded_nt.cgp_providers import *
+from condorgp.evaluation.overloaded_nt.cgp_providers import *
 
 if __name__ == "__main__":
     # Configure backtest engine

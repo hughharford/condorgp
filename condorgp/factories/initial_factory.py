@@ -3,9 +3,8 @@ from condorgp.util.utils import Utils
 from condorgp.gp.gp_deap import GpDeap
 
 from condorgp.gp.gp_psets import GpPsets
-from condorgp.gp.gp_psets_nautilus_SUPERSEDED import GpPsetsNautilus
 from condorgp.gp.gp_functions import GpFunctions
-from condorgp.evaluation.nautilus.run_naut import RunNautilus
+from condorgp.evaluation.run_naut import RunNautilus
 
 from condorgp.util.log import CondorLogger
 
@@ -22,14 +21,11 @@ class InitialFactory():
     def get_gp_psets(self, customfuncs):
         return GpPsets(customfuncs)
 
-    def get_gp_naut_psets(self, customfuncs):
-        return GpPsetsNautilus(customfuncs)
-
     def get_gp_funcs(self):
         return GpFunctions()
 
-    def get_backtest_runner(self, script_to_run = ""):
-        return RunNautilus(script_to_run)
+    def get_backtest_runner(self):
+        return RunNautilus()
 
     def start_logger(self):
         CondorLogger()

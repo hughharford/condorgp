@@ -38,9 +38,10 @@ from nautilus_trader.test_kit.providers import TestDataProvider
 from nautilus_trader.test_kit.providers import TestInstrumentProvider
 
 from nautilus_trader.config import LoggingConfig
-from condorgp.evaluation.nautilus.overloaded_nt.cgp_providers import *
+from condorgp.evaluation.overloaded_nt.cgp_providers import *
 
-# if __name__ == "__main__":
+# CGP addition
+from condorgp.evaluation.get_strategies import GetStrategies
 
 class NautRunsEvolved():
 
@@ -50,7 +51,7 @@ class NautRunsEvolved():
     def main(self, evolved_config=""):
         # Configure backtest engine
         config = BacktestEngineConfig(
-            trader_id="BACKTESTER-001-naut-runner-05",
+            trader_id="BACKTESTER-001-naut-run-05",
             logging=LoggingConfig(log_level="ERROR",
                 log_level_file="INFO",
                 log_file_format="json",
@@ -90,12 +91,11 @@ class NautRunsEvolved():
         engine.add_data(ticks)
 
         # CGP CHANGE HERE
-        from condorgp.evaluation.nautilus.get_strategies import GetStrategies
         if evolved_config:
             gp_strategy = GetStrategies(
                 instrument = AUDUSD_SIM).get_strategy(evolved_config)
         else:
-            # Configure your strategy - seperated out - see naut_strategies.py
+            # seperated out - see get_strategies.py
             gp_strategy = GetStrategies(
                 instrument = AUDUSD_SIM).get_strategy()
 

@@ -16,7 +16,6 @@ class Params():
         self.add_dict_params(self.test_dict)
         self.add_dict_params(self.highlevel_config_dict)
 
-
     def add_dict_params(self, params_dict):
         self.params_list.append(params_dict)
 
@@ -37,9 +36,6 @@ class Params():
         elif requested_params == "highlevel_config_dict":
             return self.highlevel_config_dict
 
-
-
-
     def collect_params(self):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         #       LOCAL BASE PATH
@@ -50,12 +46,9 @@ class Params():
         # HIGH LEVEL CONFIGURATION OPTIONS:
         ####################################################
         # ###################
-        # run using lean, expecting built containers etc
-        # TODO: Delete __ RUN_WITH_LEAN_CONTAINERS = True
         RUN_VERBOSE_FOR_DEBUG = True # mostly leave this as true, update line above
 
         self.highlevel_config_dict = {
-            # TODO: Delete __ 'RUN_WITH_LEAN_CONTAINERS': RUN_WITH_LEAN_CONTAINERS,
             'RUN_VERBOSE_FOR_DEBUG': RUN_VERBOSE_FOR_DEBUG,
             'LOCAL_BASE_PATH': LOCAL_BASE_PATH,
         }
@@ -64,17 +57,15 @@ class Params():
         #           MAIN NAUTILUS PARAMS
         # ################################## ##################################
 
-        # /home/hsth/code/hughharford/nautilus/condorgp/condorgp/util/logs/nautilus_log.txt
-
-        #                                   "condorgp/condorgp/util/logs"
         NAUTILUS_BASE_PATH = '/home/hughharford/code/hughharford/nautilus_trader/'
-        NAUTILUS_EVAL_PATH = LOCAL_BASE_PATH + "condorgp/evaluation/nautilus/"
-                                            # "condorgp/util/logs/nautilus_log.json"
+        NAUTILUS_EVAL_PATH = LOCAL_BASE_PATH + "condorgp/evaluation/"
         NAUTILUS_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/nautilus_log.json'
         CONDOR_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/condor_log.txt'
         LOGS_FOLDER = 'condorgp/util/logs/'
         FITNESS_CRITERIA = 'Sharpe Ratio (252 days)'
         CGP_NAUT_STRATEGIES = NAUTILUS_EVAL_PATH + "cgp_naut_strategies.py"
+        NAUT_DEFAULT_RUNNER = "naut_03_egFX.py"
+        N_DEFAULT_RUN_INC_PATH = NAUTILUS_EVAL_PATH + NAUT_DEFAULT_RUNNER
 
         self.naut_dict = {
             'NAUTILUS_BASE_PATH': NAUTILUS_BASE_PATH,
@@ -84,6 +75,8 @@ class Params():
             'CONDOR_LOG_FILE': CONDOR_LOG_FILE,
             'FITNESS_CRITERIA': FITNESS_CRITERIA,
             'CGP_NAUT_STRATEGIES': CGP_NAUT_STRATEGIES,
+            'NAUT_DEFAULT_RUNNER': NAUT_DEFAULT_RUNNER,
+            'N_DEFAULT_RUN_INC_PATH': N_DEFAULT_RUN_INC_PATH,
         }
 
         # ################################## ##################################

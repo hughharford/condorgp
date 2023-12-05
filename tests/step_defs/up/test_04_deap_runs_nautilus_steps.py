@@ -3,6 +3,7 @@ import os.path
 
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
+import logging
 
 from tests.fixtures import gp_control, utils
 
@@ -40,26 +41,25 @@ Feature: Simple usage of Nautilus by Deap, connecting the two
       | default         |   -21.496631427091        |
 """
 
-# 'Successfully ran '.' in the 'backtesting' environment and stored the output in'
-
 @given('a setup with Deap using Nautilus')
 def setup_ready():
-    pass # assumed
+    pass # assumed, nothing operates otherwise
 
 @when(parsers.cfparse('Deap specs Nautilus to run "{input_ind:String}"',
                         extra_types=EXTRA_TYPES),
                         target_fixture='input_ind')
 @when('Deap specs Nautilus to run "<input_ind>"', target_fixture='input_ind')
-def deap_sets_algo_to_nautilus(utils, input_ind):
+def deap_sets_algo_to_nautilus():
     ''' copies across config files and algorithms as needed '''
     pass # nothing to do, no longer pass across algorithms
 
 @when('a short Deap run is conducted')
 def short_deap_run(gp_control):
     assert gp_control is not None
+    pset_used = 'naut_pset_01' # 'test_pset5c'
     newpop = 1
     gens = 1
-    gp_control.setup_gp('', newpop, gens)
+    gp_control.setup_gp(pset_used, newpop, gens)
     gp_control.run_gp()
 
 @then(parsers.cfparse('the result: "{expected_value:Float}" is found',
@@ -67,4 +67,5 @@ def short_deap_run(gp_control):
 @then('the result: "<expected_value>" is found')
 def find_results(expected_value, gp_control):
     max_fitness_found = gp_control.gp.logbook.select("max")[-1]
-    assert expected_value >= max_fitness_found
+    logging.info(f"expected_value = {expected_value}")
+    assert expected_value == max_fitness_found

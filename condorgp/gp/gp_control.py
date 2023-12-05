@@ -13,22 +13,22 @@ from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
 class GpControl:
     def __init__(self):
         '''
-            Where the gp is controlled from.
-            Setup, sizing, initiation of gp runs: psets, operators, evaluator
+            The gp is controller.
+            Setup, sizing, initiation of gp runs: psets, operators, evaluator.
             The major dependency is DEAP.
         '''
-        # get params object:
+        logging.info(f"{'>'*5}, GpControl Initialising {'>'*5}")
+
         self.p = Params()
-        self.inject_gp() # inject dependencies
+        self.inject_gp()
         self.inject_utils()
         self.initiate_logger()
         self.inject_backtest_runner()
 
-        logging.info(f"{'>'*5}, GpControl Initialising {'>'*5}")
         # default population set and evaluator (fitness function)
         self.default_pset = 'default_untyped'
         self.default_eval = self.eval_nautilus
-        self.run_backtest = 1 # 1 = run lean in evaluation func, 0 = don't
+        self.run_backtest = 1
 
     def inject_gp(self):
         ''' dependency injection of gp '''
@@ -46,15 +46,13 @@ class GpControl:
 
     def inject_backtest_runner(self):
         ''' dependency injection of backtest runner '''
-        ### HACK HERE HACK HERE ###
-        default_script = "naut_03_egFX.py"
-        self.backtester = self.factory.get_backtest_runner(default_script)
+        self.backtester = self.factory.get_backtest_runner()
 
     def initiate_logger(self):
         ''' dependency injection of logger '''
         self.factory.start_logger()
 
-    def setup_gp(self, pset_spec = '', pop_size=2, no_gens=1):
+    def setup_gp(self, pset_spec='', pop_size=2, no_gens=1):
         ''' sets: 1. additional functions & terminals
                   2. major gp parameters
                   3: inputs for fitness evaluation
@@ -73,7 +71,7 @@ class GpControl:
         inputs = {}     # Sets 3: inputs for fitness evaluation
         self.gp.set_inputs(inputs)
         self.pop_size = pop_size # Sets 4: population size, defaults to 2 for efficacy
-        self.gp.set_pop_size(self.pop_size)
+        self.gp.set_pop_size(pop_size)
         self.gp.set_gens(no_gens)  # Set 5: the number of generations
         self.gp.set_evaluator(self.default_eval) # Set 6: the evaluator
         stat_params = {}        # Set 7: the stats feedback
@@ -126,26 +124,13 @@ class GpControl:
         '''
         evalf_name = 'eval_nautilus'
         # Transform the tree expression in a callable function
-        config_func = self.gp.toolbox.compile(expr=individual) # Deap reqmt, not used
+        evolved_func = self.gp.toolbox.compile(expr=individual)
         new_fitness = 0.0
         try:
             if self.run_backtest:
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
-
-                self.backtester.basic_run_through(config_func)
+                self.backtester.basic_run(evolved_func=evolved_func) # evolved_func=evolved_func
                 new_fitness = self.gpf.get_fit_nautilus_1()
-
-                # # logging.info(individual)
-                # func = self.gp.toolbox.compile(expr=individual)
-                # type_return = str(type(func))
-                # # logging.info(type_return)
-                # if 'nautilus_trader.examples.strategies.ema_cross.EMACrossConfig' in type_return:
-                #     new_fitness = 100091
-                # else:
-                #     new_fitness = 191
-
-                logging.debug(f"GpControl.{evalf_name} {'>'*2} "+
-                              f"NAUTILUS fitness {new_fitness}")
             else:
                 logging.debug(f"ERROR {evalf_name} {'>'*2} "+
                               f"NAUTILUS {'>'*4} {new_fitness}")
@@ -159,19 +144,21 @@ if __name__ == "__main__":
 
     eval_used = 'eval_nautilus'
     pset_used = 'naut_pset_01' # 'test_pset5c'
-    pop = 1
-    gens = 1
-    c = GpControl()
-    c.setup_gp(pset_used, pop, gens)
-    c.run_backtest = 1
-    c.set_test_evaluator(eval_used)
-    c.run_gp()
 
-    print('Hall of fame:')
-    for x, individual in enumerate(c.gp.hof):
-        print(c.gp.hof.items[x])
+    gp_control = GpControl()
+    newpop = 200
+    gens = 2
+    gp_control.setup_gp(pset_spec=pset_used, pop_size=newpop, no_gens=gens)
+    gp_control.run_backtest = 1
+    gp_control.set_test_evaluator(eval_used)
+    gp_control.run_gp()
 
-    print(c.gp.logbook)
+    logging.info('   deap __ Hall of fame:')
+    for x, individual in enumerate(gp_control.gp.hof):
+        logging.info(f"   deap generated individual: {gp_control.gp.hof.items[x]}")
 
-    print(f"DIRECT GpControl run, using: \
+    logging.info('   deap __ Logbook:')
+    logging.info(gp_control.gp.logbook)
+
+    logging.info(f"DIRECT GpControl run, using: \
           evaluator: {eval_used} , and pset: {pset_used}")

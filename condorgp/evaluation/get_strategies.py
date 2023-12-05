@@ -11,7 +11,7 @@ class GetStrategies():
         if bar_type == "":
             bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
         self.bar_type = bar_type
-        logging.info(f"{__name__} init: {self.instrument} {self.bar_type}")
+        logging.info(f"{__name__} init: INSTR: {self.instrument} BAR: {self.bar_type}")
 
     def get_strategy(self, config_func=""):
         if config_func:

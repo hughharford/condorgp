@@ -11,6 +11,6 @@ Feature: Nautilus tests each evolved individual
     And the result: "<expected_value>" is reported
 
     Examples:
-      | input_ind            |   output_ind   |   expected_value      |
-      | naut_run_03_egFX.py  |   naut-run-03  |   -21.49663142709111  |
-      | naut_run_04_egFX.py  |   naut-run-04  |   -16.160361991815254 |
+      | input_ind        |   output_ind   |   expected_value      |
+      | naut_03_egFX.py  |   naut-run-03  |   -21.49663142709111  |
+      | naut_04_egFX.py  |   naut-run-04  |   -16.160361991815254 |

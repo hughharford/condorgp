@@ -22,21 +22,21 @@ scenarios('../../features/03_deap_basics.feature')
     Then the fundamental functions are found
 """
 @given('Deap is setup')
-def deap_ready(deap_one):
+def deap_ready(gp_control):
     InitialFactory().start_logger()
-    assert deap_one is not None
+    assert gp_control is not None
 
 @when('an instance of Deap is instantiated')
-def instantiated_deap(deap_one):
+def instantiated_deap(gp_control):
     '''
         Instantiated Deap.
     '''
     # print(deap_one)
-    pytest.DEAP_ONE = deap_one
-    logging.info(f'pytest.DEAP_ONE: {deap_one}')
+    pytest.DEAP_ONE = gp_control
+    logging.info(f'pytest.DEAP_ONE: {gp_control}')
 
 @when('the functions are added')
-def get_deap_functions(deap_one):
+def get_deap_functions():
     pytest.DEAP_ONE.pset = gp.PrimitiveSet("MAIN", 1)
     pytest.DEAP_ONE.pset.addPrimitive(numpy.add, 2, name="vadd")
     pytest.DEAP_ONE.pset.addPrimitive(numpy.subtract, 2, name="vsub")

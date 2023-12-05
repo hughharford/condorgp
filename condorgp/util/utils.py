@@ -315,7 +315,7 @@ if __name__ == "__main__":
 
     expected = -21.49663142709111
     # for dev only:
-    backtest_id = "naut-runner-03"
+    backtest_id = "naut-run-03"
     key_fitness = Params().naut_dict['FITNESS_CRITERIA']
     print(key_fitness)
     found4 = u.find_fitness_with_matching_backtest(
