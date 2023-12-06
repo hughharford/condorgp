@@ -47,9 +47,13 @@ Feature: GpControl's evolved code must affect Nautilus functionality
                         target_fixture='pset_input')
 def gpcontrol_run_with(gp_control, pset_input):
     ''' sets psets for nautilus 1st config setup '''
+    eval_used = 'eval_nautilus'
+    newpop = 5
+    gens = 3
     gp_control.setup_gp(pset_spec=pset_input,
-                        pop_size=1,
-                        no_gens=1)
+                        pop_size=newpop,
+                        no_gens=gens)
+    gp_control.set_test_evaluator(eval_used)
 
 @when('the evolved code is used')
 def injected_algo_includes(gp_control):
