@@ -17,9 +17,6 @@ class GpFunctions():
         self.test_dict = p.get_params("test_dict")
         self.naut_dict = p.get_params("naut_dict")
 
-    def print_out_please(self):
-        print(f'{"print_out_please___"*5}')
-
     def get_fit_nautilus_1(self):
         f = 0.0
         lines_to_check = 10000
@@ -51,23 +48,25 @@ class GpFunctions():
             logging.warning(f'<<< gpf.get_fit_nautilus_1 fitness = {f}, as > 50 and unrealistic')
         return f
 
-    def find_fitness(self,backtest_id=""):
-
+    def find_fitness(self, backtest_id="", log_file_n_path=""):
+        '''
+            finds fitness number (based on criteria)
+            from Nautilus logs, within a set no. of lines close to a "run id"
+        '''
         f = 0.0
-        # key_req = self.naut_dict['FITNESS_CRITERIA'] # Sharpe's Ratio
-        key_req = self.naut_dict['SIMPLE_FITNESS_CRITERIA'] # Risk Return Ratio
+        key_req = self.naut_dict['FITNESS_CRITERIA'] # Sharpe's Ratio
+        # key_req = self.naut_dict['SIMPLE_FITNESS_CRITERIA'] # Risk Return Ratio
         if backtest_id == "":
             backtest_id = "naut-run-05" # Hard coded default if not specified
-        lines_to_check = 5000
+        lines_to_check = 7000
         max_lines_diff = 300 #
         try:
             got = self.util.find_fitness_with_matching_backtest(
                     key = key_req,
-                    log_file_n_path = "",
+                    log_file_n_path = log_file_n_path, # default: Nautilus log
                     backtest_id = backtest_id,
                     lines = lines_to_check,
                     max_lines_diff = max_lines_diff)
-
             foundfit = ""
             if got[1] != -1:
                 foundfit = self.util.get_last_chars(got[0],2)
@@ -84,4 +83,4 @@ class GpFunctions():
 
 if __name__ == "__main__":
     gpf = GpFunctions()
-    print(gpf.find_fitness())
+    print(gpf.find_fitness(backtest_id="naut-run-02"))
