@@ -125,12 +125,13 @@ class GpControl:
         evalf_name = 'eval_nautilus'
         # Transform the tree expression in a callable function
         evolved_func = self.gp.toolbox.compile(expr=individual)
+        logging.info(f" >>> eval_nautilus individual: {individual}")
         new_fitness = 0.0
         try:
             if self.run_backtest:
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
-                self.backtester.basic_run(evolved_func=evolved_func) # evolved_func=evolved_func
-                new_fitness = self.gpf.get_fit_nautilus_1()
+                self.backtester.basic_run(evolved_func=evolved_func)
+                new_fitness = self.gpf.get_fit_nautilus_2()
             else:
                 logging.debug(f"ERROR {evalf_name} {'>'*2} "+
                               f"NAUTILUS {'>'*4} {new_fitness}")
@@ -146,8 +147,8 @@ if __name__ == "__main__":
     pset_used = 'naut_pset_01' # 'test_pset5c'
 
     gp_control = GpControl()
-    newpop = 200
-    gens = 2
+    newpop = 1
+    gens = 1
     gp_control.setup_gp(pset_spec=pset_used, pop_size=newpop, no_gens=gens)
     gp_control.run_backtest = 1
     gp_control.set_test_evaluator(eval_used)

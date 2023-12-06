@@ -266,14 +266,21 @@ class GpPsets:
         self.pset.addTerminal(bar_type2, str)
         self.pset.addTerminal(bar_type3, str)
 
+        self.pset.addTerminal(10, int)
+        self.pset.addTerminal(20, int)
+        self.pset.addTerminal(30, int)
+        self.pset.addTerminal(40, int)
+        self.pset.addTerminal(50, int)
         self.pset.addTerminal(100, int)
         self.pset.addTerminal(200, int)
-        self.pset.addTerminal(500, int)
-        self.pset.addTerminal(1000, int)
+        # self.pset.addTerminal(300, int)
+        # self.pset.addTerminal(400, int)
+        # self.pset.addTerminal(500, int)
+        # self.pset.addTerminal(750, int)
+        # self.pset.addTerminal(1000, int)
         self.pset.addTerminal(1_000_000, int)
         self.pset.addTerminal(1_500_000, int)
         self.pset.addTerminal(2_000_000, int)
-
 
         self.pset.addPrimitive(Decimal, [int], Decimal)
         self.pset.addPrimitive(EMACrossConfig,
@@ -281,8 +288,13 @@ class GpPsets:
                                EMACrossConfig)
 
         # below here were added to allow DEAP to populate
-        self.pset.addPrimitive(str, [int], str)
+        self.pset.addPrimitive(str, [str], str)
         self.pset.addPrimitive(int, [int], int)
+
+        # self.pset.addPrimitive(BigInt, [BigInt], BigInt)
+        # self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
+        # self.pset.addPrimitive(StrInstr, [StrInstr], StrInstr)
+        # self.pset.addPrimitive(StrBar, [StrBar], StrBar)
 
         self.pset.addTerminal(Decimal(1_000_000), Decimal)
         self.pset.addTerminal("EMACrossConfig", EMACrossConfig)
@@ -290,24 +302,32 @@ class GpPsets:
 
         return self.pset
 
-        #   def get_config_strategy_without_full_declaration(self):
+        # def get_config_strategy(self):
         #     config = EMACrossConfig(
-        #         str(self.instrument.id),
-        #         self.bar_type,
-        #         Decimal(1_000_000),
-        #         100,
-        #         200,
+        #         instrument_id=str(self.instrument.id),
+        #         bar_type=self.bar_type,
+        #         trade_size=Decimal(1_000_000),
+        #         fast_ema_period=100,
+        #         slow_ema_period=200,
         #         )
         #     return config
 
         # first attempt at Nautilus - looking to evolve the above
 
-class StrInstrumentId():
-    def __init__():
+class StrInstr(str):
+    def pass_method(self):
         pass
 
-class StrBarType():
-    def __init__():
+class StrBar(str):
+    def pass_method(self):
+        pass
+
+class BigInt(int):
+    def pass_method(self):
+        pass
+
+class LittleInt(int):
+    def pass_method(self):
         pass
 
 if __name__ == '__main__':
@@ -315,22 +335,27 @@ if __name__ == '__main__':
 
     # uncomment the below and run to have a look into a pset created above:
 
-    from deap import gp
-    from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
-    cf = CustomFuncsFactory()
-    gp_custom_funcs = cf.get_gp_custom_functions()
-    gpp = GpPsets(gp_custom_funcs)
-    one = gpp.get_named_pset('naut_pset_01')
-    # set_pset('test_psetC_untyped')
-    # print(type(one))
+    # from deap import gp
+    # from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
+    # cf = CustomFuncsFactory()
+    # gp_custom_funcs = cf.get_gp_custom_functions()
+    # gpp = GpPsets(gp_custom_funcs)
+    # one = gpp.get_named_pset('naut_pset_01')
+    # # set_pset('test_psetC_untyped')
+    # # print(type(one))
 
-    # print('looking at terminals:')
-    print('count of terminals: ', one.terms_count,
-          ' ... n.b. always one more than actual, due to base class')
-    term_keys = list(one.terminals.keys())
-    print(term_keys)
+    # # print('looking at terminals:')
+    # print('count of terminals: ', one.terms_count,
+    #       ' ... n.b. always one more than actual, due to base class')
+    # term_keys = list(one.terminals.keys())
+    # print(term_keys)
+
     # list_terminals = one.terminals.get(term_keys[0])
     # print(list_terminals)
 
     # prim_names = list(one.context.keys())
     # print(prim_names)
+
+    stringer = StrInstr("my test")
+    print(stringer)
+    print(len(stringer))

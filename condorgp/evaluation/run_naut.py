@@ -33,14 +33,9 @@ class RunNautilus():
         '''
         result = 0.1
 
-        if evolved_func != "":
+        if evolved_func:
             # enable config_func into Nautilus evaluation:
             logging.info(">>> RunNautilus.basic_run + CONFIG_FUNC >>>")
-
-            # SIM = Venue("SIM")
-            # AUDUSD_SIM = TestInstrumentProvider.default_fx_ccy("AUD/USD", SIM)
-            # naut_config = GetStrategies(instrument = AUDUSD_SIM)
-            # config = naut_config.get_config_strategy_without_full_declaration()
             try:
                 nrun = NautRunsEvolved()
                 nrun.main(evolved_config=evolved_func)

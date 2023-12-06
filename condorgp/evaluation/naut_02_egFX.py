@@ -46,11 +46,11 @@ from nautilus_trader.config import LoggingConfig
 if __name__ == "__main__":
     # Configure backtest engine
     config = BacktestEngineConfig(
-        trader_id="BACKTESTER-001-naut-runner-04",
+        trader_id="BACKTESTER-001-naut-run-02",
         logging=LoggingConfig(log_level="ERROR",
             log_level_file="INFO",
             log_file_format="json",
-            log_file_name="nautilus_log_naut_runner_04",
+            log_file_name="nautilus_log",
             log_directory="condorgp/util/logs/",
             log_component_levels={ "Portfolio": "ERROR" }),
         risk_engine=RiskEngineConfig(
@@ -117,8 +117,8 @@ if __name__ == "__main__":
     config = EMACrossBracketConfig(
         instrument_id=str(GBPUSD_SIM.id),
         bar_type="GBP/USD.SIM-1-MINUTE-BID-EXTERNAL",
-        fast_ema_period=10,
-        slow_ema_period=20,
+        fast_ema_period=30, # 10
+        slow_ema_period=50, # 20
         bracket_distance_atr=3.0,
         trade_size=Decimal(1_000),
     )

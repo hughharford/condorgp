@@ -63,6 +63,7 @@ class Params():
         CONDOR_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/condor_log.txt'
         LOGS_FOLDER = 'condorgp/util/logs/'
         FITNESS_CRITERIA = 'Sharpe Ratio (252 days)'
+        SIMPLE_FITNESS_CRITERIA = 'Risk Return Ratio'
         CGP_NAUT_STRATEGIES = NAUTILUS_EVAL_PATH + "cgp_naut_strategies.py"
         NAUT_DEFAULT_RUNNER = "naut_03_egFX.py"
         N_DEFAULT_RUN_INC_PATH = NAUTILUS_EVAL_PATH + NAUT_DEFAULT_RUNNER
@@ -74,6 +75,7 @@ class Params():
             'NAUTILUS_LOG_FILE': NAUTILUS_LOG_FILE,
             'CONDOR_LOG_FILE': CONDOR_LOG_FILE,
             'FITNESS_CRITERIA': FITNESS_CRITERIA,
+            'SIMPLE_FITNESS_CRITERIA': SIMPLE_FITNESS_CRITERIA,
             'CGP_NAUT_STRATEGIES': CGP_NAUT_STRATEGIES,
             'NAUT_DEFAULT_RUNNER': NAUT_DEFAULT_RUNNER,
             'N_DEFAULT_RUN_INC_PATH': N_DEFAULT_RUN_INC_PATH,

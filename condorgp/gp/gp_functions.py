@@ -22,19 +22,26 @@ class GpFunctions():
 
     def get_fit_nautilus_1(self):
         f = 0.0
-        lines_to_check = 1500
+        lines_to_check = 10000
         log_file = self.naut_dict['NAUTILUS_LOG_FILE'] # check Nautilus log!
 
         latest_log = self.util.get_last_x_log_lines(lines = lines_to_check,
                                                     log_file_n_path = log_file)
         if latest_log:
             # if no errors, retrieve fitness
-            fitness_line = self.naut_dict['FITNESS_CRITERIA']
+            fitness_line = self.naut_dict['FITNESS_CRITERIA'] # Sharpe's Ratio
+            # try this instead:
+            fitness_line = self.naut_dict['SIMPLE_FITNESS_CRITERIA'] # Risk Return Ratio
             lim = lines_to_check - 1
             got = self.util.get_key_line_in_lim(key = fitness_line,
                                                 log_filepath = log_file,
                                                 lines = lim)
-            f = float(self.util.get_last_chars(got[0], ignore_last_chars = 4))
+            # print(got[0])
+            foundfit = self.util.get_last_chars(got[0], ignore_last_chars = 2)
+            if len(foundfit) > 3:
+                f = float(self.util.get_last_chars(got[0], ignore_last_chars = 2))
+            else:
+                f = -1.0
             logging.debug(f'<<< gpf.get_fit_nautilus_1 fitness = {f}, from {log_file}')
         else:
             f = -8888.8 # no backtest folder found
@@ -44,6 +51,36 @@ class GpFunctions():
             logging.warning(f'<<< gpf.get_fit_nautilus_1 fitness = {f}, as > 50 and unrealistic')
         return f
 
+    def get_fit_nautilus_2(self):
+
+        f = 0.0
+        # key_req = self.naut_dict['FITNESS_CRITERIA'] # Sharpe's Ratio
+        key_req = self.naut_dict['SIMPLE_FITNESS_CRITERIA'] # Risk Return Ratio
+        backtest_id = "naut-run-05" # Hard coded for now
+        lines_to_check = 5000
+        max_lines_diff = 300 #
+        try:
+            got = self.util.find_fitness_with_matching_backtest(
+                    key = key_req,
+                    log_file_n_path = "",
+                    backtest_id = backtest_id,
+                    lines = lines_to_check,
+                    max_lines_diff = max_lines_diff)
+
+            foundfit = ""
+            if got[1] != -1:
+                foundfit = self.util.get_last_chars(got[0],2)
+                f = -2 # nan
+            else:
+                f = -1 # not found
+            if len(foundfit) > 3:
+                f = float(self.util.get_last_chars(got[0],2))
+        except BaseException as e:
+            logging.error(f"ERROR {__name__}: {e}")
+
+        # logging.info(f'<<< gpf.get_fit_nautilus_2 fitness = {f}')
+        return f
+
 if __name__ == "__main__":
     gpf = GpFunctions()
-    print(gpf.get_fit_nautilus_1())
+    print(gpf.get_fit_nautilus_2())

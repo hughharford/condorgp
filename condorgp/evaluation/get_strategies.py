@@ -11,7 +11,7 @@ class GetStrategies():
         if bar_type == "":
             bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
         self.bar_type = bar_type
-        logging.info(f"{__name__} init: INSTR: {self.instrument} BAR: {self.bar_type}")
+        # logging.info(f"{__name__} init: INSTR: {self.instrument} BAR: {self.bar_type}")
 
     def get_strategy(self, config_func=""):
         if config_func:
@@ -36,13 +36,13 @@ class GetStrategies():
             str(self.instrument.id),
             self.bar_type,
             Decimal(1_000_000),
+            99,
             100,
-            200,
             )
         return config
 
-    def get_injected_config(self, injected_config=""):
-        if injected_config == "":
+    def get_injected_config(self, injected_config):
+        if injected_config:
             config = self.get_config_strategy_without_full_declaration()
         else:
             config = injected_config

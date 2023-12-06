@@ -206,7 +206,7 @@ class Utils:
             log_file_n_path = "",
             backtest_id = "",
             lines = 0,
-            max_lines_diff = 0):
+            max_lines_diff = 500):
         '''
             This requires finding two bits "near" each other in the log
 
@@ -236,8 +236,8 @@ class Utils:
             print("didn't find log list")
             return "nope", -1
 
-        print(first_key_for_backtest)
-        print(second_key_for_run_end)
+        # print(first_key_for_backtest)
+        # print(second_key_for_run_end)
 
         # go through reversed list (it was read from the back of the log)
         log_as_list.reverse()
@@ -315,15 +315,15 @@ if __name__ == "__main__":
 
     expected = -21.49663142709111
     # for dev only:
-    backtest_id = "naut-run-03"
+    backtest_id = "naut-run-05"
     key_fitness = Params().naut_dict['FITNESS_CRITERIA']
     print(key_fitness)
     found4 = u.find_fitness_with_matching_backtest(
             key = key_fitness,
             log_file_n_path = "",
             backtest_id = backtest_id,
-            lines = 55000,
-            max_lines_diff = 22000)
+            lines = 5000,
+            max_lines_diff = 300)
     print(found4[0])
     here = float(u.get_last_chars(found4[0],2))
-    assert here == expected
+    print(here)

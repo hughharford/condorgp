@@ -43,7 +43,7 @@ from condorgp.evaluation.overloaded_nt.cgp_providers import *
 # CGP addition
 from condorgp.evaluation.get_strategies import GetStrategies
 
-class NautRunsEvolved():
+class NautRunsEvolved:
 
     def __init__(self):
         pass
@@ -127,3 +127,7 @@ class NautRunsEvolved():
 
         # Good practice to dispose of the object when done
         engine.dispose()
+
+if __name__ == "__main__":
+    rne = NautRunsEvolved()
+    rne.main()
