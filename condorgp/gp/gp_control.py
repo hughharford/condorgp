@@ -131,7 +131,7 @@ class GpControl:
             if self.run_backtest:
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
                 self.backtester.basic_run(evolved_func=evolved_func)
-                new_fitness = self.gpf.get_fit_nautilus_2()
+                new_fitness = self.gpf.find_fitness()
             else:
                 logging.debug(f"ERROR {evalf_name} {'>'*2} "+
                               f"NAUTILUS {'>'*4} {new_fitness}")

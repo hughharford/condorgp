@@ -19,7 +19,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/08_gp_typed.feature')
+scenarios('../features/09_gp_typed.feature')
 
 """
   Scenario Outline: Evolved code can be run

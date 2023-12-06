@@ -75,6 +75,9 @@ class Utils:
         if count == 0: return False
         if recent > 0: return True
 
+    def confirm_file_extant(self, file_path):
+        return os.path.isfile(file_path)
+
     def get_latest_log_dir(self):
         return self.NAUT_DICT['LOGS_FOLDER']
 

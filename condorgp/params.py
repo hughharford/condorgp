@@ -96,13 +96,12 @@ class Params():
         CONFIG_TEST_ALGOS_FILE_2 = 'IndBasicAlgo2.py'
         BASIC_TEST_ALGO_LEAN = 'BasicTemplateFrameworkAlgorithm.py'
 
-        CONDOR_TEST_ALGOS_DIR = 'leanQC/config/'
-
+        CGP_TEST_PATH = LOCAL_BASE_PATH + "tests/"
         NAUTILUS_TEST_DATA_PATH = NAUTILUS_BASE_PATH + 'tests/test_data/'
+        CGP_TEST_DATA = CGP_TEST_PATH + 'test_data/'
 
         self.test_dict = {
             'REASONABLE_FITNESS_SECS': 60,
-            'CONDOR_TEST_ALGOS_FOLDER': CONDOR_TEST_ALGOS_DIR,
 
             'BASIC_TEST_ALGO_NAME': BASIC_TEST_ALGO_NAME,
             'CONFIG_TEST_ALGOS_FILE_1': CONFIG_TEST_ALGOS_FILE_1,
@@ -113,7 +112,9 @@ class Params():
             'CONDOR_TEST_CONFIG_FILE_1': CONDOR_TEST_CONFIG_FILE_1,
             'CONDOR_TEST_CONFIG_FILE_2': CONDOR_TEST_CONFIG_FILE_2,
 
+            'CGP_TEST_PATH': CGP_TEST_PATH,
             'NAUTILUS_TEST_DATA_PATH': NAUTILUS_TEST_DATA_PATH,
+            'CGP_TEST_DATA': CGP_TEST_DATA,
             }
 
         # ################################## ##################################

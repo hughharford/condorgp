@@ -51,12 +51,13 @@ class GpFunctions():
             logging.warning(f'<<< gpf.get_fit_nautilus_1 fitness = {f}, as > 50 and unrealistic')
         return f
 
-    def get_fit_nautilus_2(self):
+    def find_fitness(self,backtest_id=""):
 
         f = 0.0
         # key_req = self.naut_dict['FITNESS_CRITERIA'] # Sharpe's Ratio
         key_req = self.naut_dict['SIMPLE_FITNESS_CRITERIA'] # Risk Return Ratio
-        backtest_id = "naut-run-05" # Hard coded for now
+        if backtest_id == "":
+            backtest_id = "naut-run-05" # Hard coded default if not specified
         lines_to_check = 5000
         max_lines_diff = 300 #
         try:
@@ -83,4 +84,4 @@ class GpFunctions():
 
 if __name__ == "__main__":
     gpf = GpFunctions()
-    print(gpf.get_fit_nautilus_2())
+    print(gpf.find_fitness())

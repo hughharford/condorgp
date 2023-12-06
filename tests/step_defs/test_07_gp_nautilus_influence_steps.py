@@ -21,7 +21,7 @@ CONVERTERS = {
 
 pytest.MAXFITNESS = 0.0
 
-scenarios('../features/06_gp_nautilus_influence.feature')
+scenarios('../features/07_gp_nautilus_influence.feature')
 
 """
 Feature: GpControl's evolved code must affect Nautilus functionality
