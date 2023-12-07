@@ -67,18 +67,16 @@ class GpFunctions():
                     backtest_id = backtest_id,
                     lines = lines_to_check,
                     max_lines_diff = max_lines_diff)
-            foundfit = ""
+            foundfit = "" # if poor, set v low as < bad algorithms getting <0
             if got[1] != -1:
                 foundfit = self.util.get_last_chars(got[0],2)
-                f = -2 # nan
+                f = -22000 # nan
             else:
-                f = -1 # not found
+                f = -111000 # not found
             if len(foundfit) > 3:
                 f = float(self.util.get_last_chars(got[0],2))
         except BaseException as e:
             logging.error(f"ERROR {__name__}: {e}")
-
-        # logging.info(f'<<< gpf.get_fit_nautilus_2 fitness = {f}')
         return f
 
 if __name__ == "__main__":

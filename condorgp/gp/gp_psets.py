@@ -255,7 +255,7 @@ class GpPsets:
 
         # primary primitive, to enable function
         self.pset.addPrimitive(EMACrossConfig,
-                               [StrInstr, StrBar, Decimal, int, int],
+                               [StrInstr, StrBar, Decimal, LittleInt, BigInt],
                                EMACrossConfig)
 
         # first pset terminals:
@@ -267,13 +267,13 @@ class GpPsets:
         self.pset.addTerminal(bar_type2, StrBar)
         self.pset.addTerminal(bar_type3, StrBar)
 
-        self.pset.addTerminal(10, int)
-        self.pset.addTerminal(20, int)
-        self.pset.addTerminal(30, int)
-        self.pset.addTerminal(40, int)
-        self.pset.addTerminal(50, int)
-        self.pset.addTerminal(100, int)
-        self.pset.addTerminal(200, int)
+        self.pset.addTerminal(10, LittleInt)
+        self.pset.addTerminal(20, LittleInt)
+        self.pset.addTerminal(30, LittleInt)
+        self.pset.addTerminal(40, LittleInt)
+        self.pset.addTerminal(50, BigInt)
+        self.pset.addTerminal(100, BigInt)
+        self.pset.addTerminal(200, BigInt)
         self.pset.addTerminal(1_000_000, int)
         self.pset.addTerminal(2_000_000, int)
 
@@ -285,6 +285,7 @@ class GpPsets:
         self.pset.addTerminal(Decimal(1_000_000), Decimal)
         self.pset.addTerminal("EMACrossConfig", EMACrossConfig)
 
+        # using specified int and str classes to reduce degress of freedom
         self.pset.addPrimitive(BigInt, [BigInt], BigInt)
         self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
         self.pset.addPrimitive(StrInstr, [StrInstr], StrInstr)

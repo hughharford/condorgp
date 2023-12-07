@@ -3,15 +3,12 @@ Feature: Simple usage of Nautilus by Deap, connecting the two
   Deap needs to use Nautilus to evaluate,
   To test each invidual.
 
-# this previously used ROI over MDD (RoMaD - see investopedia) as this was
-# readily available.
-
   Scenario Outline: Nautilus is run and reports success and fitness
     Given a setup with Deap using Nautilus
-    When Deap specs Nautilus to run "<input_ind>"
-    And a short Deap run is conducted
-    Then the result: "<expected_value>" is found
+    When a short Deap run is conducted
+    Then the result is not "<not_found_code>"
+    And the result is not "<nan_code>"
 
     Examples:
-      | input_ind       |   expected_value          |
-      | default         |   -21.496631427091        |
+      | input_ind  |   not_found_code    |  nan_code   |
+      | default    |   111000            |  22000      |

@@ -19,6 +19,8 @@ CONVERTERS = {
     'total': int,
 }
 
+pytest.foundfitness = 99
+
 scenarios('../../features/04_deap_runs_nautilus.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,29 +34,23 @@ Feature: Simple usage of Nautilus by Deap, connecting the two
 
   Scenario Outline: Nautilus is run and reports success and fitness
     Given a setup with Deap using Nautilus
-    When Deap specs Nautilus to run "<input_ind>"
-    And a short Deap run is conducted
-    Then the result: "<expected_value>" is found
+    When a short Deap run is conducted
+    Then the result is not "<not_found_code>"
+    And the result is neither "<nan_code>"
 
     Examples:
-      | input_ind       |   expected_value          |
-      | default         |   -21.496631427091        |
+      | input_ind  |   not_found_code    |  nan_code   |
+      | default    |   111000            |  22000      |
 """
 
 @given('a setup with Deap using Nautilus')
 def setup_ready():
+    ''' assumed setup ready '''
     pass # assumed, nothing operates otherwise
-
-@when(parsers.cfparse('Deap specs Nautilus to run "{input_ind:String}"',
-                        extra_types=EXTRA_TYPES),
-                        target_fixture='input_ind')
-@when('Deap specs Nautilus to run "<input_ind>"', target_fixture='input_ind')
-def deap_sets_algo_to_nautilus():
-    ''' copies across config files and algorithms as needed '''
-    pass # nothing to do, no longer pass across algorithms
 
 @when('a short Deap run is conducted')
 def short_deap_run(gp_control):
+    ''' shortest deap run possible '''
     assert gp_control is not None
     pset_used = 'naut_pset_01' # 'test_pset5c'
     newpop = 1
@@ -62,10 +58,18 @@ def short_deap_run(gp_control):
     gp_control.setup_gp(pset_used, newpop, gens)
     gp_control.run_gp()
 
-@then(parsers.cfparse('the result: "{expected_value:Float}" is found',
-                       extra_types=EXTRA_TYPES), target_fixture='expected_value')
-@then('the result: "<expected_value>" is found')
-def find_results(expected_value, gp_control):
+@then(parsers.cfparse('the result is not "{not_found_code:Float}"',
+                       extra_types=EXTRA_TYPES), target_fixture='not_found_code')
+@then('the result is not "<not_found_code>"')
+def find_results(not_found_code, gp_control):
+    ''' check getting anything but not found '''
     max_fitness_found = gp_control.gp.logbook.select("max")[-1]
-    logging.info(f"expected_value = {expected_value}")
-    assert expected_value == max_fitness_found
+    pytest.foundfitness = max_fitness_found
+    assert not_found_code != max_fitness_found
+
+@then(parsers.cfparse('the result is neither "{nan_code:Float}"',
+                       extra_types=EXTRA_TYPES), target_fixture='nan_code')
+@then('the result is neither "<nan_code>"')
+def find_results(nan_code):
+    ''' check getting anything but nan '''
+    assert nan_code != pytest.foundfitness

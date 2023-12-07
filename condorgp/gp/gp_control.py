@@ -146,20 +146,20 @@ if __name__ == "__main__":
     eval_used = 'eval_nautilus'
     pset_used = 'naut_pset_01' # 'test_pset5c'
 
-    gp_control = GpControl()
-    newpop = 5
-    gens = 1
-    gp_control.setup_gp(pset_spec=pset_used, pop_size=newpop, no_gens=gens)
-    gp_control.run_backtest = 1
-    gp_control.set_test_evaluator(eval_used)
-    gp_control.run_gp()
+    gpc = GpControl()
+    newpop = 15
+    gens = 4
+    gpc.setup_gp(pset_spec=pset_used, pop_size=newpop, no_gens=gens)
+    gpc.run_backtest = 1
+    gpc.set_test_evaluator(eval_used)
+    gpc.run_gp()
 
-    logging.info('   deap __ Hall of fame:')
-    for x, individual in enumerate(gp_control.gp.hof):
-        logging.info(f"   deap generated individual: {gp_control.gp.hof.items[x]}")
+    logging.info(' deap __ Hall of fame:')
+    for x, individual in enumerate(gpc.gp.hof):
+        logging.info(f" deap generated individual: {gpc.gp.hof.items[x]}")
 
-    logging.info('   deap __ Logbook:')
-    logging.info(gp_control.gp.logbook)
+    logging.info(' deap __ Logbook:')
+    logging.info(gpc.gp.logbook)
 
     logging.info(f"DIRECT GpControl run, using: \
           evaluator: {eval_used} , and pset: {pset_used}")

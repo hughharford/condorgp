@@ -21,7 +21,7 @@ CONVERTERS = {
 
 pytest.MAXFITNESS = 0.0
 
-scenarios('../features/07_gp_nautilus_influence.feature')
+scenarios('../../features/07_gp_nautilus_influence.feature')
 
 """
 Feature: GpControl's evolved code must affect Nautilus functionality
@@ -78,6 +78,4 @@ def output_isnt_mdd(gp_control, expected_A):
                         target_fixture='expected_B')
 def output_isnt_mdd(expected_B):
     ''' confirms a different fitness to B '''
-    # max_fitness_found = gp_control.gp.logbook.select("max")[-1]
-    # print(max_fitness_found)
     assert pytest.MAXFITNESS != expected_B
