@@ -147,7 +147,7 @@ if __name__ == "__main__":
     pset_used = 'naut_pset_01' # 'test_pset5c'
 
     gp_control = GpControl()
-    newpop = 1
+    newpop = 5
     gens = 1
     gp_control.setup_gp(pset_spec=pset_used, pop_size=newpop, no_gens=gens)
     gp_control.run_backtest = 1

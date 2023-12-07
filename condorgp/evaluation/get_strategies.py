@@ -13,9 +13,9 @@ class GetStrategies():
         self.bar_type = bar_type
         # logging.info(f"{__name__} init: INSTR: {self.instrument} BAR: {self.bar_type}")
 
-    def get_strategy(self, config_func=""):
-        if config_func:
-            config = self.get_injected_config(injected_config=config_func)
+    def get_strategy(self, config_ev=""):
+        if config_ev:
+            config = self.get_injected_config(injected_config=config_ev)
         else:
             config = self.get_config_strategy_without_full_declaration()
         strategy = EMACross(config=config)
@@ -36,16 +36,16 @@ class GetStrategies():
             str(self.instrument.id),
             self.bar_type,
             Decimal(1_000_000),
-            99,
-            100,
+            400, # 10
+            820, # 20
             )
         return config
 
     def get_injected_config(self, injected_config):
         if injected_config:
-            config = self.get_config_strategy_without_full_declaration()
-        else:
             config = injected_config
+        else:
+            config = self.get_config_strategy_without_full_declaration()
         return config
 
 if __name__ == "__main__":

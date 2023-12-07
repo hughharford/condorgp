@@ -25,7 +25,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/06_gp_find_fitness.feature')
+scenarios('../../features/06_gp_find_fitness.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             find_fitness correctly return fitness

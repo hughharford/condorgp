@@ -93,7 +93,7 @@ class NautRunsEvolved:
         # CGP CHANGE HERE
         if evolved_config:
             gp_strategy = GetStrategies(
-                instrument = AUDUSD_SIM).get_strategy(evolved_config)
+                instrument = AUDUSD_SIM).get_strategy(config_ev=evolved_config)
         else:
             # seperated out - see get_strategies.py
             gp_strategy = GetStrategies(

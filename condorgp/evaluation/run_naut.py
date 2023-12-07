@@ -36,8 +36,8 @@ class RunNautilus():
         if evolved_func:
             # enable config_func into Nautilus evaluation:
             logging.info(">>> RunNautilus.basic_run + CONFIG_FUNC >>>")
+            nrun = NautRunsEvolved()
             try:
-                nrun = NautRunsEvolved()
                 nrun.main(evolved_config=evolved_func)
                 logging.info(">>> RunNautilus.basic_run CONFIG_FUNC ran >>>")
             except BaseException as e:

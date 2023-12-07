@@ -83,4 +83,4 @@ class GpFunctions():
 
 if __name__ == "__main__":
     gpf = GpFunctions()
-    print(gpf.find_fitness(backtest_id="naut-run-02"))
+    print(gpf.find_fitness(backtest_id="naut-run-05"))

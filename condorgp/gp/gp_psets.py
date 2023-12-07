@@ -238,33 +238,34 @@ class GpPsets:
         bar_type3 = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
 
         self.SIM = Venue("SIM")
-        instrument = TestInstrumentProvider.default_fx_ccy(
-            "AUD/USD",
-            self.SIM)
-        instrument2 = TestInstrumentProvider.default_fx_ccy(
-            "AUD/USD",
-            self.SIM)
-        instrument3 = TestInstrumentProvider.default_fx_ccy(
-            "AUD/USD",
-            self.SIM)
+        instrument = TestInstrumentProvider.default_fx_ccy("AUD/USD",
+                                                           self.SIM)
+        instrument2 = TestInstrumentProvider.default_fx_ccy("AUD/USD",
+                                                            self.SIM)
+        instrument3 = TestInstrumentProvider.default_fx_ccy("AUD/USD",
+                                                            self.SIM)
         # print(f"type(instrument) = {type(instrument)}")
         # print(f"type(instrument.id) = {type(instrument.id)}")
         # print(f"type(str(instrument.id)) = {type(str(instrument.id))}")
         print(f"str(instrument.id) = {str(instrument.id)}")
 
-
         # a first basic primitive set for strongly typed GP using Nautilus
         self.pset = gp.PrimitiveSetTyped("CGPNAUT01",
                                          [], EMACrossConfig, "ARG")
 
-        # first pset terminals:
-        self.pset.addTerminal(str(instrument.id), str)
-        self.pset.addTerminal(str(instrument2.id), str)
-        self.pset.addTerminal(str(instrument3.id), str)
+        # primary primitive, to enable function
+        self.pset.addPrimitive(EMACrossConfig,
+                               [StrInstr, StrBar, Decimal, int, int],
+                               EMACrossConfig)
 
-        self.pset.addTerminal(bar_type, str)
-        self.pset.addTerminal(bar_type2, str)
-        self.pset.addTerminal(bar_type3, str)
+        # first pset terminals:
+        self.pset.addTerminal(StrInstr(instrument.id), StrInstr)
+        self.pset.addTerminal(StrInstr(instrument2.id), StrInstr)
+        self.pset.addTerminal(StrInstr(instrument3.id), StrInstr)
+
+        self.pset.addTerminal(bar_type, StrBar)
+        self.pset.addTerminal(bar_type2, StrBar)
+        self.pset.addTerminal(bar_type3, StrBar)
 
         self.pset.addTerminal(10, int)
         self.pset.addTerminal(20, int)
@@ -273,31 +274,22 @@ class GpPsets:
         self.pset.addTerminal(50, int)
         self.pset.addTerminal(100, int)
         self.pset.addTerminal(200, int)
-        # self.pset.addTerminal(300, int)
-        # self.pset.addTerminal(400, int)
-        # self.pset.addTerminal(500, int)
-        # self.pset.addTerminal(750, int)
-        # self.pset.addTerminal(1000, int)
         self.pset.addTerminal(1_000_000, int)
-        self.pset.addTerminal(1_500_000, int)
         self.pset.addTerminal(2_000_000, int)
 
-        self.pset.addPrimitive(Decimal, [int], Decimal)
-        self.pset.addPrimitive(EMACrossConfig,
-                               [str, str, Decimal, int, int],
-                               EMACrossConfig)
-
         # below here were added to allow DEAP to populate
+        self.pset.addPrimitive(Decimal, [Decimal], Decimal)
         self.pset.addPrimitive(str, [str], str)
         self.pset.addPrimitive(int, [int], int)
 
-        # self.pset.addPrimitive(BigInt, [BigInt], BigInt)
-        # self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
-        # self.pset.addPrimitive(StrInstr, [StrInstr], StrInstr)
-        # self.pset.addPrimitive(StrBar, [StrBar], StrBar)
-
         self.pset.addTerminal(Decimal(1_000_000), Decimal)
         self.pset.addTerminal("EMACrossConfig", EMACrossConfig)
+
+        self.pset.addPrimitive(BigInt, [BigInt], BigInt)
+        self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
+        self.pset.addPrimitive(StrInstr, [StrInstr], StrInstr)
+        self.pset.addPrimitive(StrBar, [StrBar], StrBar)
+
 
 
         return self.pset
