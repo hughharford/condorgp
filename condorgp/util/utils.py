@@ -307,23 +307,27 @@ class Utils:
         renewed_log.close()
 
     def copy_down_numbered_log_backups(self, log_file_path, no_backups=""):
-        ''' writes down backups '''
+        ''' saves backups up to specified number '''
         source = log_file_path
-        if no_backups == "":
-            backups = self.NAUT_DICT['NUM_LOG_BACKUPS']
-        else:
+        if no_backups:
             backups = no_backups
-        logpath = self.NAUT_DICT['LOGS_FOLDER']
-        last_backup = logpath+f'nautilus_log_old_{backups}.json'
+        else:
+            backups = self.NAUT_DICT['NUM_LOG_BACKUPS']
+        if log_file_path:
+            log = log_file_path
+        else:
+            log = self.NAUT_DICT['NAUTILUS_LOG_FILE']
+        s = log.split(".")
+        last_backup = s[0]+f'_old_{backups}.{s[1]}'
         if os.path.isfile(last_backup): os.remove(last_backup)
         for n in range(backups, 0, -1):
-            dest_a = logpath+f'nautilus_log_old_{n}.json'
-            dest_b = logpath+f'nautilus_log_old_{n+1}.json'
+            dest_a = s[0]+f'_old_{n}.{s[1]}'
+            dest_b = s[0]+f'_old_{n+1}.{s[1]}'
             if os.path.isfile(dest_a) and n < backups:
                 shutil.copyfile(dest_a, dest_b)
                 os.remove(dest_a)
         # copy most recent to
-        dest = self.NAUT_DICT['LOGS_FOLDER']+f'nautilus_log_old_1.json'
+        dest = s[0]+f'_old_1.{s[1]}'
         shutil.copyfile(source, dest)
 
 
@@ -340,9 +344,10 @@ if __name__ == "__main__":
     lines = 2000
 
     # u.count_lines_in_file("tests/test_data/test_keep_logs_trim.json")
-    log_file_path = u.NAUT_DICT['NAUTILUS_LOG_FILE']
-    u.copy_down_numbered_log_backups(log_file_path)
-    u.keep_x_lines_of_log(log_file_path, no_last_lines=5000)
+    log = "tests/test_data/test_log_backup_orig.txt"
+    log = u.NAUT_DICT['NAUTILUS_LOG_FILE']
+    u.copy_down_numbered_log_backups(log, 2)
+    # u.keep_x_lines_of_log(log, no_last_lines=5000)
 
 
     # no error here, just need to provide lines = X enough to find it...
