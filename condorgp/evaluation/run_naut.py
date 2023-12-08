@@ -35,7 +35,7 @@ class RunNautilus():
 
         if evolved_func:
             # enable config_func into Nautilus evaluation:
-            logging.info(">>> RunNautilus.basic_run + CONFIG_FUNC >>>")
+            logging.debug(">>> RunNautilus.basic_run + CONFIG_FUNC >>>")
             nrun = NautRunsEvolved()
             try:
                 nrun.main(evolved_config=evolved_func)
@@ -54,7 +54,7 @@ class RunNautilus():
                                         stdout=subprocess.PIPE)
             else:
                 logging.error("No Nautilus script provided")
-        logging.info(">>> RunNautilus.basic_run DONE evaluating >>>")
+        logging.debug(">>> RunNautilus.basic_run DONE evaluating >>>")
         return result
 
 if __name__ == "__main__":

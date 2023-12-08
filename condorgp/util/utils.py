@@ -330,8 +330,12 @@ class Utils:
         dest = s[0]+f'_old_1.{s[1]}'
         shutil.copyfile(source, dest)
 
-
-        # start new and write last lines
+    def check_seq_increases(self, seq):
+        # print("Original list : " + str(test_list))
+        # using zip() + all() to check for strictly increasing list
+        r = all(i < j for i, j in zip(seq, seq[1:]))
+        # print("Is list strictly increasing ? : " + str(r))
+        return r
 
 if __name__ == "__main__":
     pass
@@ -340,14 +344,18 @@ if __name__ == "__main__":
     key_req = 'Sharpe Ratio (252 days)'
     # key3 = "Sharpe Ratio"
     # key2 = "EMACross-000"
-
     lines = 2000
 
+    list_seq = [1, 4, 5, 7, 8, 10]
+    list_seq = [1, 2, 3]
+    u.check_seq_increases(list_seq)
+
+    # CHECKING BACKUPS AND LOG TRIMS
     # u.count_lines_in_file("tests/test_data/test_keep_logs_trim.json")
-    log = "tests/test_data/test_log_backup_orig.txt"
-    log = u.NAUT_DICT['NAUTILUS_LOG_FILE']
-    u.make_no_log_backups(log, 2)
-    # u.keep_x_lines_of_log(log, no_last_lines=5000)
+    # log = "tests/test_data/test_log_backup_orig.txt"
+    # log = u.NAUT_DICT['NAUTILUS_LOG_FILE']
+    # u.make_no_log_backups(log, 2)
+    # # u.keep_x_lines_of_log(log, no_last_lines=5000)
 
 
     # no error here, just need to provide lines = X enough to find it...

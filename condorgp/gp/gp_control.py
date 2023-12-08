@@ -123,6 +123,10 @@ class GpControl:
         ''' undertakes the run as specified'''
         self.pop, self.stats, self.hof, self.logbook = self.gp.run_gp(inputs)
 
+        # show logbook
+        logging.info(' deap __ Logbook:')
+        logging.info(self.gp.logbook)
+
     def get_logbook(self):
         return self.gp.logbook
 
@@ -156,7 +160,7 @@ if __name__ == "__main__":
     pset_used = 'naut_pset_01' # 'test_pset5c'
 
     gpc = GpControl()
-    newpop = 5
+    newpop = 1
     gens = 1
     gpc.setup_gp(pset_spec=pset_used, pop_size=newpop, no_gens=gens)
     gpc.run_backtest = 1

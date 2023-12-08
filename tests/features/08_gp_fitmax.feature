@@ -4,6 +4,11 @@ Feature: GpControl's evolved code must improve fitness
   To ensure positive direction is ensured.
 
   Scenario Outline: Evolved code shows fitness improvement
-    Given GpControl is run with test_pset7aTyped
-    When the injected algo runs with 7aT
-    Then fitness improves over the generations run
+    Given GpControl is run with "<pset>"
+    When run with evaluator "<evaluator>"
+    Then either max fitness improves over the generations
+    And or min fitness improves over generations
+
+  Examples:
+    |  pset         |   evaluator          |
+    |  naut_pset_01 |   eval_nautilus      |

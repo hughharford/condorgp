@@ -29,6 +29,10 @@ def gp_control():
     return GpControl()
 
 @pytest.fixture
+def gpc():
+    return GpControl()
+
+@pytest.fixture
 def dep_di():
     return DependencyFactory().get_dependency()
 
