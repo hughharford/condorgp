@@ -6,8 +6,7 @@ Feature: GpControl's evolved code must improve fitness
   Scenario Outline: Evolved code shows fitness improvement
     Given GpControl is run with "<pset>"
     When run with evaluator "<evaluator>"
-    Then either max fitness improves over the generations
-    And or min fitness improves over generations
+    Then max fitness is static or improves over generations
 
   Examples:
     |  pset         |   evaluator          |

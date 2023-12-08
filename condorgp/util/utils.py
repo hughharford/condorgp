@@ -337,6 +337,13 @@ class Utils:
         # print("Is list strictly increasing ? : " + str(r))
         return r
 
+    def check_seq_never_decreases(self, seq):
+        # print("Original list : " + str(test_list))
+        # using zip() + all() to check for strictly increasing list
+        r = all(i <= j for i, j in zip(seq, seq[1:]))
+        print("Is list never decreasing ? : " + str(r))
+        return r
+
 if __name__ == "__main__":
     pass
     print('going...')
@@ -346,9 +353,10 @@ if __name__ == "__main__":
     # key2 = "EMACross-000"
     lines = 2000
 
-    list_seq = [1, 4, 5, 7, 8, 10]
-    list_seq = [1, 2, 3]
-    u.check_seq_increases(list_seq)
+    list_seq = [2, 2, 2, 2, 1, 2] # fail
+    list_seq = [2, 2, 2]
+    # list_seq = [1, 2, 3]
+    u.check_seq_never_decreases(list_seq)
 
     # CHECKING BACKUPS AND LOG TRIMS
     # u.count_lines_in_file("tests/test_data/test_keep_logs_trim.json")

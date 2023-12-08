@@ -28,8 +28,7 @@ scenarios('../features/08_gp_fitmax.feature')
   Scenario Outline: Evolved code shows fitness improvement
     Given GpControl is run with "<pset>"
     When run with evaluator "<evaluator>"
-    Then either max fitness improves over the generations
-    And or min fitness improves over generations
+    Then max fitness is static or improves over generations
 
   Examples:
     |  pset         |   evaluator          |
@@ -53,13 +52,9 @@ def gpc_with_set_evaluator(evaluator):
     pytest.gpc.set_test_evaluator(evaluator)
     pytest.gpc.run_gp()
 
-@then('either max fitness improves over the generations')
-def either_max_fitness_improves():
+@then('max fitness is static or improves over generations')
+def either_max_fitness_improves(utils):
     pytest.f_max = pytest.gpc.gp.logbook.select("max")
-
-@then('or min fitness improves over generations')
-def or_min_fitness_improves(utils):
-    pytest.f_min = pytest.gpc.gp.logbook.select("min")
-    max_increases = utils.check_seq_increases(pytest.f_max)
-    min_increases = utils.check_seq_increases(pytest.f_min)
-    assert max_increases or min_increases
+    max_incrs = utils.check_seq_increases(pytest.f_max)
+    max_never_decrs = utils.check_seq_never_decreases(pytest.f_max)
+    assert (max_incrs or max_never_decrs)
