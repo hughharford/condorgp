@@ -50,6 +50,9 @@ class GpControl:
 
     def initiate_logger(self):
         ''' dependency injection of logger '''
+        # keep logs tidy:
+        # nautlog = self.NAUT_DICT['NAUTILUS_LOG_FILE']
+        # self.util.keep_x_lines_of_log_n_backup(nautlog, no_last_lines=5000)
         self.factory.start_logger()
 
     def setup_gp(self, pset_spec='', pop_size=2, no_gens=1):

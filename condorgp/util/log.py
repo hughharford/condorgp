@@ -47,6 +47,24 @@ class CondorLogger:
         err.setFormatter(formatter)
         l.addHandler(err)
 
+        # log rotation:
+            # second (s)
+            # minute (m)
+            # hour (h)
+            # day (d)
+            # w0-w6 (weekday, 0=Monday)
+            # midnight
+
+        try:
+            from logging.handlers import TimedRotatingFileHandler
+            rotate_log_file_path = self.naut_dict['NAUTILUS_LOG_FILE']
+            rotating_handler = TimedRotatingFileHandler(rotate_log_file_path,
+                                            when="m",
+                                            interval=15,
+                                            backupCount=1)
+            l.addHandler(rotating_handler)
+        except BaseException as e:
+            print(f"ERROR: {e}")
         return l
 
     def get_logger(self):

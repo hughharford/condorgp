@@ -62,6 +62,7 @@ class Params():
         NAUTILUS_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/nautilus_log.json'
         CONDOR_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/condor_log.txt'
         LOGS_FOLDER = 'condorgp/util/logs/'
+        NUM_LOG_BACKUPS = 3
         FITNESS_CRITERIA = 'Sharpe Ratio (252 days)'
         SIMPLE_FITNESS_CRITERIA = 'Risk Return Ratio'
         CGP_NAUT_STRATEGIES = NAUTILUS_EVAL_PATH + "cgp_naut_strategies.py"
@@ -72,6 +73,7 @@ class Params():
             'NAUTILUS_BASE_PATH': NAUTILUS_BASE_PATH,
             'NAUTILUS_EVAL_PATH': NAUTILUS_EVAL_PATH,
             'LOGS_FOLDER': LOGS_FOLDER,
+            'NUM_LOG_BACKUPS': NUM_LOG_BACKUPS,
             'NAUTILUS_LOG_FILE': NAUTILUS_LOG_FILE,
             'CONDOR_LOG_FILE': CONDOR_LOG_FILE,
             'FITNESS_CRITERIA': FITNESS_CRITERIA,
@@ -85,32 +87,12 @@ class Params():
         #           TESTING PARAMS
         # ################################## ##################################
 
-        CONDOR_TEST_CONFIG_FILE = 'config_test_condor.json'
-
-        CONDOR_TEST_CONFIG_FILE = 'config_test_condor.json'
-        CONDOR_TEST_CONFIG_FILE_1 = 'config_test_algos_1.json'
-        CONDOR_TEST_CONFIG_FILE_2 = 'config_test_algos_2.json'
-
-        BASIC_TEST_ALGO_NAME = 'IndBasicAlgo0.py'
-        CONFIG_TEST_ALGOS_FILE_1 = 'IndBasicAlgo1.py'
-        CONFIG_TEST_ALGOS_FILE_2 = 'IndBasicAlgo2.py'
-        BASIC_TEST_ALGO_LEAN = 'BasicTemplateFrameworkAlgorithm.py'
-
         CGP_TEST_PATH = LOCAL_BASE_PATH + "tests/"
         NAUTILUS_TEST_DATA_PATH = NAUTILUS_BASE_PATH + 'tests/test_data/'
         CGP_TEST_DATA = CGP_TEST_PATH + 'test_data/'
 
         self.test_dict = {
             'REASONABLE_FITNESS_SECS': 60,
-
-            'BASIC_TEST_ALGO_NAME': BASIC_TEST_ALGO_NAME,
-            'CONFIG_TEST_ALGOS_FILE_1': CONFIG_TEST_ALGOS_FILE_1,
-            'CONFIG_TEST_ALGOS_FILE_2': CONFIG_TEST_ALGOS_FILE_2,
-            'BASIC_TEST_ALGO_LEAN': BASIC_TEST_ALGO_LEAN,
-
-            'CONDOR_TEST_CONFIG_FILE': CONDOR_TEST_CONFIG_FILE,
-            'CONDOR_TEST_CONFIG_FILE_1': CONDOR_TEST_CONFIG_FILE_1,
-            'CONDOR_TEST_CONFIG_FILE_2': CONDOR_TEST_CONFIG_FILE_2,
 
             'CGP_TEST_PATH': CGP_TEST_PATH,
             'NAUTILUS_TEST_DATA_PATH': NAUTILUS_TEST_DATA_PATH,

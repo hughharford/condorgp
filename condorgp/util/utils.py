@@ -290,6 +290,45 @@ class Utils:
                            filename n path: {filename_n_path}")
             return None
 
+    def count_lines_in_file(self, file_path):
+        ''' returns no. of lines '''
+        with open(file_path, 'r') as fp:
+            lines = sum(1 for line in fp)
+            print('Total Number of lines:', lines)
+            return lines
+
+    def keep_x_lines_of_log(self, log_file_path, no_last_lines=5000):
+        ''' saves last x lines and calls method to writes down backups'''
+        last_lines = self.get_last_x_log_lines(no_last_lines, log_file_path)
+        os.remove(log_file_path)
+        with open(log_file_path, "w") as renewed_log:
+            for line in last_lines:
+                renewed_log.write(line + '\n')
+        renewed_log.close()
+
+    def copy_down_numbered_log_backups(self, log_file_path, no_backups=""):
+        ''' writes down backups '''
+        source = log_file_path
+        if no_backups == "":
+            backups = self.NAUT_DICT['NUM_LOG_BACKUPS']
+        else:
+            backups = no_backups
+        logpath = self.NAUT_DICT['LOGS_FOLDER']
+        last_backup = logpath+f'nautilus_log_old_{backups}.json'
+        if os.path.isfile(last_backup): os.remove(last_backup)
+        for n in range(backups, 0, -1):
+            dest_a = logpath+f'nautilus_log_old_{n}.json'
+            dest_b = logpath+f'nautilus_log_old_{n+1}.json'
+            if os.path.isfile(dest_a) and n < backups:
+                shutil.copyfile(dest_a, dest_b)
+                os.remove(dest_a)
+        # copy most recent to
+        dest = self.NAUT_DICT['LOGS_FOLDER']+f'nautilus_log_old_1.json'
+        shutil.copyfile(source, dest)
+
+
+        # start new and write last lines
+
 if __name__ == "__main__":
     pass
     print('going...')
@@ -297,7 +336,14 @@ if __name__ == "__main__":
     key_req = 'Sharpe Ratio (252 days)'
     # key3 = "Sharpe Ratio"
     # key2 = "EMACross-000"
+
     lines = 2000
+
+    # u.count_lines_in_file("tests/test_data/test_keep_logs_trim.json")
+    log_file_path = u.NAUT_DICT['NAUTILUS_LOG_FILE']
+    u.copy_down_numbered_log_backups(log_file_path)
+    u.keep_x_lines_of_log(log_file_path, no_last_lines=5000)
+
 
     # no error here, just need to provide lines = X enough to find it...
     # found2 = u.retrieve_log_line_with_key(
@@ -316,17 +362,19 @@ if __name__ == "__main__":
     # here = float(u.get_last_chars(found3[0],2))
     # assert here == expected
 
-    expected = -21.49663142709111
-    # for dev only:
-    backtest_id = "naut-run-05"
-    key_fitness = Params().naut_dict['FITNESS_CRITERIA']
-    print(key_fitness)
-    found4 = u.find_fitness_with_matching_backtest(
-            key = key_fitness,
-            log_file_n_path = "",
-            backtest_id = backtest_id,
-            lines = 5000,
-            max_lines_diff = 300)
-    print(found4[0])
-    here = float(u.get_last_chars(found4[0],2))
-    print(here)
+    # checking fitness:
+
+    # expected = -21.49663142709111
+    # # for dev only:
+    # backtest_id = "naut-run-05"
+    # key_fitness = Params().naut_dict['FITNESS_CRITERIA']
+    # print(key_fitness)
+    # found4 = u.find_fitness_with_matching_backtest(
+    #         key = key_fitness,
+    #         log_file_n_path = "",
+    #         backtest_id = backtest_id,
+    #         lines = 5000,
+    #         max_lines_diff = 300)
+    # print(found4[0])
+    # here = float(u.get_last_chars(found4[0],2))
+    # print(here)
