@@ -238,16 +238,13 @@ class GpPsets:
         bar_type3 = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
 
         self.SIM = Venue("SIM")
-        instrument = TestInstrumentProvider.default_fx_ccy("AUD/USD",
-                                                           self.SIM)
-        instrument2 = TestInstrumentProvider.default_fx_ccy("AUD/USD",
-                                                            self.SIM)
-        instrument3 = TestInstrumentProvider.default_fx_ccy("AUD/USD",
-                                                            self.SIM)
+        inst = TestInstrumentProvider.default_fx_ccy("AUD/USD", self.SIM)
+        inst2 = TestInstrumentProvider.default_fx_ccy("AUD/USD",self.SIM)
+        inst3 = TestInstrumentProvider.default_fx_ccy("AUD/USD",self.SIM)
         # print(f"type(instrument) = {type(instrument)}")
         # print(f"type(instrument.id) = {type(instrument.id)}")
         # print(f"type(str(instrument.id)) = {type(str(instrument.id))}")
-        print(f"str(instrument.id) = {str(instrument.id)}")
+        print(f"str(instrument.id) = {str(inst.id)}")
 
         # a first basic primitive set for strongly typed GP using Nautilus
         self.pset = gp.PrimitiveSetTyped("CGPNAUT01",
@@ -259,9 +256,9 @@ class GpPsets:
                                EMACrossConfig)
 
         # first pset terminals:
-        self.pset.addTerminal(StrInstr(instrument.id), StrInstr)
-        self.pset.addTerminal(StrInstr(instrument2.id), StrInstr)
-        self.pset.addTerminal(StrInstr(instrument3.id), StrInstr)
+        self.pset.addTerminal(StrInstr(inst.id), StrInstr)
+        self.pset.addTerminal(StrInstr(inst2.id), StrInstr)
+        self.pset.addTerminal(StrInstr(inst3.id), StrInstr)
 
         self.pset.addTerminal(bar_type, StrBar)
         self.pset.addTerminal(bar_type2, StrBar)
@@ -288,10 +285,8 @@ class GpPsets:
         # using specified int and str classes to reduce degress of freedom
         self.pset.addPrimitive(BigInt, [BigInt], BigInt)
         self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
-        self.pset.addPrimitive(StrInstr, [StrInstr], StrInstr)
-        self.pset.addPrimitive(StrBar, [StrBar], StrBar)
-
-
+        self.pset.addPrimitive(str, [StrInstr], StrInstr)
+        self.pset.addPrimitive(str, [StrBar], StrBar)
 
         return self.pset
 

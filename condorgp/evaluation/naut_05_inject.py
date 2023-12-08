@@ -48,7 +48,7 @@ class NautRunsEvolved:
     def __init__(self):
         pass
 
-    def main(self, evolved_config=""):
+    def main(self, evolved_config):
         # Configure backtest engine
         config = BacktestEngineConfig(
             trader_id="BACKTESTER-001-naut-run-05",

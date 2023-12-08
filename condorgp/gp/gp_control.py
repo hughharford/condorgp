@@ -22,6 +22,7 @@ class GpControl:
         self.p = Params()
         self.inject_gp()
         self.inject_utils()
+        self.keep_logs_tidy()
         self.initiate_logger()
         self.inject_backtest_runner()
 
@@ -50,10 +51,15 @@ class GpControl:
 
     def initiate_logger(self):
         ''' dependency injection of logger '''
-        # keep logs tidy:
-        # nautlog = self.NAUT_DICT['NAUTILUS_LOG_FILE']
-        # self.util.keep_x_lines_of_log_n_backup(nautlog, no_last_lines=5000)
         self.factory.start_logger()
+
+    def keep_logs_tidy(self):
+        ''' keep logs tidy: '''
+        nautlog = self.p.naut_dict['NAUTILUS_LOG_FILE']
+        self.util.keep_x_lines_of_log(log_file_path=nautlog,
+                                      no_last_lines=10000)
+        self.util.make_no_log_backups(log_file_path=nautlog,
+                                      no_backups=2)
 
     def setup_gp(self, pset_spec='', pop_size=2, no_gens=1):
         ''' sets: 1. additional functions & terminals
@@ -96,7 +102,7 @@ class GpControl:
 
     def set_test_evaluator(self, new_eval = ''):
         '''
-        default to eval_test_6, can spec any evaluation function by string
+        default to eval_nautilus, can spec any evaluation function by string
         provided named function is within gp_control...
         '''
         if new_eval:
@@ -104,7 +110,7 @@ class GpControl:
             if new_eval: logging.debug(f'GpControl set evaluator: {new_eval}')
             self.gp.set_evaluator(new_eval)
         else:
-            self.gp.set_evaluator(self.eval_test_6)
+            self.gp.set_evaluator(self.eval_nautilus)
 
     def get_custom_evaluator(self, e_name):
         try:
@@ -150,8 +156,8 @@ if __name__ == "__main__":
     pset_used = 'naut_pset_01' # 'test_pset5c'
 
     gpc = GpControl()
-    newpop = 15
-    gens = 4
+    newpop = 5
+    gens = 1
     gpc.setup_gp(pset_spec=pset_used, pop_size=newpop, no_gens=gens)
     gpc.run_backtest = 1
     gpc.set_test_evaluator(eval_used)

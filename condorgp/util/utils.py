@@ -306,7 +306,7 @@ class Utils:
                 renewed_log.write(line + '\n')
         renewed_log.close()
 
-    def copy_down_numbered_log_backups(self, log_file_path, no_backups=""):
+    def make_no_log_backups(self, log_file_path, no_backups=""):
         ''' saves backups up to specified number '''
         source = log_file_path
         if no_backups:
@@ -346,7 +346,7 @@ if __name__ == "__main__":
     # u.count_lines_in_file("tests/test_data/test_keep_logs_trim.json")
     log = "tests/test_data/test_log_backup_orig.txt"
     log = u.NAUT_DICT['NAUTILUS_LOG_FILE']
-    u.copy_down_numbered_log_backups(log, 2)
+    u.make_no_log_backups(log, 2)
     # u.keep_x_lines_of_log(log, no_last_lines=5000)
 
 
