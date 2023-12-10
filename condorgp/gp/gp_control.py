@@ -20,18 +20,22 @@ class GpControl:
         self.default_pset = 'naut_pset_01'
         self.default_eval = self.eval_nautilus
         self.run_backtest = 1
-        self.use_adfs = 0 # default to zero. i.e. not using
         # gather resources
         self.p = Params()
         self.factory = Factory()
         self.initiate_logger()
-        self.inject_gp()
         self.inject_utils()
         self.keep_logs_tidy()
         self.inject_backtest_runner()
 
+        self.use_adfs = 0 # default to zero. i.e. not using
+        if self.use_adfs == 0:
+            self.inject_gp() # call via select_gp_provider if adfs in use
+
         logging.debug(f"GpControl: __init__ complete")
 
+    def select_gp_provider(self):
+        self.inject_gp()
 
     def inject_gp(self):
         ''' dependency injection of gp '''
@@ -44,6 +48,7 @@ class GpControl:
         self.gp_psets_cls = self.factory.get_gp_psets(self.gp_custom_funcs)
         #  not using get_gp_naut_psets - separating out creates complications
         self.gpf = self.factory.get_gp_funcs()
+        logging.debug(f"GpControl: inject_gp complete")
 
     def inject_utils(self):
         ''' dependency injection of utils '''
@@ -178,16 +183,17 @@ if __name__ == "__main__":
 
     gpc = GpControl()
 
-    eval_used = 'eval_nautilus'
     gpc.use_adfs = 1
     if gpc.use_adfs:
         pset_used = 'naut_pset_02_adf'
     else:
         pset_used = 'naut_pset_01' #  'test_pset5c'
+    eval_used = 'eval_nautilus'
 
     newpop = 1
     gens = 1
 
+    gpc.select_gp_provider()
     gpc.setup_gp(pset_spec=pset_used, pop_size=newpop, no_gens=gens)
     gpc.set_test_evaluator(eval_used)
     gpc.run_backtest = 0

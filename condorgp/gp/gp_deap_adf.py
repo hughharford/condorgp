@@ -82,3 +82,7 @@ class GpDeapADF(GpDeap):
         self.toolbox.register("mate", gp.cxOnePoint)
         self.toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
         self.toolbox.register('mutate', gp.mutUniform, expr=self.toolbox.expr_mut)
+
+        ind = self.toolbox.individual()
+
+        pop = self.toolbox.population(n=100)

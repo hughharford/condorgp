@@ -1,7 +1,7 @@
 
 
-from condorgp.learning.dependency_factory import DependencyFactory
-from condorgp.learning.dependency_factory_overridden import DependencyFactoryOverridden
+from condorgp.learning.dependency_injection.dependency_factory import DependencyFactory
+from condorgp.learning.dependency_injection.dependency_factory_overridden import DependencyFactoryOverridden
 
 
 

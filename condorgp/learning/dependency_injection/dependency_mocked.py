@@ -1,4 +1,4 @@
-from condorgp.learning.dependency import Dependency
+from condorgp.learning.dependency_injection.dependency import Dependency
 
 class DependencyMocked(Dependency):
     def __init__(self) -> None:
@@ -6,4 +6,3 @@ class DependencyMocked(Dependency):
 
     def dep_multiply(self, x):
         return x*self.dependency
-

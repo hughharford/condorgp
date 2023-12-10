@@ -3,8 +3,8 @@ from condorgp.params import Params
 from condorgp.util.utils import Utils
 from condorgp.gp.gp_control import GpControl
 from condorgp.gp.gp_functions import GpFunctions
-from condorgp.learning.dependency_factory import DependencyFactory
-from condorgp.learning.dependency_factory_overridden import DependencyFactoryOverridden
+from condorgp.learning.dependency_injection.dependency_factory import DependencyFactory
+from condorgp.learning.dependency_injection.dependency_factory_overridden import DependencyFactoryOverridden
 from condorgp.factories.factory import Factory
 
 

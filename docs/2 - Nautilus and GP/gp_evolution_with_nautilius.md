@@ -11,6 +11,11 @@
       A number of strategies added to the engine, each ADFs
       A range of indicators available for strategies
 
+# <<<<<<<< HERE >>>>>>>>
+
+      Starting with a very simple ADF addition to naut_pset_02_adf
+      ADF evaluation looks very different based on the examples
+
   # 2 # Then use the example strategies given by Nautilus as first options
       See: nautilus_trader/examples/strategies
 

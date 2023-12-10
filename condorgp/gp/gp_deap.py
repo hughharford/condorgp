@@ -91,7 +91,7 @@ class GpDeap(GpProvider):
 
     def set_pop_size(self, pop_size: int = 2):
         ''' Sets population size as required '''
-        self.pop = self.toolbox.population(pop_size)
+        self.pop = self.toolbox.population(n=pop_size)
 
     def set_evaluator(self, new_evaluator):
         ''' Sets evaluation function '''
