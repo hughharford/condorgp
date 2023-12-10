@@ -13,7 +13,6 @@ from nautilus_trader.model.identifiers import Venue
 from nautilus_trader.model.identifiers import InstrumentId
 
 import logging
-from condorgp.util.log import CondorLogger
 
 class GpPsets:
     ''' Provides population sets (psets) for CondorGP '''
@@ -84,7 +83,7 @@ class GpPsets:
         inst = TestInstrumentProvider.default_fx_ccy("AUD/USD", self.SIM)
         inst2 = TestInstrumentProvider.default_fx_ccy("AUD/USD",self.SIM)
         # a first basic primitive set for strongly typed GP using Nautilus
-        self.pset = gp.PrimitiveSetTyped("CGPNAUT01",
+        self.pset = gp.PrimitiveSetTyped("CGPNAUT02",
                                          [], EMACrossConfig, "ARG")
         # primary primitive, to enable function
         self.pset.addPrimitive(EMACrossConfig,
@@ -132,14 +131,8 @@ class GpPsets:
         self.psets = (self.pset, self.adfset0)
 
 
-        return self.pset
+        return self.psets
 
-# Define new functions
-def protectedDiv(left, right):
-    try:
-        return left / right
-    except ZeroDivisionError:
-        return 1
 
 
     def get_naut_pset_01(self):
@@ -196,6 +189,12 @@ def protectedDiv(left, right):
         self.pset.addPrimitive(str, [StrBar], StrBar)
         return self.pset
 
+# Define new functions
+def protectedDiv(left, right):
+    try:
+        return left / right
+    except ZeroDivisionError:
+        return 1
 
 class StrInstr(str):
     def pass_method(self):
@@ -218,14 +217,14 @@ if __name__ == '__main__':
 
     # uncomment the below and run to have a look into a pset created above:
 
-    # from deap import gp
-    # from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
-    # cf = CustomFuncsFactory()
-    # gp_custom_funcs = cf.get_gp_custom_functions()
-    # gpp = GpPsets(gp_custom_funcs)
-    # one = gpp.get_named_pset('naut_pset_01')
-    # # set_pset('test_psetC_untyped')
-    # # print(type(one))
+    from deap import gp
+    from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
+    cf = CustomFuncsFactory()
+    gp_custom_funcs = cf.get_gp_custom_functions()
+    gpp = GpPsets(gp_custom_funcs)
+    pset_and_adf = gpp.get_named_pset('naut_pset_02_adf')
+    print(type(pset_and_adf[0]))
+    print(type(pset_and_adf[1]))
 
     # # print('looking at terminals:')
     # print('count of terminals: ', one.terms_count,
@@ -238,7 +237,3 @@ if __name__ == '__main__':
 
     # prim_names = list(one.context.keys())
     # print(prim_names)
-
-    stringer = StrInstr("my test")
-    print(stringer)
-    print(len(stringer))

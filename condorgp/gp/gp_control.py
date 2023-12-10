@@ -16,29 +16,32 @@ class GpControl:
         '''
         logging.info(f"{'>'*5}, GpControl Initialising {'>'*5}")
 
-        self.p = Params()
-        self.inject_gp()
-        self.inject_utils()
-        self.keep_logs_tidy()
-        self.initiate_logger()
-        self.inject_backtest_runner()
-
         # default population set and evaluator (fitness function)
-        self.default_pset = 'default_untyped'
+        self.default_pset = 'naut_pset_01'
         self.default_eval = self.eval_nautilus
         self.run_backtest = 1
         self.use_adfs = 1
+        # gather resources
+        self.p = Params()
+        self.factory = Factory()
+        self.initiate_logger()
+        self.inject_gp()
+        self.inject_utils()
+        self.keep_logs_tidy()
+        self.inject_backtest_runner()
+
+        logging.debug(f"GpControl: __init__ complete")
+
 
     def inject_gp(self):
         ''' dependency injection of gp '''
         cf = CustomFuncsFactory()
         self.gp_custom_funcs = cf.get_gp_custom_functions()
-        self.factory = Factory()
         if self.use_adfs:
             self.gp = self.factory.get_gp_adf_provider()
         else:
             self.gp = self.factory.get_gp_provider()
-        self.gp_psets = self.factory.get_gp_psets(self.gp_custom_funcs)
+        self.gp_psets_cls = self.factory.get_gp_psets(self.gp_custom_funcs)
         #  not using get_gp_naut_psets - separating out creates complications
         self.gpf = self.factory.get_gp_funcs()
 
@@ -71,28 +74,42 @@ class GpControl:
                   6: the evaluator
                   7: the stats feedback
         '''
+        logging.debug(f"GpControl: starting setup_gp >>>>>>>>>>> ")
 
         if pset_spec == '': pset_spec = self.default_pset
         funcs = {}     # Set: 1. additional functions & terminals
         terms = {}
-        self.gp.set_defined_pset(self.gp_psets, pset_spec, funcs, terms)
+        self.gp.set_defined_pset(self.gp_psets_cls, pset_spec, funcs, terms)
+        logging.debug(f"GpControl: set_defined_pset complete")
+
         params = {}     # Set 2. major gp parameters
         self.gp.set_gp_params(params)
+        logging.debug(f"GpControl: set_gp_params complete")
+
         inputs = {}     # Sets 3: inputs for fitness evaluation
         self.gp.set_inputs(inputs)
+        logging.debug(f"GpControl: set_inputs complete")
+
         self.pop_size = pop_size # Sets 4: population size, defaults to 2 for efficacy
         self.gp.set_pop_size(pop_size)
+        logging.debug(f"GpControl: set_pop_size complete")
+
         self.gp.set_gens(no_gens)  # Set 5: the number of generations
         self.gp.set_evaluator(self.default_eval) # Set 6: the evaluator
+        logging.debug(f"GpControl: set_evaluator complete")
+
         stat_params = {}        # Set 7: the stats feedback
         self.gp.set_stats(stat_params)
+        logging.debug(f"GpControl: set_stats complete")
+
+        logging.debug(f"GpControl: SETUP_GP complete")
 
     def set_and_get_pset(self, pset_spec = ""):
         ''' get and set a tailored pset '''
         if pset_spec == '': pset_spec = self.default_pset
         funcs = {}     # Set: 1. additional functions & terminals
         terms = {}
-        self.gp.set_defined_pset(self.gp_psets, pset_spec, funcs, terms)
+        self.gp.set_defined_pset(self.gp_psets_cls, pset_spec, funcs, terms)
         return self.gp.pset
 
     def set_population(self, pop_size):
@@ -108,7 +125,8 @@ class GpControl:
         '''
         if new_eval:
             new_eval = self.get_custom_evaluator(new_eval)
-            if new_eval: logging.debug(f'GpControl set evaluator: {new_eval}')
+            if new_eval:
+                logging.debug(f'GpControl set evaluator: {new_eval.__name__}')
             self.gp.set_evaluator(new_eval)
         else:
             self.gp.set_evaluator(self.eval_nautilus)
@@ -158,15 +176,21 @@ class GpControl:
 if __name__ == "__main__":
     start_time = time.time()
 
-    eval_used = 'eval_nautilus'
-    pset_used = 'naut_pset_02_adf' # 'naut_pset_01' 'test_pset5c'
-
     gpc = GpControl()
+
+    eval_used = 'eval_nautilus'
+    gpc.use_adfs = 1
+    if gpc.use_adfs:
+        pset_used = 'naut_pset_02_adf'
+    else:
+        pset_used = 'naut_pset_01' #  'test_pset5c'
+
     newpop = 1
     gens = 1
+
     gpc.setup_gp(pset_spec=pset_used, pop_size=newpop, no_gens=gens)
-    gpc.run_backtest = 1
     gpc.set_test_evaluator(eval_used)
+    gpc.run_backtest = 0
     gpc.run_gp()
 
     logging.info(' deap __ Hall of fame:')
