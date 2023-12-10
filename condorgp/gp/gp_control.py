@@ -1,19 +1,16 @@
-from condorgp.params import Params #, util_dict, test_dict, lean_dict
+import time
 import logging
-from condorgp.factories.initial_factory import InitialFactory
+
+from condorgp.params import Params #, util_dict, test_dict, lean_dict
+from condorgp.factories.factory import Factory
 from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
-from condorgp.util.log import CondorLogger
 
 from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
-
-
-# NB
-# TODO:below, search for: "### HACK HERE HACK HERE ###"
 
 class GpControl:
     def __init__(self):
         '''
-            The gp is controller.
+            The Genetic Programming (gp) controller.
             Setup, sizing, initiation of gp runs: psets, operators, evaluator.
             The major dependency is DEAP.
         '''
@@ -30,13 +27,17 @@ class GpControl:
         self.default_pset = 'default_untyped'
         self.default_eval = self.eval_nautilus
         self.run_backtest = 1
+        self.use_adfs = 1
 
     def inject_gp(self):
         ''' dependency injection of gp '''
         cf = CustomFuncsFactory()
         self.gp_custom_funcs = cf.get_gp_custom_functions()
-        self.factory = InitialFactory()
-        self.gp = self.factory.get_gp_provider()
+        self.factory = Factory()
+        if self.use_adfs:
+            self.gp = self.factory.get_gp_adf_provider()
+        else:
+            self.gp = self.factory.get_gp_provider()
         self.gp_psets = self.factory.get_gp_psets(self.gp_custom_funcs)
         #  not using get_gp_naut_psets - separating out creates complications
         self.gpf = self.factory.get_gp_funcs()
@@ -155,9 +156,10 @@ class GpControl:
         return new_fitness, # returns a float in a tuple, i.e.  14736.68,
 
 if __name__ == "__main__":
+    start_time = time.time()
 
     eval_used = 'eval_nautilus'
-    pset_used = 'naut_pset_01' # 'test_pset5c'
+    pset_used = 'naut_pset_02_adf' # 'naut_pset_01' 'test_pset5c'
 
     gpc = GpControl()
     newpop = 1
@@ -176,3 +178,5 @@ if __name__ == "__main__":
 
     logging.info(f"DIRECT GpControl run, using: \
           evaluator: {eval_used} , and pset: {pset_used}")
+
+    logging.info("--- %s seconds ---" % (time.time() - start_time))

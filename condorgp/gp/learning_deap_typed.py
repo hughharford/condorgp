@@ -30,7 +30,7 @@ from deap import tools
 from deap import gp
 
 from condorgp.util.log import CondorLogger
-from condorgp.factories.initial_factory import InitialFactory
+from condorgp.factories.factory import Factory
 
 class CondorDeapLearning:
     def __init__(self):
@@ -44,7 +44,7 @@ class CondorDeapLearning:
         filler_INIT = '>'*10
         self.log.info(f"{filler_INIT}, {__class__} - DEAP gp - run began {filler_INIT}")
 
-        self.util = InitialFactory().get_utils()
+        self.util = Factory().get_utils()
 
         # attempt at a strongly typed pset with adfs etc
         # aming to get multi-line output

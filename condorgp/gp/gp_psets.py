@@ -27,84 +27,120 @@ class GpPsets:
             print("GpPsets ERROR: " + str(e))
             return None
 
-    def get_default_untyped(self):
-         # basic untyped deap.gp.PrimitiveSet:
-        self.default_untyped = gp.PrimitiveSet("default_untyped", 1)
-        self.default_untyped.addPrimitive(numpy.add, 2, name="vadd")
-        self.default_untyped.addPrimitive(numpy.subtract, 2, name="vsub")
-        self.default_untyped.addPrimitive(numpy.multiply, 2, name="vmul")
-        self.default_untyped.addPrimitive(numpy.negative, 1, name="vneg")
-        self.default_untyped.addPrimitive(numpy.cos, 1, name="vcos")
-        self.default_untyped.addPrimitive(numpy.sin, 1, name="vsin")
-        self.default_untyped.addEphemeralConstant(
-                                                "number78",
-                                                78)
-        self.default_untyped.renameArguments(ARG0='x')
-        return self.default_untyped
+    # def get_default_untyped(self):
+    #      # basic untyped deap.gp.PrimitiveSet:
+    #     self.default_untyped = gp.PrimitiveSet("default_untyped", 1)
+    #     self.default_untyped.addPrimitive(numpy.add, 2, name="vadd")
+    #     self.default_untyped.addPrimitive(numpy.subtract, 2, name="vsub")
+    #     self.default_untyped.addPrimitive(numpy.multiply, 2, name="vmul")
+    #     self.default_untyped.addPrimitive(numpy.negative, 1, name="vneg")
+    #     self.default_untyped.addPrimitive(numpy.cos, 1, name="vcos")
+    #     self.default_untyped.addPrimitive(numpy.sin, 1, name="vsin")
+    #     self.default_untyped.addEphemeralConstant(
+    #                                             "number78",
+    #                                             78)
+    #     self.default_untyped.renameArguments(ARG0='x')
+    #     return self.default_untyped
 
-    def get_test_pset5c(self):
-        ''' test_pset5c '''
-        self.test5c = gp.PrimitiveSet("test_pset5c", 1)
-        self.test5c.addPrimitive(logging.info, 1, name="logging.info")
-        self.test5c.renameArguments(ARG0='x0')
-        return self.test5c
+    # def get_test_pset5c(self):
+    #     ''' test_pset5c '''
+    #     self.test5c = gp.PrimitiveSet("test_pset5c", 1)
+    #     self.test5c.addPrimitive(logging.info, 1, name="logging.info")
+    #     self.test5c.renameArguments(ARG0='x0')
+    #     return self.test5c
 
-    def get_test_pset7aTyped(self):
-        ''' test_pset_7aTyped '''
-        self.test7a = gp.PrimitiveSetTyped("test_pset_7aTyped",[object],str)
-        self.test7a.addTerminal(1, int)
-        self.test7a.addTerminal(0, int)
-        self.test7a.addPrimitive(self.cfs.get_alpha_model_A,[int],str)
-        self.test7a.addPrimitive(self.cfs.get_alpha_model_B,[int],str)
-        self.test7a.addPrimitive(self.cfs.get_alpha_model_C,[int],str)
-        self.test7a.addPrimitive(self.cfs.get_alpha_model_D,[int],str)
-        # dummy int primitive, with name "" to avoid func call
-        self.test7a.addPrimitive(self.cfs.double,[int],int, "")
+    # def get_test_pset7aTyped(self):
+    #     ''' test_pset_7aTyped '''
+    #     self.test7a = gp.PrimitiveSetTyped("test_pset_7aTyped",[object],str)
+    #     self.test7a.addTerminal(1, int)
+    #     self.test7a.addTerminal(0, int)
+    #     self.test7a.addPrimitive(self.cfs.get_alpha_model_A,[int],str)
+    #     self.test7a.addPrimitive(self.cfs.get_alpha_model_B,[int],str)
+    #     self.test7a.addPrimitive(self.cfs.get_alpha_model_C,[int],str)
+    #     self.test7a.addPrimitive(self.cfs.get_alpha_model_D,[int],str)
+    #     # dummy int primitive, with name "" to avoid func call
+    #     self.test7a.addPrimitive(self.cfs.double,[int],int, "")
 
-        return self.test7a
+    #     return self.test7a
+
+    def get_naut_pset_02_adf(self):
+        ''' naut_pset_02_adf
+
+        # looking to add simple ADF to integer choice and evolve:
+
+        # def get_config_strategy(self):
+        #     config = EMACrossConfig(
+        #         instrument_id=str(self.instrument.id),
+        #         bar_type=self.bar_type,
+        #         trade_size=Decimal(1_000_000),
+        #         fast_ema_period=100,
+        #         slow_ema_period=200,
+        #         )
+        #     return config
+        '''
+        bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+        bar_type2 = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+        self.SIM = Venue("SIM")
+        inst = TestInstrumentProvider.default_fx_ccy("AUD/USD", self.SIM)
+        inst2 = TestInstrumentProvider.default_fx_ccy("AUD/USD",self.SIM)
+        # a first basic primitive set for strongly typed GP using Nautilus
+        self.pset = gp.PrimitiveSetTyped("CGPNAUT01",
+                                         [], EMACrossConfig, "ARG")
+        # primary primitive, to enable function
+        self.pset.addPrimitive(EMACrossConfig,
+                               [StrInstr, StrBar, Decimal, LittleInt, BigInt],
+                               EMACrossConfig)
+        # first pset terminals:
+        self.pset.addTerminal(StrInstr(inst.id), StrInstr)
+        self.pset.addTerminal(StrInstr(inst2.id), StrInstr)
+        self.pset.addTerminal(bar_type, StrBar)
+        self.pset.addTerminal(bar_type2, StrBar)
+        self.pset.addTerminal(10, LittleInt)
+        self.pset.addTerminal(20, LittleInt)
+        self.pset.addTerminal(30, LittleInt)
+        self.pset.addTerminal(40, LittleInt)
+        self.pset.addTerminal(50, BigInt)
+        self.pset.addTerminal(100, BigInt)
+        self.pset.addTerminal(200, BigInt)
+        self.pset.addTerminal(1_000_000, int)
+        self.pset.addTerminal(2_000_000, int)
+        # below here were added to allow DEAP to populate
+        self.pset.addPrimitive(Decimal, [Decimal], Decimal)
+        self.pset.addPrimitive(str, [str], str)
+        self.pset.addPrimitive(int, [int], int)
+        self.pset.addTerminal(Decimal(1_000_000), Decimal)
+        self.pset.addTerminal("EMACrossConfig", EMACrossConfig)
+        # using specified int and str classes to reduce degress of freedom
+        self.pset.addPrimitive(BigInt, [BigInt], BigInt)
+        self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
+        self.pset.addPrimitive(str, [StrInstr], StrInstr)
+        self.pset.addPrimitive(str, [StrBar], StrBar)
+
+        self.adfset0 = gp.PrimitiveSet("ADF0", 2)
+        self.adfset0.addPrimitive(operator.add, 2)
+        self.adfset0.addPrimitive(operator.sub, 2)
+        self.adfset0.addPrimitive(operator.mul, 2)
+        self.adfset0.addPrimitive(protectedDiv, 2)
+        self.adfset0.addPrimitive(operator.neg, 1)
+        self.adfset0.addPrimitive(math.cos, 1)
+        self.adfset0.addPrimitive(math.sin, 1)
+        # self.adfset0.addADF(adfset1)
+        # self.adfset0.addADF(adfset2)
+        # self.adfset0.renameArguments(ARG0='x0')
+        # self.adfset0.renameArguments(ARG1='y0')
+
+        self.psets = (self.pset, self.adfset0)
 
 
-#     def get_adf2(self):
-#         self.adfset2 = gp.PrimitiveSet("ADF2", 2)
-#         self.adfset2.addPrimitive(operator.add, 2)
-#         self.adfset2.addPrimitive(operator.sub, 2)
-#         self.adfset2.addPrimitive(operator.mul, 2)
-#         self.adfset2.addPrimitive(self.cfs.protectedDiv, 2)
-#         self.adfset2.addPrimitive(operator.neg, 1)
-#         self.adfset2.addPrimitive(math.cos, 1)
-#         self.adfset2.addPrimitive(math.sin, 1)
-#         self.adfset2.renameArguments(ARG0='x2')
-#         self.adfset2.renameArguments(ARG1='y2')
-#         return self.adfset2
+        return self.pset
 
-#     def get_adf1(self):
-#         self.adfset1 = gp.PrimitiveSet("ADF1", 2)
-#         self.adfset1.addPrimitive(operator.add, 2)
-#         self.adfset1.addPrimitive(operator.sub, 2)
-#         self.adfset1.addPrimitive(operator.mul, 2)
-#         self.adfset1.addPrimitive(self.cfs.protectedDiv, 2)
-#         self.adfset1.addPrimitive(operator.neg, 1)
-#         self.adfset1.addPrimitive(math.cos, 1)
-#         self.adfset1.addPrimitive(math.sin, 1)
-#         self.adfset1.addADF(self.get_adf2())
-#         self.adfset1.renameArguments(ARG0='x1')
-#         self.adfset1.renameArguments(ARG1='y1')
-#         return self.adfset1
+# Define new functions
+def protectedDiv(left, right):
+    try:
+        return left / right
+    except ZeroDivisionError:
+        return 1
 
-#     def get_adf0(self):
-#         self.adfset0 = gp.PrimitiveSet("ADF0", 2)
-#         self.adfset0.addPrimitive(operator.add, 2)
-#         self.adfset0.addPrimitive(operator.sub, 2)
-#         self.adfset0.addPrimitive(operator.mul, 2)
-#         self.adfset0.addPrimitive(self.cfs.protectedDiv, 2)
-#         self.adfset0.addPrimitive(operator.neg, 1)
-#         self.adfset0.addPrimitive(math.cos, 1)
-#         self.adfset0.addPrimitive(math.sin, 1)
-#         self.adfset0.addADF(self.get_adf1())
-#         self.adfset0.addADF(self.get_adf2())
-#         self.adfset0.renameArguments(ARG0='x0')
-#         self.adfset0.renameArguments(ARG1='y0')
-#         return self.adfset0
 
     def get_naut_pset_01(self):
         ''' naut_pset_01

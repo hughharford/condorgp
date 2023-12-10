@@ -5,12 +5,12 @@ from condorgp.gp.gp_control import GpControl
 from condorgp.gp.gp_functions import GpFunctions
 from condorgp.learning.dependency_factory import DependencyFactory
 from condorgp.learning.dependency_factory_overridden import DependencyFactoryOverridden
-from condorgp.factories.initial_factory import InitialFactory
+from condorgp.factories.factory import Factory
 
 
 @pytest.fixture
 def initial_factory():
-    return InitialFactory()
+    return Factory()
 
 @pytest.fixture
 def params():
