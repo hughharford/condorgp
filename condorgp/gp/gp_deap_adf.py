@@ -31,12 +31,12 @@ class GpDeapADF(GpDeap):
             self.psets = gp_psets_cls.get_named_pset(new_pset_name)
 
         if not self.psets:
-            logging.warn(f"GpDeapADF: running pset "+
+            logging.warning(f"GpDeapADF: running pset "+
                          "{self.pset.__name__}")
             self.psets = gp_psets_cls.get_naut_pset_01()
 
         if not self.psets:
-            logging.warn(f"ERROR GpDeapADF: no pset!")
+            logging.warning(f"ERROR GpDeapADF: no pset!")
 
         logging.debug(self.psets[0].name)
         logging.debug(self.psets[1].name)

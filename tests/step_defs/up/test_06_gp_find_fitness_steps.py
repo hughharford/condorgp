@@ -47,7 +47,7 @@ Feature: Finding the fitness after every test is critcal
       | naut_04_egFX.py | naut-run-04 | -16.160361991815254 |
       | naut_03_egFX.py | naut-run-03 | -21.49663142709111  |
       | naut_02_egFX.py | naut-run-02 | 15.966514528587545  |
-      | fictional.py    | naut-run-77 | -1                  |
+      | fictional.py    | naut-run-77 | -111000             |
 
 """
 # SCENARIO 1

@@ -20,7 +20,7 @@ class GpControl:
         self.default_pset = 'naut_pset_01'
         self.default_eval = self.eval_nautilus
         self.run_backtest = 1
-        self.use_adfs = 1
+        self.use_adfs = 0 # default to zero. i.e. not using
         # gather resources
         self.p = Params()
         self.factory = Factory()

@@ -41,6 +41,20 @@ class GpPsets:
     #     self.default_untyped.renameArguments(ARG0='x')
     #     return self.default_untyped
 
+    def get_test_pset5a(self):
+        ''' test_pset5a '''
+        self.test5a = gp.PrimitiveSet("test_pset5a", 0)
+        self.test5a.addPrimitive(numpy.multiply, 2, name="vmul")
+        return self.test5a
+
+    def get_test_pset5b(self):
+        ''' test_pset5b '''
+        self.test5b = gp.PrimitiveSet("test_pset5b", 0)
+        self.test5b.addPrimitive(numpy.add, 2, name="vadd")
+        self.test5b.addPrimitive(print, 1, name="print")
+        self.test5b.addTerminal("***_***_***", "3x3")
+        return self.test5b
+
     # def get_test_pset5c(self):
     #     ''' test_pset5c '''
     #     self.test5c = gp.PrimitiveSet("test_pset5c", 1)
