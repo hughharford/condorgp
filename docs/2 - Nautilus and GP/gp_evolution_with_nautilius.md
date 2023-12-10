@@ -6,6 +6,11 @@
 
       See: condorgp/evaluation/nautilus/naut_runner_05_evolve_strategy_01.py
 
+  # 1a # Ensure typed psets can handle ADFs effectively
+    Try:
+      A number of strategies added to the engine, each ADFs
+      A range of indicators available for strategies
+
   # 2 # Then use the example strategies given by Nautilus as first options
       See: nautilus_trader/examples/strategies
 
@@ -13,7 +18,7 @@
       i.e. of a strategy itself
 
       The blank template is:
-      condorgp/evaluation/nautilus/naut_raw/blank_strat_n_strat_config.py
+      condorgp/evaluation/naut_raw/blank_strat_n_strat_config.py
       Found in, and copied directly from:
       nautilus_trader/examples/strategies/blank.py
 
