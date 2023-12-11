@@ -35,14 +35,6 @@ class GpDeap(GpProvider):
                 logging.warn("Gp_Deap WARNING, default untyped used instead: " + str(e))
                 self.pset = pset_obj.get_default_untyped()
 
-
-        # if functions == '' and terminals == '':
-        #     return self.pset
-        # else:
-        #     print("need to do something to add primitives")
-            # self.pset.addPrimitive(
-            #     functions['method'], functions['arrity'], functions['name'])
-
         return self.pset
 
 
@@ -110,8 +102,12 @@ class GpDeap(GpProvider):
         self.stats.register("min", numpy.min)
         self.stats.register("max", numpy.max)
 
-    def run_gp(self, inputs):
+        self.logbook = tools.Logbook()
+        self.logbook.header = "gen", "evals", "std", "min", "avg", "max"
+
+    def run_gp(self):
         ''' Do a GP run, using DEAP algorithms.eaSimple '''
+        inputs = [0,0,0]
         self.values = inputs
 
         self.pop, self.logbook = algorithms.eaSimple(self.pop,
@@ -121,5 +117,4 @@ class GpDeap(GpProvider):
                                                     self.ngen,
                                                     self.stats,
                                                     halloffame=self.hof)
-        self.logbook.header = "gen", "nevals", "avg", "std", "min", "max"
         return self.pop, self.stats, self.hof, self.logbook

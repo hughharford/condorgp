@@ -30,10 +30,10 @@ class GpDeapADF(GpDeap):
             logging.info(f"GpDeapADF SETTING pset: {new_pset_name}")
             self.psets = gp_psets_cls.get_named_pset(new_pset_name)
 
-        if not self.psets:
-            logging.warning(f"GpDeapADF: running pset "+
-                         "{self.pset.__name__}")
-            self.psets = gp_psets_cls.get_naut_pset_01()
+        # if not self.psets:
+        #     logging.warning(f"GpDeapADF: running pset "+
+        #                  "{self.pset.__name__}")
+        #     # self.psets = gp_psets_cls.get_naut_pset_01()
 
         if not self.psets:
             logging.warning(f"ERROR GpDeapADF: no pset!")
@@ -56,7 +56,10 @@ class GpDeapADF(GpDeap):
         Fitness function, Individual and GP tree base classes. Population,
         genetic operators, initiation of population mechanism.
         '''
-        self.rand = random.seed(318)
+        # self.rand = random.seed(318) - now sets in run_gp
+
+        logging.debug(f"self.adfset name: {self.adfset.name}")
+        logging.debug(f"self.pset name: {self.pset.name}")
 
         # fundamentals for the gp tree
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))
@@ -83,6 +86,67 @@ class GpDeapADF(GpDeap):
         self.toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
         self.toolbox.register('mutate', gp.mutUniform, expr=self.toolbox.expr_mut)
 
-        ind = self.toolbox.individual()
+    def run_gp(self, inputs):
+        ''' GpDeapADF. Do a GP run.
+            previously used DEAP algorithms.eaSimple but this won't handle ADFs
+            so trying example for '''
 
-        pop = self.toolbox.population(n=100)
+        logging.debug(f"gp_deap_adf.run_gp: {'@'*5}")
+        random.seed(3227)
+        NGEN = self.ngen
+        logging.debug(f"run_gp: NGEN: {NGEN}")
+
+        CXPB, MUTPB = 0.5, 0.2
+
+        ind = self.toolbox.individual()
+        pop = self.toolbox.population(n=NGEN)
+        logging.debug(f"{'&&'*5} gp_deap_adf.run_gp: {'&&'*5}")
+
+        # ************************************
+        # breakpoint()
+        # ************************************
+
+        # Evaluate the entire population
+        for ind in pop:
+            ind.fitness.values = self.toolbox.evaluate(ind)
+
+        self.hof.update(pop)
+        self.record = self.stats.compile(pop)
+        self.logbook.record(gen=0, evals=len(pop), **self.record)
+        logging.info(self.logbook.stream)
+
+        for g in range(1, NGEN):
+            # Select the offspring
+            self.offspring = self.toolbox.select(pop, len(pop))
+            # Clone the offspring
+            self.offspring = [self.toolbox.clone(ind) for ind in self.offspring]
+
+            # Apply crossover and mutation
+            for ind1, ind2 in zip(self.offspring[::2], self.offspring[1::2]):
+                for tree1, tree2 in zip(ind1, ind2):
+                    if random.random() < CXPB:
+                        self.toolbox.mate(tree1, tree2)
+                        del ind1.fitness.values
+                        del ind2.fitness.values
+
+            for ind in self.offspring:
+                for tree, pset in zip(ind, self.psets):
+                    if random.random() < MUTPB:
+                        self.toolbox.mutate(individual=tree, pset=pset)
+                        del ind.fitness.values
+
+            # Evaluate the individuals with an invalid fitness
+            invalids = [ind for ind in self.offspring if not ind.fitness.valid]
+            for ind in invalids:
+                ind.fitness.values = self.toolbox.evaluate(ind)
+
+            # Replacement of the population by the offspring
+            pop = self.offspring
+            self.hof.update(pop)
+            self.record = self.stats.compile(pop)
+            self.logbook.record(gen=g, evals=len(invalids), **self.record)
+            logging.info(self.logbook.stream)
+
+        logging.info('Best individual : ', self.hof[0][0], self.hof[0].fitness)
+
+        return pop, self.stats, self.hof, self.logbook

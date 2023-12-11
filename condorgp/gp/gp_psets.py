@@ -91,11 +91,28 @@ class GpPsets:
         #         )
         #     return config
         '''
+
+        # ADF0 pset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        self.adfset0 = gp.PrimitiveSetTyped("ADF0", [LittleInt, LittleInt], LittleInt)
+        self.adfset0.addPrimitive(operator.add, [LittleInt, LittleInt], LittleInt)
+        self.adfset0.addPrimitive(operator.sub, [LittleInt, LittleInt], LittleInt)
+        self.adfset0.addPrimitive(operator.mul, [LittleInt], LittleInt)
+        # self.adfset0.addPrimitive(protectedDiv, [LittleInt, LittleInt], LittleInt)
+        self.adfset0.addPrimitive(operator.neg, [LittleInt], LittleInt)
+        # self.adfset0.addPrimitive(math.cos, 1)
+        # self.adfset0.addPrimitive(math.sin, 1)
+        # self.adfset0.addADF(adfset1)
+        # self.adfset0.addADF(adfset2)
+        # self.adfset0.renameArguments(ARG0='x0')
+        # self.adfset0.renameArguments(ARG1='y0')
+
+        # MAIN pset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
         bar_type2 = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
         self.SIM = Venue("SIM")
         inst = TestInstrumentProvider.default_fx_ccy("AUD/USD", self.SIM)
         inst2 = TestInstrumentProvider.default_fx_ccy("AUD/USD",self.SIM)
+
         # a first basic primitive set for strongly typed GP using Nautilus
         self.pset = gp.PrimitiveSetTyped("CGPNAUT02",
                                          [], EMACrossConfig, "ARG")
@@ -128,22 +145,10 @@ class GpPsets:
         self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
         self.pset.addPrimitive(str, [StrInstr], StrInstr)
         self.pset.addPrimitive(str, [StrBar], StrBar)
-
-        self.adfset0 = gp.PrimitiveSet("ADF0", 2)
-        self.adfset0.addPrimitive(operator.add, 2)
-        self.adfset0.addPrimitive(operator.sub, 2)
-        self.adfset0.addPrimitive(operator.mul, 2)
-        self.adfset0.addPrimitive(protectedDiv, 2)
-        self.adfset0.addPrimitive(operator.neg, 1)
-        self.adfset0.addPrimitive(math.cos, 1)
-        self.adfset0.addPrimitive(math.sin, 1)
-        # self.adfset0.addADF(adfset1)
-        # self.adfset0.addADF(adfset2)
-        # self.adfset0.renameArguments(ARG0='x0')
-        # self.adfset0.renameArguments(ARG1='y0')
+        # add ADF:
+        self.pset.addADF(self.adfset0)
 
         self.psets = (self.pset, self.adfset0)
-
 
         return self.psets
 
@@ -237,8 +242,8 @@ if __name__ == '__main__':
     gp_custom_funcs = cf.get_gp_custom_functions()
     gpp = GpPsets(gp_custom_funcs)
     pset_and_adf = gpp.get_named_pset('naut_pset_02_adf')
-    print(type(pset_and_adf[0]))
-    print(type(pset_and_adf[1]))
+    print(f"{type(pset_and_adf[0])} named: {pset_and_adf[0].name}")
+    print(f"{type(pset_and_adf[1])} named: {pset_and_adf[1].name}")
 
     # # print('looking at terminals:')
     # print('count of terminals: ', one.terms_count,

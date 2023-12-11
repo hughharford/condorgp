@@ -79,7 +79,7 @@ class GpControl:
                   6: the evaluator
                   7: the stats feedback
         '''
-        logging.debug(f"GpControl: starting setup_gp >>>>>>>>>>> ")
+        logging.debug(f"GpControl: starting setup_gp {'>'*8}")
 
         if pset_spec == '': pset_spec = self.default_pset
         funcs = {}     # Set: 1. additional functions & terminals
@@ -107,7 +107,7 @@ class GpControl:
         self.gp.set_stats(stat_params)
         logging.debug(f"GpControl: set_stats complete")
 
-        logging.debug(f"GpControl: SETUP_GP complete")
+        logging.debug(f"GpControl: complete SETUP_GP {'>'*8}")
 
     def set_and_get_pset(self, pset_spec = ""):
         ''' get and set a tailored pset '''
@@ -145,7 +145,14 @@ class GpControl:
 
     def run_gp(self, inputs = [0,0,0]):
         ''' undertakes the run as specified'''
-        self.pop, self.stats, self.hof, self.logbook = self.gp.run_gp(inputs)
+        logging.debug(f"GpControl: starting GP run now {'_'*10}")
+        try:
+            if self.use_adfs:
+                self.pop, self.stats, self.hof, self.logbook = self.gp.run_gp(inputs)
+            else:
+                self.pop, self.stats, self.hof, self.logbook = self.gp.run_gp()
+        except BaseException as e:
+            logging.error(f"GpControl ERROR: {e}")
 
         # show logbook
         logging.info(' deap __ Logbook:')
@@ -161,13 +168,13 @@ class GpControl:
         '''
         evalf_name = 'eval_nautilus'
         # Transform the tree expression in a callable function
-        evolved_func = self.gp.toolbox.compile(expr=individual)
+        func = self.gp.toolbox.compile(expr=individual)
         logging.info(f" >>> eval_nautilus individual: {individual}")
         new_fitness = 0.0
         try:
             if self.run_backtest:
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
-                self.backtester.basic_run(evolved_func=evolved_func)
+                self.backtester.basic_run(evolved_func=func)
                 new_fitness = self.gpf.find_fitness()
             else:
                 logging.debug(f"ERROR {evalf_name} {'>'*2} "+
@@ -190,13 +197,13 @@ if __name__ == "__main__":
         pset_used = 'naut_pset_01' #  'test_pset5c'
     eval_used = 'eval_nautilus'
 
-    newpop = 1
-    gens = 1
+    newpop = 2
+    gens = 2
 
     gpc.select_gp_provider()
     gpc.setup_gp(pset_spec=pset_used, pop_size=newpop, no_gens=gens)
     gpc.set_test_evaluator(eval_used)
-    gpc.run_backtest = 0
+    gpc.run_backtest = 1
     gpc.run_gp()
 
     logging.info(' deap __ Hall of fame:')
