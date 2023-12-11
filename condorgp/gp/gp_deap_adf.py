@@ -65,7 +65,11 @@ class GpDeapADF(GpDeap):
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))
         creator.create("Tree", gp.PrimitiveTree)
 
-        creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMax)
+        creator.create("Individual", list, fitness=creator.FitnessMax) # list was gp.PrimitiveTree
+
+        # NO DICE __ Adding these reduced __init__ completion
+        # creator.create("ADF0", gp.PrimitiveTree, pset=self.adfset)
+        # creator.create("MAIN", gp.PrimitiveTree, pset=self.pset)
 
         self.toolbox = base.Toolbox()
         self.toolbox.register('adf_expr0', gp.genFull, pset=self.adfset, min_=1, max_=2)
@@ -73,6 +77,10 @@ class GpDeapADF(GpDeap):
 
         self.toolbox.register('ADF0', tools.initIterate, creator.Tree, self.toolbox.adf_expr0)
         self.toolbox.register('MAIN', tools.initIterate, creator.Tree, self.toolbox.main_expr)
+
+        # NO DICE __ Adding these reduced __init__ completion
+        # self.toolbox.register('ADF1', tools.initIterate, creator.ADF0, self.toolbox.adf_expr0)
+        # self.toolbox.register('MAIN', tools.initIterate, creator.MAIN, self.toolbox.main_expr)
 
         self.func_cycle = [self.toolbox.MAIN, self.toolbox.ADF0]
 
@@ -92,23 +100,28 @@ class GpDeapADF(GpDeap):
             so trying example for '''
 
         logging.debug(f"gp_deap_adf.run_gp: {'@'*5}")
+        # logging.debug(f"{'&&'*5} gp_deap_adf.run_gp: {'&&'*5}")
+
         random.seed(3227)
         NGEN = self.ngen
-        logging.debug(f"run_gp: NGEN: {NGEN}")
+        # logging.debug(f"run_gp: NGEN: {NGEN}")
 
         CXPB, MUTPB = 0.5, 0.2
 
-        ind = self.toolbox.individual()
-        pop = self.toolbox.population(n=NGEN)
-        logging.debug(f"{'&&'*5} gp_deap_adf.run_gp: {'&&'*5}")
+        try:
+            ind = self.toolbox.individual()
+            pop = self.toolbox.population(n=NGEN)
 
         # ************************************
         # breakpoint()
         # ************************************
 
-        # Evaluate the entire population
-        for ind in pop:
-            ind.fitness.values = self.toolbox.evaluate(ind)
+            # Evaluate the entire population
+            for ind in pop:
+                ind.fitness.values = self.toolbox.evaluate(ind)
+
+        except BaseException as e:
+            logging.error(f"gp_deap_adf.run_gp ERROR: {e}")
 
         self.hof.update(pop)
         self.record = self.stats.compile(pop)

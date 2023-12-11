@@ -93,12 +93,14 @@ class GpPsets:
         '''
 
         # ADF0 pset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-        self.adfset0 = gp.PrimitiveSetTyped("ADF0", [LittleInt, LittleInt], LittleInt)
+        self.adfset0 = gp.PrimitiveSetTyped("ADF0", [LittleInt], LittleInt, "ARG")
         self.adfset0.addPrimitive(operator.add, [LittleInt, LittleInt], LittleInt)
         self.adfset0.addPrimitive(operator.sub, [LittleInt, LittleInt], LittleInt)
         self.adfset0.addPrimitive(operator.mul, [LittleInt], LittleInt)
         # self.adfset0.addPrimitive(protectedDiv, [LittleInt, LittleInt], LittleInt)
         self.adfset0.addPrimitive(operator.neg, [LittleInt], LittleInt)
+        # self.adfset0.addTerminal(10, LittleInt)
+
         # self.adfset0.addPrimitive(math.cos, 1)
         # self.adfset0.addPrimitive(math.sin, 1)
         # self.adfset0.addADF(adfset1)

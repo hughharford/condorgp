@@ -197,7 +197,7 @@ if __name__ == "__main__":
         pset_used = 'naut_pset_01' #  'test_pset5c'
     eval_used = 'eval_nautilus'
 
-    newpop = 2
+    newpop = 3
     gens = 2
 
     gpc.select_gp_provider()
