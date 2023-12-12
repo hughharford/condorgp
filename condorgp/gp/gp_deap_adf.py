@@ -27,7 +27,7 @@ class GpDeapADF(GpDeap):
         '''
 
         if new_pset_name:
-            logging.info(f"GpDeapADF SETTING pset: {new_pset_name}")
+            logging.debug(f"GpDeapADF SETTING pset: {new_pset_name}")
             self.psets = gp_psets_cls.get_named_pset(new_pset_name)
 
         # if not self.psets:

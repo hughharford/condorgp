@@ -23,7 +23,7 @@ class RunNautilus():
         self.cmd_str = "python"
         self.eval_path = self.naut_dict['NAUTILUS_EVAL_PATH']
 
-        logging.info(">> RunNautilus evaluation ready NAUTILUS >> ")
+        logging.debug(">> RunNautilus evaluation ready NAUTILUS >> ")
 
 
     def basic_run(self, specified_script: str="", evolved_func=""):

@@ -169,7 +169,8 @@ class GpControl:
         evalf_name = 'eval_nautilus'
         # Transform the tree expression in a callable function
         func = self.gp.toolbox.compile(expr=individual)
-        logging.info(f" >>> eval_nautilus individual: {individual}")
+        printed_ind = [str(tree) for tree in individual]
+        logging.info(f" >>> eval_nautilus individual: {printed_ind}")
         new_fitness = 0.0
         try:
             if self.run_backtest:
@@ -197,7 +198,7 @@ if __name__ == "__main__":
         pset_used = 'naut_pset_01' #  'test_pset5c'
     eval_used = 'eval_nautilus'
 
-    newpop = 3
+    newpop = 5
     gens = 2
 
     gpc.select_gp_provider()
@@ -205,13 +206,14 @@ if __name__ == "__main__":
     gpc.set_test_evaluator(eval_used)
     gpc.run_backtest = 1
     gpc.run_gp()
-
     logging.info(' deap __ Hall of fame:')
     for x, individual in enumerate(gpc.gp.hof):
-        logging.info(f" deap generated individual: {gpc.gp.hof.items[x]}")
+        printed_ind = [str(tree) for tree in gpc.gp.hof.items[x]]
+        logging.info(f" deap generated individual: {printed_ind}")
 
-    logging.info(' deap __ Logbook:')
-    logging.info(gpc.gp.logbook)
+    # now in gpc.run_gp
+    # logging.info(' deap __ Logbook:')
+    # logging.info(gpc.gp.logbook)
 
     logging.info(f"DIRECT GpControl run, using: \
           evaluator: {eval_used} , and pset: {pset_used}")
