@@ -21,7 +21,7 @@ CONVERTERS = {
 
 pytest.foundfitness = 99
 
-scenarios('../../features/04_deap_runs_nautilus.feature')
+scenarios('../../features/up/04_deap_runs_nautilus.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #    Deap runs Nautilus tests for each evolved individual

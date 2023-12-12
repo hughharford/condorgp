@@ -9,7 +9,7 @@ from condorgp.factories.factory import Factory
 
 pytest.DEAP_ONE = ""
 
-scenarios('../../features/03_deap_basics.feature')
+scenarios('../../features/up/03_deap_basics.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             Deap basic operations

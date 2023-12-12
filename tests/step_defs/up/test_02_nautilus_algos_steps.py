@@ -18,7 +18,7 @@ CONVERTERS = {
 
 pytest.OUTPUT_IND = ""
 
-scenarios('../../features/02_nautilus_algos.feature')
+scenarios('../../features/up/02_nautilus_algos.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             Nautilus tests each evolved individual

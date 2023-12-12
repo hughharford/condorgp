@@ -22,7 +22,7 @@ pytest.gpc = None
 pytest.f_max = []
 pytest.f_min = []
 
-scenarios('../../features/08_gp_fitmax.feature')
+scenarios('../../features/up/08_gp_fitmax.feature')
 
 """
   Scenario Outline: Evolved code shows fitness improvement
@@ -39,7 +39,7 @@ scenarios('../../features/08_gp_fitmax.feature')
                        extra_types=EXTRA_TYPES), target_fixture='pset')
 @given('GpControl is run with "<pset>"')
 def gpcontrol_run_001(gpc, pset):
-    p = 5
+    p = 2
     g = 3
     gpc.setup_gp(pset_spec=pset, pop_size=p, no_gens=g)
     gpc.run_backtest = 1

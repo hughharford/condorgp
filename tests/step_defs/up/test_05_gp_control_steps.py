@@ -20,7 +20,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../../features/05_gp_control.feature')
+scenarios('../../features/up/05_gp_control.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             GpControl can set different psets as needed

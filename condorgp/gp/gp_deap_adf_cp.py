@@ -8,45 +8,15 @@ from deap import creator
 from deap import tools
 from deap import gp
 
-from condorgp.gp.gp_deap import GpDeap
+from condorgp.gp.gp_deap import GpDeapADF
 from condorgp.util.log import CondorLogger
 
-class GpDeapADF(GpDeap):
+class GpDeapAdfCp(GpDeapADF):
     def __init__(self):
         '''
             Provides the workings for Deap to operate.
         '''
         super.__init__
-
-    def set_defined_pset(self, gp_psets_cls,
-                 new_pset_name = '',
-                 functions: dict = '',
-                 terminals: dict = ''):
-        ''' sets the population set for the gp run.
-        inputs: the functions and terminals by name, their arrity and function
-        '''
-
-        if new_pset_name:
-            logging.debug(f"GpDeapADF SETTING pset: {new_pset_name}")
-            self.psets = gp_psets_cls.get_named_pset(new_pset_name)
-
-        # if not self.psets:
-        #     logging.warning(f"GpDeapADF: running pset "+
-        #                  "{self.pset.__name__}")
-        #     # self.psets = gp_psets_cls.get_naut_pset_01()
-
-        if not self.psets:
-            logging.warning(f"ERROR GpDeapADF: no pset!")
-
-        logging.debug(self.psets[0].name)
-        logging.debug(self.psets[1].name)
-
-        # # seperate out main and adf:
-        self.pset = self.psets[0]
-        self.adfset = self.psets[1]
-
-        return self.psets
-
 
     def set_gp_params(self, params: dict):
         '''

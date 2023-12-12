@@ -20,7 +20,7 @@ CONVERTERS = {
 
 pytest.gpc = None
 
-scenarios('../features/09_gp_typed_adf.feature')
+scenarios('../../features/up/09_gp_typed_adf.feature')
 
 """
 Feature: GpControl's typed evolved code must be runnable
@@ -47,14 +47,16 @@ def gpcontrol_with_typed_psets08(gpc, pset_ADF):
     gpc.select_gp_provider()
     gpc.setup_gp(pset_spec=pset_ADF, pop_size=p, no_gens=g)
     gpc.run_backtest = 1
-    pytest.gpc = gpc
+    # pytest.gpc = gpc
 
 @when(parsers.cfparse('a short ADF run is made with "{evaluator:String}"',
                         extra_types=EXTRA_TYPES), target_fixture='evaluator')
 @when('a short ADF run is made with "<evaluator>"', target_fixture='<evaluator>')
-def first_ADF_run(evaluator):
-    pytest.gpc.set_test_evaluator(evaluator)
-    pytest.gpc.run_gp()
+def first_ADF_run(gpc, evaluator):
+    # pytest.
+    gpc.set_test_evaluator(evaluator)
+    # pytest.
+    gpc.run_gp()
 
 @then('the fitness is not zero')
 def adf_fitness_is_not_zero(gpc):

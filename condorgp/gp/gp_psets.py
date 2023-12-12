@@ -99,14 +99,9 @@ class GpPsets:
         self.adfset0.addPrimitive(operator.mul, [LittleInt], LittleInt)
         # self.adfset0.addPrimitive(protectedDiv, [LittleInt, LittleInt], LittleInt)
         self.adfset0.addPrimitive(operator.neg, [LittleInt], LittleInt)
-        # self.adfset0.addTerminal(10, LittleInt)
 
-        # self.adfset0.addPrimitive(math.cos, 1)
-        # self.adfset0.addPrimitive(math.sin, 1)
-        # self.adfset0.addADF(adfset1)
         # self.adfset0.addADF(adfset2)
         # self.adfset0.renameArguments(ARG0='x0')
-        # self.adfset0.renameArguments(ARG1='y0')
 
         # MAIN pset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"

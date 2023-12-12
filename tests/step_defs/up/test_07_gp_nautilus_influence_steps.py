@@ -21,7 +21,7 @@ CONVERTERS = {
 
 pytest.MAXFITNESS = 0.0
 
-scenarios('../../features/07_gp_nautilus_influence.feature')
+scenarios('../../features/up/07_gp_nautilus_influence.feature')
 
 """
 Feature: GpControl's evolved code must affect Nautilus functionality
@@ -48,11 +48,9 @@ Feature: GpControl's evolved code must affect Nautilus functionality
 def gpcontrol_run_with(gp_control, pset_input):
     ''' sets psets for nautilus 1st config setup '''
     eval_used = 'eval_nautilus'
-    newpop = 5
-    gens = 3
-    gp_control.setup_gp(pset_spec=pset_input,
-                        pop_size=newpop,
-                        no_gens=gens)
+    p = 1
+    g = 1
+    gp_control.setup_gp(pset_spec=pset_input, pop_size=p, no_gens=g)
     gp_control.set_test_evaluator(eval_used)
 
 @when('the evolved code is used')

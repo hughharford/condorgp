@@ -198,11 +198,11 @@ if __name__ == "__main__":
         pset_used = 'naut_pset_01' #  'test_pset5c'
     eval_used = 'eval_nautilus'
 
-    newpop = 1
-    gens = 1
+    p = 1
+    g = 1
 
     gpc.select_gp_provider()
-    gpc.setup_gp(pset_spec=pset_used, pop_size=newpop, no_gens=gens)
+    gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
     gpc.set_test_evaluator(eval_used)
     gpc.run_backtest = 1
     gpc.run_gp()
