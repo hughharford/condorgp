@@ -9,15 +9,13 @@ from deap import tools
 from deap import gp
 
 from condorgp.interfaces.gp_provider import GpProvider
-from condorgp.util.log import CondorLogger
 
 class GpDeap(GpProvider):
     def __init__(self):
         '''
             Provides the workings for Deap to operate.
         '''
-        pass
-        # CondorLogger()
+        self.verbose = 0
 
     def set_defined_pset(self, pset_obj,
                  new_pset_name = '',
@@ -83,7 +81,8 @@ class GpDeap(GpProvider):
 
     def set_pop_size(self, pop_size: int = 2):
         ''' Sets population size as required '''
-        self.pop = self.toolbox.population(n=pop_size)
+        self.pop_size = pop_size
+        self.pop = self.toolbox.population(n=self.pop_size)
 
     def set_evaluator(self, new_evaluator):
         ''' Sets evaluation function '''

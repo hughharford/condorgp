@@ -14,41 +14,67 @@ class GpControl:
             Setup, sizing, initiation of gp runs: psets, operators, evaluator.
             The major dependency is DEAP.
         '''
-        logging.info(f"{'>'*5}, GpControl Initialising {'>'*5}")
+        try:
+            logging.info(f"{'>'*5}, GpControl Initialising {'>'*5}")
 
-        # default population set and evaluator (fitness function)
-        self.default_pset = 'naut_pset_01'
-        self.default_eval = self.eval_nautilus
-        self.run_backtest = 1
-        # gather resources
-        self.p = Params()
-        self.factory = Factory()
-        self.initiate_logger()
-        self.inject_utils()
-        self.keep_logs_tidy()
-        self.inject_backtest_runner()
+            # default population set and evaluator (fitness function)
+            self.default_pset = 'naut_pset_01'
+            self.default_eval = self.eval_nautilus
+            self.run_backtest = 1
+            self.verbose = 1 # default to print out
+            # gather resources
+            self.p = Params()
+            self.factory = Factory()
+            self.initiate_logger()
+            self.inject_utils()
+            self.keep_logs_tidy()
+            self.inject_backtest_runner()
 
-        self.use_adfs = 0 # default to zero. i.e. not using
-        if self.use_adfs == 0:
-            self.inject_gp() # call via select_gp_provider if adfs in use
+            self.checkpointing = None # default to None. i.e. not using
+            self.use_adfs = 0 # default to zero. i.e. not using
 
-        logging.debug(f"GpControl: __init__ complete")
+            logging.debug(f"GpControl: __init__ complete")
+        except BaseException as e:
+            logging.error(f"GPC ERROR: {e}")
 
-    def select_gp_provider(self):
+    def set_gp_n_cp(self, freq, cp_file:str):
+        ''' setup variables for DEAP checkpointing with gp_deap_adf_cp'''
+        try:
+            if not cp_file:
+                raise ValueError(f"cp_file missing: set_gp_n_cp.")
+            self.checkpointing = 1
+            self.inject_gp() # to establish self.gpc first
+            self.gp.checkpoint_freq = freq
+            self.run_done_txt = self.p.naut_dict['RUN_DONE_TEXT']
+            self.gp.checkpointfile = cp_file + '.pkl'
+            cp_path = self.p.naut_dict['CHECKPOINT_PATH']
+            self.gp.checkpointfilepath = cp_path + self.gp.checkpointfile
+            logging.info(f"GpControl - will checkpoint @ {freq}g's.")
+            logging.debug(f"GpControl: set checkpointing complete")
+        except BaseException as e:
+            logging.error(f"gpc.set_gp_n_cp: {e}")
+
+    def select_gp_provider_for_ADFs(self):
+        ''' to be called for ADF without Checkpointing'''
         self.inject_gp()
 
     def inject_gp(self):
         ''' dependency injection of gp '''
-        cf = CustomFuncsFactory()
-        self.gp_custom_funcs = cf.get_gp_custom_functions()
-        if self.use_adfs:
-            self.gp = self.factory.get_gp_adf_provider()
-        else:
-            self.gp = self.factory.get_gp_provider()
-        self.gp_psets_cls = self.factory.get_gp_psets(self.gp_custom_funcs)
-        #  not using get_gp_naut_psets - separating out creates complications
-        self.gpf = self.factory.get_gp_funcs()
-        logging.debug(f"GpControl: inject_gp complete")
+        try:
+            cf = CustomFuncsFactory()
+            self.gp_custom_funcs = cf.get_gp_custom_functions()
+            if self.checkpointing:
+                self.gp = self.factory.get_gp_adf_cp_provider()
+            elif self.use_adfs:
+                self.gp = self.factory.get_gp_adf_provider()
+            else:
+                self.gp = self.factory.get_gp_provider()
+            self.gp_psets_cls = self.factory.get_gp_psets(self.gp_custom_funcs)
+            #  not using get_gp_naut_psets - separating out creates complications
+            self.gpf = self.factory.get_gp_funcs()
+            logging.debug(f"GpControl: inject_gp complete")
+        except BaseException as e:
+            logging.error(f"gpc.inject_gp ERROR: {e}")
 
     def inject_utils(self):
         ''' dependency injection of utils '''
@@ -80,6 +106,9 @@ class GpControl:
                   7: the stats feedback
         '''
         logging.debug(f"GpControl: starting setup_gp {'>'*8}")
+
+        # set verbosity in gp:
+        self.gp.verbose = self.verbose
 
         if pset_spec == '': pset_spec = self.default_pset
         funcs = {}     # Set: 1. additional functions & terminals
@@ -170,7 +199,8 @@ class GpControl:
         # Transform the tree expression in a callable function
         func = self.gp.toolbox.compile(expr=individual)
         printed_ind = [str(tree) for tree in individual]
-        logging.info(f" >>> eval_nautilus individual: {printed_ind}")
+        if self.verbose:
+            logging.info(f" >>> eval_nautilus individual: {printed_ind}")
         new_fitness = 0.0
         try:
             if self.run_backtest:
@@ -182,8 +212,8 @@ class GpControl:
                               f"NAUTILUS {'>'*4} {new_fitness}")
         except BaseException as e:
             logging.error(f"ERROR {evalf_name}, attempting Nautilus run: {e}")
-
-        logging.info(f'GpControl.{evalf_name}, new fitness {new_fitness}')
+        if self.verbose:
+            logging.info(f'GpControl.{evalf_name}, new fitness {new_fitness}')
         return new_fitness, # returns a float in a tuple, i.e.  14736.68,
 
 if __name__ == "__main__":
@@ -191,6 +221,7 @@ if __name__ == "__main__":
 
     gpc = GpControl()
 
+    gpc.verbose = 0
     gpc.use_adfs = 1
     if gpc.use_adfs:
         pset_used = 'naut_pset_02_adf'
@@ -198,24 +229,29 @@ if __name__ == "__main__":
         pset_used = 'naut_pset_01' #  'test_pset5c'
     eval_used = 'eval_nautilus'
 
-    p = 1
-    g = 1
+    p = 2
+    g = 7
+    cp_freq = 6
+    tidy_checkpoints = 1
 
-    gpc.select_gp_provider()
+    gpc.set_gp_n_cp(freq=cp_freq, cp_file="test2_done")
+    # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints
     gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
     gpc.set_test_evaluator(eval_used)
-    gpc.run_backtest = 1
+    gpc.run_backtest = 0
     gpc.run_gp()
-    logging.info(' deap __ Hall of fame:')
-    for x, individual in enumerate(gpc.gp.hof):
-        printed_ind = [str(tree) for tree in gpc.gp.hof.items[x]]
-        logging.info(f" deap generated individual: {printed_ind}")
 
-    # now in gpc.run_gp
-    # logging.info(' deap __ Logbook:')
-    # logging.info(gpc.gp.logbook)
+    if gpc.verbose:
+        logging.info(' deap __ Hall of fame:')
+        for x, individual in enumerate(gpc.gp.hof):
+            printed_ind = [str(tree) for tree in gpc.gp.hof.items[x]]
+            logging.info(f" deap generated individual: {printed_ind}")
 
-    logging.info(f"DIRECT GpControl run, using: \
-          evaluator: {eval_used} , and pset: {pset_used}")
+    logging.debug(f"GpControl run, evaluator: {eval_used}, pset: {pset_used}")
+
+    best = gpc.gp.hof.items[0]
+    printed_ind = [str(tree) for tree in best]
+    logging.info(f" Evolution run, best individual: \n\
+        {printed_ind} __ fitness: {best.fitness}")
 
     logging.info("--- %s seconds ---" % (time.time() - start_time))

@@ -1,6 +1,7 @@
 import os
 import os.path
 import time
+import glob
 
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
@@ -19,8 +20,9 @@ CONVERTERS = {
     'total': int,
 }
 
-pytest.gpc = None
-pytest.checkpointfilepath = ""
+pytest.checkpointfile = ""
+pytest.cp_path = ""
+pytest.given_cp_file = ""
 
 scenarios('../features/011_gp_deap_checkpoints.feature')
 
@@ -38,45 +40,50 @@ Feature: GpControl's evolution improves fitness over time
 """
 @given('gp_deap_adf.GpDeapAdfCp')
 def ability_to_checkpoint(gpc):
-    p = 1
-    g = 1
+    gpc.verbose = 0
     gpc.use_adfs = 1
-    gpc.select_gp_provider()
-    gpc.setup_gp(pset_spec="naut_pset_02_adf", pop_size=p, no_gens=g)
+    pset_used = 'naut_pset_02_adf'
+    p = 2
+    g = 7
+    cp_freq = 3
+
+    gpc.set_gp_n_cp(freq=cp_freq, cp_file="test_011_6g_2cps__")
+    gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
     gpc.run_backtest = 0
-    gpc.checkpointfile = "test_011_6g_2cps__"
-    pytest.gpc = gpc
 
 @when('a 6 generation run with checkpoints every 3 is made')
-def six_gen_run_with_cps_every_three():
-    pytest.gpc.set_test_evaluator("eval_nautilus")
-    pytest.gpc.run_gp()
+def six_gen_run_with_cps_every_three(gpc):
+    eval_used = 'eval_nautilus'
+    gpc.set_test_evaluator(eval_used)
+    gpc.run_gp()
 
 @then('the checkpoint file is created at generation 3')
-def new_checkpoint_file_created(gpc, params):
+def first_new_checkpoint_file_created(gpc, params):
     now = time.time()
-    cp_path = params.naut_dict['CHECKPOINT_PATH'] + gpc.checkpointfile +'.pkl'
-    pytest.checkpointfilepath = cp_path
+    pytest.given_cp_file = gpc.gp.checkpointfile
+    pytest.cp_path = params.naut_dict['CHECKPOINT_PATH']
+    cp_path = pytest.cp_path + \
+        pytest.given_cp_file.split('.')[0] + '_3.pkl'
+    pytest.checkpointfile = pytest.given_cp_file
     assert os.path.isfile(cp_path)
     # get time of creation
     ti_c = os.path.getctime(cp_path)
     assert (now - ti_c) < 60
 
-    # Converting the time in seconds to a timestamp
-    # c_ti = time.ctime(ti_c)
-    # m_ti = time.ctime(ti_m)
-
 @then('the checkpoint is updated at generation 6')
-def new_checkpoint_file_created(gpc, params):
+def second_new_checkpoint_file_created(gpc, params):
     now = time.time()
-    cp_path = pytest.checkpointfilepath
+    cp_path = pytest.cp_path + \
+        pytest.given_cp_file.split('.')[0] + '_6.pkl'
     assert os.path.isfile(cp_path)
     # get last time of modification
     ti_m = os.path.getmtime(cp_path)
     assert (now - ti_m) < 60
 
     # tidy up
-def teardown_module():
-    cp_path = pytest.checkpointfilepath
-    os.remove(cp_path)
-    assert not os.path.isfile(cp_path)
+def teardown_module(gpc):
+    p = pytest.cp_path
+    f = pytest.given_cp_file.split('.')[0]
+    for filename in glob.glob(f"{p}{f}*"):
+        os.remove(filename)
+        assert not os.path.isfile(filename)

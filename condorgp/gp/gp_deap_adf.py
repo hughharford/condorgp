@@ -38,9 +38,6 @@ class GpDeapADF(GpDeap):
         if not self.psets:
             logging.warning(f"ERROR GpDeapADF: no pset!")
 
-        logging.debug(self.psets[0].name)
-        logging.debug(self.psets[1].name)
-
         # # seperate out main and adf:
         self.pset = self.psets[0]
         self.adfset = self.psets[1]
@@ -102,16 +99,14 @@ class GpDeapADF(GpDeap):
             so trying example for '''
 
         logging.debug(f"gp_deap_adf.run_gp: {'@'*5}")
-        # logging.debug(f"{'&&'*5} gp_deap_adf.run_gp: {'&&'*5}")
 
         random.seed(3227)
         NGEN = self.ngen
-        # logging.debug(f"run_gp: NGEN: {NGEN}")
-
+        NPOP = self.pop_size
         CXPB, MUTPB = 0.5, 0.2
 
         try:
-            pop = self.toolbox.population(n=NGEN)
+            pop = self.toolbox.population(n=NPOP)
             # Evaluate the entire population
             for ind in pop:
                 ind.fitness.values = self.toolbox.evaluate(ind)
@@ -122,7 +117,8 @@ class GpDeapADF(GpDeap):
         self.hof.update(pop)
         self.record = self.stats.compile(pop)
         self.logbook.record(gen=0, evals=len(pop), **self.record)
-        logging.info(self.logbook.stream)
+        if self.verbose:
+            logging.info(self.logbook.stream)
 
         for g in range(1, NGEN):
             # Select the offspring
@@ -154,8 +150,10 @@ class GpDeapADF(GpDeap):
             self.hof.update(pop)
             self.record = self.stats.compile(pop)
             self.logbook.record(gen=g, evals=len(invalids), **self.record)
-            logging.info(self.logbook.stream)
-
-        logging.info('Best individual : ', self.hof[0][0], self.hof[0].fitness)
+            if self.verbose:
+                logging.info(self.logbook.stream)
+                
+        if self.verbose:
+            logging.info('Best individual : ', self.hof[0][0], self.hof[0].fitness)
 
         return pop, self.stats, self.hof, self.logbook

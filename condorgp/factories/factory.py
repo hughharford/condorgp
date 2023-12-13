@@ -2,6 +2,7 @@ from condorgp.params import Params
 from condorgp.util.utils import Utils
 from condorgp.gp.gp_deap import GpDeap
 from condorgp.gp.gp_deap_adf import GpDeapADF
+from condorgp.gp.gp_deap_adf_cp import GpDeapAdfCp
 
 from condorgp.gp.gp_psets import GpPsets
 from condorgp.gp.gp_functions import GpFunctions
@@ -21,6 +22,9 @@ class Factory():
 
     def get_gp_adf_provider(self):
         return GpDeapADF()
+
+    def get_gp_adf_cp_provider(self):
+        return GpDeapAdfCp()
 
     def get_gp_psets(self, customfuncs):
         return GpPsets(customfuncs)

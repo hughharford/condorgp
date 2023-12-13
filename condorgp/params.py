@@ -62,7 +62,8 @@ class Params():
         NAUTILUS_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/nautilus_log.json'
         CONDOR_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/condor_log.txt'
         LOGS_FOLDER = 'condorgp/util/logs/'
-        CHECKPOINT_PATH = LOCAL_BASE_PATH + "/condorgp/util/checkpoints/"
+        CHECKPOINT_PATH = LOCAL_BASE_PATH + "condorgp/util/checkpoints/"
+        RUN_DONE_TEXT = "done"
         NUM_LOG_BACKUPS = 3
         FITNESS_CRITERIA = 'Sharpe Ratio (252 days)'
         SIMPLE_FITNESS_CRITERIA = 'Risk Return Ratio'
@@ -78,6 +79,7 @@ class Params():
             'NAUTILUS_LOG_FILE': NAUTILUS_LOG_FILE,
             'CONDOR_LOG_FILE': CONDOR_LOG_FILE,
             'CHECKPOINT_PATH': CHECKPOINT_PATH,
+            'RUN_DONE_TEXT': RUN_DONE_TEXT,
             'FITNESS_CRITERIA': FITNESS_CRITERIA,
             'SIMPLE_FITNESS_CRITERIA': SIMPLE_FITNESS_CRITERIA,
             'CGP_NAUT_STRATEGIES': CGP_NAUT_STRATEGIES,
