@@ -11,21 +11,20 @@
       A number of strategies added to the engine, each ADFs
       A range of indicators available for strategies
 
+      DONE - gp_deap_adf and gp_deap_adf_cp both run with ADFs
+        Starting with a very simple ADF addition to naut_pset_02_adf
+        ADF evaluation looks very different based on the examples
+
 # <<<<<<<< HERE >>>>>>>>
 
-      Starting with a very simple ADF addition to naut_pset_02_adf
-      ADF evaluation looks very different based on the examples
+      NEXT - assemble working ADFs for 3 key indicators
+      Then assemble working ADFs for 2 strategies (EMAcross and 2 others)
+      Then work out how to bring them all into a strategy
+        See: condorgp/evaluation/naut_raw/blank_strat_n_strat_config.py
+
 
   # 2 # Then use the example strategies given by Nautilus as first options
       See: nautilus_trader/examples/strategies
-
-  # 3 # Then consider implementing further reaching evolution,
-      i.e. of a strategy itself
-
-      The blank template is:
-      condorgp/evaluation/naut_raw/blank_strat_n_strat_config.py
-      Found in, and copied directly from:
-      nautilus_trader/examples/strategies/blank.py
 
   # 4 # For this, using all the many indicators provided will
   # be likely sufficient
