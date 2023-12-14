@@ -129,5 +129,5 @@ class NautRunsEvolved:
         engine.dispose()
 
 if __name__ == "__main__":
-    rne = NautRunsEvolved()
-    rne.main()
+    nre = NautRunsEvolved()
+    nre.main()

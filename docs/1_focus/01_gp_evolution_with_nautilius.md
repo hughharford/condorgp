@@ -27,10 +27,33 @@
       Q - need to understand the implications of adding >1 strategy
 
       Major game could be:
-      Allow EvolvedStrategy to:
+  # Allow EvolvedStrategy to:
         Select from a range of indicators
         Develop it's own logic as to how they are applied
-        
+
+      This means that the script that runs Nautilus is not evolved, many
+      parts of it are unchanged.
+        E.g condorgp/evaluation/naut_05_inject.py
+        Has the following set:
+          BacktestEngineConfig
+          BacktestEngine
+          Data configurations (in this case interest rate) and data for this
+          Venue (trading venue - > 1 permitted)
+          Instruments (in this case AUS v USD FX data)
+          Wrangle and add data (in this case: audusd_ticks.csv)
+
+          Evolved strategy added (we only change the EMACross fast and slow)
+
+          Run reports
+          Reset (basic but important)
+          Dispose (basic but important)
+
+# <<<<<<<< HERE >>>>>>>>
+
+      A good deal of change is needed here
+
+  # Evolving the strategy itself:
+
 
   # 3 # About indicators
       All indicators inherit base class Indicator, with Cython cimport
