@@ -2,7 +2,7 @@
 
 
 
-# 1 # work into: gp_evolution_with_nautilius.md
+# 1 # work into: 01_gp_evolution_with_nautilius.md
     write out what gp evolution is expected, and implement one by one
 
 # 2 # Get Deap checkpointing working, BDD first
@@ -14,5 +14,6 @@
 
 # 4 # go through: cgp_actions_1 __ LEAN.md and pick out useful ideas
 
-# 5 # work to gp_evolution_with_Nautilus notes
-  Many things to work on in here
+# 5 # establish working with container run Nautilus
+  Once 1 container is up - establish message bus commands to it
+  Then be able to run > 1 to speed up evaluation
