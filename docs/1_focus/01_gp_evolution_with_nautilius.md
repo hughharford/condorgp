@@ -61,8 +61,10 @@
       from nautilus_trader.indicators.base.indicator cimport Indicator
 
       Question is - what do we evolve about indicators
-        A - In the first instance, configure them to be added to strategies, or to be an ADF available to be used.
-        Later: can get into evolving how an indicator works, or evolving new indicators.
+        A - In the first instance, configure them to be added to strategies,
+        or to be an ADF available to be used.
+        B - Later: can get into evolving how an indicator works,
+        or evolving new indicators.
 
 # <<<<<<<< HERE >>>>>>>>
 
@@ -80,3 +82,25 @@
           averages
           base          a folder of the base classes etc
           fuzzy_enums
+
+    Select indicators to be ADFs:
+
+    from nautilus_trader.indicators.average:
+      1 _ WeightedMovingAverage(MovingAverage)
+      2 _ AdaptiveMovingAverage(MovingAverage)
+      3 _ VariableIndexDynamicAverage(MovingAverage)
+
+    from nautilus_trader.indicators:
+      4 _
+      5 _
+
+    THIS NEEDS SOME MORE THOUGHT - i.e. pick indicators that build together
+
+# DESIGN DECISION REQUIRED
+  # There will be lots of ADFs this way
+      Indicators
+        8 x moving average
+       29 x indicators
+
+      Not expected to be required:
+        4 x fuzzy_enums - these are used in the fuzzy_candle stick indicator
