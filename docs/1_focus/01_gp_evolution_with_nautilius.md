@@ -95,6 +95,60 @@
       5 _
 
     THIS NEEDS SOME MORE THOUGHT - i.e. pick indicators that build together
+    to enable the strategies
+
+# <<<<<<<< HERE >>>>>>>>
+# <<<<<<<< FOCUS HERE >>>>>>>>
+
+    Additionally, need to understand how to wire these pieces together.
+
+    1 - Read and understand Nautilus example strategies, looking for examples
+    for where indicators are used. Aim: to understand their configuration and
+    use - hopefully simple enough to be ADFs.
+      (a) Starting here, from the top: nautilus_trader/examples/strategies
+
+          nautilus_trader/examples/strategies/ema_cross_bracket_algo.py
+          _____________________________________________________________
+
+          from nautilus_trader.indicators.atr import AverageTrueRange
+          from nautilus_trader.indicators.average.ema import ExponentialMovingAverage
+
+          # in __init__, simply, with int config.set_variables:
+          # Create the indicators for the strategy
+          self.atr = AverageTrueRange(config.atr_period)
+          self.fast_ema = ExponentialMovingAverage(config.fast_ema_period)
+          self.slow_ema = ExponentialMovingAverage(config.slow_ema_period)
+
+          # in on_start:
+          # Register the indicators for updating
+          self.register_indicator_for_bars(self.bar_type, self.atr)
+          self.register_indicator_for_bars(self.bar_type, self.fast_ema)
+          self.register_indicator_for_bars(self.bar_type, self.slow_ema)
+
+          # given this uses bar data:
+          # on_bar holds the buy and sell logic
+          # buy and sell methods execute via call from on_bar
+          # buy and sell methods include a 15 strong order_list
+
+          nautilus_trader/examples/strategies/ema_cross_bracket.py
+          ________________________________________________________
+
+          # Only different to the algo above, in that the algo includes
+          # lots of order management - this is for later.
+
+          nautilus_trader/examples/strategies/ema_cross_stop_entry.py
+          ___________________________________________________________
+
+          # This shows examples of order types, rather than indicator use
+
+          nautilus_trader/examples/strategies/ema_cross_trailing_stop.py
+          ______________________________________________________________
+
+          # Similar - trailing stop buy and sell in on_event method
+
+    Interesting reading so far:
+      The examples focus more on order types, which makes sense. These show
+      some different approaches. All of which can be evolved, but not soon. 
 
 # DESIGN DECISION REQUIRED
   # There will be lots of ADFs this way
