@@ -6,7 +6,8 @@ from condorgp.util.utils import Utils
 from nautilus_trader.model.identifiers import Venue
 from nautilus_trader.test_kit.providers import TestInstrumentProvider
 from condorgp.evaluation.get_strategies import GetStrategies
-from condorgp.evaluation.naut_05_inject import NautRunsEvolved
+from condorgp.evaluation.naut_05_inject import NautRuns05Inject
+from condorgp.evaluation.naut_06_gp_strategy import NautRuns06GpStrategy
 
 class RunNautilus():
     def __init__(self) -> None:
@@ -26,34 +27,48 @@ class RunNautilus():
         logging.debug(">> RunNautilus evaluation ready NAUTILUS >> ")
 
 
-    def basic_run(self, specified_script: str="", evolved_func=""):
+    def basic_run(self,
+                  specified_script: str="",
+                  evolved_func="",
+                  gp_strategy=False):
         '''
-            Runs Nautilus script in a basically separated process - early doors.
-            Or secondarily, with config provided, more directly.
+            In dev: Run Nautilus with evolved strategy provided.
+            Recent: Run Nautilus with evolved config provided, more directly.
+            Most basic: Runs Nautilus script in a separated process.
         '''
         result = 0.1
 
-        if evolved_func:
-            # enable config_func into Nautilus evaluation:
-            logging.debug(">>> RunNautilus.basic_run + CONFIG_FUNC >>>")
-            nrun = NautRunsEvolved()
+        if gp_strategy: # gp evolving strategy
+            logging.debug(">>> RunNautilus.basic_run naut_06_gp_strategy >>>")
             try:
-                nrun.main(evolved_config=evolved_func)
-                logging.info(">>> RunNautilus.basic_run CONFIG_FUNC ran >>>")
+                nrun = NautRuns06GpStrategy()
+                nrun.main(evolved_strategy=evolved_func)
+                logging.info(
+                    ">>> RunNautilus.basic_run naut_06_gp_strategy ran >>>")
+
             except BaseException as e:
                 logging.error(f"ERROR {__name__}, failed basic_run: {e}")
         else:
-            # run without injecting code
-            if specified_script != "": # use specified script for further runs
-                self.script_str = f"{self.eval_path}{specified_script}"
+            if evolved_func: # enable config_func into Nautilus evaluation:
+                logging.debug(">>> RunNautilus.basic_run naut_05_inject >>>")
+                nrun = NautRuns05Inject()
+                try:
+                    nrun.main(evolved_config=evolved_func)
+                    logging.info(">>> RunNautilus.basic_run naut_05_inject ran >>>")
+                except BaseException as e:
+                    logging.error(f"ERROR {__name__}, failed basic_run: {e}")
             else:
-                self.script_str = self.n_runner_inc_path
+                # run without injecting code
+                if specified_script != "": # use specified script for further runs
+                    self.script_str = f"{self.eval_path}{specified_script}"
+                else:
+                    self.script_str = self.n_runner_inc_path
 
-            if self.script_str:
-                result = subprocess.run([self.cmd_str, self.script_str],
-                                        stdout=subprocess.PIPE)
-            else:
-                logging.error("No Nautilus script provided")
+                if self.script_str:
+                    result = subprocess.run([self.cmd_str, self.script_str],
+                                            stdout=subprocess.PIPE)
+                else:
+                    logging.error("No Nautilus script provided")
         logging.debug(">>> RunNautilus.basic_run DONE evaluating >>>")
         return result
 
@@ -61,4 +76,4 @@ if __name__ == "__main__":
     logging.info("Running RunNautilus")
     script_to_run = "naut_03_egFX.py"
     n = RunNautilus()
-    n.basic_run()
+    n.basic_run(evolved_func="something", gp_strategy=True)

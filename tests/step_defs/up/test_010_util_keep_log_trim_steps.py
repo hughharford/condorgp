@@ -22,7 +22,7 @@ CONVERTERS = {
 pytest.logfile_n_path = ""
 pytest.tidy_logs = 0
 
-scenarios('../features/010_util_keep_log_trim.feature')
+scenarios('../../features/up/010_util_keep_log_trim.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #    Deap runs Nautilus tests for each evolved individual

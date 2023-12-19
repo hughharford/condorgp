@@ -19,7 +19,7 @@ class CondorLogger:
         self.log = self.create_logger()
 
     def create_logger(self):
-        loglevel = logging.INFO # INFO # DEBUG # ERROR
+        loglevel = logging.DEBUG # INFO # DEBUG # ERROR
 
         # this captures to file the Condor logs
         sys.stdout = open(self.naut_dict['CONDOR_LOG_FILE'], "a")

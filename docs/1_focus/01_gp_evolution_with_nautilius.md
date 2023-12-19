@@ -97,8 +97,16 @@
     THIS NEEDS SOME MORE THOUGHT - i.e. pick indicators that build together
     to enable the strategies
 
+# DESIGN DECISION REQUIRED
+  # There will be lots of ADFs this way
+      Indicators
+        8 x moving average
+       29 x indicators
+
+      Not expected to be required:
+        4 x fuzzy_enums - these are used in the fuzzy_candle stick indicator
+
 # <<<<<<<< HERE >>>>>>>>
-# <<<<<<<< FOCUS HERE >>>>>>>>
 
     Additionally, need to understand how to wire these pieces together.
 
@@ -148,13 +156,22 @@
 
     Interesting reading so far:
       The examples focus more on order types, which makes sense. These show
-      some different approaches. All of which can be evolved, but not soon. 
+      some different approaches. All of which can be evolved, but not soon.
 
-# DESIGN DECISION REQUIRED
-  # There will be lots of ADFs this way
-      Indicators
-        8 x moving average
-       29 x indicators
 
-      Not expected to be required:
-        4 x fuzzy_enums - these are used in the fuzzy_candle stick indicator
+  # Conclusions from the above is:
+        A - Using the extant indicators isn't that complex.
+        B - What is needed is to be able to use them in a strategy
+        C - How strategies are setup is not simple
+        D - Considerable effort with GP and evolution, what the pset will be to
+            get a strategy to operate will be demanding.
+
+# <<<<<<<< HERE >>>>>>>>
+# <<<<<<<< FOCUS HERE >>>>>>>>
+        Actions to achieve D
+          01 - Firstly, the most simple strategy config possible is just
+               an instrument. Letting this be the case for now, would simplify.
+               It might enable only a single tree individual, in the strategy
+               itself.
+          02 - Must be able to run a single strategy that has the evolved code
+               injected into it. 

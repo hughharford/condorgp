@@ -40,11 +40,11 @@ Feature: GpControl's typed evolved code must be runnable
 @given(parsers.cfparse('GpControl with "{pset_ADF:String}"',
                         extra_types=EXTRA_TYPES), target_fixture='pset_ADF')
 @given('GpControl with "<pset_ADF>"', target_fixture='<pset_ADF>')
-def gpcontrol_with_typed_psets08(gpc, pset_ADF):
+def gpcontrol_with_typed_ADF(gpc, pset_ADF):
     p = 1
     g = 1
     gpc.use_adfs = 1
-    gpc.select_gp_provider()
+    gpc.select_gp_provider_for_ADFs()
     gpc.setup_gp(pset_spec=pset_ADF, pop_size=p, no_gens=g)
     gpc.run_backtest = 1
     # pytest.gpc = gpc

@@ -43,15 +43,15 @@ from condorgp.evaluation.overloaded_nt.cgp_providers import *
 # CGP addition
 from condorgp.evaluation.get_strategies import GetStrategies
 
-class NautRuns05Inject:
+class NautRuns06GpStrategy:
 
     def __init__(self):
         pass
 
-    def main(self, evolved_config):
+    def main(self, evolved_strategy):
         # Configure backtest engine
         config = BacktestEngineConfig(
-            trader_id="BACKTESTER-001-naut-run-05",
+            trader_id="BACKTESTER-001-naut-run-06",
             logging=LoggingConfig(log_level="ERROR",
                 log_level_file="INFO",
                 log_file_format="json",
@@ -91,13 +91,13 @@ class NautRuns05Inject:
         engine.add_data(ticks)
 
         # CGP CHANGE HERE
-        if evolved_config:
+        if evolved_strategy:
             gp_strategy = GetStrategies(
-                instrument = AUDUSD_SIM).get_strategy(config_ev=evolved_config)
+                instrument = AUDUSD_SIM).get_evolved_strategy(
+                    config_ev=evolved_strategy)
         else:
-            # seperated out - see get_strategies.py
-            gp_strategy = GetStrategies(
-                instrument = AUDUSD_SIM).get_strategy()
+            raise ValueError(
+                f"NautRuns06GpStrategy evolved_strategy not provided")
 
         # add the strategy
         engine.add_strategy(strategy=gp_strategy)
@@ -129,5 +129,5 @@ class NautRuns05Inject:
         engine.dispose()
 
 if __name__ == "__main__":
-    nre = NautRuns05Inject()
-    nre.main()
+    nre = NautRuns06GpStrategy()
+    nre.main(evolved_strategy="something")

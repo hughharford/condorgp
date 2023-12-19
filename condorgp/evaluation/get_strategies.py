@@ -4,6 +4,9 @@ from decimal import Decimal
 from nautilus_trader.examples.strategies.ema_cross import EMACross
 from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
 
+from condorgp.evaluation.gp_strat_01 import GpStrategyZeroOne
+from condorgp.evaluation.gp_strat_01 import GpStrategyZeroOneConfig
+
 class GetStrategies():
 
     def __init__(self, instrument, bar_type = ""):
@@ -47,6 +50,23 @@ class GetStrategies():
         else:
             config = self.get_config_strategy_without_full_declaration()
         return config
+
+    def get_config_evolved_strategy(self):
+        config = GpStrategyZeroOneConfig(
+            str(self.instrument.id),
+            self.bar_type,
+            trade_size=Decimal(1_000_000),
+            fast_ema_period=400, # 10
+            slow_ema_period=820, # 20
+            )
+        return config
+
+    def get_evolved_strategy(self, config_ev=""):
+
+        config = self.get_config_evolved_strategy()
+        strategy = GpStrategyZeroOne(config=config)
+        return strategy
+
 
 if __name__ == "__main__":
     from nautilus_trader.model.identifiers import Venue

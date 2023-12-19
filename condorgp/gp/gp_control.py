@@ -32,6 +32,7 @@ class GpControl:
 
             self.checkpointing = None # default to None. i.e. not using
             self.use_adfs = 0 # default to zero. i.e. not using
+            self.inject_strategy = 0 # assume not
 
             logging.debug(f"GpControl: __init__ complete")
         except BaseException as e:
@@ -42,7 +43,8 @@ class GpControl:
         try:
             if not cp_file:
                 raise ValueError(f"cp_file missing: set_gp_n_cp.")
-            self.checkpointing = 1
+            if freq > 0:
+                self.checkpointing = 1
             self.inject_gp() # to establish self.gpc first
             self.gp.checkpoint_freq = freq
             self.run_done_txt = self.p.naut_dict['RUN_DONE_TEXT']
@@ -202,16 +204,29 @@ class GpControl:
         if self.verbose:
             logging.info(f" >>> eval_nautilus individual: {printed_ind}")
         new_fitness = 0.0
-        try:
+        if self.inject_strategy == 1: # new inject gp strategy approach
             if self.run_backtest:
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
-                self.backtester.basic_run(evolved_func=func)
-                new_fitness = self.gpf.find_fitness()
+                self.backtester.basic_run(evolved_func=func, gp_strategy=True)
+                new_fitness = self.gpf.find_fitness(
+                                       backtest_id="naut-run-06")
             else:
                 logging.debug(f"ERROR {evalf_name} {'>'*2} "+
                               f"NAUTILUS {'>'*4} {new_fitness}")
-        except BaseException as e:
-            logging.error(f"ERROR {evalf_name}, attempting Nautilus run: {e}")
+        else:  # first inject gp strategy config approach
+            try:
+                if self.run_backtest:
+                    logging.debug(
+                        f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
+                    self.backtester.basic_run(evolved_func=func)
+                    new_fitness = self.gpf.find_fitness(
+                                           backtest_id="naut-run-05")
+                else:
+                    logging.debug(f"ERROR {evalf_name} {'>'*2} "+
+                                f"NAUTILUS {'>'*4} {new_fitness}")
+            except BaseException as e:
+                logging.error(
+                    f"ERROR {evalf_name}, attempting Nautilus run: {e}")
         if self.verbose:
             logging.info(f'GpControl.{evalf_name}, new fitness {new_fitness}')
         return new_fitness, # returns a float in a tuple, i.e.  14736.68,
@@ -229,16 +244,18 @@ if __name__ == "__main__":
         pset_used = 'naut_pset_01' #  'test_pset5c'
     eval_used = 'eval_nautilus'
 
-    p = 2
-    g = 7
-    cp_freq = 6
-    tidy_checkpoints = 1
+    p = 1
+    g = 0
+    cp_freq = 0
 
     gpc.set_gp_n_cp(freq=cp_freq, cp_file="test2_done")
     # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints
     gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
     gpc.set_test_evaluator(eval_used)
-    gpc.run_backtest = 0
+    
+    gpc.run_backtest = 1
+    gpc.inject_strategy = 1
+
     gpc.run_gp()
 
     if gpc.verbose:
