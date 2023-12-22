@@ -91,10 +91,11 @@ class NautRuns06GpStrategy:
         engine.add_data(ticks)
 
         # CGP CHANGE HERE
+        gs = GetStrategies(instrument = AUDUSD_SIM)
         if evolved_strategy:
-            gp_strategy = GetStrategies(
-                instrument = AUDUSD_SIM).get_evolved_strategy(
-                    config_ev=evolved_strategy)
+            gp_strategy = gs.get_evolved_strategy(ev_strategy=evolved_strategy)
+        elif not evolved_strategy:
+            gp_strategy = gs.get_evolved_strategy(ev_strategy="")
         else:
             raise ValueError(
                 f"NautRuns06GpStrategy evolved_strategy not provided")
@@ -130,4 +131,4 @@ class NautRuns06GpStrategy:
 
 if __name__ == "__main__":
     nre = NautRuns06GpStrategy()
-    nre.main(evolved_strategy="something")
+    nre.main(evolved_strategy="1")

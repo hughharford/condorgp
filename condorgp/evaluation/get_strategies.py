@@ -4,8 +4,8 @@ from decimal import Decimal
 from nautilus_trader.examples.strategies.ema_cross import EMACross
 from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
 
-from condorgp.evaluation.gp_strat_01 import GpStrategyZeroOne
-from condorgp.evaluation.gp_strat_01 import GpStrategyZeroOneConfig
+from condorgp.evaluation.gp_run_strat_01 import GpRunStrategyZeroOne
+from condorgp.evaluation.gp_run_strat_01 import GpRunStrategyZeroOneConfig
 
 class GetStrategies():
 
@@ -52,20 +52,41 @@ class GetStrategies():
         return config
 
     def get_config_evolved_strategy(self):
-        config = GpStrategyZeroOneConfig(
+        config = GpRunStrategyZeroOneConfig(
             str(self.instrument.id),
             self.bar_type,
             trade_size=Decimal(1_000_000),
-            fast_ema_period=400, # 10
-            slow_ema_period=820, # 20
+            fast_ema_period=40, # 10
+            slow_ema_period=82, # 20
             )
         return config
 
-    def get_evolved_strategy(self, config_ev=""):
-
+    def get_evolved_strategy(self, ev_strategy=""):
         config = self.get_config_evolved_strategy()
-        strategy = GpStrategyZeroOne(config=config)
-        return strategy
+        if len(ev_strategy) > 5:
+            self.ev_strategy = GpRunStrategyZeroOne(
+                                            config=config,
+                                            ev_strategy=ev_strategy)
+        elif len(ev_strategy) == 1:
+            self.ev_strategy = GpRunStrategyZeroOne(
+                                            config=config,
+                                            ev_strategy=EvStrategy())
+        else:
+            self.ev_strategy = GpRunStrategyZeroOne(config=config)
+        return self.ev_strategy
+
+class EvStrategy:
+    def __init__(self):
+        pass
+
+    def on_bar(self, fast_ema, slow_ema):
+
+        # BUY LOGIC, very much simplified for now
+        if fast_ema >= slow_ema:
+            return "buy"
+        # SELL LOGIC, very much simplified for now
+        elif fast_ema < slow_ema:
+            return "sell"
 
 
 if __name__ == "__main__":
