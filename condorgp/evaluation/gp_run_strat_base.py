@@ -36,6 +36,9 @@ from nautilus_trader.model.orderbook import OrderBook
 from nautilus_trader.model.orders import MarketOrder
 from nautilus_trader.trading.strategy import Strategy
 
+# CGP:
+import logging
+from condorgp.params import Params
 
 # *** THIS IS A TEST STRATEGY WITH NO ALPHA ADVANTAGE WHATSOEVER. ***
 # *** IT IS NOT INTENDED TO BE USED TO TRADE LIVE WITH REAL MONEY. ***
@@ -105,8 +108,8 @@ class GpRunStrategyBase(Strategy):
     def __init__(self, config: GpRunStrategyBaseConfig, ev_strategy=None) -> None:
 
         self.ev_strategy = None
-        # if ev_strategy:
-        #     self.ev_strategy = ev_strategy
+        self.p = Params()
+        self.verbosity = self.p.naut_dict['VERBOSITY']
 
         PyCondition.true(
             config.fast_ema_period < config.slow_ema_period,
@@ -176,7 +179,11 @@ class GpRunStrategyBase(Strategy):
         if bar.is_single_price():
             # Implies no market information for this bar
             return
-
+        
+        if self.verbosity:
+            logging.info(
+                f"setting check_triggers in GpRunStrategyBase"
+            )
         if self.ev_strategy:
             self.check_triggers(blank="")
         else:

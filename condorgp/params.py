@@ -46,7 +46,7 @@ class Params():
         # HIGH LEVEL CONFIGURATION OPTIONS:
         ####################################################
         # ###################
-        RUN_VERBOSE_FOR_DEBUG = True # mostly leave this as true, update line above
+        RUN_VERBOSE_FOR_DEBUG = False
 
         self.highlevel_config_dict = {
             'RUN_VERBOSE_FOR_DEBUG': RUN_VERBOSE_FOR_DEBUG,
@@ -70,8 +70,10 @@ class Params():
         CGP_NAUT_STRATEGIES = NAUTILUS_EVAL_PATH + "cgp_naut_strategies.py"
         NAUT_DEFAULT_RUNNER = "naut_03_egFX.py"
         N_DEFAULT_RUN_INC_PATH = NAUTILUS_EVAL_PATH + NAUT_DEFAULT_RUNNER
+        VERBOSITY = RUN_VERBOSE_FOR_DEBUG
 
         self.naut_dict = {
+            'VERBOSITY': VERBOSITY,
             'NAUTILUS_BASE_PATH': NAUTILUS_BASE_PATH,
             'NAUTILUS_EVAL_PATH': NAUTILUS_EVAL_PATH,
             'LOGS_FOLDER': LOGS_FOLDER,

@@ -254,7 +254,7 @@ if __name__ == "__main__":
     gpc.set_test_evaluator(eval_used)
 
     gpc.run_backtest = 1
-    gpc.inject_strategy = 1
+    gpc.inject_strategy = 1 # set to 1, this selects naut_06_gp_strategy
 
     gpc.run_gp()
 

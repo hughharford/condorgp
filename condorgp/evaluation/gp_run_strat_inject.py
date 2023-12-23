@@ -37,6 +37,9 @@ from nautilus_trader.model.orders import MarketOrder
 from nautilus_trader.trading.strategy import Strategy
 
 from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBaseConfig
+from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBase
+
+from condorgp.params import Params
 
 import logging
 
@@ -47,7 +50,7 @@ import logging
 # then adapted
 
 
-class GpRunStrategyInject(Strategy):
+class GpRunStrategyInject(GpRunStrategyBase):
     """
     First injection of gp evolved strategies
 
@@ -61,10 +64,18 @@ class GpRunStrategyInject(Strategy):
         if ev_strategy:
             self.ev_strategy = ev_strategy
 
+        self.p = Params()
+        self.verbosity = self.p.naut_dict['VERBOSITY']
+
     def check_triggers(self, blank = ""):
 
-            logging.info(
-                f"GpRunStrategyInject.chekck_triggers(""): {self.ev_strategy}")
+            if self.verbosity: # note, this will log for every bar checked
+                logging.info(
+                    f"GpRunStrategyInject.check_triggers: {self.ev_strategy}")
+
+            # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+            # THE BELOW IS DIRECTLY FROM EMACROSS
+            # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
             if self.fast_ema.value >= self.slow_ema.value:
                 if self.portfolio.is_flat(self.instrument_id):

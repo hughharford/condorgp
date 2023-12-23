@@ -8,6 +8,8 @@ from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBase
 from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBaseConfig
 from condorgp.evaluation.gp_run_strat_inject import GpRunStrategyInject
 
+from condorgp.params import Params
+
 class GetStrategies():
 
     def __init__(self, instrument, bar_type = ""):
@@ -16,6 +18,9 @@ class GetStrategies():
             bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
         self.bar_type = bar_type
         # logging.info(f"{__name__} init: INSTR: {self.instrument} BAR: {self.bar_type}")
+
+        self.p = Params()
+        self.verbosity = self.p.naut_dict['VERBOSITY']
 
     def get_strategy(self, config_ev=""):
         if config_ev:
@@ -40,8 +45,8 @@ class GetStrategies():
             str(self.instrument.id),
             self.bar_type,
             Decimal(1_000_000),
-            400, # 10
-            820, # 20
+            10, # 10
+            20, # 20
             )
         return config
 
@@ -66,11 +71,23 @@ class GetStrategies():
         config = self.get_std_config_for_evolved_strategy()
         if ev_strategy:
             # i.e. run inherited strategy with adjusted check_triggers method
-            self.ev_strategy = GpRunStrategyInject(
-                                            config=config,
-                                            ev_strategy=ev_strategy)
+            logging.info(
+                f"GetStrategies.get_evolved_strategy: setting ev_strategy")
+            # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
+            # ###     This replaces what an evolved strategy should be:
+            # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
+            # self.ev_strategy = GpRunStrategyInject(
+            #                                 config=config,
+            #                                 ev_strategy=ev_strategy)
+            # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
+            # instead, just:
+            # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
+            self.ev_strategy = ev_strategy
+
         else:
             # i.e. run standard strategy, but with check_triggers method
+            logging.info(
+                f"GetStrategies.get_evolved_strategy: setting std strategy")
             self.ev_strategy = GpRunStrategyBase(config=config)
         return self.ev_strategy
 
