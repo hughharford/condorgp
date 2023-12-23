@@ -94,8 +94,6 @@ class NautRuns06GpStrategy:
         gs = GetStrategies(instrument = AUDUSD_SIM)
         if evolved_strategy:
             gp_strategy = gs.get_evolved_strategy(ev_strategy=evolved_strategy)
-        elif not evolved_strategy:
-            gp_strategy = gs.get_evolved_strategy(ev_strategy="")
         else:
             raise ValueError(
                 f"NautRuns06GpStrategy evolved_strategy not provided")
@@ -131,4 +129,4 @@ class NautRuns06GpStrategy:
 
 if __name__ == "__main__":
     nre = NautRuns06GpStrategy()
-    nre.main(evolved_strategy="1")
+    nre.main(evolved_strategy="12345")

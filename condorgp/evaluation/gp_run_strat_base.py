@@ -43,7 +43,7 @@ from nautilus_trader.trading.strategy import Strategy
 # was ema_cross.py - directly taken from Nautilus trader
 # then adapted
 
-class GpRunStrategyZeroOneConfig(StrategyConfig, frozen=True):
+class GpRunStrategyBaseConfig(StrategyConfig, frozen=True):
     """
     Configuration for minimal ``GpStrategyZeroOne`` instances.
 
@@ -81,7 +81,7 @@ class GpRunStrategyZeroOneConfig(StrategyConfig, frozen=True):
     close_positions_on_stop: bool = True
 
 
-class GpRunStrategyZeroOne(Strategy):
+class GpRunStrategyBase(Strategy):
     """
     A simple moving average cross example strategy.
 
@@ -102,18 +102,11 @@ class GpRunStrategyZeroOne(Strategy):
 
     """
 
-    def __init__(self, config: GpRunStrategyZeroOneConfig, ev_strategy=None) -> None:
+    def __init__(self, config: GpRunStrategyBaseConfig, ev_strategy=None) -> None:
 
-        # CGP start of changes:
-        # manually set these for now
-        # manual set didn't work, so fully automating config
-        #
-        # config.trade_size = Decimal(1_000_000)
-        # config.fast_ema_period = 40
-        # config.slow_ema_period = 82
         self.ev_strategy = None
-        if ev_strategy:
-            self.ev_strategy = ev_strategy
+        # if ev_strategy:
+        #     self.ev_strategy = ev_strategy
 
         PyCondition.true(
             config.fast_ema_period < config.slow_ema_period,
@@ -185,34 +178,25 @@ class GpRunStrategyZeroOne(Strategy):
             return
 
         if self.ev_strategy:
-            try:
-                trade_instruction = self.ev_strategy.on_bar(
-                    self.fast_ema.value,
-                    self.slow_ema.value)
-                if trade_instruction == "buy":
-                    self.buy()
-                elif trade_instruction == "sell":
-                    self.sell
-            except BaseException as e:
-                self.log.error(
-                    f"CGP ev_strategy ERROR: {e}",
-                    color=LogColor.RED,
-                )
-        else: # original strategy operations
-            # BUY LOGIC
-            if self.fast_ema.value >= self.slow_ema.value:
-                if self.portfolio.is_flat(self.instrument_id):
-                    self.buy()
-                elif self.portfolio.is_net_short(self.instrument_id):
-                    self.close_all_positions(self.instrument_id)
-                    self.buy()
-            # SELL LOGIC
-            elif self.fast_ema.value < self.slow_ema.value:
-                if self.portfolio.is_flat(self.instrument_id):
-                    self.sell()
-                elif self.portfolio.is_net_long(self.instrument_id):
-                    self.close_all_positions(self.instrument_id)
-                    self.sell()
+            self.check_triggers(blank="")
+        else:
+            self.check_triggers()
+
+    def check_triggers(self) -> None:
+        # BUY LOGIC
+        if self.fast_ema.value >= self.slow_ema.value:
+            if self.portfolio.is_flat(self.instrument_id):
+                self.buy()
+            elif self.portfolio.is_net_short(self.instrument_id):
+                self.close_all_positions(self.instrument_id)
+                self.buy()
+        # SELL LOGIC
+        elif self.fast_ema.value < self.slow_ema.value:
+            if self.portfolio.is_flat(self.instrument_id):
+                self.sell()
+            elif self.portfolio.is_net_long(self.instrument_id):
+                self.close_all_positions(self.instrument_id)
+                self.sell()
 
     def buy(self) -> None:
         """

@@ -45,9 +45,9 @@ class RunNautilus():
                 nrun.main(evolved_strategy=evolved_func)
                 logging.info(
                     ">>> RunNautilus.basic_run naut_06_gp_strategy ran >>>")
-
             except BaseException as e:
-                logging.error(f"ERROR {__name__}, failed basic_run: {e}")
+                logging.error(
+                    f"ERROR {__name__}, failed basic_run gp_strategy: {e}")
         else:
             if evolved_func: # enable config_func into Nautilus evaluation:
                 logging.debug(">>> RunNautilus.basic_run naut_05_inject >>>")
@@ -56,7 +56,8 @@ class RunNautilus():
                     nrun.main(evolved_config=evolved_func)
                     logging.info(">>> RunNautilus.basic_run naut_05_inject ran >>>")
                 except BaseException as e:
-                    logging.error(f"ERROR {__name__}, failed basic_run: {e}")
+                    logging.error(
+                        f"ERROR {__name__}, failed basic_run evolved_func: {e}")
             else:
                 # run without injecting code
                 if specified_script != "": # use specified script for further runs
@@ -76,4 +77,4 @@ if __name__ == "__main__":
     logging.info("Running RunNautilus")
     script_to_run = "naut_03_egFX.py"
     n = RunNautilus()
-    n.basic_run(evolved_func="something", gp_strategy=True)
+    n.basic_run(evolved_func="12345", gp_strategy=True)

@@ -236,7 +236,7 @@ if __name__ == "__main__":
 
     gpc = GpControl()
 
-    gpc.verbose = 0
+    gpc.verbose = 1
     gpc.use_adfs = 1
     if gpc.use_adfs:
         pset_used = 'naut_pset_02_adf'
@@ -252,7 +252,7 @@ if __name__ == "__main__":
     # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints
     gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
     gpc.set_test_evaluator(eval_used)
-    
+
     gpc.run_backtest = 1
     gpc.inject_strategy = 1
 

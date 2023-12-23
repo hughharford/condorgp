@@ -4,8 +4,9 @@ from decimal import Decimal
 from nautilus_trader.examples.strategies.ema_cross import EMACross
 from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
 
-from condorgp.evaluation.gp_run_strat_01 import GpRunStrategyZeroOne
-from condorgp.evaluation.gp_run_strat_01 import GpRunStrategyZeroOneConfig
+from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBase
+from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBaseConfig
+from condorgp.evaluation.gp_run_strat_inject import GpRunStrategyInject
 
 class GetStrategies():
 
@@ -51,8 +52,8 @@ class GetStrategies():
             config = self.get_config_strategy_without_full_declaration()
         return config
 
-    def get_config_evolved_strategy(self):
-        config = GpRunStrategyZeroOneConfig(
+    def get_std_config_for_evolved_strategy(self):
+        config = GpRunStrategyBaseConfig(
             str(self.instrument.id),
             self.bar_type,
             trade_size=Decimal(1_000_000),
@@ -62,32 +63,16 @@ class GetStrategies():
         return config
 
     def get_evolved_strategy(self, ev_strategy=""):
-        config = self.get_config_evolved_strategy()
-        if len(ev_strategy) > 5:
-            self.ev_strategy = GpRunStrategyZeroOne(
+        config = self.get_std_config_for_evolved_strategy()
+        if ev_strategy:
+            # i.e. run inherited strategy with adjusted check_triggers method
+            self.ev_strategy = GpRunStrategyInject(
                                             config=config,
                                             ev_strategy=ev_strategy)
-        elif len(ev_strategy) == 1:
-            self.ev_strategy = GpRunStrategyZeroOne(
-                                            config=config,
-                                            ev_strategy=EvStrategy())
         else:
-            self.ev_strategy = GpRunStrategyZeroOne(config=config)
+            # i.e. run standard strategy, but with check_triggers method
+            self.ev_strategy = GpRunStrategyBase(config=config)
         return self.ev_strategy
-
-class EvStrategy:
-    def __init__(self):
-        pass
-
-    def on_bar(self, fast_ema, slow_ema):
-
-        # BUY LOGIC, very much simplified for now
-        if fast_ema >= slow_ema:
-            return "buy"
-        # SELL LOGIC, very much simplified for now
-        elif fast_ema < slow_ema:
-            return "sell"
-
 
 if __name__ == "__main__":
     from nautilus_trader.model.identifiers import Venue
