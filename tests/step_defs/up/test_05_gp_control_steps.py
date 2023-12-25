@@ -40,8 +40,9 @@ scenarios('../../features/up/05_gp_control.feature')
 """
 
 @given('a specific pset is needed')
-def setup_ready():
-    pass # assumes, rest of test to prove
+def setup_ready(gp_control):
+    cp_freq = 0
+    gp_control.set_gp_n_cp(freq=cp_freq, cp_file="empty")
 
 @when(parsers.cfparse('GpControl gets a requirement for "{pset_input:String}"',
       extra_types=EXTRA_TYPES), target_fixture='pset_input')
@@ -49,6 +50,7 @@ def setup_ready():
       target_fixture='pset_input')
 def check_GpControl(gp_control, pset_input):
     ''' sets 2 different psets '''
+
     gp_control.base_pset = gp_control.set_and_get_pset('test_base_pset')
     gp_control.test_pset = gp_control.set_and_get_pset(pset_input)
 

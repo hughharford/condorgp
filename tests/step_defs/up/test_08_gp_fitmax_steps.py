@@ -41,6 +41,8 @@ scenarios('../../features/up/08_gp_fitmax.feature')
 def gpcontrol_run_001(gpc, pset):
     p = 2
     g = 3
+    cp_freq = 0
+    gpc.set_gp_n_cp(freq=cp_freq, cp_file="empty")
     gpc.setup_gp(pset_spec=pset, pop_size=p, no_gens=g)
     gpc.run_backtest = 1
     pytest.gpc = gpc

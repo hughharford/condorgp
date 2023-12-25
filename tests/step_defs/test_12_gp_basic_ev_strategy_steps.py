@@ -18,7 +18,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/012_gp_basic_ev_strategy.feature')
+scenarios('../features/12_gp_basic_ev_strategy.feature')
 
 """
 Feature: CondorGp's evolved code is immediately most effective as a strategy

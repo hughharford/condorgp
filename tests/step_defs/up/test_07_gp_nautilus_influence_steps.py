@@ -50,6 +50,8 @@ def gpcontrol_run_with(gp_control, pset_input):
     eval_used = 'eval_nautilus'
     p = 1
     g = 1
+    cp_freq = 0
+    gp_control.set_gp_n_cp(freq=cp_freq, cp_file="empty")
     gp_control.setup_gp(pset_spec=pset_input, pop_size=p, no_gens=g)
     gp_control.set_test_evaluator(eval_used)
 

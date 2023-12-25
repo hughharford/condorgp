@@ -76,6 +76,79 @@ class GpPsets:
 
     #     return self.test7a
 
+    def get_naut_pset_03_strategy(self):
+        ''' naut_pset_03_strategy
+
+        # looking to evolve a first simple strategy:
+
+        # def get_config_strategy(self):
+        #     config = EMACrossConfig(
+        #         instrument_id=str(self.instrument.id),
+        #         bar_type=self.bar_type,
+        #         trade_size=Decimal(1_000_000),
+        #         fast_ema_period=100,
+        #         slow_ema_period=200,
+        #         )
+        #     return config
+        '''
+
+        # ADF0 pset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        self.adfset0 = gp.PrimitiveSetTyped("ADF0", [LittleInt], LittleInt, "ARG")
+        self.adfset0.addPrimitive(operator.add, [LittleInt, LittleInt], LittleInt)
+        self.adfset0.addPrimitive(operator.sub, [LittleInt, LittleInt], LittleInt)
+        self.adfset0.addPrimitive(operator.mul, [LittleInt], LittleInt)
+        # self.adfset0.addPrimitive(protectedDiv, [LittleInt, LittleInt], LittleInt)
+        self.adfset0.addPrimitive(operator.neg, [LittleInt], LittleInt)
+
+        # self.adfset0.addADF(adfset2)
+        # self.adfset0.renameArguments(ARG0='x0')
+
+        # MAIN pset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+        bar_type2 = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+        self.SIM = Venue("SIM")
+        inst = TestInstrumentProvider.default_fx_ccy("AUD/USD", self.SIM)
+        inst2 = TestInstrumentProvider.default_fx_ccy("AUD/USD",self.SIM)
+
+        # a first basic primitive set for strongly typed GP using Nautilus
+        self.pset = gp.PrimitiveSetTyped("CGPNAUT02",
+                                         [], EMACrossConfig, "ARG")
+        # primary primitive, to enable function
+        self.pset.addPrimitive(EMACrossConfig,
+                               [StrInstr, StrBar, Decimal, LittleInt, BigInt],
+                               EMACrossConfig)
+        # first pset terminals:
+        self.pset.addTerminal(StrInstr(inst.id), StrInstr)
+        self.pset.addTerminal(StrInstr(inst2.id), StrInstr)
+        self.pset.addTerminal(bar_type, StrBar)
+        self.pset.addTerminal(bar_type2, StrBar)
+        self.pset.addTerminal(10, LittleInt)
+        self.pset.addTerminal(20, LittleInt)
+        self.pset.addTerminal(30, LittleInt)
+        self.pset.addTerminal(40, LittleInt)
+        self.pset.addTerminal(50, BigInt)
+        self.pset.addTerminal(100, BigInt)
+        self.pset.addTerminal(200, BigInt)
+        self.pset.addTerminal(1_000_000, int)
+        self.pset.addTerminal(2_000_000, int)
+        # below here were added to allow DEAP to populate
+        self.pset.addPrimitive(Decimal, [Decimal], Decimal)
+        self.pset.addPrimitive(str, [str], str)
+        self.pset.addPrimitive(int, [int], int)
+        self.pset.addTerminal(Decimal(1_000_000), Decimal)
+        self.pset.addTerminal("EMACrossConfig", EMACrossConfig)
+        # using specified int and str classes to reduce degress of freedom
+        self.pset.addPrimitive(BigInt, [BigInt], BigInt)
+        self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
+        self.pset.addPrimitive(str, [StrInstr], StrInstr)
+        self.pset.addPrimitive(str, [StrBar], StrBar)
+        # add ADF:
+        self.pset.addADF(self.adfset0)
+
+        self.psets = (self.pset, self.adfset0)
+
+        return self.psets
+
     def get_naut_pset_02_adf(self):
         ''' naut_pset_02_adf
 

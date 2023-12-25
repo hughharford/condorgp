@@ -246,9 +246,10 @@ if __name__ == "__main__":
 
     p = 1
     g = 0
-    cp_freq = 0
 
+    cp_freq = 0
     gpc.set_gp_n_cp(freq=cp_freq, cp_file="test2_done")
+    
     # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints
     gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
     gpc.set_test_evaluator(eval_used)
