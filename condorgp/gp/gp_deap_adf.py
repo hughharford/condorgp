@@ -15,6 +15,8 @@ class GpDeapADF(GpDeap):
     def __init__(self):
         '''
             Provides the workings for Deap to operate.
+            This class additionally achieves ADF usage (custom algorithm).
+            Inherits from GpDeap. 
         '''
         super.__init__
 
@@ -152,7 +154,7 @@ class GpDeapADF(GpDeap):
             self.logbook.record(gen=g, evals=len(invalids), **self.record)
             if self.verbose:
                 logging.info(self.logbook.stream)
-                
+
         if self.verbose:
             logging.info('Best individual : ', self.hof[0][0], self.hof[0].fitness)
 

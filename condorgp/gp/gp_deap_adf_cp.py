@@ -18,6 +18,8 @@ class GpDeapAdfCp(GpDeapADF):
     def __init__(self):
         '''
             Provides the workings for Deap to operate.
+            This class additionally achives checkpointing.
+            Inherits from GpDeapADF.
         '''
         super.__init__
         self.checkpointfile = None

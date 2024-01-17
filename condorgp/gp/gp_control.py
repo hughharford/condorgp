@@ -30,6 +30,7 @@ class GpControl:
             self.keep_logs_tidy()
             self.inject_backtest_runner()
 
+            self.elitism = 1 # default to assuming elitism
             self.checkpointing = None # default to None. i.e. not using
             self.use_adfs = 0 # default to zero. i.e. not using
             self.inject_strategy = 0 # assume not
@@ -65,7 +66,9 @@ class GpControl:
         try:
             cf = CustomFuncsFactory()
             self.gp_custom_funcs = cf.get_gp_custom_functions()
-            if self.checkpointing:
+            if self.elitism:
+                self.gp = self.factory.get_gp_elistist()
+            elif self.checkpointing:
                 self.gp = self.factory.get_gp_adf_cp_provider()
             elif self.use_adfs:
                 self.gp = self.factory.get_gp_adf_provider()
@@ -202,7 +205,7 @@ class GpControl:
         func = self.gp.toolbox.compile(expr=individual)
         printed_ind = [str(tree) for tree in individual]
         if self.verbose:
-            logging.info(f" >>> eval_nautilus individual: {printed_ind}")
+            logging.debug(f" >>> eval_nautilus individual: {printed_ind}")
         new_fitness = 0.0
         if self.inject_strategy == 1: # new inject gp strategy approach
             if self.run_backtest:
@@ -249,7 +252,7 @@ if __name__ == "__main__":
 
     cp_freq = 0
     gpc.set_gp_n_cp(freq=cp_freq, cp_file="test2_done")
-    
+
     # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints
     gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
     gpc.set_test_evaluator(eval_used)

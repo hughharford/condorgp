@@ -26,21 +26,6 @@ class GpPsets:
             print("GpPsets ERROR: " + str(e))
             return None
 
-    # def get_default_untyped(self):
-    #      # basic untyped deap.gp.PrimitiveSet:
-    #     self.default_untyped = gp.PrimitiveSet("default_untyped", 1)
-    #     self.default_untyped.addPrimitive(numpy.add, 2, name="vadd")
-    #     self.default_untyped.addPrimitive(numpy.subtract, 2, name="vsub")
-    #     self.default_untyped.addPrimitive(numpy.multiply, 2, name="vmul")
-    #     self.default_untyped.addPrimitive(numpy.negative, 1, name="vneg")
-    #     self.default_untyped.addPrimitive(numpy.cos, 1, name="vcos")
-    #     self.default_untyped.addPrimitive(numpy.sin, 1, name="vsin")
-    #     self.default_untyped.addEphemeralConstant(
-    #                                             "number78",
-    #                                             78)
-    #     self.default_untyped.renameArguments(ARG0='x')
-    #     return self.default_untyped
-
     def get_test_pset5a(self):
         ''' test_pset5a '''
         self.test5a = gp.PrimitiveSet("test_pset5a", 0)
@@ -54,27 +39,6 @@ class GpPsets:
         self.test5b.addPrimitive(print, 1, name="print")
         self.test5b.addTerminal("***_***_***", "3x3")
         return self.test5b
-
-    # def get_test_pset5c(self):
-    #     ''' test_pset5c '''
-    #     self.test5c = gp.PrimitiveSet("test_pset5c", 1)
-    #     self.test5c.addPrimitive(logging.info, 1, name="logging.info")
-    #     self.test5c.renameArguments(ARG0='x0')
-    #     return self.test5c
-
-    # def get_test_pset7aTyped(self):
-    #     ''' test_pset_7aTyped '''
-    #     self.test7a = gp.PrimitiveSetTyped("test_pset_7aTyped",[object],str)
-    #     self.test7a.addTerminal(1, int)
-    #     self.test7a.addTerminal(0, int)
-    #     self.test7a.addPrimitive(self.cfs.get_alpha_model_A,[int],str)
-    #     self.test7a.addPrimitive(self.cfs.get_alpha_model_B,[int],str)
-    #     self.test7a.addPrimitive(self.cfs.get_alpha_model_C,[int],str)
-    #     self.test7a.addPrimitive(self.cfs.get_alpha_model_D,[int],str)
-    #     # dummy int primitive, with name "" to avoid func call
-    #     self.test7a.addPrimitive(self.cfs.double,[int],int, "")
-
-    #     return self.test7a
 
     def get_naut_pset_03_strategy(self):
         ''' naut_pset_03_strategy
@@ -91,6 +55,40 @@ class GpPsets:
         #         )
         #     return config
         '''
+
+        # ADF1 pset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        self.adfset1 = gp.PrimitiveSetTyped("ADF1", [LittleInt], LittleInt, "ARG")
+
+                # boolean operators
+        self.adfset1.addPrimitive(operator.and_, [bool, bool], bool)
+        self.adfset1.addPrimitive(operator.or_, [bool, bool], bool)
+        self.adfset1.addPrimitive(operator.not_, [bool], bool)
+
+        # floating point operators
+        # Define a protected division function
+        def protectedDiv(left, right):
+            try: return left / right
+            except ZeroDivisionError: return 1
+
+        self.adfset1.addPrimitive(operator.add, [float,float], float)
+        self.adfset1.addPrimitive(operator.sub, [float,float], float)
+        self.adfset1.addPrimitive(operator.mul, [float,float], float)
+        self.adfset1.addPrimitive(protectedDiv, [float,float], float)
+
+        # logic operators
+        # Define a new if-then-else function
+        def if_then_else(input, output1, output2):
+            if input: return output1
+            else: return output2
+
+        self.adfset1.addPrimitive(operator.lt, [float, float], bool)
+        self.adfset1.addPrimitive(operator.eq, [float, float], bool)
+        self.adfset1.addPrimitive(if_then_else, [bool, float, float], float)
+
+        # terminals
+        self.adfset1.addEphemeralConstant("rand100", partial(random.uniform, 0, 100), float)
+        self.adfset1.addTerminal(False, bool)
+        self.adfset1.addTerminal(True, bool)
 
         # ADF0 pset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         self.adfset0 = gp.PrimitiveSetTyped("ADF0", [LittleInt], LittleInt, "ARG")

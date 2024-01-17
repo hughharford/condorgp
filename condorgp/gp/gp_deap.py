@@ -50,23 +50,31 @@ class GpDeap(GpProvider):
 
         # toobox and it's components, including population
         self.toolbox = base.Toolbox()
-        self.toolbox.register("expr", gp.genHalfAndHalf, pset=self.pset, min_=1, max_=2)
+        self.toolbox.register("expr",
+                              gp.genHalfAndHalf,
+                              pset=self.pset,
+                              min_=1,
+                              max_=2)
         self.toolbox.register("individual",
                               tools.initIterate,
                               creator.Individual,
                               self.toolbox.expr)
-        self.toolbox.register("population", tools.initRepeat, list, self.toolbox.individual)
+        self.toolbox.register("population",
+                              tools.initRepeat,
+                              list,
+                              self.toolbox.individual)
         self.toolbox.register("compile", gp.compile, pset=self.pset)
 
         self.rand = random.seed(318)
 
-        # attempting insert of these lines here. have seperated out this line:
-        #    toolbox.register("evaluate", evalSymbReg)
-        # which normally appears before these 4...
         self.toolbox.register("select", tools.selTournament, tournsize=3)
         self.toolbox.register("mate", gp.cxOnePoint)
         self.toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
-        self.toolbox.register('mutate', gp.mutUniform, expr=self.toolbox.expr_mut, pset=self.pset)
+        self.toolbox.register('mutate',
+                              gp.mutUniform,
+                              expr=self.toolbox.expr_mut,
+                              pset=self.pset)
+
 
     def set_inputs(self, inputs: dict):
         '''
