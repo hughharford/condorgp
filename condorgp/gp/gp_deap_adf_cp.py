@@ -1,6 +1,7 @@
 import numpy
 import random
 import logging
+import traceback
 import pickle
 import os
 
@@ -63,6 +64,8 @@ class GpDeapAdfCp(GpDeapADF):
 
         except BaseException as e:
             logging.error(f"gp_deap_adf_cp.run_gp restart / start ERROR: {e}")
+            tb = ''.join(traceback.format_tb(e.__traceback__))
+            logging.debug(f"gp_deap_adf_cp.run_gp ERROR: \n {tb}")
 
         self.hof.update(self.pop)
         self.record = self.stats.compile(self.pop)
@@ -70,8 +73,12 @@ class GpDeapAdfCp(GpDeapADF):
         if self.verbose:
             logging.info(self.logbook.stream)
 
+        filenamebase = self.checkpointfilepath.split(".")[0]
+
+        generation_reached = 0
         try:
             for g in range(start_gen, N_GEN):
+                generation_reached = g
                 # Select the offspring
                 self.offspring = self.toolbox.select(self.pop, len(self.pop))
                 # Clone the offspring
@@ -113,20 +120,22 @@ class GpDeapAdfCp(GpDeapADF):
                             rndstate=random.getstate())
 
                     # set generation marked check point file:
-                    filenamebase = self.checkpointfilepath.split(".")[0]
                     if self.run_done_txt in filenamebase:
                         filenamebase = filenamebase[:-5]
                     cp_file_g_marked = f"{filenamebase}_{g}.pkl"
 
                     with open(cp_file_g_marked, "wb") as cp_file:
                         pickle.dump(cp, cp_file)
+
         except BaseException as e:
             logging.error(f"gp_deap_adf_cp.run_gp evolution mech {e}")
+            tb = ''.join(traceback.format_tb(e.__traceback__))
+            logging.debug(f"gp_deap_adf_cp.run_gp ERROR: \n {tb}")
 
         # checkpoint again after generations:
         cp_done_file = f"{filenamebase}_{self.run_done_txt}.pkl"
         cp = dict(population=self.pop,
-                        generation=g,
+                        generation=generation_reached,
                         halloffame=self.hof,
                         logbook=self.logbook,
                         rndstate=random.getstate())

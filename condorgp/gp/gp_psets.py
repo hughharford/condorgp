@@ -86,7 +86,7 @@ class GpPsets:
         self.adfset1.addPrimitive(if_then_else, [bool, float, float], float)
 
         # terminals
-        self.adfset1.addEphemeralConstant("rand100", partial(random.uniform, 0, 100), float)
+        # self.adfset1.addEphemeralConstant("rand100", partial(random.uniform, 0, 100), float)
         self.adfset1.addTerminal(False, bool)
         self.adfset1.addTerminal(True, bool)
 

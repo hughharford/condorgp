@@ -1,5 +1,7 @@
 import time
 import logging
+import traceback
+import math
 
 from condorgp.params import Params #, util_dict, test_dict, lean_dict
 from condorgp.factories.factory import Factory
@@ -38,6 +40,8 @@ class GpControl:
             logging.debug(f"GpControl: __init__ complete")
         except BaseException as e:
             logging.error(f"GPC ERROR: {e}")
+            tb = ''.join(traceback.format_tb(e.__traceback__))
+            logging.debug(f"GPC: {tb}")
 
     def set_gp_n_cp(self, freq, cp_file:str):
         ''' setup variables for DEAP checkpointing with gp_deap_adf_cp'''
@@ -56,6 +60,8 @@ class GpControl:
             logging.debug(f"GpControl: set checkpointing complete")
         except BaseException as e:
             logging.error(f"gpc.set_gp_n_cp: {e}")
+            tb = ''.join(traceback.format_tb(e.__traceback__))
+            logging.debug(f"gpc.set_gp_n_cp: {tb}")
 
     def select_gp_provider_for_ADFs(self):
         ''' to be called for ADF without Checkpointing'''
@@ -80,6 +86,8 @@ class GpControl:
             logging.debug(f"GpControl: inject_gp complete")
         except BaseException as e:
             logging.error(f"gpc.inject_gp ERROR: {e}")
+            tb = ''.join(traceback.format_tb(e.__traceback__))
+            logging.debug(f"gpc.inject_gp: {tb}")
 
     def inject_utils(self):
         ''' dependency injection of utils '''
@@ -187,6 +195,8 @@ class GpControl:
                 self.pop, self.stats, self.hof, self.logbook = self.gp.run_gp()
         except BaseException as e:
             logging.error(f"GpControl ERROR: {e}")
+            tb = ''.join(traceback.format_tb(e.__traceback__))
+            logging.debug(f"GpControl: {tb}")
 
         # show logbook
         logging.info(' deap __ Logbook:')
@@ -216,6 +226,9 @@ class GpControl:
             else:
                 logging.debug(f"ERROR {evalf_name} {'>'*2} "+
                               f"NAUTILUS {'>'*4} {new_fitness}")
+                tb = ''.join(traceback.format_tb(e.__traceback__))
+                logging.debug(f"eval_nautilus: {tb}")
+
         else:  # first inject gp strategy config approach
             try:
                 if self.run_backtest:
@@ -227,9 +240,14 @@ class GpControl:
                 else:
                     logging.debug(f"ERROR {evalf_name} {'>'*2} "+
                                 f"NAUTILUS {'>'*4} {new_fitness}")
+                    tb = ''.join(traceback.format_tb(e.__traceback__))
+                    logging.debug(f"eval_nautilus: {tb}")
             except BaseException as e:
                 logging.error(
                     f"ERROR {evalf_name}, attempting Nautilus run: {e}")
+                tb = ''.join(traceback.format_tb(e.__traceback__))
+                logging.debug(f"eval_nautilus: {tb}")
+
         if self.verbose:
             logging.info(f'GpControl.{evalf_name}, new fitness {new_fitness}')
         return new_fitness, # returns a float in a tuple, i.e.  14736.68,
@@ -242,9 +260,9 @@ if __name__ == "__main__":
     gpc.verbose = 1
     gpc.use_adfs = 1
     if gpc.use_adfs:
-        pset_used = 'naut_pset_02_adf'
+        pset_used = 'naut_pset_02_adf' # 'test_pset5b'
     else:
-        pset_used = 'naut_pset_01' #  'test_pset5c'
+        pset_used = 'naut_pset_01' #  'test_pset5b'
     eval_used = 'eval_nautilus'
 
     p = 1
@@ -275,4 +293,4 @@ if __name__ == "__main__":
     logging.info(f" Evolution run, best individual: \n\
         {printed_ind} __ fitness: {best.fitness}")
 
-    logging.info("--- %s seconds ---" % (time.time() - start_time))
+    logging.info("--- %s seconds ---" % (round((time.time() - start_time),3)))
