@@ -32,7 +32,6 @@ class GpControl:
             self.keep_logs_tidy()
             self.inject_backtest_runner()
 
-            self.elitism = 1 # default to assuming elitism
             self.checkpointing = None # default to None. i.e. not using
             self.use_adfs = 0 # default to zero. i.e. not using
             self.inject_strategy = 0 # assume not
@@ -72,9 +71,8 @@ class GpControl:
         try:
             cf = CustomFuncsFactory()
             self.gp_custom_funcs = cf.get_gp_custom_functions()
-            if self.elitism:
-                self.gp = self.factory.get_gp_elistist()
-            elif self.checkpointing:
+
+            if self.checkpointing:
                 self.gp = self.factory.get_gp_adf_cp_provider()
             elif self.use_adfs:
                 self.gp = self.factory.get_gp_adf_provider()
@@ -213,8 +211,8 @@ class GpControl:
         evalf_name = 'eval_nautilus'
         # Transform the tree expression in a callable function
         func = self.gp.toolbox.compile(expr=individual)
-        printed_ind = [str(tree) for tree in individual]
         if self.verbose:
+            printed_ind = [str(tree) for tree in individual] # not needed with elitism!
             logging.debug(f" >>> eval_nautilus individual: {printed_ind}")
         new_fitness = 0.0
         if self.inject_strategy == 1: # new inject gp strategy approach
@@ -240,8 +238,6 @@ class GpControl:
                 else:
                     logging.debug(f"ERROR {evalf_name} {'>'*2} "+
                                 f"NAUTILUS {'>'*4} {new_fitness}")
-                    tb = ''.join(traceback.format_tb(e.__traceback__))
-                    logging.debug(f"eval_nautilus: {tb}")
             except BaseException as e:
                 logging.error(
                     f"ERROR {evalf_name}, attempting Nautilus run: {e}")
@@ -256,8 +252,8 @@ if __name__ == "__main__":
     start_time = time.time()
 
     gpc = GpControl()
-
     gpc.verbose = 1
+
     gpc.use_adfs = 1
     if gpc.use_adfs:
         pset_used = 'naut_pset_02_adf' # 'test_pset5b'
@@ -265,8 +261,8 @@ if __name__ == "__main__":
         pset_used = 'naut_pset_01' #  'test_pset5b'
     eval_used = 'eval_nautilus'
 
-    p = 1
-    g = 0
+    p = 3
+    g = 1
 
     cp_freq = 0
     gpc.set_gp_n_cp(freq=cp_freq, cp_file="test2_done")
@@ -275,8 +271,8 @@ if __name__ == "__main__":
     gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
     gpc.set_test_evaluator(eval_used)
 
-    gpc.run_backtest = 1
-    gpc.inject_strategy = 1 # set to 1, this selects naut_06_gp_strategy
+    gpc.run_backtest = 0
+    gpc.inject_strategy = 0 # set to 1, this selects naut_06_gp_strategy
 
     gpc.run_gp()
 

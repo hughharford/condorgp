@@ -22,7 +22,7 @@ class GpDeapAdfCp(GpDeapADF):
             This class additionally achives checkpointing.
             Inherits from GpDeapADF.
         '''
-        super.__init__
+        super().__init__()
         self.checkpointfile = None
         self.checkpoint_freq = None
         self.checkpointfilepath = None
@@ -80,7 +80,15 @@ class GpDeapAdfCp(GpDeapADF):
             for g in range(start_gen, N_GEN):
                 generation_reached = g
                 # Select the offspring
-                self.offspring = self.toolbox.select(self.pop, len(self.pop))
+                try:
+                    self.offspring = self.toolbox.select(self.pop,
+                                                         len(self.pop))
+
+                except BaseException as e:
+                    logging.error(f"gp_deap_adf_cp.run_gp 'select' {e}")
+                    tb = ''.join(traceback.format_tb(e.__traceback__))
+                    logging.debug(f"gp_deap_adf_cp.run_gp 'select': \n {tb}")
+
                 # Clone the offspring
                 self.offspring = [self.toolbox.clone(ind) for ind in self.offspring]
 

@@ -19,7 +19,7 @@ class GpDeapADF(GpDeap):
             This class additionally achieves ADF usage (custom algorithm).
             Inherits from GpDeap.
         '''
-        super.__init__
+        super().__init__()
 
     def set_defined_pset(self, gp_psets_cls,
                  new_pset_name = '',

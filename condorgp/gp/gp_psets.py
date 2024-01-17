@@ -283,21 +283,34 @@ def protectedDiv(left, right):
     except ZeroDivisionError:
         return 1
 
+
 class StrInstr(str):
     def pass_method(self):
         pass
+
+    def __len__(self):
+        return 1
 
 class StrBar(str):
     def pass_method(self):
         pass
 
+    def __len__(self):
+        return 1
+
 class BigInt(int):
     def pass_method(self):
         pass
 
+    def __len__(self):
+        return 1
+
 class LittleInt(int):
     def pass_method(self):
         pass
+
+    def __len__(self):
+        return 1
 
 if __name__ == '__main__':
     pass
