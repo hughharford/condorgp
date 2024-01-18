@@ -11,15 +11,16 @@ from deap import creator
 from deap import tools
 from deap import gp
 
-from condorgp.gp.gp_deap_adf import GpDeapADF
+from condorgp.gp.gp_deap_elitist import GpDeapElitist
+# from condorgp.gp.gp_deap_adf import GpDeapADF
 from condorgp.util.log import CondorLogger
 from condorgp.params import Params
 
-class GpDeapAdfCp(GpDeapADF):
+class GpDeapAdfCp(GpDeapElitist):
     def __init__(self):
         '''
             Provides the workings for Deap to operate.
-            This class additionally achives checkpointing.
+            This class additionally achieves checkpointing.
             Inherits from GpDeapADF.
         '''
         super().__init__()

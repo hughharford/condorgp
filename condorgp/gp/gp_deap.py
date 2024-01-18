@@ -44,6 +44,7 @@ class GpDeap(GpProvider):
         Fitness function, Individual and GP tree base classes. Population,
         genetic operators, initiation of population mechanism.
         '''
+        logging.debug(f"gp_deap.set_gp_params")
         try:
             # fundamentals for the gp tree
             creator.create("FitnessMax", base.Fitness, weights=(1.0,))

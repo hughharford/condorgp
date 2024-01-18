@@ -32,6 +32,7 @@ class GpControl:
             self.keep_logs_tidy()
             self.inject_backtest_runner()
 
+            self.elitism = 1 # default to elitism
             self.checkpointing = None # default to None. i.e. not using
             self.use_adfs = 0 # default to zero. i.e. not using
             self.inject_strategy = 0 # assume not
@@ -114,37 +115,41 @@ class GpControl:
                   7: the stats feedback
         '''
         logging.debug(f"GpControl: starting setup_gp {'>'*8}")
+        try:
+            # set verbosity in gp:
+            self.gp.verbose = self.verbose
 
-        # set verbosity in gp:
-        self.gp.verbose = self.verbose
+            if pset_spec == '': pset_spec = self.default_pset
+            funcs = {}     # Set: 1. additional functions & terminals
+            terms = {}
+            self.gp.set_defined_pset(self.gp_psets_cls, pset_spec, funcs, terms)
+            logging.debug(f"GpControl: set_defined_pset complete")
 
-        if pset_spec == '': pset_spec = self.default_pset
-        funcs = {}     # Set: 1. additional functions & terminals
-        terms = {}
-        self.gp.set_defined_pset(self.gp_psets_cls, pset_spec, funcs, terms)
-        logging.debug(f"GpControl: set_defined_pset complete")
+            params = {}     # Set 2. major gp parameters
+            self.gp.set_gp_params(params)
+            logging.debug(f"GpControl: set_gp_params complete")
 
-        params = {}     # Set 2. major gp parameters
-        self.gp.set_gp_params(params)
-        logging.debug(f"GpControl: set_gp_params complete")
+            inputs = {}     # Sets 3: inputs for fitness evaluation
+            self.gp.set_inputs(inputs)
+            logging.debug(f"GpControl: set_inputs complete")
 
-        inputs = {}     # Sets 3: inputs for fitness evaluation
-        self.gp.set_inputs(inputs)
-        logging.debug(f"GpControl: set_inputs complete")
+            self.pop_size = pop_size # Sets 4: population size, defaults to 2 for efficacy
+            self.gp.set_pop_size(pop_size)
+            logging.debug(f"GpControl: set_pop_size complete")
 
-        self.pop_size = pop_size # Sets 4: population size, defaults to 2 for efficacy
-        self.gp.set_pop_size(pop_size)
-        logging.debug(f"GpControl: set_pop_size complete")
+            self.gp.set_gens(no_gens)  # Set 5: the number of generations
+            self.gp.set_evaluator(self.default_eval) # Set 6: the evaluator
+            logging.debug(f"GpControl: set_evaluator complete")
 
-        self.gp.set_gens(no_gens)  # Set 5: the number of generations
-        self.gp.set_evaluator(self.default_eval) # Set 6: the evaluator
-        logging.debug(f"GpControl: set_evaluator complete")
+            stat_params = {}        # Set 7: the stats feedback
+            self.gp.set_stats(stat_params)
+            logging.debug(f"GpControl: set_stats complete")
 
-        stat_params = {}        # Set 7: the stats feedback
-        self.gp.set_stats(stat_params)
-        logging.debug(f"GpControl: set_stats complete")
-
-        logging.debug(f"GpControl: complete SETUP_GP {'>'*8}")
+            logging.debug(f"GpControl: complete SETUP_GP {'>'*8}")
+        except BaseException as e:
+            logging.error(f"GpControl SETUP_GP: {e}")
+            tb = ''.join(traceback.format_tb(e.__traceback__))
+            logging.debug(f"GpControl SETUP_GP: {tb}")
 
     def set_and_get_pset(self, pset_spec = ""):
         ''' get and set a tailored pset '''
@@ -251,6 +256,8 @@ if __name__ == "__main__":
     gpc = GpControl()
     gpc.verbose = 1
 
+    gpc.elitism = 0
+
     gpc.use_adfs = 1
     if gpc.use_adfs:
         pset_used = 'naut_pset_02_adf' # 'test_pset5b'
@@ -261,7 +268,7 @@ if __name__ == "__main__":
     p = 3
     g = 1
 
-    cp_freq = 0
+    cp_freq = 5
     gpc.set_gp_n_cp(freq=cp_freq, cp_file="test2_done")
 
     # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints
