@@ -339,7 +339,7 @@ class Utils:
         # print("Original list : " + str(test_list))
         # using zip() + all() to check for strictly increasing list
         r = all(i <= j for i, j in zip(seq, seq[1:]))
-        print("Is list never decreasing ? : " + str(r))
+        # print("Is list never decreasing ? : " + str(r))
         return r
 
 if __name__ == "__main__":

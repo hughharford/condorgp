@@ -21,11 +21,9 @@ class GpDeapElitist(GpDeapADF):
         '''
             Provides the workings for Deap to operate.
             This class additionally achives elitism.
-            Inherits from GpDeapAdfCp.
+            Inherits from GpDeapAdf.
         '''
         super().__init__()
-        logging.debug(f"gp_deap_elitist.__init__")
-
 
     def set_gp_params(self, params: dict):
         '''
@@ -35,9 +33,9 @@ class GpDeapElitist(GpDeapADF):
         Fitness function, Individual and GP tree base classes. Population,
         genetic operators, initiation of population mechanism.
         '''
+        logging.debug(f"gp_deap_elitist.set_gp_params")
         logging.debug(f"self.adfset name: {self.adfset.name}")
         logging.debug(f"self.pset name: {self.pset.name}")
-        logging.debug(f"gp_deap_elitist.set_gp_params")
 
         try:
 
@@ -61,7 +59,14 @@ class GpDeapElitist(GpDeapADF):
 
             self.toolbox.register('compile', gp.compileADF, psets=self.psets)
             # evaluate set elsewhere
-            self.toolbox.register("select", tools.selTournament, tournsize=3)
+
+            # changes here for 'select'
+            # self.toolbox.register("select", tools.selTournament, tournsize=3)
+            self.toolbox.register("select",
+                                  self.selElitistAndTournament,
+                                  frac_elitist=0.1,
+                                  tournsize=3)
+
             self.toolbox.register("mate", gp.cxOnePoint)
             self.toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
             self.toolbox.register('mutate', gp.mutUniform, expr=self.toolbox.expr_mut)
@@ -71,3 +76,21 @@ class GpDeapElitist(GpDeapADF):
         except BaseException as e:
             tb = ''.join(traceback.format_tb(e.__traceback__))
             logging.debug(f"gp_deap.set_gp_params ERROR: \n {tb}")
+
+    def selElitistAndTournament(self,
+                                individuals,
+                                k,
+                                frac_elitist,
+                                tournsize):
+        '''
+        deap_users suggestion:
+        https://groups.google.com/g/deap-users/c/iannnLI2ncE/m/eI4BcVcwFwMJ
+
+        '''
+        best = tools.selBest(individuals,
+                             int(k*frac_elitist))
+
+        tournament = tools.selTournament(individuals,
+                                         int(k*(1-frac_elitist)),
+                                         tournsize=tournsize)
+        return best + tournament

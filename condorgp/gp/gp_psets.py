@@ -18,7 +18,7 @@ class GpPsets:
     ''' Provides population sets (psets) for CondorGP '''
     def __init__(self):
         pass
-    
+
     def get_named_pset(self, named_pset):
         try:
             return eval('self.get_' + named_pset + '()')
@@ -167,7 +167,7 @@ class GpPsets:
         self.adfset0 = gp.PrimitiveSetTyped("ADF0", [LittleInt], LittleInt, "ARG")
         self.adfset0.addPrimitive(operator.add, [LittleInt, LittleInt], LittleInt)
         self.adfset0.addPrimitive(operator.sub, [LittleInt, LittleInt], LittleInt)
-        self.adfset0.addPrimitive(operator.mul, [LittleInt], LittleInt)
+        self.adfset0.addPrimitive(operator.mul, [LittleInt, LittleInt], LittleInt)
         # self.adfset0.addPrimitive(protectedDiv, [LittleInt, LittleInt], LittleInt)
         self.adfset0.addPrimitive(operator.neg, [LittleInt], LittleInt)
 

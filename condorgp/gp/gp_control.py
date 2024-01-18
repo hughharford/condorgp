@@ -32,7 +32,6 @@ class GpControl:
             self.keep_logs_tidy()
             self.inject_backtest_runner()
 
-            self.elitism = 1 # default to elitism
             self.checkpointing = None # default to None. i.e. not using
             self.use_adfs = 0 # default to zero. i.e. not using
             self.inject_strategy = 0 # assume not
@@ -214,7 +213,7 @@ class GpControl:
         # Transform the tree expression in a callable function
         func = self.gp.toolbox.compile(expr=individual)
         if self.verbose:
-            printed_ind = [str(tree) for tree in individual] # not needed with elitism!
+            printed_ind = [str(tree) for tree in individual]
             logging.debug(f" >>> eval_nautilus individual: {printed_ind}")
         new_fitness = 0.0
         if self.inject_strategy == 1: # new inject gp strategy approach
@@ -256,8 +255,6 @@ if __name__ == "__main__":
     gpc = GpControl()
     gpc.verbose = 1
 
-    gpc.elitism = 0
-
     gpc.use_adfs = 1
     if gpc.use_adfs:
         pset_used = 'naut_pset_02_adf' # 'test_pset5b'
@@ -265,17 +262,17 @@ if __name__ == "__main__":
         pset_used = 'naut_pset_01' #  'test_pset5b'
     eval_used = 'eval_nautilus'
 
-    p = 3
-    g = 1
+    p = 4
+    g = 4
 
-    cp_freq = 5
+    cp_freq = 8
     gpc.set_gp_n_cp(freq=cp_freq, cp_file="test2_done")
 
     # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints
     gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
     gpc.set_test_evaluator(eval_used)
 
-    gpc.run_backtest = 0
+    gpc.run_backtest = 1
     gpc.inject_strategy = 0 # set to 1, this selects naut_06_gp_strategy
 
     gpc.run_gp()

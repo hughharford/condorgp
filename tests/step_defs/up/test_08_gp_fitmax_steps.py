@@ -58,5 +58,6 @@ def gpc_with_set_evaluator(evaluator):
 def either_max_fitness_improves(utils):
     pytest.f_max = pytest.gpc.gp.logbook.select("max")
     max_incrs = utils.check_seq_increases(pytest.f_max)
-    max_never_decrs = utils.check_seq_never_decreases(pytest.f_max)
-    assert (max_incrs or max_never_decrs)
+    # max_never_decrs = utils.check_seq_never_decreases(pytest.f_max)
+    # assert (max_incrs or max_never_decrs)
+    assert max_incrs
