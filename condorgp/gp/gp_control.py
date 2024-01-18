@@ -5,7 +5,6 @@ import math
 
 from condorgp.params import Params #, util_dict, test_dict, lean_dict
 from condorgp.factories.factory import Factory
-from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
 
 from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
 
@@ -13,6 +12,7 @@ class GpControl:
     def __init__(self):
         '''
             The Genetic Programming (gp) controller.
+
             Setup, sizing, initiation of gp runs: psets, operators, evaluator.
             The major dependency is DEAP.
         '''
@@ -68,19 +68,16 @@ class GpControl:
 
     def inject_gp(self):
         ''' dependency injection of gp '''
+        # getting gp_provider (varies)
         try:
-            cf = CustomFuncsFactory()
-            self.gp_custom_funcs = cf.get_gp_custom_functions()
-
             if self.checkpointing:
                 self.gp = self.factory.get_gp_adf_cp_provider()
             elif self.use_adfs:
                 self.gp = self.factory.get_gp_adf_provider()
             else:
                 self.gp = self.factory.get_gp_provider()
-            self.gp_psets_cls = self.factory.get_gp_psets(self.gp_custom_funcs)
-            #  not using get_gp_naut_psets - separating out creates complications
-            self.gpf = self.factory.get_gp_funcs()
+            self.gp_psets_cls = self.factory.get_gp_psets() # get gp_psets
+            self.gpf = self.factory.get_gp_funcs() # get gp_functions
             logging.debug(f"GpControl: inject_gp complete")
         except BaseException as e:
             logging.error(f"gpc.inject_gp ERROR: {e}")

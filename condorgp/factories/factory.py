@@ -26,8 +26,8 @@ class Factory():
     def get_gp_adf_cp_provider(self):
         return GpDeapAdfCp()
 
-    def get_gp_psets(self, customfuncs):
-        return GpPsets(customfuncs)
+    def get_gp_psets(self):
+        return GpPsets()
 
     def get_gp_funcs(self):
         return GpFunctions()

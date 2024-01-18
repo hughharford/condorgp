@@ -9,7 +9,6 @@ import logging
 from file_read_backwards import FileReadBackwards
 
 from condorgp.params import Params
-from condorgp.gp.gp_custom_functions import GpCustomFunctions
 
 import sys
 
@@ -19,7 +18,6 @@ class Utils:
     '''
 
     def __init__(self):
-        self.cfs = GpCustomFunctions()
         self.p = Params()
         self.NAUT_DICT = self.p.naut_dict
         NAUT_DICT = self.p.naut_dict

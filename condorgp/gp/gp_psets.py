@@ -16,9 +16,9 @@ import logging
 
 class GpPsets:
     ''' Provides population sets (psets) for CondorGP '''
-    def __init__(self, custom_funcs):
-        self.cfs = custom_funcs
-
+    def __init__(self):
+        pass
+    
     def get_named_pset(self, named_pset):
         try:
             return eval('self.get_' + named_pset + '()')
