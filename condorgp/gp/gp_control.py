@@ -2,6 +2,7 @@ import time
 import logging
 import traceback
 import math
+import random
 
 from condorgp.params import Params #, util_dict, test_dict, lean_dict
 from condorgp.factories.factory import Factory
@@ -32,6 +33,7 @@ class GpControl:
             self.keep_logs_tidy()
             self.inject_backtest_runner()
 
+            self.randomised_test_fitness = 0 # default to evaluated fitness
             self.checkpointing = None # default to None. i.e. not using
             self.use_adfs = 0 # default to zero. i.e. not using
             self.inject_strategy = 0 # assume not
@@ -236,6 +238,8 @@ class GpControl:
                     self.backtester.basic_run(evolved_func=func)
                     new_fitness = self.gpf.find_fitness(
                                            backtest_id="naut-run-05")
+                elif self.randomised_test_fitness == 1:
+                    new_fitness = random.uniform(0, 1)
                 else:
                     logging.debug(f"ERROR {evalf_name} {'>'*2} "+
                                 f"NAUTILUS {'>'*4} {new_fitness}")
@@ -254,6 +258,7 @@ if __name__ == "__main__":
 
     gpc = GpControl()
     gpc.verbose = 1
+    gpc.randomised_test_fitness = 0 # can't show improving fitness
 
     gpc.use_adfs = 1
     if gpc.use_adfs:
@@ -262,17 +267,17 @@ if __name__ == "__main__":
         pset_used = 'naut_pset_01' #  'test_pset5b'
     eval_used = 'eval_nautilus'
 
-    p = 4
-    g = 4
+    p = 150
+    g = 15
 
-    cp_freq = 8
-    gpc.set_gp_n_cp(freq=cp_freq, cp_file="test2_done")
+    cp_freq = 30
+    gpc.set_gp_n_cp(freq=cp_freq, cp_file="new")
 
     # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints
     gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
     gpc.set_test_evaluator(eval_used)
 
-    gpc.run_backtest = 1
+    gpc.run_backtest = 0
     gpc.inject_strategy = 0 # set to 1, this selects naut_06_gp_strategy
 
     gpc.run_gp()

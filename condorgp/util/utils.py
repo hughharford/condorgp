@@ -25,25 +25,26 @@ class Utils:
         UTIL_DICT = self.p.util_dict
 
 
-    def cp_ind_to_lean_algos(self, file_path, filename):
-        '''
-        Copy a file to the
-            lean_dict['LOCALPACKAGES_PATH']
-        '''
-        if filename[-3:] != '.py':
-            filename = filename + '.py'
-        src = file_path + filename
-        dst = self.p.lean_dict['LOCALPACKAGES_PATH'] + filename
-        shutil.copy(src, dst, follow_symlinks=True)
+    # FOR DELETION
+    # def cp_ind_to_lean_algos(self, file_path, filename):
+    #     '''
+    #     Copy a file to the
+    #         lean_dict['LOCALPACKAGES_PATH']
+    #     '''
+    #     if filename[-3:] != '.py':
+    #         filename = filename + '.py'
+    #     src = file_path + filename
+    #     dst = self.p.lean_dict['LOCALPACKAGES_PATH'] + filename
+    #     shutil.copy(src, dst, follow_symlinks=True)
 
-    def cp_config_to_lean_launcher(self, file_path, filename):
-        '''
-        Copy the file to
-            lean_dict['LOCALPACKAGES_PATH']
-        '''
-        src_ingoing_config = file_path + filename
-        dst_to_copy_to = self.p.lean_dict['LOCALPACKAGES_PATH'] + filename
-        shutil.copy(src_ingoing_config, dst_to_copy_to, follow_symlinks=True)
+    # def cp_config_to_lean_launcher(self, file_path, filename):
+    #     '''
+    #     Copy the file to
+    #         lean_dict['LOCALPACKAGES_PATH']
+    #     '''
+    #     src_ingoing_config = file_path + filename
+    #     dst_to_copy_to = self.p.lean_dict['LOCALPACKAGES_PATH'] + filename
+    #     shutil.copy(src_ingoing_config, dst_to_copy_to, follow_symlinks=True)
 
     def delete_file_from_path(self, file_path, filename):
         '''
@@ -342,58 +343,27 @@ class Utils:
         # print("Is list never decreasing ? : " + str(r))
         return r
 
+    def fix_number_for_sort(self, string_num):
+        if string_num > 0 and string_num < 10:
+            return f"000{string_num}"
+        elif string_num > 10 and string_num < 100:
+            return f"00{string_num}"
+        elif string_num > 100 and string_num < 1000:
+            return f"0{string_num}"
+
+
 if __name__ == "__main__":
     pass
     print('going...')
     u = Utils()
-    key_req = 'Sharpe Ratio (252 days)'
-    # key3 = "Sharpe Ratio"
-    # key2 = "EMACross-000"
-    lines = 2000
+    # key_req = 'Sharpe Ratio (252 days)'
+    # # key3 = "Sharpe Ratio"
+    # # key2 = "EMACross-000"
+    # lines = 2000
 
-    list_seq = [2, 2, 2, 2, 1, 2] # fail
-    list_seq = [2, 2, 2]
-    # list_seq = [1, 2, 3]
-    u.check_seq_never_decreases(list_seq)
-
-    # CHECKING BACKUPS AND LOG TRIMS
-    # u.count_lines_in_file("tests/test_data/test_keep_logs_trim.json")
-    # log = "tests/test_data/test_log_backup_orig.txt"
-    # log = u.NAUT_DICT['NAUTILUS_LOG_FILE']
-    # u.make_no_log_backups(log, 2)
-    # # u.keep_x_lines_of_log(log, no_last_lines=5000)
-
-
-    # no error here, just need to provide lines = X enough to find it...
-    # found2 = u.retrieve_log_line_with_key(
-    #     key = key_req,
-    #     lines = lines)
-    # print(f"found2 = {found2[0]}")
-
-    # actually a key finding issue
-    # found3 = u.get_key_line_in_lim(
-    #     key = key_req,
-    #     lines = lines)
-    # # print(f"found3 = {found3}")
-
-    # expected = -21.49663142709111
-
-    # here = float(u.get_last_chars(found3[0],2))
-    # assert here == expected
-
-    # checking fitness:
-
-    # expected = -21.49663142709111
-    # # for dev only:
-    # backtest_id = "naut-run-05"
-    # key_fitness = Params().naut_dict['FITNESS_CRITERIA']
-    # print(key_fitness)
-    # found4 = u.find_fitness_with_matching_backtest(
-    #         key = key_fitness,
-    #         log_file_n_path = "",
-    #         backtest_id = backtest_id,
-    #         lines = 5000,
-    #         max_lines_diff = 300)
-    # print(found4[0])
-    # here = float(u.get_last_chars(found4[0],2))
-    # print(here)
+    # list_seq = [2, 2, 2, 2, 1, 2] # fail
+    # list_seq = [2, 2, 2]
+    # # list_seq = [1, 2, 3]
+    # u.check_seq_never_decreases(list_seq)
+    input = 8
+    print(u.fix_number_for_sort(input))

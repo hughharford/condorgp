@@ -24,6 +24,7 @@ class GpDeapElitist(GpDeapADF):
             Inherits from GpDeapAdf.
         '''
         super().__init__()
+        self.p = Params()
 
     def set_gp_params(self, params: dict):
         '''
@@ -64,7 +65,7 @@ class GpDeapElitist(GpDeapADF):
             # self.toolbox.register("select", tools.selTournament, tournsize=3)
             self.toolbox.register("select",
                                   self.selElitistAndTournament,
-                                  frac_elitist=0.1,
+                                  no_elite=self.p.naut_dict['ELITE_NO'],
                                   tournsize=3)
 
             self.toolbox.register("mate", gp.cxOnePoint)
@@ -80,17 +81,19 @@ class GpDeapElitist(GpDeapADF):
     def selElitistAndTournament(self,
                                 individuals,
                                 k,
-                                frac_elitist,
+                                no_elite,
                                 tournsize):
         '''
         deap_users suggestion:
         https://groups.google.com/g/deap-users/c/iannnLI2ncE/m/eI4BcVcwFwMJ
 
         '''
-        best = tools.selBest(individuals,
-                             int(k*frac_elitist))
+        # selBest would be the obvious choice, but this assumes FitnessMin setup
+        # therefore, selWorst to choose those individuals with highest fitness
+        best = tools.selWorst(individuals,
+                             int(no_elite))
 
         tournament = tools.selTournament(individuals,
-                                         int(k*(1-frac_elitist)),
+                                         int(k-no_elite),
                                          tournsize=tournsize)
         return best + tournament

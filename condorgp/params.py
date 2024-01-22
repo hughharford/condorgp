@@ -71,6 +71,7 @@ class Params():
         NAUT_DEFAULT_RUNNER = "naut_03_egFX.py"
         N_DEFAULT_RUN_INC_PATH = NAUTILUS_EVAL_PATH + NAUT_DEFAULT_RUNNER
         VERBOSITY = RUN_VERBOSE_FOR_DEBUG
+        ELITE_NO = 1
 
         self.naut_dict = {
             'VERBOSITY': VERBOSITY,
@@ -87,6 +88,7 @@ class Params():
             'CGP_NAUT_STRATEGIES': CGP_NAUT_STRATEGIES,
             'NAUT_DEFAULT_RUNNER': NAUT_DEFAULT_RUNNER,
             'N_DEFAULT_RUN_INC_PATH': N_DEFAULT_RUN_INC_PATH,
+            'ELITE_NO': ELITE_NO,
         }
 
         # ################################## ##################################

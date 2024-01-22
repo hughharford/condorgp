@@ -33,11 +33,6 @@ class GpDeapADF(GpDeap):
             logging.debug(f"GpDeapADF SETTING pset: {new_pset_name}")
             self.psets = gp_psets_cls.get_named_pset(new_pset_name)
 
-        # if not self.psets:
-        #     logging.warning(f"GpDeapADF: running pset "+
-        #                  "{self.pset.__name__}")
-        #     # self.psets = gp_psets_cls.get_naut_pset_01()
-
         if not self.psets:
             logging.warning(f"ERROR GpDeapADF: no pset!")
 
@@ -67,20 +62,12 @@ class GpDeapADF(GpDeap):
 
             creator.create("Individual", list, fitness=creator.FitnessMax) # list was gp.PrimitiveTree
 
-            # NO DICE __ Adding these reduced __init__ completion
-            # creator.create("ADF0", gp.PrimitiveTree, pset=self.adfset)
-            # creator.create("MAIN", gp.PrimitiveTree, pset=self.pset)
-
             self.toolbox = base.Toolbox()
             self.toolbox.register('adf_expr0', gp.genFull, pset=self.adfset, min_=1, max_=2)
             self.toolbox.register("main_expr", gp.genHalfAndHalf, pset=self.pset, min_=1, max_=2)
 
             self.toolbox.register('ADF0', tools.initIterate, creator.Tree, self.toolbox.adf_expr0)
             self.toolbox.register('MAIN', tools.initIterate, creator.Tree, self.toolbox.main_expr)
-
-            # NO DICE __ Adding these reduced __init__ completion
-            # self.toolbox.register('ADF1', tools.initIterate, creator.ADF0, self.toolbox.adf_expr0)
-            # self.toolbox.register('MAIN', tools.initIterate, creator.MAIN, self.toolbox.main_expr)
 
             self.func_cycle = [self.toolbox.MAIN, self.toolbox.ADF0]
 
