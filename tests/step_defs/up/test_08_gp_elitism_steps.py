@@ -25,7 +25,7 @@ pytest.gpc = None
 pytest.f_max = []
 pytest.f_min = []
 
-scenarios('../../features/up/08_gp_fitmax.feature')
+scenarios('../../features/up/08_gp_elitism.feature')
 
 """
   Scenario Outline: Evolved code shows fitness improvement

@@ -71,7 +71,7 @@ class Params():
         NAUT_DEFAULT_RUNNER = "naut_03_egFX.py"
         N_DEFAULT_RUN_INC_PATH = NAUTILUS_EVAL_PATH + NAUT_DEFAULT_RUNNER
         VERBOSITY = RUN_VERBOSE_FOR_DEBUG
-        NO_OF_ELITE = 1
+        NO_OF_ELITE = 1 # make this 0 to remove elitism
 
         self.naut_dict = {
             'VERBOSITY': VERBOSITY,
