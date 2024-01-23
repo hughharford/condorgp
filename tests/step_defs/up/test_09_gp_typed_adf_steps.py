@@ -47,19 +47,15 @@ def gpcontrol_with_typed_ADF(gpc, pset_ADF):
     gpc.select_gp_provider_for_ADFs()
     gpc.setup_gp(pset_spec=pset_ADF, pop_size=p, no_gens=g)
     gpc.run_backtest = 1
-    # pytest.gpc = gpc
 
 @when(parsers.cfparse('a short ADF run is made with "{evaluator:String}"',
                         extra_types=EXTRA_TYPES), target_fixture='evaluator')
 @when('a short ADF run is made with "<evaluator>"', target_fixture='<evaluator>')
 def first_ADF_run(gpc, evaluator):
-    # pytest.
     gpc.set_test_evaluator(evaluator)
-    # pytest.
     gpc.run_gp()
 
 @then('the fitness is not zero')
 def adf_fitness_is_not_zero(gpc):
     max_fitness_found = gpc.gp.logbook.select("max")[-1]
-    # min_fitness_found = gpc.gp.logbook.select("min")[0]
     assert max_fitness_found != 0

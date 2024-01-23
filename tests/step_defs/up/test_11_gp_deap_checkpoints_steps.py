@@ -63,7 +63,7 @@ def first_new_checkpoint_file_created(gpc, params):
     pytest.given_cp_file = gpc.gp.checkpointfile
     pytest.cp_path = params.naut_dict['CHECKPOINT_PATH']
     cp_path = pytest.cp_path + \
-        pytest.given_cp_file.split('.')[0] + '_3.pkl'
+        pytest.given_cp_file.split('.')[0] + '_0003.pkl'
     pytest.checkpointfile = pytest.given_cp_file
     assert os.path.isfile(cp_path)
     # get time of creation
@@ -74,7 +74,7 @@ def first_new_checkpoint_file_created(gpc, params):
 def second_new_checkpoint_file_created(gpc, params):
     now = time.time()
     cp_path = pytest.cp_path + \
-        pytest.given_cp_file.split('.')[0] + '_6.pkl'
+        pytest.given_cp_file.split('.')[0] + '_0006.pkl'
     assert os.path.isfile(cp_path)
     # get last time of modification
     ti_m = os.path.getmtime(cp_path)
