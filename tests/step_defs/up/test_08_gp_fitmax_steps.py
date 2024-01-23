@@ -20,6 +20,7 @@ CONVERTERS = {
     'total': int,
 }
 
+pytest.u = None
 pytest.gpc = None
 pytest.f_max = []
 pytest.f_min = []
@@ -43,25 +44,26 @@ scenarios('../../features/up/08_gp_fitmax.feature')
 def gpcontrol_run_001(gpc, pset):
     Factory().start_logger()
 
-    eval_used = 'eval_nautilus'
-    pset_used = 'naut_pset_02_adf' #  'test_pset5b'
-    gpc.run_backtest = 0
-
-    p = 2
-    g = 7 # this accumulates, provided _done included in cp_file
-    cp_freq = 3
-    gpc.use_adfs = 1
-
-    gpc.set_gp_n_cp(freq=cp_freq, cp_file="test_08_fitmax_done")
-    gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
-    gpc.set_test_evaluator(eval_used)
-
     pytest.gpc = gpc
+
+    gpc.use_adfs = 1
+    pset_used = pset # 'test_adf_symbreg_pset' - see .feature
+
+    p = 15
+    g = 30
+    cp_base = "test_08_fitmax"
+    cp_freq = g+1
+    gpc.set_gp_n_cp(freq=cp_freq, cp_file=cp_base+"")
+    gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
+
+    gpc.run_backtest = 0
+    gpc.inject_strategy = 0 # set to 1, this selects naut_06_gp_strategy
 
 @when(parsers.cfparse('run with evaluator "{evaluator:String}"',
                        extra_types=EXTRA_TYPES), target_fixture='evaluator')
 @when('run with evaluator "<evaluator>"')
 def gpc_with_set_evaluator(evaluator):
+    eval_used = 'evalSymbRegTest' # - see .feature
     pytest.gpc.set_test_evaluator(evaluator)
     pytest.gpc.run_gp()
 
@@ -72,20 +74,13 @@ def either_max_fitness_improves(utils):
     logging.info(pytest.gpc.gp.logbook)
 
     pytest.f_max = pytest.gpc.gp.logbook.select("max")
-    max_incrs = utils.check_seq_increases(pytest.f_max)
     max_never_decrs = utils.check_seq_never_decreases(pytest.f_max)
-    assert (max_incrs or max_never_decrs)
-    # assert max_incrs
+    assert (max_never_decrs)
+    assert pytest.f_max[-1] > pytest.f_max[0]
 
     pytest.u = utils
+
     # tidy up
 def teardown_module():
-    chpt_path = pytest.u.p.naut_dict['CHECKPOINT_PATH']
-    import glob
-    # All files and directories ending with .txt and that don't begin with a dot:
-    to_delete = glob.glob(f"{chpt_path}test_08_fitmax_*.pkl")
-    to_delete.sort()
-    for f in range(len(to_delete)-2):
-        if to_delete[f] != chpt_path+'test_08_fitmax_done.pkl':
-            pass
-            os.remove(to_delete[f])
+    pass
+    # pytest.u.tidy_cp_files(pytest.cp_base)

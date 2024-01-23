@@ -59,7 +59,7 @@ class GpDeapAdfCp(GpDeapADF):
                 self.pop = self.toolbox.population(n=N_POP)
                 start_gen = 0
 
-            # Evaluate the entire population
+            # # Evaluate the entire population
             for ind in self.pop:
                 ind.fitness.values = self.toolbox.evaluate(ind)
 
@@ -150,7 +150,10 @@ class GpDeapAdfCp(GpDeapADF):
             logging.debug(f"gp_deap_adf_cp.run_gp ERROR: \n {tb}")
 
         # checkpoint again after completing set generations:
+        if self.run_done_txt in filenamebase:
+            filenamebase = filenamebase[:-5]
         cp_done_file = f"{filenamebase}_{self.run_done_txt}.pkl"
+
         cp = dict(population=self.pop,
                         generation=generation_reached,
                         halloffame=self.hof,
@@ -201,7 +204,7 @@ class GpDeapAdfCp(GpDeapADF):
             # self.toolbox.register("select", tools.selTournament, tournsize=3)
             self.toolbox.register("select",
                                   self.selElitistAndTournament,
-                                  no_elite=self.p.naut_dict['ELITE_NO'],
+                                  no_of_elite=self.p.naut_dict['NO_OF_ELITE'],
                                   tournsize=3)
 
             self.toolbox.register("mate", gp.cxOnePoint)
@@ -217,7 +220,7 @@ class GpDeapAdfCp(GpDeapADF):
     def selElitistAndTournament(self,
                                 individuals,
                                 k,
-                                no_elite,
+                                no_of_elite,
                                 tournsize):
         '''
         deap_users suggestion:
@@ -227,9 +230,9 @@ class GpDeapAdfCp(GpDeapADF):
         # selBest would be the obvious choice, but this assumes FitnessMin setup
         # therefore, selWorst to choose those individuals with highest fitness
         best = tools.selBest(individuals,
-                             int(no_elite))
+                             int(no_of_elite))
 
         tournament = tools.selTournament(individuals,
-                                         int(k-no_elite),
+                                         int(k-no_of_elite),
                                          tournsize=tournsize)
         return best + tournament

@@ -253,25 +253,40 @@ class GpControl:
             logging.info(f'GpControl.{evalf_name}, new fitness {new_fitness}')
         return new_fitness, # returns a float in a tuple, i.e.  14736.68,
 
+    def evalSymbRegTest(self, individual):
+        # Transform the tree expression in a callable function
+        func = self.gp.toolbox.compile(expr=individual)
+        # Evaluate the sum of squared difference between the expression
+        # and the real function : x**4 + x**3 + x**2 + x
+        try:
+            values = (x/10. for x in range(-10, 10))
+            diff_func = lambda x: (func(x)-(x**4 + x**3 + x**2 + x))**2
+            diff = sum(map(diff_func, values))
+        except BaseException as e:
+            # logging.error(f'evalSymbRegTest ERROR {e}')
+            # tb = ''.join(traceback.format_tb(e.__traceback__))
+            # logging.debug(f"evalSymbRegTest: {tb}")
+            return -110.0, # return 110.0 when evolved func fails
+        return diff,
+
 if __name__ == "__main__":
     start_time = time.time()
 
     gpc = GpControl()
-    gpc.verbose = 1
-    gpc.randomised_test_fitness = 0 # can't show improving fitness
+    gpc.verbose = 0
 
     gpc.use_adfs = 1
     if gpc.use_adfs:
-        pset_used = 'naut_pset_02_adf' # 'test_pset5b'
+        pset_used = 'test_adf_symbreg_pset' # 'naut_pset_02_adf' # 'test_pset5b'
     else:
         pset_used = 'naut_pset_01' #  'test_pset5b'
-    eval_used = 'eval_nautilus'
+    eval_used = 'evalSymbRegTest' # eval_nautilus
 
-    p = 150
-    g = 15
-
-    cp_freq = 30
-    gpc.set_gp_n_cp(freq=cp_freq, cp_file="new")
+    p = 15
+    g = 8
+    cp_base = "adfSymbRegTest"
+    cp_freq = 1
+    gpc.set_gp_n_cp(freq=cp_freq, cp_file=cp_base+"")
 
     # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints
     gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
@@ -281,6 +296,9 @@ if __name__ == "__main__":
     gpc.inject_strategy = 0 # set to 1, this selects naut_06_gp_strategy
 
     gpc.run_gp()
+
+    # tidy up
+    gpc.util.tidy_cp_files(cp_base)
 
     if gpc.verbose:
         logging.info(' deap __ Hall of fame:')

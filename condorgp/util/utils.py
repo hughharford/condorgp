@@ -1,6 +1,8 @@
 import os
 import sys
 from os import listdir
+import glob
+
 from os.path import isfile, join
 import shutil
 from datetime import datetime
@@ -329,18 +331,19 @@ class Utils:
         dest = s[0]+f'_old_1.{s[1]}'
         shutil.copyfile(source, dest)
 
-    def check_seq_increases(self, seq):
-        # print("Original list : " + str(test_list))
-        # using zip() + all() to check for strictly increasing list
-        r = all(i < j for i, j in zip(seq, seq[1:]))
-        # print("Is list strictly increasing ? : " + str(r))
-        return r
+    # this is misplaced
+    # def check_seq_only_ever_increases(self, seq):
+    #     print("Original list : " + str(seq))
+    #     # using zip() + all() to check for strictly increasing list
+    #     r = all(i < j for i, j in zip(seq, seq[1:]))
+    #     print("Is list strictly increasing ? : " + str(r))
+    #     return r
 
     def check_seq_never_decreases(self, seq):
-        # print("Original list : " + str(test_list))
+        print("Original list : " + str(seq))
         # using zip() + all() to check for strictly increasing list
         r = all(i <= j for i, j in zip(seq, seq[1:]))
-        # print("Is list never decreasing ? : " + str(r))
+        print("Is list never decreasing ? : " + str(r))
         return r
 
     def fix_number_for_sort(self, string_num):
@@ -351,19 +354,22 @@ class Utils:
         elif string_num > 100 and string_num < 1000:
             return f"0{string_num}"
 
+    def tidy_cp_files(self, cp_base):
+        chpt_path = self.p.naut_dict['CHECKPOINT_PATH']
+        # All files and directories ending with .txt and that don't begin with a dot:
+        to_delete = glob.glob(f"{chpt_path}{cp_base}_*.pkl")
+        to_delete.sort()
+        for f in range(len(to_delete)-2):
+            if to_delete[f] != chpt_path+cp_base+'_done.pkl':
+                pass
+                os.remove(to_delete[f])
 
 if __name__ == "__main__":
     pass
     print('going...')
     u = Utils()
-    # key_req = 'Sharpe Ratio (252 days)'
-    # # key3 = "Sharpe Ratio"
-    # # key2 = "EMACross-000"
-    # lines = 2000
-
-    # list_seq = [2, 2, 2, 2, 1, 2] # fail
-    # list_seq = [2, 2, 2]
-    # # list_seq = [1, 2, 3]
-    # u.check_seq_never_decreases(list_seq)
-    input = 8
-    print(u.fix_number_for_sort(input))
+    base = "new"
+    # u.tidy_cp_files(base) # tidying cp files
+    seq1 = [1,1,1,1,1,1,1,1,1,1,1] # 2,3,3,4,5,6]
+    seq2 = []
+    u.check_seq_never_decreases(seq1)

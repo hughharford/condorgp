@@ -9,5 +9,6 @@ Feature: GpControl's evolved code must improve fitness
     Then max fitness is static or improves over generations
 
   Examples:
-    |  pset         |   evaluator          |
-    |  naut_pset_01 |   eval_nautilus      |
+    |  pset                  |   evaluator          |
+#   |  naut_pset_01          |   eval_nautilus      |
+    |  test_adf_symbreg_pset |   evalSymbRegTest    |

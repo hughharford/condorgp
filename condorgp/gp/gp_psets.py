@@ -40,6 +40,63 @@ class GpPsets:
         self.test5b.addTerminal("***_***_***", "3x3")
         return self.test5b
 
+    def get_test_adf_symbreg_pset(self):
+        ''' test_adf_symbreg_pset '''
+                # Define new functions
+        def protectedDiv(left, right):
+            try:
+                return left / right
+            except ZeroDivisionError:
+                return 1
+
+        adfset2 = gp.PrimitiveSet("ADF2", 2)
+        adfset2.addPrimitive(operator.add, 2)
+        adfset2.addPrimitive(operator.sub, 2)
+        adfset2.addPrimitive(operator.mul, 2)
+        adfset2.addPrimitive(protectedDiv, 2)
+        adfset2.addPrimitive(operator.neg, 1)
+        adfset2.addPrimitive(math.cos, 1)
+        adfset2.addPrimitive(math.sin, 1)
+
+        adfset1 = gp.PrimitiveSet("ADF1", 2)
+        adfset1.addPrimitive(operator.add, 2)
+        adfset1.addPrimitive(operator.sub, 2)
+        adfset1.addPrimitive(operator.mul, 2)
+        adfset1.addPrimitive(protectedDiv, 2)
+        adfset1.addPrimitive(operator.neg, 1)
+        adfset1.addPrimitive(math.cos, 1)
+        adfset1.addPrimitive(math.sin, 1)
+        adfset1.addADF(adfset2)
+
+        adfset0 = gp.PrimitiveSet("ADF0", 2)
+        adfset0.addPrimitive(operator.add, 2)
+        adfset0.addPrimitive(operator.sub, 2)
+        adfset0.addPrimitive(operator.mul, 2)
+        adfset0.addPrimitive(protectedDiv, 2)
+        adfset0.addPrimitive(operator.neg, 1)
+        adfset0.addPrimitive(math.cos, 1)
+        adfset0.addPrimitive(math.sin, 1)
+        adfset0.addADF(adfset1)
+        adfset0.addADF(adfset2)
+
+        pset = gp.PrimitiveSet("MAIN", 1)
+        pset.addPrimitive(operator.add, 2)
+        pset.addPrimitive(operator.sub, 2)
+        pset.addPrimitive(operator.mul, 2)
+        pset.addPrimitive(protectedDiv, 2)
+        pset.addPrimitive(operator.neg, 1)
+        pset.addPrimitive(math.cos, 1)
+        pset.addPrimitive(math.sin, 1)
+        # pset.addEphemeralConstant("rand101", lambda: random.randint(-1, 1))
+        pset.addADF(adfset0)
+        pset.addADF(adfset1)
+        pset.addADF(adfset2)
+        pset.renameArguments(ARG0='x')
+
+        psets = (pset, adfset0, adfset1, adfset2)
+
+        return psets
+
     def get_naut_pset_03_strategy(self):
         ''' naut_pset_03_strategy
 
