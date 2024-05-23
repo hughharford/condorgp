@@ -137,7 +137,9 @@ RUN apt-get install -y docker.io docker-compose
   # WARNING: pip is configured with locations that require TLS/SSL, 
   # however the ssl module in Python is not available.
 RUN apt-get install -y \
-  libreadline-gplv2-dev \
+#  libreadline-gplv2-dev \  
+# TO DO: Need to understand why there was no candidate for libreadline-gplv2-dev 
+# and why it didn't matter on previous builds
   libncursesw5-dev \
   libssl-dev \
   libsqlite3-dev \
@@ -146,11 +148,11 @@ RUN apt-get install -y \
   libc6-dev \
   libbz2-dev
 
-############# Then, PYTHON 3.8.0 #########################################################
+############# Then, PYTHON #########################################################
 # ''''''''''''''' ############################# '''''''''''''''''' ####################
 
-# WAS 3.8.0 we want: 3.10.6
-ENV PYTHON_VERSION 3.8.0
+# WAS 3.8.0 (builds successfully) we want: 3.10.6
+ENV PYTHON_VERSION 3.10.6
 
 RUN set -ex \
 	\
@@ -194,7 +196,8 @@ RUN set -ex \
 # ''''''''''''''' ############################# '''''''''''''''''' ####################
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 21.0.0
+# was 20.0.0:
+ENV PYTHON_PIP_VERSION 22.2.1
 # https://github.com/docker-library/python/issues/365
 ENV PYTHON_SETUPTOOLS_VERSION 57.0.0
 # https://github.com/pypa/get-pip
