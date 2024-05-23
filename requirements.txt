@@ -27,17 +27,14 @@ joblib
 memoized-property
 termcolor
 
-# condorgp,
+# condorgp:
 deap
+# nautilus_trader:
+# can install simply:
+  # pip install -U nautilus_trader
+# or with interactive brokers and docker:
+  # pip install -U "nautilus_trader[docker,ib]"
 
 # condorgp utilities etc
 pytest-bdd
 file-read-backwards # utils
-
-# # OUTDATED ____ OUTDATED ____ OUTDATED ____ OUTDATED ____ OUTDATED ____
-# #       # lean dotnet build requirements
-# # OUTDATED ____ OUTDATED ____ OUTDATED ____ OUTDATED ____ OUTDATED ____
-# # libicu-dev # apt get install instead
-# pythonnet # and then run:
-#                      # export PYTHONNET_PYDLL=pathto/../libpython3.8.so
-# mono-complete

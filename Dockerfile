@@ -63,17 +63,6 @@ RUN apt-get install -y \
 # so install manually once set up, or?
 
 #		VS Code
-#			#### 	https://linuxize.com/post/how-to-install-visual-studio-code-on-ubuntu-18-04/
-#			sudo apt install gnupg2 software-properties-common apt-transport-https wget
-#			wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
-#			sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
-#			sudo apt update
-#			sudo apt install code
-#		Docker
-#			RUN apt-get install -y docker.io docker-compose
-#				sudo snap install docker          # version 20.10.11, or
-#				sudo apt  install docker-compose  # version 1.25.0-1
-
 #
 # Further useful:
 #
@@ -88,41 +77,47 @@ RUN apt-get install -y \
 # was: RUN apt-get install docker.io -y
 RUN apt-get install -y docker.io docker-compose
 
+# THESE FEEL SUPERFLUOUS 240523
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 #### LE WAGON INSTALLS ##### start #
 # REF                                https://gto76.github.io/python-cheatsheet/
 ### TODO: Convert to requirements.txt
 
-RUN pip3 install pygame \
-	&& pip3 install PySimpleGUI \
-	# FROM 					REF/#logging
-	&& pip3 install loguru \
-	# for logging
-	&& pip3 install requests beautifulsoup4 \
-	# for web-scraping
-	&& pip3 install bottle \
-	# for web
-	&& pip3 install line_profiler memory_profiler \
-	# for profiling by line
-	&& pip3 install pycallgraph2 \
-	# for a PNG image of the call graph with highlighted bottlenecks (see example)
-	&& pip3 install pillow \
-	# for image
-	&& pip3 install pyttsx3 \
-	# for text to speech recognition
-	#													&& pip3 install simpleaudio \
-	# for synthesizer
-	&& pip3 install plotly kaleido \
-	# for plotly
-	&& pip3 install cython \
-	# for the Library that compiles Python code into C.
-	&& pip3 install tqdm \
-	# progress bar
-	&& pip3 install tabulate
-	# can prints a CSV file as an ASCII table
+# RUN pip3 install pygame \
+	# && pip3 install PySimpleGUI \
+	# # FROM 					REF/#logging
+	# && pip3 install loguru \
+	# # for logging
+	# && pip3 install requests beautifulsoup4 \
+	# # for web-scraping
+	# && pip3 install bottle \
+	# # for web
+	# && pip3 install line_profiler memory_profiler \
+	# # for profiling by line
+	# && pip3 install pycallgraph2 \
+	# # for a PNG image of the call graph with highlighted bottlenecks (see example)
+	# && pip3 install pillow \
+	# # for image
+	# && pip3 install pyttsx3 \
+	# # for text to speech recognition
+	# #													&& pip3 install simpleaudio \
+	# # for synthesizer
+	# && pip3 install plotly kaleido \
+	# # for plotly
+	# && pip3 install cython \
+	# # for the Library that compiles Python code into C.
+	# && pip3 install tqdm \
+	# # progress bar
+	# && pip3 install tabulate
+	# # can prints a CSV file as an ASCII table
 
 ### TODO: Convert to requirements.txt
 #### LE WAGON INSTALLS ##### end #
 
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 # # make some useful symlinks that are expected to exist
  RUN cd /usr/local/bin \
@@ -138,10 +133,23 @@ RUN pip3 install pygame \
 ############# @@@@@@@@@@@@@@@ #########################################################
 # ''''''''''''''' ############################# '''''''''''''''''' ####################
 
+# HSTH additional to deal with: 
+  # WARNING: pip is configured with locations that require TLS/SSL, 
+  # however the ssl module in Python is not available.
+RUN apt-get install -y \
+  libreadline-gplv2-dev \
+  libncursesw5-dev \
+  libssl-dev \
+  libsqlite3-dev \
+  tk-dev \
+  libgdbm-dev \
+  libc6-dev \
+  libbz2-dev
 
 ############# Then, PYTHON 3.8.0 #########################################################
 # ''''''''''''''' ############################# '''''''''''''''''' ####################
 
+# WAS 3.8.0 we want: 3.10.6
 ENV PYTHON_VERSION 3.8.0
 
 RUN set -ex \
@@ -193,8 +201,6 @@ ENV PYTHON_SETUPTOOLS_VERSION 57.0.0
 ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/3cb8888cc2869620f57d5d2da64da38f516078c7/public/get-pip.py
 ENV PYTHON_GET_PIP_SHA256 c518250e91a70d7b20cceb15272209a4ded2a0c263ae5776f129e0d9b5674309
 
-# HSTH additional to deal with: WARNING: pip is configured with locations that require TLS/SSL, however the ssl module in Python is not available.
-RUN apt-get install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
 
 RUN set -ex; \
 	\
