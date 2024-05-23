@@ -60,17 +60,19 @@ class GpRunStrategyInject(GpRunStrategyBase):
 
         super().__init__(config)
 
-        self.ev_strategy = None
         if ev_strategy:
             self.ev_strategy = ev_strategy
 
         self.p = Params()
         self.verbosity = self.p.naut_dict['VERBOSITY']
+        
+    def __main__():
+        return 1
 
     def check_triggers(self, blank = ""):
 
             if self.verbosity: # note, this will log for every bar checked
-                logging.info(
+                logging.debug(
                     f"GpRunStrategyInject.check_triggers: {self.ev_strategy}")
 
             # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''

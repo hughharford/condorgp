@@ -123,6 +123,8 @@ class GpControl:
             if pset_spec == '': pset_spec = self.default_pset
             funcs = {}     # Set: 1. additional functions & terminals
             terms = {}
+            logging.debug(f"GpControl: set_defined_pset {pset_spec}")
+
             self.gp.set_defined_pset(self.gp_psets_cls, pset_spec, funcs, terms)
             logging.debug(f"GpControl: set_defined_pset complete")
 
@@ -219,6 +221,7 @@ class GpControl:
             logging.debug(f" >>> eval_nautilus individual: {printed_ind}")
         new_fitness = 0.0
         if self.inject_strategy == 1: # new inject gp strategy approach
+            new_fitness = -9988
             if self.run_backtest:
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
                 self.backtester.basic_run(evolved_func=func, gp_strategy=True)
@@ -227,8 +230,6 @@ class GpControl:
             else:
                 logging.debug(f"ERROR {evalf_name} {'>'*2} "+
                               f"NAUTILUS {'>'*4} {new_fitness}")
-                tb = ''.join(traceback.format_tb(e.__traceback__))
-                logging.debug(f"eval_nautilus: {tb}")
 
         else:  # first inject gp strategy config approach
             try:
@@ -273,19 +274,20 @@ if __name__ == "__main__":
     start_time = time.time()
 
     gpc = GpControl()
-    gpc.verbose = 0
+    gpc.verbose = 1
 
     gpc.use_adfs = 1
     if gpc.use_adfs:
-        pset_used = 'test_adf_symbreg_pset' # 'naut_pset_02_adf' # 'test_pset5b'
+        pset_used = 'naut_pset_03_strategy' # 'naut_pset_03_strategy'
+        # 'naut_pset_02_adf' # 'test_adf_symbreg_pset' # 'test_pset5b'
     else:
         pset_used = 'naut_pset_01' #  'test_pset5b'
-    eval_used = 'evalSymbRegTest' # eval_nautilus
+    eval_used = 'eval_nautilus' # evalSymbRegTest
 
-    p = 15
-    g = 8
-    cp_base = "adfSymbRegTest"
-    cp_freq = 1
+    p = 4
+    g = 1
+    cp_base = "first_strat"
+    cp_freq = g+1
     gpc.set_gp_n_cp(freq=cp_freq, cp_file=cp_base+"")
 
     # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints
@@ -293,7 +295,7 @@ if __name__ == "__main__":
     gpc.set_test_evaluator(eval_used)
 
     gpc.run_backtest = 0
-    gpc.inject_strategy = 0 # set to 1, this selects naut_06_gp_strategy
+    gpc.inject_strategy = 1 # set to 1, this selects naut_06_gp_strategy
 
     gpc.run_gp()
 
@@ -311,6 +313,6 @@ if __name__ == "__main__":
     best = gpc.gp.hof.items[0]
     printed_ind = [str(tree) for tree in best]
     logging.info(f" Evolution run, best individual: \n\
-        {printed_ind} __ fitness: {best.fitness}")
+        {printed_ind} __ fitness: {round(best.fitness,4)}")
 
     logging.info("--- %s seconds ---" % (round((time.time() - start_time),3)))

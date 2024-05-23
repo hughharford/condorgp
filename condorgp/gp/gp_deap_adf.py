@@ -34,7 +34,7 @@ class GpDeapADF(GpDeap):
             self.psets = gp_psets_cls.get_named_pset(new_pset_name)
 
         if not self.psets:
-            logging.warning(f"ERROR GpDeapADF: no pset!")
+            logging.warning(f"ERROR GpDeapADF: no pset! {gp_psets_cls}")
 
         # # seperate out main and adf:
         self.pset = self.psets[0]

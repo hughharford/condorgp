@@ -30,6 +30,12 @@ class GetStrategies():
         strategy = EMACross(config=config)
         return strategy
 
+    # @@@@@@@@@@@@@@@@@@@@@@@@@@
+    #
+    #    CONFIG SECTION
+    #
+    # @@@@@@@@@@@@@@@@@@@@@@@@@@
+
     def get_config_strategy(self):
         config = EMACrossConfig(
             instrument_id=str(self.instrument.id),
@@ -67,6 +73,13 @@ class GetStrategies():
             )
         return config
 
+    # @@@@@@@@@@@@@@@@@@@@@@@@@@
+    #
+    #    STRATEGIES SECTION
+    #
+    # @@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
     def get_evolved_strategy(self, ev_strategy=""):
         config = self.get_std_config_for_evolved_strategy()
         if ev_strategy:
@@ -76,13 +89,16 @@ class GetStrategies():
             # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
             # ###     This replaces what an evolved strategy should be:
             # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
-            # self.ev_strategy = GpRunStrategyInject(
-            #                                 config=config,
-            #                                 ev_strategy=ev_strategy)
+            self.ev_strategy = GpRunStrategyInject(
+                                            config=config,
+                                            ev_strategy=ev_strategy)
             # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
-            # instead, just:
+            # holding pattern, just:
+            #
+            # OUT OF DATE< REMOVE WITH NO ISSUE
+            #
             # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
-            self.ev_strategy = ev_strategy
+            # self.ev_strategy = ev_strategy
 
         else:
             # i.e. run standard strategy, but with check_triggers method

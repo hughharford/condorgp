@@ -7,12 +7,17 @@ from datetime import timedelta
 
 from decimal import Decimal
 
+from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBase
+from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBaseConfig
+from condorgp.evaluation.gp_run_strat_inject import GpRunStrategyInject
+
 from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
 from nautilus_trader.test_kit.providers import TestInstrumentProvider
 from nautilus_trader.model.identifiers import Venue
 from nautilus_trader.model.identifiers import InstrumentId
 
 import logging
+import traceback
 
 class GpPsets:
     ''' Provides population sets (psets) for CondorGP '''
@@ -23,7 +28,9 @@ class GpPsets:
         try:
             return eval('self.get_' + named_pset + '()')
         except BaseException as e:
-            print("GpPsets ERROR: " + str(e))
+            logging.error("GpPsets.get_named_pset ERROR: " + str(e))
+            tb = ''.join(traceback.format_tb(e.__traceback__))
+            logging.debug(f"GpPsets.get_named_pset: {tb}")
             return None
 
     def get_test_pset5a(self):
@@ -165,13 +172,29 @@ class GpPsets:
         inst = TestInstrumentProvider.default_fx_ccy("AUD/USD", self.SIM)
         inst2 = TestInstrumentProvider.default_fx_ccy("AUD/USD",self.SIM)
 
-        # a first basic primitive set for strongly typed GP using Nautilus
-        self.pset = gp.PrimitiveSetTyped("CGPNAUT02",
-                                         [], EMACrossConfig, "ARG")
+        # # a first basic primitive set for strongly typed GP using Nautilus
+        self.pset = gp.PrimitiveSetTyped("CGPNAUT03",
+                                         [], GpRunStrategyInject, "ARG")
         # primary primitive, to enable function
-        self.pset.addPrimitive(EMACrossConfig,
-                               [StrInstr, StrBar, Decimal, LittleInt, BigInt],
-                               EMACrossConfig)
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
+        # add GpRunStrategyInject as a PRIMITIVE 
+        
+        # This didn't throw pset error, but needs GpRunStrategyBaseConfig injection
+        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyInject], GpRunStrategyInject)
+        # This was even better:
+        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig], GpRunStrategyInject)
+        # But it needs ev_strategy input, like so, also seems ok:
+        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
+        # now to try with backtest enabled:
+        # with or without backtest enabled still gives ERROR:
+        # ERROR:root:gp_deap_adf_cp.run_gp restart / start ERROR: 'str' object has no attribute 'fast_ema_period'
+        #   This is caused as the eInd uses a str(xxx) where xxx is all sorts of evolved uselessness
+        #   So, unsurprising.
+        #   The str() input variable is for 
+
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
         # first pset terminals:
         self.pset.addTerminal(StrInstr(inst.id), StrInstr)
         self.pset.addTerminal(StrInstr(inst2.id), StrInstr)
@@ -190,8 +213,15 @@ class GpPsets:
         self.pset.addPrimitive(Decimal, [Decimal], Decimal)
         self.pset.addPrimitive(str, [str], str)
         self.pset.addPrimitive(int, [int], int)
+
+        self.pset.addPrimitive(GpRunStrategyBaseConfig,
+                               [StrInstr, StrBar, Decimal, LittleInt, BigInt],
+                               GpRunStrategyBaseConfig)
+
         self.pset.addTerminal(Decimal(1_000_000), Decimal)
-        self.pset.addTerminal("EMACrossConfig", EMACrossConfig)
+        self.pset.addTerminal('GpRunStrategyBaseConfig', GpRunStrategyBaseConfig)
+        self.pset.addTerminal('GpRunStrategyInject', GpRunStrategyInject)
+
         # using specified int and str classes to reduce degress of freedom
         self.pset.addPrimitive(BigInt, [BigInt], BigInt)
         self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
@@ -259,12 +289,15 @@ class GpPsets:
         self.pset.addTerminal(200, BigInt)
         self.pset.addTerminal(1_000_000, int)
         self.pset.addTerminal(2_000_000, int)
+
         # below here were added to allow DEAP to populate
         self.pset.addPrimitive(Decimal, [Decimal], Decimal)
         self.pset.addPrimitive(str, [str], str)
         self.pset.addPrimitive(int, [int], int)
+
         self.pset.addTerminal(Decimal(1_000_000), Decimal)
         self.pset.addTerminal("EMACrossConfig", EMACrossConfig)
+
         # using specified int and str classes to reduce degress of freedom
         self.pset.addPrimitive(BigInt, [BigInt], BigInt)
         self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
@@ -276,8 +309,6 @@ class GpPsets:
         self.psets = (self.pset, self.adfset0)
 
         return self.psets
-
-
 
     def get_naut_pset_01(self):
         ''' naut_pset_01
@@ -331,6 +362,7 @@ class GpPsets:
         self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
         self.pset.addPrimitive(str, [StrInstr], StrInstr)
         self.pset.addPrimitive(str, [StrBar], StrBar)
+
         return self.pset
 
 # Define new functions
@@ -339,7 +371,6 @@ def protectedDiv(left, right):
         return left / right
     except ZeroDivisionError:
         return 1
-
 
 class StrInstr(str):
     def pass_method(self):
@@ -366,31 +397,25 @@ class LittleInt(int):
     def pass_method(self):
         pass
 
-    def __len__(self):
-        return 1
-
 if __name__ == '__main__':
     pass
 
     # uncomment the below and run to have a look into a pset created above:
 
-    from deap import gp
-    from condorgp.factories.custom_funcs_factory import CustomFuncsFactory
-    cf = CustomFuncsFactory()
-    gp_custom_funcs = cf.get_gp_custom_functions()
-    gpp = GpPsets(gp_custom_funcs)
-    pset_and_adf = gpp.get_named_pset('naut_pset_02_adf')
-    print(f"{type(pset_and_adf[0])} named: {pset_and_adf[0].name}")
-    print(f"{type(pset_and_adf[1])} named: {pset_and_adf[1].name}")
-
+    a = 'naut_pset_03_strategy'
+    b = 'test_pset5a'
+    c = 'test_adf_symbreg_pset'
+    gpp = GpPsets()
+    pset_and_adf = gpp.get_named_pset(a)
+    print(pset_and_adf)
+    # print(f"{type(pset_and_adf[0])} named: {pset_and_adf[0].name}")
+    # print(f"{type(pset_and_adf[1])} named: {pset_and_adf[1].name}")
     # # print('looking at terminals:')
     # print('count of terminals: ', one.terms_count,
     #       ' ... n.b. always one more than actual, due to base class')
     # term_keys = list(one.terminals.keys())
     # print(term_keys)
-
     # list_terminals = one.terminals.get(term_keys[0])
     # print(list_terminals)
-
     # prim_names = list(one.context.keys())
     # print(prim_names)

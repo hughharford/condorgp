@@ -38,7 +38,7 @@ class RunNautilus():
         '''
         result = 0.1
 
-        if gp_strategy: # gp evolving strategy
+        if gp_strategy: # set GpControl: gpc.inject_strategy = 1
             logging.debug(">>> RunNautilus.basic_run naut_06_gp_strategy >>>")
             try:
                 nrun = NautRuns06GpStrategy()
@@ -59,7 +59,7 @@ class RunNautilus():
                     logging.error(
                         f"ERROR {__name__}, failed basic_run evolved_func: {e}")
             else:
-                # run without injecting code
+                # run without injecting code, i.e. a script in a sub-process
                 if specified_script != "": # use specified script for further runs
                     self.script_str = f"{self.eval_path}{specified_script}"
                 else:

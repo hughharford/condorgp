@@ -107,7 +107,8 @@ class GpRunStrategyBase(Strategy):
 
     def __init__(self, config: GpRunStrategyBaseConfig, ev_strategy=None) -> None:
 
-        self.ev_strategy = None
+        if ev_strategy:
+            self.ev_strategy = ev_strategy
         self.p = Params()
         self.verbosity = self.p.naut_dict['VERBOSITY']
 
@@ -179,9 +180,9 @@ class GpRunStrategyBase(Strategy):
         if bar.is_single_price():
             # Implies no market information for this bar
             return
-        
+
         if self.verbosity:
-            logging.info(
+            logging.debug(
                 f"setting check_triggers in GpRunStrategyBase"
             )
         if self.ev_strategy:
