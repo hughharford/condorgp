@@ -2,6 +2,7 @@ import os
 import os.path
 
 import pytest
+import logging
 from pytest_bdd import scenarios, given, when, then, parsers
 
 from tests.fixtures import *
@@ -18,7 +19,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/12_gp_basic_ev_strategy.feature')
+scenarios('../features/12_gp_ev_strategy.feature')
 
 """
 Feature: CondorGp's evolved code is immediately most effective as a strategy
@@ -34,11 +35,13 @@ Feature: CondorGp's evolved code is immediately most effective as a strategy
 
 @given('GpControl with naut_06_gp_strategy')
 def gpcontrol_n_naut_06(gpc):
+    Factory().start_logger()
+
     gpc.use_adfs = 1
     pset = 'naut_pset_02_adf'
     p = 1
     g = 0
-    cp_freq = 0
+    cp_freq = g+1
     gpc.set_gp_n_cp(freq=cp_freq, cp_file="test12_done")
     gpc.setup_gp(pset_spec=pset, pop_size=p, no_gens=g)
     gpc.run_backtest = 1
@@ -53,5 +56,5 @@ def first_gp_strategy_run(gpc):
 @then('the initial strategy fitness is not zero')
 def adf_fitness_is_not_zero(gpc):
     max_fitness_found = gpc.gp.logbook.select("max")[-1]
-    # min_fitness_found = gpc.gp.logbook.select("min")[0]
+    logging.info(f'max_fitness_found = {max_fitness_found}')
     assert max_fitness_found > -21000
