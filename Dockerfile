@@ -204,36 +204,6 @@ ENV PYTHON_SETUPTOOLS_VERSION 57.0.0
 ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/3cb8888cc2869620f57d5d2da64da38f516078c7/public/get-pip.py
 ENV PYTHON_GET_PIP_SHA256 c518250e91a70d7b20cceb15272209a4ded2a0c263ae5776f129e0d9b5674309
 
-
-RUN set -ex; \
-	\
-	curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
-	python get-pip.py \
-	pip --version; \
-	\
-	find /usr/local -depth \
-		\( \
-			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
-			-o \
-			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
-		\) -exec rm -rf '{}' +; \
-	rm -f get-pip.py
-
-
-# NEED TO INVESTIGATE HOW TO SET UP SSH KEY AUTOMATICALLY
-# - better:
-#   echo -e "Host github.com
-#       Hostname github.com                            
-#       User git                  
-#       IdentityFile '~/.ssh/some_key'" > ~/temp_config_example.txt
-  
-#       ssh -T git@github.com
-#       Hi hughharford! You've successfully authenticated, but GitHub does not provide shell access.
-  
-#   - Make sure an SSH key is setup with Github on this instance, then:
-#   mkdir code; cd code
-  
-  
 #   ### dotfiles
 #   export GITHUB_USERNAME=`gh api user | jq -r '.login'`
 #   echo $GITHUB_USERNAME
