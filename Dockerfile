@@ -219,6 +219,53 @@ RUN set -ex; \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
+
+# NEED TO INVESTIGATE HOW TO SET UP SSH KEY AUTOMATICALLY
+# - better:
+#   echo -e "Host github.com
+#       Hostname github.com                            
+#       User git                  
+#       IdentityFile '~/.ssh/some_key'" > ~/temp_config_example.txt
+  
+#       ssh -T git@github.com
+#       Hi hughharford! You've successfully authenticated, but GitHub does not provide shell access.
+  
+#   - Make sure an SSH key is setup with Github on this instance, then:
+#   mkdir code; cd code
+  
+  
+#   ### dotfiles
+#   export GITHUB_USERNAME=`gh api user | jq -r '.login'`
+#   echo $GITHUB_USERNAME
+#   cd ~/code; git clone git@github.com:hughharford/dotfiles.git
+#   cd ~/code/dotfiles && zsh install.sh
+#   cd ~/code/dotfiles && zsh git_setup.sh
+
+# additional 24 05 23 quickly
+RUN pip3 install -y gh \
+  make 
+
+RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
+  exec zsh
+
+# additional 24 05 23 quickly 2
+RUN sudo apt install -y curl git imagemagick jq unzip vim zsh tree; \
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; \
+  sudo apt-get update; sudo apt-get install direnv; \
+  echo 'eval "$(direnv hook zsh)"' >> ~/.zshrc;
+
+# further python support packages?
+RUN sudo apt-get update; sudo apt-get install make build-essential libssl-dev zlib1g-dev \
+  libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+  libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev \
+  python3-dev
+
+### set virtual environment
+RUN git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv \
+  exec zsh \
+  pyenv virtualenv 3.10.6 condorgp \
+  pyenv global condorgp
+
 # HSTH fulfill from requirements.txt
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
