@@ -269,8 +269,8 @@ class GpControl:
             # logging.debug(f"evalSymbRegTest: {tb}")
             return -110.0, # return 110.0 when evolved func fails
         return diff,
-
-if __name__ == "__main__":
+    
+def main():
     start_time = time.time()
 
     gpc = GpControl()
@@ -284,7 +284,7 @@ if __name__ == "__main__":
         pset_used = 'naut_pset_01' #  'test_pset5b'
     eval_used = 'eval_nautilus' # evalSymbRegTest
 
-    p = 4
+    p = 1
     g = 1
     cp_base = "first_strat"
     cp_freq = g+1
@@ -310,9 +310,13 @@ if __name__ == "__main__":
 
     logging.debug(f"GpControl run, evaluator: {eval_used}, pset: {pset_used}")
 
-    best = gpc.gp.hof.items[0]
-    printed_ind = [str(tree) for tree in best]
-    logging.info(f" Evolution run, best individual: \n\
-        {printed_ind} __ fitness: {round(best.fitness,4)}")
+    if gpc.run_backtest == 1:
+        best = gpc.gp.hof.items[0]
+        printed_ind = [str(tree) for tree in best]
+        logging.info(f" Evolution run, best individual: \n\
+            {printed_ind} __ fitness: {round(best.fitness,4)}")
 
     logging.info("--- %s seconds ---" % (round((time.time() - start_time),3)))
+
+if __name__ == "__main__":
+     main()

@@ -45,6 +45,10 @@ nautilus_trader
 # comms
 pika>=1.3.2
 
+# rabbitmq with erlang
+# https://www.rabbitmq.com/docs/install-debian
+# see script here
+
 # condorgp utilities etc
 pytest-bdd
 file-read-backwards # utils
