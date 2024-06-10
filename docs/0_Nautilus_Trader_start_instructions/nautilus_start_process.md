@@ -1,7 +1,7 @@
 ##
 
 ## Used this  to the Enviroment
-https://docs.nautilustrader.io/developer_guide/environment_setup.html
+<!-- https://docs.nautilustrader.io/developer_guide/environment_setup.html -->
 
 # First update all packages
 sudo apt update && sudo apt upgrade

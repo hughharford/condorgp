@@ -27,13 +27,23 @@ joblib
 memoized-property
 termcolor
 
-# condorgp:
+# memory:
+memory_profiler
+line_profiler
+
+# evolution:
 deap
-# nautilus_trader:
+
+# trading
+nautilus_trader
+# TRYING nautilus_trader 24 05 30:
 # can install simply:
   # pip install -U nautilus_trader
 # or with interactive brokers and docker:
   # pip install -U "nautilus_trader[docker,ib]"
+
+# comms
+pika>=1.3.2
 
 # condorgp utilities etc
 pytest-bdd

@@ -4,6 +4,7 @@
 data/*
 .vscode/*
 raw_data/*
+build/*
 
 # file types
 .zip

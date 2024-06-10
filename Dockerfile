@@ -96,22 +96,12 @@ RUN apt-get install -y docker.io docker-compose
 	# # for web
 	# && pip3 install line_profiler memory_profiler \
 	# # for profiling by line
-	# && pip3 install pycallgraph2 \
-	# # for a PNG image of the call graph with highlighted bottlenecks (see example)
-	# && pip3 install pillow \
-	# # for image
-	# && pip3 install pyttsx3 \
-	# # for text to speech recognition
-	# #													&& pip3 install simpleaudio \
+
+
 	# # for synthesizer
 	# && pip3 install plotly kaleido \
 	# # for plotly
-	# && pip3 install cython \
-	# # for the Library that compiles Python code into C.
-	# && pip3 install tqdm \
-	# # progress bar
-	# && pip3 install tabulate
-	# # can prints a CSV file as an ASCII table
+
 
 ### TODO: Convert to requirements.txt
 #### LE WAGON INSTALLS ##### end #
@@ -128,17 +118,13 @@ RUN apt-get install -y docker.io docker-compose
 
 ############# PYTHON #########################################################
 # ''''''''''''''' ############################# '''''''''''''''''' ####################
-############# @@@@@@@@@@@@@@@ #########################################################
-# ''''''''''''''' ############################# '''''''''''''''''' ####################
-############# @@@@@@@@@@@@@@@ #########################################################
-# ''''''''''''''' ############################# '''''''''''''''''' ####################
 
 # HSTH additional to deal with: 
   # WARNING: pip is configured with locations that require TLS/SSL, 
   # however the ssl module in Python is not available.
 RUN apt-get install -y \
 #  libreadline-gplv2-dev \  
-# TO DO: Need to understand why there was no candidate for libreadline-gplv2-dev 
+# TO DO: 250519 Need to understand why there was no candidate for libreadline-gplv2-dev 
 # and why it didn't matter on previous builds
   libncursesw5-dev \
   libssl-dev \
@@ -148,10 +134,9 @@ RUN apt-get install -y \
   libc6-dev \
   libbz2-dev
 
-############# Then, PYTHON #########################################################
+############# Then, PYTHON 3.10.6 #####################################################
 # ''''''''''''''' ############################# '''''''''''''''''' ####################
 
-# WAS 3.8.0 (builds successfully) we want: 3.10.6
 ENV PYTHON_VERSION 3.10.6
 
 RUN set -ex \
@@ -188,18 +173,14 @@ RUN set -ex \
 	\
 	&& python3 --version
 
-############# @@@@@@@@@@@@@@@ #########################################################
-# ''''''''''''''' ############################# '''''''''''''''''' ####################
-############# @@@@@@@@@@@@@@@ #########################################################
-# ''''''''''''''' ############################# '''''''''''''''''' ####################
 ############# PYTHON VERSIONS #########################################################
 # ''''''''''''''' ############################# '''''''''''''''''' ####################
 
-# if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-# was 20.0.0:
 ENV PYTHON_PIP_VERSION 22.2.1
 # https://github.com/docker-library/python/issues/365
-ENV PYTHON_SETUPTOOLS_VERSION 57.0.0
+ENV PYTHON_SETUPTOOLS_VERSION 70.0.0
+# was 57.0.0 
+# SETUPTOOLS version 70 indicated: https://pypi.org/project/setuptools/#history
 # https://github.com/pypa/get-pip
 ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/3cb8888cc2869620f57d5d2da64da38f516078c7/public/get-pip.py
 ENV PYTHON_GET_PIP_SHA256 c518250e91a70d7b20cceb15272209a4ded2a0c263ae5776f129e0d9b5674309
@@ -211,33 +192,36 @@ ENV PYTHON_GET_PIP_SHA256 c518250e91a70d7b20cceb15272209a4ded2a0c263ae5776f129e0
 #   cd ~/code/dotfiles && zsh install.sh
 #   cd ~/code/dotfiles && zsh git_setup.sh
 
-# additional 24 05 23 quickly
-RUN pip3 install -y gh \
-  make 
+# # additional 24 05 23 quickly
+# RUN pip3 install \
+#   gh \
+#   make 
 
-RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
-  exec zsh
+RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 
 # additional 24 05 23 quickly 2
-RUN sudo apt install -y curl git imagemagick jq unzip vim zsh tree; \
+RUN apt install -y curl git imagemagick jq unzip vim zsh tree gh make; \
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; \
-  sudo apt-get update; sudo apt-get install direnv; \
+  apt-get update; apt-get install direnv; \
   echo 'eval "$(direnv hook zsh)"' >> ~/.zshrc;
 
 # further python support packages?
-RUN sudo apt-get update; sudo apt-get install make build-essential libssl-dev zlib1g-dev \
+RUN apt-get update; apt-get install -y make build-essential libssl-dev zlib1g-dev \
   libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
   libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev \
   python3-dev
 
 ### set virtual environment
-RUN git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv \
-  exec zsh \
-  pyenv virtualenv 3.10.6 condorgp \
-  pyenv global condorgp
+# isn't the Container itself a "virtual environment" in itself?
+  # exec zsh \
+  # pyenv virtualenv 3.10.6 condorgp \
+  # pyenv global condorgp
 
 # HSTH fulfill from requirements.txt
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
+
+# the below IS PROBLEMATIC, REMOVE: why is this needed...
+# RUN exec zsh
 
 CMD ["/bin/bash"]
