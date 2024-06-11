@@ -24,9 +24,9 @@ def main():
         gpc.undertake_run()
         
         print(" [x] Done")
+        ch.basic_ack(delivery_tag = method.delivery_tag)
         
     channel.basic_consume(queue='cgp_queue',
-                        auto_ack=True,
                         on_message_callback=callback)
 
     print(' [*] Waiting for messages. To exit press CTRL+C')

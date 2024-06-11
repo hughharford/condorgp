@@ -13,7 +13,7 @@ git clone git@github.com:nautechsystems/nautilus_trader.git
 cd nautilus_trader
 
 # Create nautilus environment with pyenv
-pyenv virtualenv 3.10.6  naut_trader
+pyenv virtualenv 3.10.6 naut_trader
 # Activate virtualenv locally
 pyenv local naut_trader
 

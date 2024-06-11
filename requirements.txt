@@ -35,7 +35,9 @@ line_profiler
 deap
 
 # trading
-nautilus_trader
+# nautilus_trader
+#             THIS DID NOT INSTALL DATA
+
 # TRYING nautilus_trader 24 05 30:
 # can install simply:
   # pip install -U nautilus_trader
