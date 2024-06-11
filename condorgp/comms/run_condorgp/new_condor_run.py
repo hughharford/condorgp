@@ -8,10 +8,11 @@ import pika, sys
 connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 channel = connection.channel()
 
-channel.queue_declare(queue='hello')
+channel.queue_declare(queue='cgp_queue')
 
-message = ' '.join(sys.argv[1:]) or "Hello World!"
+message = ' '.join(sys.argv[1:]) or "Start CondorGP standard run!"
 channel.basic_publish(exchange='',
-                      routing_key='hello',
+                      routing_key='cgp_queue',
                       body=message)
+
 print(f" [x] Sent {message}")

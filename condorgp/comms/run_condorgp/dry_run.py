@@ -55,7 +55,8 @@ def undertake_cgp_run():
 
 if __name__ == '__main__':
     try:
-        undertake_cgp_run()
+        gpc = GpControl()
+        gpc.undertake_run()
     except KeyboardInterrupt:
         print('Interrupted')
         try:
