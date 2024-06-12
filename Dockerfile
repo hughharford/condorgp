@@ -102,14 +102,14 @@ ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 RUN echo 'export PYENV_ROOT="$HOME/.pyenv"' >> .bashrc
 RUN echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> .bashrc
 RUN echo 'eval "$(pyenv init -)"' >> .bashrc
-RUN pyenv install 3.10.6
+RUN pyenv install 3.10.12
 
 # install pyenv-virtualenv
 RUN git clone https://github.com/yyuu/pyenv-virtualenv.git .pyenv/plugins/pyenv-virtualenv
 RUN echo 'eval "$(pyenv virtualenv-init -)"' >> .bashrc
 
 # # NEED THESE
-RUN pip install numpy setuptools wheel six auditwheel setuptools
+RUN pip3 install numpy setuptools wheel six auditwheel setuptools
 
 
 ############# PYTHON #########################################################
@@ -137,54 +137,75 @@ RUN pip3 install --ignore-installed six
 # git clone first
 RUN mkdir $HOME/code/
 RUN mkdir $HOME/code/nautilus_trader
-RUN git clone https://github.com/nautechsystems/nautilus_trader.git $HOME/code/nautilus_trader
+# CONSIDER git shallow clone to speed up
+# use --single-branch
+# WORKS: much much faster
+RUN git clone --single-branch https://github.com/nautechsystems/nautilus_trader.git $HOME/code/nautilus_trader
 WORKDIR $HOME/code/nautilus_trader
-RUN pyenv virtualenv 3.10.6 naut_trader
-# RUN pyenv activate naut_trader # not in a Dockerfile
+
+# setup pyenv, but deactivate after as build.py does it's own:  
+RUN pyenv virtualenv 3.10.12 naut_trader
+# # RUN pyenv activate naut_trader # not in a Dockerfile
 RUN . /home/user/.pyenv/versions/naut_trader/bin/activate
 
+# ACTIVATING VENV FOR EACH LINE:
 # install nautilus_trader dependencies
 # clang
 RUN apt install -y clang
 # rust
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
-RUN . $HOME/.cargo/env
+ENV PATH=${PATH}:$HOME/.cargo/bin
+# this didn't work:  RUN . $HOME/.cargo/env
+
 # poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
+    curl -sSL https://install.python-poetry.org | python3 -
+
 ENV PATH="/home/user/.local/bin:$PATH"
-RUN pip install toml Cython requests numpy
+
+RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
+    pip3 install toml Cython requests numpy
+# --ignore-installed did not work...
+
+# RUN pyenv deactivate
 
 # nautilus_trader __ install with poetry (can't get this to work fully)
-# WORKDIR $HOME/code/nautilus_trader/nautilus_trader
-# GETS THIS FAR BUT SOMEHOW POETRY INSTALL FAILS...
-# @@@ $HOME/code/nautilus_trader/nautilus_trader
-# OR
-# @@@ $HOME/code/nautilus_trader
+# WORKDIR $HOME/code/nautilus_trader
+# RUN poetry install --only main --all-extras # FAILS
 
-# RUN poetry install --only main --all-extras
-RUN poetry run python build.py 
-# TRY THIS or make build
 
-# RUN pip install pre-commit
-# RUN pre-commit install
 
-# pip install Nautilus instead. seems fine...!
-WORKDIR $HOME/code/
-RUN pip install -U nautilus_trader
+# GOT TO HERE SUCCESSFULLY 24 06 12 1352
 
-# install condorgp
-RUN mkdir $HOME/code/condorgp
-COPY . $HOME/code/condorgp
-WORKDIR $HOME/code/condorgp
-RUN pyenv virtualenv 3.10.6 condorgp
-# RUN pyenv activate condorgp # not in a Dockerfile
-RUN . /home/user/.pyenv/versions/condorgp/bin/activate
+RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
+    poetry run python build.py 
+# TRY THIS or 
+# RUN make build
 
-# # make install gave error:
-# #  /home/user/.pyenv/pyenv.d/exec/pip-rehash/pip: line 20:    
-# # 86 Segmentation fault      (core dumped) "$PYENV_COMMAND_PATH" "$@"
-RUN make install
-RUN pip install -U nautilus_trader
+# GOT TO HERE SUCCESSFULLY 24 06 12 1430
+
+
+# # # skip these, for working within repo... unlikely
+# # RUN pip install pre-commit
+# # RUN pre-commit install
+
+# # pip install Nautilus instead. seems fine...!
+# WORKDIR $HOME/code/
+# RUN pip3 install -U nautilus_trader
+
+# # install condorgp
+# RUN mkdir $HOME/code/condorgp
+# COPY . $HOME/code/condorgp
+# WORKDIR $HOME/code/condorgp
+# RUN pyenv virtualenv 3.10.12 condorgp
+# # RUN pyenv activate condorgp # not in a Dockerfile
+# RUN . /home/user/.pyenv/versions/condorgp/bin/activate
+
+# # # make install gave error:
+# # #  /home/user/.pyenv/pyenv.d/exec/pip-rehash/pip: line 20:    
+# # # 86 Segmentation fault      (core dumped) "$PYENV_COMMAND_PATH" "$@"
+# RUN make install
+# RUN pip3 install -U nautilus_trader
 
 # # #   ### dotfiles
 # WORKDIR $HOME/code/
