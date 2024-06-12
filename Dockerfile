@@ -140,10 +140,11 @@ RUN mkdir $HOME/code/nautilus_trader
 RUN git clone https://github.com/nautechsystems/nautilus_trader.git $HOME/code/nautilus_trader
 WORKDIR $HOME/code/nautilus_trader
 RUN pyenv virtualenv 3.10.6 naut_trader
-RUN pyenv activate naut_trader
+# RUN pyenv activate naut_trader # not in a Dockerfile
+RUN . /home/user/.pyenv/versions/naut_trader/bin/activate
 
-# # install nautilus_trader dependencies
-# # clang
+# install nautilus_trader dependencies
+# clang
 RUN apt install -y clang
 # rust
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
@@ -151,16 +152,19 @@ RUN . $HOME/.cargo/env
 # poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/home/user/.local/bin:$PATH"
-RUN pip install toml Cython requests
+RUN pip install toml Cython requests numpy
 
-# nautilus_trader __ install with poetry
-WORKDIR $HOME/code/nautilus_trader/nautilus_trader
+# nautilus_trader __ install with poetry (can't get this to work fully)
+# WORKDIR $HOME/code/nautilus_trader/nautilus_trader
 # GETS THIS FAR BUT SOMEHOW POETRY INSTALL FAILS...
 # @@@ $HOME/code/nautilus_trader/nautilus_trader
 # OR
 # @@@ $HOME/code/nautilus_trader
 
 # RUN poetry install --only main --all-extras
+RUN poetry run python build.py 
+# TRY THIS or make build
+
 # RUN pip install pre-commit
 # RUN pre-commit install
 
@@ -173,21 +177,23 @@ RUN mkdir $HOME/code/condorgp
 COPY . $HOME/code/condorgp
 WORKDIR $HOME/code/condorgp
 RUN pyenv virtualenv 3.10.6 condorgp
-RUN pyenv activate condorgp
+# RUN pyenv activate condorgp # not in a Dockerfile
+RUN . /home/user/.pyenv/versions/condorgp/bin/activate
 
-# make install gave error:
-#  /home/user/.pyenv/pyenv.d/exec/pip-rehash/pip: line 20:    
-# 86 Segmentation fault      (core dumped) "$PYENV_COMMAND_PATH" "$@"
-# RUN make install
+# # make install gave error:
+# #  /home/user/.pyenv/pyenv.d/exec/pip-rehash/pip: line 20:    
+# # 86 Segmentation fault      (core dumped) "$PYENV_COMMAND_PATH" "$@"
+RUN make install
+RUN pip install -U nautilus_trader
 
-# #   ### dotfiles
-WORKDIR $HOME/code/
-RUN git clone https://github.com/hughharford/dotfiles.git
-WORKDIR $HOME/code/dotfiles
-RUN zsh install.sh
+# # #   ### dotfiles
+# WORKDIR $HOME/code/
+# RUN git clone https://github.com/hughharford/dotfiles.git
+# WORKDIR $HOME/code/dotfiles
+# RUN zsh install.sh
 
-ENV PATH="/usr/local/lib/python3.10/dist-packages:$PATH" 
-ENV PYTHONPATH "${PYTHONPATH}:/usr/local/lib/python3.10/dist-packages"
+# ENV PATH="/usr/local/lib/python3.10/dist-packages:$PATH" 
+# ENV PYTHONPATH "${PYTHONPATH}:/usr/local/lib/python3.10/dist-packages"
 
 # EXPOSE 5672
 # EXPOSE 15672

@@ -140,51 +140,51 @@ RUN mkdir $HOME/code/nautilus_trader
 RUN git clone https://github.com/nautechsystems/nautilus_trader.git $HOME/code/nautilus_trader
 WORKDIR $HOME/code/nautilus_trader
 RUN pyenv virtualenv 3.10.6 naut_trader
-RUN pyenv activate naut_trader
+# RUN pyenv activate naut_trader
 
-# # install nautilus_trader dependencies
-# # clang
-RUN apt install -y clang
-# rust
-RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
-RUN . $HOME/.cargo/env
-# poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="/home/user/.local/bin:$PATH"
-RUN pip install toml Cython requests
+# # # install nautilus_trader dependencies
+# # # clang
+# RUN apt install -y clang
+# # rust
+# RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+# RUN . $HOME/.cargo/env
+# # poetry
+# RUN curl -sSL https://install.python-poetry.org | python3 -
+# ENV PATH="/home/user/.local/bin:$PATH"
+# RUN pip install toml Cython requests
 
-# nautilus_trader __ install with poetry
-WORKDIR $HOME/code/nautilus_trader/nautilus_trader
-# GETS THIS FAR BUT SOMEHOW POETRY INSTALL FAILS...
-# @@@ $HOME/code/nautilus_trader/nautilus_trader
-# OR
-# @@@ $HOME/code/nautilus_trader
+# # nautilus_trader __ install with poetry
+# WORKDIR $HOME/code/nautilus_trader/nautilus_trader
+# # GETS THIS FAR BUT SOMEHOW POETRY INSTALL FAILS...
+# # @@@ $HOME/code/nautilus_trader/nautilus_trader
+# # OR
+# # @@@ $HOME/code/nautilus_trader
 
-# RUN poetry install --only main --all-extras
-# RUN pip install pre-commit
-# RUN pre-commit install
+# # RUN poetry install --only main --all-extras
+# # RUN pip install pre-commit
+# # RUN pre-commit install
 
-# pip install Nautilus instead. seems fine...!
-WORKDIR $HOME/code/
-RUN pip install -U nautilus_trader
+# # pip install Nautilus instead. seems fine...!
+# WORKDIR $HOME/code/
+# RUN pip install -U nautilus_trader
 
-# install condorgp
-RUN mkdir $HOME/code/condorgp
-COPY . $HOME/code/condorgp
-WORKDIR $HOME/code/condorgp
-RUN pyenv virtualenv 3.10.6 condorgp
-RUN pyenv activate condorgp
+# # install condorgp
+# RUN mkdir $HOME/code/condorgp
+# COPY . $HOME/code/condorgp
+# WORKDIR $HOME/code/condorgp
+# RUN pyenv virtualenv 3.10.6 condorgp
+# RUN pyenv activate condorgp
 
-# make install gave error:
-#  /home/user/.pyenv/pyenv.d/exec/pip-rehash/pip: line 20:    
-# 86 Segmentation fault      (core dumped) "$PYENV_COMMAND_PATH" "$@"
-# RUN make install
+# # make install gave error:
+# #  /home/user/.pyenv/pyenv.d/exec/pip-rehash/pip: line 20:    
+# # 86 Segmentation fault      (core dumped) "$PYENV_COMMAND_PATH" "$@"
+# # RUN make install
 
-# #   ### dotfiles
-WORKDIR $HOME/code/
-RUN git clone https://github.com/hughharford/dotfiles.git
-WORKDIR $HOME/code/dotfiles
-RUN zsh install.sh
+# # #   ### dotfiles
+# WORKDIR $HOME/code/
+# RUN git clone https://github.com/hughharford/dotfiles.git
+# WORKDIR $HOME/code/dotfiles
+# RUN zsh install.sh
 
 ENV PATH="/usr/local/lib/python3.10/dist-packages:$PATH" 
 ENV PYTHONPATH "${PYTHONPATH}:/usr/local/lib/python3.10/dist-packages"

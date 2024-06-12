@@ -46,3 +46,17 @@ pre-commit install
 
 ### THE ABOVE ALL SEEMED TO WORK WITHOUT HITCH
 ## Proof will be in whether Nautilus runs 
+
+# for Dockerfile, the above did not immediately work:
+# trying:
+https://docs.nautilustrader.io/developer_guide/environment_setup.html
+
+# Builds
+## Following any changes to .pyx or .pxd files, you can re-compile by running:
+
+#                         this seemed to work (certainly different to the above)
+poetry run python build.py
+
+
+## or
+make build
