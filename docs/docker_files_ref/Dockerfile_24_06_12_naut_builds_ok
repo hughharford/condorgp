@@ -165,9 +165,20 @@ ENV PATH="/home/user/.local/bin:$PATH"
 
 RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
     pip3 install toml Cython requests numpy
+# --ignore-installed did not work...
+
+# RUN pyenv deactivate
+
+# nautilus_trader __ install with poetry (can't get this to work fully)
+# WORKDIR $HOME/code/nautilus_trader
+# RUN poetry install --only main --all-extras # FAILS
+
+
+
+# GOT TO HERE SUCCESSFULLY 24 06 12 1352
 
 RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
-    poetry run python build.py
+    poetry run python build.py 
 # TRY THIS or 
 # RUN make build
 
@@ -178,76 +189,23 @@ RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
 # # RUN pip install pre-commit
 # # RUN pre-commit install
 
-# WORKDIR $HOME/code/
-# # install condorgp
-WORKDIR $HOME/code/
-RUN pyenv virtualenv 3.10.12 condorgp
-# RUN pyenv activate condorgp # not in a Dockerfile
-RUN . /home/user/.pyenv/versions/condorgp/bin/activate && \
-    git clone --single-branch https://github.com/hughharford/condorgp.git 
-WORKDIR $HOME/code/condorgp
-RUN . /home/user/.pyenv/versions/condorgp/bin/activate && \
-    make install
-
-# GOT TO HERE SUCCESSFULLY 24 06 12 2104
-
-
 # # pip install Nautilus instead. seems fine...!
+# WORKDIR $HOME/code/
 # RUN pip3 install -U nautilus_trader
 
-# # NOTES
-# # Either condor folder and install inside nautilus or vice versa
-# # Trying condorgp inside nautilus (with condorgp venv)
-# # A:
-# # didn't obviously work
-# # despite both condorgp and nautilus_trader importing ok in a python3 prompt
-# # error:
-# #   from nautilus_trader.model.data import Ticker
-# # ImportError: cannot import name 'Ticker' from 'nautilus_trader.model.data' (/home/user/.pyenv/versions/3.10.12/envs/condorgp/lib/python3.10/site-packages/nautilus_trader/model/data.cpython-310-x86_64-linux-gnu.so)
-# # B:
-# # Trying condorgp inside nautilus (with naut_trader venv)
-# # in condorgp: make install (inside activated naut_trader venv)
-# # despite both condorgp and nautilus_trader importing ok in a python3 prompt
-# # ERROR nope, again, same issue, ever so slightly different error:
-# #     from nautilus_trader.common.enums import LogColor
-# #   ModuleNotFoundError: No module named 'nautilus_trader'
-# # given when either in nautilus_trader/condorgp or in nautilus_trader/
+# # install condorgp
+# RUN mkdir $HOME/code/condorgp
+# COPY . $HOME/code/condorgp
+# WORKDIR $HOME/code/condorgp
+# RUN pyenv virtualenv 3.10.12 condorgp
+# # RUN pyenv activate condorgp # not in a Dockerfile
+# RUN . /home/user/.pyenv/versions/condorgp/bin/activate
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# With:
-#     pyenv global naut_trader
-#     condorgp: make install
-#     in nautilus_trader: run
-# python ../condorgp/condorgp/comms/run_condorgp/condor_worker.py
-#
-# suddenly get a new error:
-  # when running
-#     import msgspec
-# ModuleNotFoundError: No module named 'msgspec'
-# this came underneath a previous error:
-#   gp_run_strat_base.py", line 20, in <module>
-#   from nautilus_trader.common.enums import LogColor
-# File "/home/user/code/nautilus_trader/nautilus_trader/common/enums.py", line 20, in <module>
-#
-# so:
-#
-# pip3 install msgspec
-# import pyarrow
-# ModuleNotFoundError: No module named 'pyarrow'
-# so:
-  # pip3 install pyarrow
-# attempting:
-  # pip3 install nautilus_trader
-  # to avoid installing and installing
-# now back at:
-  # from nautilus_trader.model.data import Ticker
-  # ImportError: cannot import name 'Ticker' from 'nautilus_trader.model.data' 
-  # (/home/user/code/nautilus_trader/nautilus_trader/model/data.cpython-310-x86_64-linux-gnu.so)
-
-# The poetry build summary includes the line:
-#  Copied /home/user/code/nautilus_trader/nautilus_core/target/release/libnautilus_pyo3.so 
-# to nautilus_trader/core/nautilus_pyo3.cpython-310-x86_64-linux-gnu.so
+# # # make install gave error:
+# # #  /home/user/.pyenv/pyenv.d/exec/pip-rehash/pip: line 20:    
+# # # 86 Segmentation fault      (core dumped) "$PYENV_COMMAND_PATH" "$@"
+# RUN make install
+# RUN pip3 install -U nautilus_trader
 
 # # #   ### dotfiles
 # WORKDIR $HOME/code/
@@ -256,7 +214,7 @@ RUN . /home/user/.pyenv/versions/condorgp/bin/activate && \
 # RUN zsh install.sh
 
 # ENV PATH="/usr/local/lib/python3.10/dist-packages:$PATH" 
-# ENV PYTHONPATH="/usr/local/lib/python3.10/dist-packages:$PYTHONPATH"
+# ENV PYTHONPATH "${PYTHONPATH}:/usr/local/lib/python3.10/dist-packages"
 
 # EXPOSE 5672
 # EXPOSE 15672
