@@ -17,24 +17,24 @@ from decimal import Decimal
 
 import pandas as pd
 
-from nautilus_trader.common.enums import LogColor
+# from nautilus_trader.common.enums import LogColor
 from nautilus_trader.config import StrategyConfig
-from nautilus_trader.core.correctness import PyCondition
-from nautilus_trader.core.data import Data
-from nautilus_trader.core.message import Event
-from nautilus_trader.indicators.average.ema import ExponentialMovingAverage
-from nautilus_trader.model.data import Bar
-from nautilus_trader.model.data import BarType
-from nautilus_trader.model.data import OrderBookDeltas
-from nautilus_trader.model.data import QuoteTick
+# from nautilus_trader.core.correctness import PyCondition
+# from nautilus_trader.core.data import Data
+# from nautilus_trader.core.message import Event
+# from nautilus_trader.indicators.average.ema import ExponentialMovingAverage
+# from nautilus_trader.model.data import Bar
+# from nautilus_trader.model.data import BarType
+# from nautilus_trader.model.data import OrderBookDeltas
+# from nautilus_trader.model.data import QuoteTick
 # from nautilus_trader.model.data import Ticker
-from nautilus_trader.model.data import TradeTick
-from nautilus_trader.model.enums import OrderSide
-from nautilus_trader.model.identifiers import InstrumentId
-from nautilus_trader.model.instruments import Instrument
-from nautilus_trader.model.orderbook import OrderBook
-from nautilus_trader.model.orders import MarketOrder
-from nautilus_trader.trading.strategy import Strategy
+# from nautilus_trader.model.data import TradeTick
+# from nautilus_trader.model.enums import OrderSide
+# from nautilus_trader.model.identifiers import InstrumentId
+# from nautilus_trader.model.instruments import Instrument
+# # from nautilus_trader.model.orderbook import OrderBook
+# from nautilus_trader.model.orders import MarketOrder
+# from nautilus_trader.trading.strategy import Strategy
 
 from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBaseConfig
 from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBase
