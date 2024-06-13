@@ -177,79 +177,48 @@ RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
 # WORKDIR $HOME/code/
 # # install condorgp
 WORKDIR $HOME/code/
-RUN pyenv virtualenv 3.10.12 condorgp
+# SKIP THIS _ SINGLE ENVIRONMENT WORKS
+#             RUN pyenv virtualenv 3.10.12 condorgp
 # RUN pyenv activate condorgp # not in a Dockerfile
-RUN git clone --single-branch https://github.com/hughharford/condorgp.git 
+RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
+    git clone --single-branch https://github.com/hughharford/condorgp.git 
 WORKDIR $HOME/code/condorgp
 RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
     make install
 
 # GOT TO HERE SUCCESSFULLY 24 06 12 2104
 
-### 24 06 13 - somehow got past nautilus_trader imports, and ones unused
-### and then got to pika AQMP failed connection failure. 
-### This clearly indicates that the lack of port or whatever was the fault
-### i.e. not the nautilus and condorgp pyenv interaction.
-###
-### Trouble being, on each container the record is gone quick of what was
-### tried so it can be repeated. Ouch. 
-
-### these were likely involved. overall, make sure to make a record of actions 
-### taken until the same result is seen(!) Wow, really?!
-
-### 1stly, start from a fresh container, 
-### starts in ~/code/condorgp with (condorgp):
-pyenv versions
-. /home/user/.pyenv/versions/naut_trader/bin/activate
-make install (i.e. install condorgp)
-# try:
-python condorgp/comms/run_condorgp/condor_worker.py
-# result: No module named 'nautilus_trader'
-cd ../nautilus_trader
-poetry run python build.py
+#@@@ @@@@@@ ACTION:
+#@@@ cd ../nautilus_trader
+#@@@ poetry run python build.py
+# GGGGG Didn't need to build this again, done above
 # very short Nautilus Builder 11.05 seconds
-cd ../condorgp
-# same as above
-# result: No module named 'nautilus_trader'
-# CHECK PYTHON IMPORTS
-# @: (naut_trader) root@3e0f61e222fd:~/code/condorgp# 
-# NOTE:
-  # Python 3.10.12 (main, Jun 12 2024, 13:13:03) [GCC 11.4.0] on linux
-  # Type "help", "copyright", "credits" or "license" for more information.
-  # >>> import nautilus_trader
-  # Traceback (most recent call last):
-  #   File "<stdin>", line 1, in <module>
-  # ModuleNotFoundError: No module named 'nautilus_trader'
-  # >>> import condorgp
-  # >>> {i.e. imports fine}
-# cd ../nautilus_trader
-# (naut_trader) root@3e0f61e222fd:~/code/nautilus_trader# python
-# Python 3.10.12 (main, Jun 12 2024, 13:13:03) [GCC 11.4.0] on linux
-# Type "help", "copyright", "credits" or "license" for more information.
-# >>> import nautilus_trader
-# >>> import condorgp
-# >>> 
-# TRY:
-python ../condorgp/condorgp/comms/run_condorgp/condor_worker.py
-# SAME ERROR AS ABOVE
-# result: No module named 'nautilus_trader'
-# TRY:
-  pyenv global naut_trader
-  pip freeze 
-  # shows deap, pandas, pika, condorgp but not nautilus.
-# TRY:
-  poetry run python build.py
-  # quick build again
-  pip freeze 
-  # still not showing nautilus_trader
-# TRY:
-  pip install -U nautilus_trader
-  # shows:
-#    Installing collected packages: uvloop, tqdm, pyarrow, msgspec, fsspec, nautilus_trader
-# some of these were individually installed on the last succesful run, think so?
-# NOW, progress, onto Ticker import failure:
-#   from nautilus_trader.model.data import Ticker
-# ImportError: cannot import name 'Ticker' from 'nautilus_trader.model.data' etc etc
+
+#@@@ @@@@@@ ACTION:
+#@@@ pyenv global naut_trader
+ENV PYENV_GLOBAL=naut_trader
+RUN pyenv global ${PYENV_GLOBAL}
+ENV PYENV_VERSION=naut_trader
+
+# install condorgp again
+WORKDIR $HOME/code/condorgp
+RUN make install
+
+WORKDIR $HOME/code/nautilus_trader
+RUN pip install -U nautilus_trader
+
+# GOT TO HERE SUCCESSFULLY 24 06 13 2137
+
+# finally, got same pika issue:
+#       connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+#   File "/home/user/.pyenv/versions/3.10.12/envs/naut_trader/lib/python3.10/site-packages/pika/adapters/blocking_connection.py", line 360, in __init__
+#     self._impl = self._create_connection(parameters, _impl_class)
+#   File "/home/user/.pyenv/versions/3.10.12/envs/naut_trader/lib/python3.10/site-packages/pika/adapters/blocking_connection.py", line 451, in _create_connection
+#     raise self._reap_last_connection_workflow_error(error)
+# pika.exceptions.AMQPConnectionError
+
+# @ PIKA connection issue: 
+
 
 # # #   ### dotfiles
 # WORKDIR $HOME/code/
@@ -257,8 +226,6 @@ python ../condorgp/condorgp/comms/run_condorgp/condor_worker.py
 # WORKDIR $HOME/code/dotfiles
 # RUN zsh install.sh
 
-# FROM HERE NONE OF THIS IS CURRENT >>> # FROM HERE NONE OF THIS IS CURRENT >>> 
-# FROM HERE NONE OF THIS IS CURRENT >>> # FROM HERE NONE OF THIS IS CURRENT >>> 
 
 RUN apt install net-tools
 
@@ -269,8 +236,12 @@ ENV PYTHONPATH="/usr/local/lib/python3.10/dist-packages:$PYTHONPATH"
 EXPOSE 5673 
 EXPOSE 15672
 
+
+WORKDIR $HOME/code/condorgp
 # for -it interactive running
 CMD ["/bin/bash"]
 
+# FROM HERE NONE OF THIS IS CURRENT >>> # FROM HERE NONE OF THIS IS CURRENT >>> 
+# FROM HERE NONE OF THIS IS CURRENT >>> # FROM HERE NONE OF THIS IS CURRENT >>> 
 # attempting command run
 # CMD ["python3", "code/condorgp/comms/run_condorgp/condor_worker.py"]
