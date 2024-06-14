@@ -237,9 +237,12 @@ ENV AMQP_URL='amqp://rabbit_mq?connection_attempts=10&retry_delay=10'
 # https://www.baeldung.com/ops/docker-communicating-with-containers-on-same-machine
 
 
-WORKDIR $HOME/code/condorgp
+WORKDIR $HOME/code/
 
 COPY ./scripts/reclone_cgp $HOME/code/
+RUN chmod +x reclone_cgp
+
+WORKDIR $HOME/code/condorgp
 
 # for -it interactive running
 CMD ["/bin/bash"]
@@ -248,3 +251,6 @@ CMD ["/bin/bash"]
 # FROM HERE NONE OF THIS IS CURRENT >>> # FROM HERE NONE OF THIS IS CURRENT >>> 
 # attempting command run
 # CMD ["python3", "condorgp/comms/run_condorgp/condor_worker_d.py"]
+
+# CMD ["python3", "condorgp/comms/run_condorgp/new_condor_run_d.py"]
+

@@ -1,4 +1,3 @@
-bash 
 #!/bin/bash 
 ## for use on CGP container to reclone code fast
 # moved in the dockerfile to the enclosing folder
