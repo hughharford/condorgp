@@ -6,6 +6,7 @@ import random
 
 from condorgp.params import Params #, util_dict, test_dict, lean_dict
 from condorgp.factories.factory import Factory
+import condorgp.util.utils
 
 from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
 
@@ -303,7 +304,7 @@ class GpControl:
         gpc.run_gp()
 
         # tidy up
-        gpc.util.tidy_cp_files(cp_base)
+        self.util.tidy_cp_files(cp_base)
 
         if gpc.verbose:
             logging.info(' deap __ Hall of fame:')

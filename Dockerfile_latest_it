@@ -1,0 +1,12 @@
+FROM condorgp:builder
+
+WORKDIR $HOME/code/condorgp
+
+COPY . .
+
+ENV PYENV_GLOBAL=naut_trader
+RUN pyenv global ${PYENV_GLOBAL}
+ENV PYENV_VERSION=naut_trader
+
+CMD ["/bin/bash"]
+

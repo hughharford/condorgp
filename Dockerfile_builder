@@ -177,9 +177,26 @@ RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
 # WORKDIR $HOME/code/
 # # install condorgp
 WORKDIR $HOME/code/
+WORKDIR $HOME/code/condorgp
+
 # so python prints
 ENV PYTHONUNBUFFERED=1 
 
+#@@@ @@@@@@ ACTION:
+#@@@ pyenv global naut_trader
+ENV PYENV_GLOBAL=naut_trader
+RUN pyenv global ${PYENV_GLOBAL}
+ENV PYENV_VERSION=naut_trader
+
+
+#####
+#   This code, which will update regularly, should be copied after this build
+#   See Dockerfile_latest
+#   Do this here, so it's done once. 
+#   The latest copy is just the latest files. 
+#####
+
+WORKDIR $HOME/code/
 RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
     git clone --single-branch https://github.com/hughharford/condorgp.git 
 WORKDIR $HOME/code/condorgp
@@ -188,15 +205,9 @@ RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
 
 # GOT TO HERE SUCCESSFULLY 24 06 12 2104
 
-#@@@ @@@@@@ ACTION:
-#@@@ pyenv global naut_trader
-ENV PYENV_GLOBAL=naut_trader
-RUN pyenv global ${PYENV_GLOBAL}
-ENV PYENV_VERSION=naut_trader
-
 # install condorgp again
-WORKDIR $HOME/code/condorgp
-RUN make install
+# WORKDIR $HOME/code/condorgp
+# RUN make install
 
 WORKDIR $HOME/code/nautilus_trader
 RUN pip install -U nautilus_trader
@@ -227,7 +238,7 @@ ENV PATH="/usr/local/lib/python3.10/dist-packages:$PATH"
 ENV PYTHONPATH="/usr/local/lib/python3.10/dist-packages:$PYTHONPATH"
 
 # for rabbitmq
-ENV AMQP_URL='amqp://rabbit_mq?connection_attempts=10&retry_delay=10'
+ENV AMQP_URL='amqp://172.17.0.2?connection_attempts=2&retry_delay=5'
 
 # 5672 and 15672 already in use (by rabbitmq docker)
 # EXPOSE 5672
@@ -239,8 +250,8 @@ ENV AMQP_URL='amqp://rabbit_mq?connection_attempts=10&retry_delay=10'
 
 WORKDIR $HOME/code/
 
-COPY ./scripts/reclone_cgp $HOME/code/
-RUN chmod +x reclone_cgp
+COPY ./scripts/reclone_cgp.sh $HOME/code/
+RUN chmod +x reclone_cgp.sh
 
 WORKDIR $HOME/code/condorgp
 

@@ -12,3 +12,6 @@ git clone --single-branch https://github.com/hughharford/condorgp.git
 cd condorgp
 # install again to be sure
 make install
+
+cd ~/code/condorgp/
+
