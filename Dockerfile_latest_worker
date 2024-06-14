@@ -2,6 +2,14 @@ FROM condorgp:builder
 
 WORKDIR $HOME/code/condorgp
 
+# create log folder and empty log file, for ease
+RUN mkdir /home/user/code/condorgp/condorgp/util/logs/ && \
+    touch /home/user/code/condorgp/condorgp/util/logs/condor_log.txt
+
+# create checkpoint folder and empty checkpoint file, for ease
+RUN mkdir /home/user/code/condorgp/condorgp/util/checkpoints/ && \
+    touch /home/user/code/condorgp/condorgp/util/checkpoints/first_strat_done.pkl
+
 COPY . .
 
 ENV PYENV_GLOBAL=naut_trader
