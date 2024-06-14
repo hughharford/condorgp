@@ -304,7 +304,9 @@ class GpControl:
         gpc.run_gp()
 
         # tidy up
-        self.util.tidy_cp_files(cp_base)
+        # CUT THIS FOR NOW, CONFUSING ERROR ON PIKA CONTAINER RUNNING...
+        # Does question, is this really needed?
+        #        gpc.util.tidy_cp_files(cp_base)
 
         if gpc.verbose:
             logging.info(' deap __ Hall of fame:')
