@@ -46,6 +46,8 @@ deap
 
 # comms
 pika>=1.3.2
+rabbitmq-collect-env 
+rabbitmqctl
 
 # rabbitmq with erlang
 # https://www.rabbitmq.com/docs/install-debian

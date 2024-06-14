@@ -5,7 +5,15 @@
 
 import pika, sys
 
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+# to connect to docker
+credentials = pika.PlainCredentials("guest", "guest")
+connection = pika.BlockingConnection(
+    pika.ConnectionParameters("localhost", 5672, "/", credentials)
+    )
+
+# for localhost service
+# connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    
 channel = connection.channel()
 
 channel.queue_declare(queue='cgp_queue')

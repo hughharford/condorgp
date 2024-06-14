@@ -232,9 +232,12 @@ RUN apt install net-tools
 ENV PATH="/usr/local/lib/python3.10/dist-packages:$PATH" 
 ENV PYTHONPATH="/usr/local/lib/python3.10/dist-packages:$PYTHONPATH"
 
-# 5672 already in use on host
-EXPOSE 5673 
-EXPOSE 15672
+# 5672 and 15672 already in use (by rabbitmq docker)
+# EXPOSE 5672
+# EXPOSE 15672
+
+# will try to communicate via docker dns
+# https://www.baeldung.com/ops/docker-communicating-with-containers-on-same-machine
 
 
 WORKDIR $HOME/code/condorgp
