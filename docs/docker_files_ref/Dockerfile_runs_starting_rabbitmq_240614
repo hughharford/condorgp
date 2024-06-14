@@ -239,8 +239,6 @@ ENV AMQP_URL='amqp://rabbit_mq?connection_attempts=10&retry_delay=10'
 
 WORKDIR $HOME/code/condorgp
 
-COPY ./scripts/reclone_cgp $HOME/code/
-
 # for -it interactive running
 CMD ["/bin/bash"]
 
