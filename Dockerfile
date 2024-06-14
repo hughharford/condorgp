@@ -177,9 +177,9 @@ RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
 # WORKDIR $HOME/code/
 # # install condorgp
 WORKDIR $HOME/code/
-# SKIP THIS _ SINGLE ENVIRONMENT WORKS
-#             RUN pyenv virtualenv 3.10.12 condorgp
-# RUN pyenv activate condorgp # not in a Dockerfile
+# so python prints
+ENV PYTHONUNBUFFERED=1 
+
 RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
     git clone --single-branch https://github.com/hughharford/condorgp.git 
 WORKDIR $HOME/code/condorgp
@@ -187,12 +187,6 @@ RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
     make install
 
 # GOT TO HERE SUCCESSFULLY 24 06 12 2104
-
-#@@@ @@@@@@ ACTION:
-#@@@ cd ../nautilus_trader
-#@@@ poetry run python build.py
-# GGGGG Didn't need to build this again, done above
-# very short Nautilus Builder 11.05 seconds
 
 #@@@ @@@@@@ ACTION:
 #@@@ pyenv global naut_trader
@@ -241,6 +235,7 @@ ENV PYTHONPATH="/usr/local/lib/python3.10/dist-packages:$PYTHONPATH"
 
 
 WORKDIR $HOME/code/condorgp
+
 # for -it interactive running
 CMD ["/bin/bash"]
 
