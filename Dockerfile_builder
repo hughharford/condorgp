@@ -1,22 +1,8 @@
 # from:
-  # /home/hughharford/code/hughharford/condorgp/docs/docker_files_ref/Dockerfile_working_basic_220724
-  # built fine 240522
-  # trying version updates 
+  # built and rabbitmq commands ran 250614
 
-# NB! this:
-  #
-# NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
-#		 ORIGINALLY MS VSCODE dockerfile for dev in container work
-# PLEASE DO NOT EDIT IT DIRECTLY.
-
-# NOTES ##  ##  ## see likely useful ref:
-#										https://github.com/fcwu/docker-ubuntu-vnc-desktop
-#
-
-# was ubuntu:20.04 
 FROM ubuntu:22.04 
 
-# ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
 
 # http://bugs.python.org/issue19846
@@ -56,10 +42,6 @@ RUN apt-get install -y \
 #		INSTALL NOTES
 ######
 ######
-#
-
-### TODO: Convert to requirements.txt
-#### LE WAGON INSTALLS ##### end #
 
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -74,24 +56,18 @@ RUN apt-get install -y \
 ############# PYTHON #########################################################
 # ''''''''''''''' ############################# '''''''''''''''''' ####################
 
-# HSTH additional to deal with: 
-  # WARNING: pip is configured with locations that require TLS/SSL, 
-  # however the ssl module in Python is not available.
-
 RUN apt-get install -y \
 #  libreadline-gplv2-dev \  
 # TO DO: 250519 Need to understand why there was no candidate for libreadline-gplv2-dev 
 # and why it didn't matter on previous builds
   libgdbm-dev libc6-dev libbz2-dev
 
-# further python support packages? MOVED BEFORE PYTHON VERSION
+# further python support packages
 RUN apt-get update; apt-get install -y make build-essential libssl-dev zlib1g-dev \
   libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
   libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev \
   python3-dev libncurses5-dev git
 
-############# Then, PYTHON #####################################################
-# ''''''''''''''' ############################# '''''''''''''''''' ####################
 WORKDIR /home/user
 
 # install pyenv
@@ -108,13 +84,12 @@ RUN pyenv install 3.10.12
 RUN git clone https://github.com/yyuu/pyenv-virtualenv.git .pyenv/plugins/pyenv-virtualenv
 RUN echo 'eval "$(pyenv virtualenv-init -)"' >> .bashrc
 
-# # NEED THESE
 RUN pip3 install numpy setuptools wheel six auditwheel setuptools
-
 
 ############# PYTHON #########################################################
 # ''''''''''''''' ############################# '''''''''''''''''' ####################
 
+# TODO: check this ENVs are doing anything... tbc could well be but pinning versions?
 ENV PYTHON_PIP_VERSION 22.2.1
 # https://github.com/docker-library/python/issues/365
 ENV PYTHON_SETUPTOOLS_VERSION 70.0.0
@@ -134,29 +109,22 @@ RUN apt install -y curl git imagemagick jq unzip vim zsh tree gh make; \
 RUN pip3 install --ignore-installed six
 
 # install nautilus_trader
-# git clone first
 RUN mkdir $HOME/code/
 RUN mkdir $HOME/code/nautilus_trader
-# CONSIDER git shallow clone to speed up
-# use --single-branch
-# WORKS: much much faster
 RUN git clone --single-branch https://github.com/nautechsystems/nautilus_trader.git $HOME/code/nautilus_trader
 WORKDIR $HOME/code/nautilus_trader
 
-# setup pyenv, but deactivate after as build.py does it's own:  
 RUN pyenv virtualenv 3.10.12 naut_trader
-# # RUN pyenv activate naut_trader # not in a Dockerfile
 RUN . /home/user/.pyenv/versions/naut_trader/bin/activate
 
-# ACTIVATING VENV FOR EACH LINE:
 # install nautilus_trader dependencies
 # clang
 RUN apt install -y clang
 # rust
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 ENV PATH=${PATH}:$HOME/.cargo/bin
-# this didn't work:  RUN . $HOME/.cargo/env
 
+# TODO: tidy up pyenv usage here. see lines below PYENV_GLOBAL etc
 # poetry
 RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
     curl -sSL https://install.python-poetry.org | python3 -
@@ -170,29 +138,19 @@ RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
 
 # GOT TO HERE SUCCESSFULLY 24 06 12 1430
 
-# # # skip these, for working within repo... unlikely
-# # RUN pip install pre-commit
-# # RUN pre-commit install
-
-# WORKDIR $HOME/code/
-# # install condorgp
-WORKDIR $HOME/code/
 WORKDIR $HOME/code/condorgp
 
 # so python prints
 ENV PYTHONUNBUFFERED=1 
 
-#@@@ @@@@@@ ACTION:
-#@@@ pyenv global naut_trader
 ENV PYENV_GLOBAL=naut_trader
 RUN pyenv global ${PYENV_GLOBAL}
 ENV PYENV_VERSION=naut_trader
 
-
 #####
-#   This code, which will update regularly, should be copied after this build
-#   See Dockerfile_latest
-#   Do this here, so it's done once. 
+#   Condorgp code, which will update regularly, to be copied after this build
+#   See Dockerfile_latest_<various>
+#   Do this here, so install done once now, not many times later. 
 #   The latest copy is just the latest files. 
 #####
 
@@ -205,25 +163,10 @@ RUN . /home/user/.pyenv/versions/naut_trader/bin/activate && \
 
 # GOT TO HERE SUCCESSFULLY 24 06 12 2104
 
-# install condorgp again
-# WORKDIR $HOME/code/condorgp
-# RUN make install
-
 WORKDIR $HOME/code/nautilus_trader
 RUN pip install -U nautilus_trader
 
 # GOT TO HERE SUCCESSFULLY 24 06 13 2137
-
-# finally, got same pika issue:
-#       connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-#   File "/home/user/.pyenv/versions/3.10.12/envs/naut_trader/lib/python3.10/site-packages/pika/adapters/blocking_connection.py", line 360, in __init__
-#     self._impl = self._create_connection(parameters, _impl_class)
-#   File "/home/user/.pyenv/versions/3.10.12/envs/naut_trader/lib/python3.10/site-packages/pika/adapters/blocking_connection.py", line 451, in _create_connection
-#     raise self._reap_last_connection_workflow_error(error)
-# pika.exceptions.AMQPConnectionError
-
-# @ PIKA connection issue: 
-
 
 # # #   ### dotfiles
 # WORKDIR $HOME/code/
@@ -231,12 +174,14 @@ RUN pip install -U nautilus_trader
 # WORKDIR $HOME/code/dotfiles
 # RUN zsh install.sh
 
-
 RUN apt install net-tools
 
 ENV PATH="/usr/local/lib/python3.10/dist-packages:$PATH" 
 ENV PYTHONPATH="/usr/local/lib/python3.10/dist-packages:$PYTHONPATH"
 
+# TODO: get this URL working with hostname not potentially changing URL
+# check bridge status with:
+  #                       docker network inspect bridge 
 # for rabbitmq
 ENV AMQP_URL='amqp://172.17.0.2?connection_attempts=2&retry_delay=5'
 
@@ -255,13 +200,14 @@ RUN chmod +x reclone_cgp.sh
 
 WORKDIR $HOME/code/condorgp
 
+# RAN SUCCESSFULLY 24 06 14 15xx - added multistage build
+
 # for -it interactive running
 CMD ["/bin/bash"]
 
-# FROM HERE NONE OF THIS IS CURRENT >>> # FROM HERE NONE OF THIS IS CURRENT >>> 
-# FROM HERE NONE OF THIS IS CURRENT >>> # FROM HERE NONE OF THIS IS CURRENT >>> 
-# attempting command run
+# worker, on docker
 # CMD ["python3", "condorgp/comms/run_condorgp/condor_worker_d.py"]
 
+# command, on docker
 # CMD ["python3", "condorgp/comms/run_condorgp/new_condor_run_d.py"]
 
