@@ -30,6 +30,9 @@ Interface: [::], port: 25672, protocol: clustering, purpose: inter-node and CLI 
 Interface: [::], port: 5672, protocol: amqp, purpose: AMQP 0-9-1 and AMQP 1.0
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 # Stop rabbitmq service:
 sudo rabbitmqctl stop
 ### or
@@ -40,7 +43,8 @@ sudo rabbitmqctl stop_app
 http://localhost:15672/#/
 password and username: guest
 
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 ### response when trying to start rabbitmq '3' docker
 initially:

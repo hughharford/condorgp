@@ -17,6 +17,6 @@ RUN pyenv global ${PYENV_GLOBAL}
 ENV PYENV_VERSION=naut_trader
 
 # python3 condorgp/comms/run_condorgp/condor_worker_d.py
-CMD ["python3", "condorgp/comms/run_condorgp/condor_worker_d.py"]
+CMD ["python3", "condorgp/comms/run_condorgp/cgp_w_d.py"]
 # CMD ["/bin/bash"]
 

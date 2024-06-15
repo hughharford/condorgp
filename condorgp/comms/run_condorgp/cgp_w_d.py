@@ -11,42 +11,37 @@ import logging, time
 # for use in docker to docker connections
 
 def main():
+    queue='cgp_queue'
     
+    # to connect to docker, but only from local
+    credentials = pika.PlainCredentials("guest", "guest")
+
     # read rabbitmq connection url from environment variable
     amqp_url = os.environ['AMQP_URL']
     url_params = pika.URLParameters(amqp_url)
 
     # connect to rabbitmq
     connection = pika.BlockingConnection(url_params)
-    
-    # to connect to docker, but only from local
-    credentials = pika.PlainCredentials("guest", "guest")
-    # connection = pika.BlockingConnection(
-    #     pika.ConnectionParameters("localhost", 5672, "/", credentials)
-    #     )
-    
-    # for localhost service
-    # connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-    
     channel = connection.channel()
-
-    channel.queue_declare(queue='cgp_queue')
+    channel.queue_declare(queue=queue)
 
     def callback(ch, method, properties, body):
         print(f" [x] Received {body.decode()}")
-        # time.sleep(body.count(b'.'))
-        print(" [x] attempting task")
-        
+        logging.info(f"{'&&&'*3} cgp_w_d: q={queue} [x] Start Task")
+
         gpc = GpControl()
         gpc.undertake_run()
         
-        print(" [x] Done")
+        logging.info(f"{'&&&'*3} cgp_w_d: q={queue} [x] DONE")
+
         ch.basic_ack(delivery_tag = method.delivery_tag)
         
-    channel.basic_consume(queue='cgp_queue',
+    channel.basic_consume(queue=queue,
                         on_message_callback=callback)
 
     print(' [*] Waiting for messages. To exit press CTRL+C')
+    logging.info(f"{'&&&'*3} GpControl>cgp_cmd_d: q=cgp_queue [x] Sent {message}")
+
     channel.start_consuming()
     
 
