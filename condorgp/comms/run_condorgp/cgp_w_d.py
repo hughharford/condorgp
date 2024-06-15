@@ -11,7 +11,7 @@ import logging, time
 # for use in docker to docker connections
 
 def main():
-    queue='cgp_queue'
+    queue='cgp_queue2'
     
     # to connect to docker, but only from local
     credentials = pika.PlainCredentials("guest", "guest")
@@ -23,7 +23,7 @@ def main():
     # connect to rabbitmq
     connection = pika.BlockingConnection(url_params)
     channel = connection.channel()
-    channel.queue_declare(queue=queue)
+    channel.queue_declare(queue=queue, durable=True)
 
     def callback(ch, method, properties, body):
         print(f" [x] Received {body.decode()}")
@@ -40,7 +40,8 @@ def main():
                         on_message_callback=callback)
 
     print(' [*] Waiting for messages. To exit press CTRL+C')
-    logging.info(f"{'&&&'*3} GpControl>cgp_cmd_d: q=cgp_queue [x] Sent {message}")
+    logging.info(f"{'&&&'*3} GpControl>cgp_cmd_d: q={queue} \
+        [x] Waiting for messages")
 
     channel.start_consuming()
     

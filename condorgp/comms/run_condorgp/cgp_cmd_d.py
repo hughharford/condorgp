@@ -6,7 +6,7 @@
 import pika, sys, os
 import logging
 
-queue='cgp_queue'
+queue='cgp_queue2'
 
 # to connect to docker, but only from local
 credentials = pika.PlainCredentials("guest", "guest")
@@ -17,7 +17,7 @@ url_params = pika.URLParameters(amqp_url)
 # connect to rabbitmq
 connection = pika.BlockingConnection(url_params)
 channel = connection.channel()
-channel.queue_declare(queue=queue)
+channel.queue_declare(queue=queue, durable=True)
 
 message = ' '.join(sys.argv[1:]) or "Start CondorGP run!"
 channel.basic_publish(exchange='',
