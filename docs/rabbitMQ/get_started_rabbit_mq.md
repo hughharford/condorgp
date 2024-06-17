@@ -11,6 +11,10 @@ cloudsmith_quick_start_script.sh
 # latest RabbitMQ 3.13 on DOCKER
 docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management
 
+### does work to see something at 127.0.0.1:5672 ... but bridge IP is still 172.x.x.x
+docker run -it --rm --name rabbitmq -dp 127.0.0.1:5672:5672 -p 15672:15672 rabbitmq:3.13-management
+
+
 
 # CONTROLLING LOCAL NODE
 ##### CANNOT RUN DOCKER AND LOCALHOST SERVICE TOGETHER

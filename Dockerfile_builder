@@ -183,7 +183,7 @@ ENV PYTHONPATH="/usr/local/lib/python3.10/dist-packages:$PYTHONPATH"
 # check bridge status with:
   #                       docker network inspect bridge 
 # for rabbitmq
-ENV AMQP_URL='amqp://172.17.0.2?connection_attempts=2&retry_delay=5'
+ENV AMQP_URL='amqp://172.17.0.3?connection_attempts=2&retry_delay=5'
 
 # 5672 and 15672 already in use (by rabbitmq docker)
 # EXPOSE 5672

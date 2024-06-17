@@ -16,6 +16,6 @@ ENV PYENV_GLOBAL=naut_trader
 RUN pyenv global ${PYENV_GLOBAL}
 ENV PYENV_VERSION=naut_trader
 
-# python3 condorgp/comms/run_condorgp/new_condor_run_d.py
+  # python3 condorgp/comms/run_condorgp/cgp_cmd_d.py
 CMD ["python3", "condorgp/comms/run_condorgp/cgp_cmd_d.py"]
 # CMD ["/bin/bash"]

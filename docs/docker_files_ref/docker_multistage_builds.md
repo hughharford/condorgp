@@ -26,3 +26,9 @@ docker run -it --name condorgp_c condorgp:latest_c
 # OVERALL
 docker build -t condorgp:latest_it -f Dockerfile_latest_it . 
 docker run -it --name condorgp_c_X condorgp:latest_it
+
+
+
+# n___________________________-
+# DELETE ALL STOPPED CONTAINERS:
+docker rm $(docker ps --filter status=exited -q)
