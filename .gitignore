@@ -12,3 +12,7 @@ build/*
 # ignore logs and checkpoints
 condorgp/util/logs/*
 condorgp/util/checkpoints/*
+
+.secrets
+.secrets/*
+
