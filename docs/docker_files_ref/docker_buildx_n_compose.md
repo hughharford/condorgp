@@ -29,6 +29,25 @@ https://docs.docker.com/compose/install/linux/#install-the-plugin-manually
 ## Up / down
 docker compose up/down to start/stop
 
+# DOCKER COMPOSE ARCHIVE:
+https://github.com/docker-archive/compose-cli/tree/main/docs
+
+## TRYING THIS HASURA AND POSTGRES TUTORIAL
+https://dev.to/raphaelmansuy/10-minutes-to-deploy-a-docker-compose-stack-on-aws-illustrated-with-hasura-and-postgres-3f6e
+Feel like the stack is useful in any case - for condorGP not just tutorial
+The docker compose learning is strong.
+
+PROGRESS:
+  AWS environment variables set on home machine
+  AWS user group setup that has suitable permissions. Fairly coarse grain for now.
+  Running .sh files works well. 
+  Cluster creation succeeded.
+
+BUT
+  CANNOT SSH INTO EC2 INSTANCE AND GET A REPLY...
+Consider trying:
+        https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-methods.html
+
 
 
 # DIRECT TO AWS via DOCKER COMPOSE:
@@ -40,6 +59,11 @@ https://github.com/mreferre/yelb/tree/master/deployments/platformdeployment
 https://dev.to/raphaelmansuy/10-minutes-to-deploy-a-docker-compose-stack-on-aws-illustrated-with-hasura-and-postgres-3f6e
 ### install ecs-cli:
 https://github.com/aws/amazon-ecs-cli
+Better:
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI.html
+# ecs-cli command list:
+https://docs.aws.amazon.com/cli/latest/reference/ecs/
+
 
 
 

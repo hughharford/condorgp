@@ -1,0 +1,6 @@
+version: "3"
+services:
+  webdemo:
+    image: "amazon/amazon-ecs-sample"
+    ports:
+      - "80:80"

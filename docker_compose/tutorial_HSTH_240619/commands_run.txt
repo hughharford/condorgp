@@ -1,0 +1,261 @@
+# URL:
+https://dev.to/raphaelmansuy/10-minutes-to-deploy-a-docker-compose-stack-on-aws-illustrated-with-hasura-and-postgres-3f6e
+
+
+
+# CREATE KEY PAIR CALLED tutorial-cluster
+
+aws ec2 create-key-pair --key-name tutorial-cluster \
+ --query 'KeyMaterial' --output text > ~/.ssh/tutorial-cluster.pem
+
+
+
+
+# LOCALLY TEST docker-compose.yml
+
+docker compose up
+
+
+
+
+# TO RUN DOCKER-COMPOSE.YML ON AWS
+
+ecs-cli compose --project-name tutorial  --file docker-compose.yml \
+--debug service up  \
+--deployment-max-percent 100 --deployment-min-healthy-percent 0 \
+--region eu-west-2 --ecs-profile tutorial --cluster-config tutorial
+
+
+
+# RUN LIST TO SEE WHAT IS RUNNING:
+
+ecs-cli ps
+
+
+
+# OPEN WEBSITE TO MATCH THE ABOVE OUTPUTS:
+
+open http://18.170.60.183
+
+
+# Open the port 22 to connect to the EC2 instances of the cluster
+
+# Get my IP
+myip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+
+# Get the security group
+sg="$(aws ec2 describe-security-groups   --filters Name=tag:project,Values=tutorial-cluster | jq '.SecurityGroups[].GroupId')"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+###                                   THE ABOVE DIDN'T IMMEDIATELY RETURN ANYTHING - i.e. sg was ""
+###       ADJUSTED THE ABOVE and manually retrieved and filled sg variable:
+###       Used 
+###           aws ec2 describe-security-groups
+###
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Add port 22 to the Security Group of the VPC
+aws ec2 authorize-security-group-ingress \
+        --group-id $sg \
+        --protocol tcp \
+        --port 22 \
+        --cidr "$myip/32" | jq '.'
+
+
+
+
+
+# CONNECT TO THE INSTANCE:
+
+chmod 400 ~/.ssh/tutorial-cluster.pem
+ssh -i ~/.ssh/tutorial-cluster.pem ec2-user@18.170.60.183
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+###       
+###       DID NOT CONNECT - OR AT LEAST NOT TO A COMMAND LINE
+###       
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#################### #################### #################### ####################
+# STILL DIDN'T GET TO THIS WORKING ................................
+#################### #################### #################### ####################
+
+# ONCE ON THE INSTANCE, HAVE A CHECK AND SEE WHAT DOCKERS RUNNING
+
+docker ps
+
+Can see the service, instances etc running - going into start up/then stopping etc
+But haven't managed to sort the ec2 ssh login and run. Suspect the dockerfile 
+doesn't support the equivalent of docker run -it - but just a guess.
+
+#################### #################### #################### ####################
+# STILL DIDN'T GET TO THIS WORKING ................................
+#################### #################### #################### ####################
+
+
+
+# TRYING THE NEXT BIT WITH LOGGING
+
+ecs-cli compose --project-name tutorial  --file docker-compose.yml \
+--debug service up \
+--deployment-max-percent 100 --deployment-min-healthy-percent 0 \
+--region eu-west-2 --ecs-profile tutorial --cluster-config tutorial \
+--create-log-groups
+
+# Can see logs on AWS Cloudwatch
+
+
+
+# DELETE THE service
+
+ecs-cli compose --project-name tutorial  --file docker-compose.yml \
+--debug service down  \
+--region eu-west-2 --ecs-profile tutorial --cluster-config tutorial
+
+
+
+# RUN THE POSTGRES AND HASURA ON AWS VIA DOCKER-COMPOSE
+
+ecs-cli compose --project-name tutorial  --file docker-compose.yml \
+ --debug service up  \
+--deployment-max-percent 100 --deployment-min-healthy-percent 0 \
+  --region eu-west-2 --ecs-profile tutorial \
+--cluster-config tutorial --create-log-groups
+
+
+
+
+# LIST THE CONTAINERS RUNNING ON AWS:
+
+ecs-cli ps
+
+
+
+
+# USE THE IP TO OPEN THE PAGE RUNNING ON HASURA
+
+open http://18.171.62.211 
+
+
+
+
+
+# STOP THE STACK, from the host command line:
+
+ecs-cli compose down
+
+# this compose down did not stop the instances or the service on AWS
+# tried:
+ecs-cli compose down & [got more information out, but still no result]
+and 
+ecs-cli compose down --force [failed, cannot force like that]
+
+# manually terminated instances and service
+
+
+
+
+
+
+
+# NOW TO CREATE FILESYSTEM ON AWS EFS TO GO ALONGSIDE:
+
+aws efs create-file-system \
+    --performance-mode generalPurpose \
+    --throughput-mode bursting \
+    --encrypted \
+    --tags Key=Name,Value=hasura-db-filesystem
+
+Worked nicely, once FullAccess for EFS ElasticFileSystem was added to the User Group
+
+REMEMBER TO CAPTURE OUTPUT, NEED fs REFERENCE:
+
+{
+    "OwnerId": "610968622525",
+    "CreationToken": "c02c56a7-fedf-4d66-8a99-be74882e58da",
+    "FileSystemId": "fs-0e0f316985e3080f2",
+    "FileSystemArn": "arn:aws:elasticfilesystem:us-west-1:610968622525:file-system/fs-0e0f316985e3080f2",
+    "CreationTime": "2024-06-20T10:43:51+01:00",
+    "LifeCycleState": "creating",
+    "Name": "hasura-db-filesystem",
+    "NumberOfMountTargets": 0,
+    "SizeInBytes": {
+        "Value": 0,
+        "ValueInIA": 0,
+        "ValueInStandard": 0,
+        "ValueInArchive": 0
+    },
+    "PerformanceMode": "generalPurpose",
+    "Encrypted": true,
+    "KmsKeyId": "arn:aws:kms:us-west-1:610968622525:key/52d11729-6640-431d-b7bc-13b0e0419dca",
+    "ThroughputMode": "bursting",
+    "Tags": [
+        {
+            "Key": "Name",
+            "Value": "hasura-db-filesystem"
+        }
+    ],
+    "FileSystemProtection": {
+        "ReplicationOverwriteProtection": "ENABLED"
+    }
+}
+
+###############################################################################
+#         MANUALLY CREATED EFS FILESYSTEM
+###############################################################################
+
+fs-024a997f169f89b64 # OUCH, CREATED IT IN us-west-1...
+
+hasura-db-filesystem-manual (fs-027a8594c30ceddd6)
+fs-027a8594c30ceddd6
+
+
+
+# ADD MOUNT POINTS TO EACH SUBNET OF THE VPC
+
+aws ec2 describe-subnets --filters Name=tag:project,Values=tutorial-cluster \
+ | jq ".Subnets[].SubnetId" | \
+xargs -ISUBNET  aws efs create-mount-target \
+ --file-system-id fs-027a8594c30ceddd6 --subnet-id SUBNET
+
+This fails to create as expected. the describe yields nothing...
+Trying:
+
+aws efs create-mount-target \
+ --file-system-id fs-027a8594c30ceddd6 --subnet-id SUBNET
+
+RESPONSE:
+Parameter validation failed:
+Invalid length for parameter SubnetId, value: 6, valid min length: 15
+TRYING:
+
+aws efs create-mount-target \
+ --file-system-id fs-027a8594c30ceddd6 \
+ --subnet-id tutorial-cluster-fs-027a8594c30ceddd6
+
+RESPONSE:
+An error occurred (ValidationException) when calling the CreateMountTarget operation: 
+1 validation error detected: Value 'tutorial-cluster-fs-027a8594c30ceddd6' 
+at 'subnetId' failed to satisfy constraint: 
+Member must satisfy regular expression pattern: ^subnet-[0-9a-f]{8,40}$
+TRYING:
+
+aws efs create-mount-target \
+ --file-system-id fs-027a8594c30ceddd6 \
+ --subnet-id subnet-027a8594c30ceddd6
+
+RESPONSE:
+An error occurred (FileSystemNotFound) when calling the CreateMountTarget 
+operation: File system 'fs-027a8594c30ceddd6' does not exist.
+
+
+################
+# BIGGER STEP (2)
+# The next step is to allow NFS connection from the VPC
+
+# get sg Security Group associated with each mount target
+
+efs_sg=$(aws efs describe-mount-targets --file-system-id fs-0fe01fbe930d1969b \
+| jq ".MountTargets[0].MountTargetId" \
+  | xargs -IMOUNTG aws efs describe-mount-target-security-groups \
+  --mount-target-id MOUNTG | jq ".SecurityGroups[0]" | xargs echo )
