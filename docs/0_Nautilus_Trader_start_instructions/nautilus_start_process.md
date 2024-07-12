@@ -34,8 +34,12 @@ source $HOME/.cargo/env
 
 # Install poetry
 curl -sSL https://install.python-poetry.org | python3 -
+# Add poetry to path:
+echo -e export PATH="/home/hughharford/.local/bin:$PATH" >> ~/.zshrc
+## NOTE: this uses zsh, which might not be your preference...
+
 # Install with poetry
-poetry install --only main --all-extras
+# SKIP THIS___ poetry install --only main --all-extras
 # OR just
 poetry install
 
