@@ -46,7 +46,7 @@ deap
 
 # comms
 pika>=1.3.2
-# rabbitmq-collect-env 
+# rabbitmq-collect-env
 # rabbitmqctl
 
 # rabbitmq with erlang
@@ -62,4 +62,4 @@ docker
 # ?? docker-compose
 # sudo apt-get install jq.
 jq
-gpg
+# gpg

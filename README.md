@@ -1,10 +1,13 @@
 [![Build Status](https://dev.azure.com/hughharford/CONDOR_GP/_apis/build/status%2Fhughharford.condorgp?branchName=refs%2Fpull%2F17%2Fmerge)](https://dev.azure.com/hughharford/CONDOR_GP/_build/latest?definitionId=1&branchName=refs%2Fpull%2F17%2Fmerge)
 
 # About CondorGP
-- This is a highly ambitious Fintech AI project. 
-- Description: genetic programming
-- Data Source: various tbc, expected quant market history only, for initial hypothesis
-- Type of analysis: backtested evolving algorithms created by DEAP, with fitness function specified by us.
+- This is a highly ambitious Fintech AI project.
+- Description: the AI used is not Deep Learning (although NNs will be used),
+at the high level, genetic programming (GP) is the approach.
+- - GP outputs are live code, and GP is well known for athropomorphised
+    ingenuity and cleverness.
+- Data Source: various, including quant market history, for initial hypothesis
+- Type of analysis: backtested evolving algorithms created by DEAP, with fitness function specified by GP. Backtesting undertaken by Nautilus Trader. 
 
 # Startup the project
 The initial setup.
@@ -15,61 +18,19 @@ sudo apt-get install virtualenv python-pip python-dev
 deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
     pip install pip -U; pip install -r requirements.txt
 ```
-Unittest test:
+
+Once you have setup your ssh public key...
+
+# Get and install CondorGP:
 ```bash
+git clone git@github.com:hughharford/condorgp.git
+cd condorgp
+pip install -r requirements.txt
 make clean install test
 ```
 
-STANDARD BOILERPLATE FROM HERE DOWN >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-Check for condorgp in gitlab.com/{group}.
-If your project is not set please add it:
-
-- Create a new project on `gitlab.com/{group}/condorgp`
-- Then populate it:
-
+# Functionnal test with a script:
 ```bash
-##   e.g. if group is "{group}" and project_name is "condorgp"
-git remote add origin git@github.com:{group}/condorgp.git
-git push -u origin master
-git push -u origin --tags
-```
-
-Functionnal test with a script:
-
-```bash
-cd
-mkdir tmp
-cd tmp
-condorgp-run
-```
-
-# Install
-
-Go to `https://github.com/{group}/condorgp` to see the project, manage issues,
-setup you ssh public key, ...
-
-Create a python3 virtualenv and activate it:
-
-```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
-```
-
-Clone the project and install it:
-
-```bash
-git clone git@github.com:{group}/condorgp.git
 cd condorgp
-pip install -r requirements.txt
-make clean install test                # install and test
-```
-Functionnal test with a script:
-
-```bash
-cd
-mkdir tmp
-cd tmp
 condorgp-run
 ```
