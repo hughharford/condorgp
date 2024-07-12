@@ -7,7 +7,7 @@ at the high level, genetic programming (GP) is the approach.
 - - GP outputs are live code, and GP is well known for athropomorphised
     ingenuity and cleverness.
 - Data Source: various, including quant market history, for initial hypothesis
-- Type of analysis: backtested evolving algorithms created by DEAP, with fitness function specified by GP. Backtesting undertaken by Nautilus Trader. 
+- Type of analysis: backtested evolving algorithms created by DEAP, with fitness function specified by GP. Backtesting undertaken by Nautilus Trader.
 
 # Startup the project
 The initial setup.
@@ -21,15 +21,20 @@ deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
 
 Once you have setup your ssh public key...
 
-# Get and install CondorGP:
+# Get and install CondorGP
 ```bash
 git clone git@github.com:hughharford/condorgp.git
 cd condorgp
 pip install -r requirements.txt
 make clean install test
 ```
+# This will fail, now
+Follow the instructions in:
+docs/0_Nautilus_Trader_start_instructions/nautilus_start_process.md
 
-# Functionnal test with a script:
+
+
+# Functional test with a script
 ```bash
 cd condorgp
 condorgp-run

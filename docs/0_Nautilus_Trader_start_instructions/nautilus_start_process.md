@@ -1,4 +1,5 @@
-##
+# Guidance for Nautilus Trader installation
+Be careful to follow each step in turn.
 
 ## Used this  to the Enviroment
 <!-- https://docs.nautilustrader.io/developer_guide/environment_setup.html -->
@@ -27,6 +28,7 @@ sudo apt install clang
 
 # Install Rustup
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+- note, default installation will be fine
 # Enable cargo in the current shell:
 source $HOME/.cargo/env
 
@@ -45,7 +47,7 @@ pre-commit install
 
 
 ### THE ABOVE ALL SEEMED TO WORK WITHOUT HITCH
-## Proof will be in whether Nautilus runs 
+## Proof will be in whether Nautilus runs
 
 # for Dockerfile, the above did not immediately work:
 # trying:
