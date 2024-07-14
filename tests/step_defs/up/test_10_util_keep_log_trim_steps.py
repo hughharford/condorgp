@@ -6,7 +6,7 @@ from pytest_bdd import scenarios, given, when, then, parsers
 import logging
 import shutil
 
-from tests.fixtures import *
+from tests.gpc_fixtures import *
 
 EXTRA_TYPES = {
     'Number': int,
