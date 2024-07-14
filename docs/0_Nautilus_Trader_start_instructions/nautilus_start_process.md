@@ -40,6 +40,7 @@ echo -e export PATH="/home/hughharford/.local/bin:$PATH" >> ~/.zshrc
 
 # Install with poetry
 # SKIP THIS___ poetry install --only main --all-extras
+#               EXTRAS would include IB Interactive Brokers, for later
 # OR just
 poetry install
 
