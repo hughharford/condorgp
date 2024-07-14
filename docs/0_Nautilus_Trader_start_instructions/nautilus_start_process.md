@@ -90,33 +90,17 @@ gave:
 '''bash
 pyenv local condorgp
 '''
-- then tried running, in code/hughharford/condorgp:
-                     python condorgp/gp/gp_control.py
-                     GAVE:
-Traceback (most recent call last):
-  File "/home/hughharford/code/hughharford/condorgp/condorgp/gp/gp_control.py", line 8, in <module>
-    from condorgp.factories.factory import Factory
-  File "/home/hughharford/code/hughharford/condorgp/condorgp/factories/factory.py", line 7, in <module>
-    from condorgp.gp.gp_psets import GpPsets
-  File "/home/hughharford/code/hughharford/condorgp/condorgp/gp/gp_psets.py", line 10, in <module>
-    from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBase
-  File "/home/hughharford/code/hughharford/condorgp/condorgp/evaluation/gp_run_strat_base.py", line 20, in <module>
-    from nautilus_trader.common.enums import LogColor
-ModuleNotFoundError: No module named 'nautilus_trader'
 
-- then tried running, in code/hughharford/nautilus_trader:
-                     python condorgp/gp/gp_control.py
-                     GAVE:
-                     - nope, obviously, path wrong
-                     python ../condorgp/condorgp/gp/gp_control.py
-                     GAVE:
-                     same as line 94
 
-- Trying:
-  localling naut_trader env into condorgp folder
+# THIS IS HOW TO DO IT, CONDORGP RUN CAN NOW FIND nautilus_trader
+- Once nautilus fully installed next to condorgp folder:
+  local naut_trader env into condorgp folder
+
+'''bash
+cd ../condorgp
+pyenv local cgp_naut
+'''
+
   reinstalling condorgp in it's own folder, now that the nautilus has been localled
 -- WORKED
-# THIS IS HOW TO DO IT, CONDORGP RUN CAN NOW FIND nautilus_trader
 - Need to give a more considered name to the virtual environment
-
-
