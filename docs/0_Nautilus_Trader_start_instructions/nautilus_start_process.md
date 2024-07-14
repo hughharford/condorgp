@@ -67,3 +67,56 @@ poetry run python build.py
 
 ## or
 make build
+
+
+# STILL FIND THAT ONCE INSTALLED IN SIDE BY SIDE FOLDER RUNNING ANYTHING
+# CONDOR DOESN'T IMMEDIATELY WORK AND CANNOT RECOGNISE/FIND nautilus_trader
+
+- for temporary change to PATH
+'''bash
+export PATH="~/code/hughharford/nautilus_trader:$PATH"
+'''
+- didn't work
+
+
+# INSTALLING FROM CONDORGP LOCATION - NO
+'''bash
+poetry run python ../nautilus_trader/build.py
+'''
+gave:
+  Poetry could not find a pyproject.toml file in /home/hughharford/code/hughharford/condorgp or its parents
+
+# LOCALLING THE PYENV condorgp virtual environment in the nautilus_trader folder
+'''bash
+pyenv local condorgp
+'''
+- then tried running, in code/hughharford/condorgp:
+                     python condorgp/gp/gp_control.py
+                     GAVE:
+Traceback (most recent call last):
+  File "/home/hughharford/code/hughharford/condorgp/condorgp/gp/gp_control.py", line 8, in <module>
+    from condorgp.factories.factory import Factory
+  File "/home/hughharford/code/hughharford/condorgp/condorgp/factories/factory.py", line 7, in <module>
+    from condorgp.gp.gp_psets import GpPsets
+  File "/home/hughharford/code/hughharford/condorgp/condorgp/gp/gp_psets.py", line 10, in <module>
+    from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBase
+  File "/home/hughharford/code/hughharford/condorgp/condorgp/evaluation/gp_run_strat_base.py", line 20, in <module>
+    from nautilus_trader.common.enums import LogColor
+ModuleNotFoundError: No module named 'nautilus_trader'
+
+- then tried running, in code/hughharford/nautilus_trader:
+                     python condorgp/gp/gp_control.py
+                     GAVE:
+                     - nope, obviously, path wrong
+                     python ../condorgp/condorgp/gp/gp_control.py
+                     GAVE:
+                     same as line 94
+
+- Trying:
+  localling naut_trader env into condorgp folder
+  reinstalling condorgp in it's own folder, now that the nautilus has been localled
+-- WORKED
+# THIS IS HOW TO DO IT, CONDORGP RUN CAN NOW FIND nautilus_trader
+- Need to give a more considered name to the virtual environment
+
+
