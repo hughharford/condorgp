@@ -14,9 +14,9 @@ git clone git@github.com:nautechsystems/nautilus_trader.git
 cd nautilus_trader
 
 # Create nautilus environment with pyenv
-pyenv virtualenv 3.10.6 naut_trader
+pyenv virtualenv 3.10.6 cgp_naut
 # Activate virtualenv locally
-pyenv local naut_trader
+pyenv local cgp_naut
 
 ## Follow installation instructions
 # from:
@@ -69,38 +69,12 @@ poetry run python build.py
 make build
 
 
-# STILL FIND THAT ONCE INSTALLED IN SIDE BY SIDE FOLDER RUNNING ANYTHING
-# CONDOR DOESN'T IMMEDIATELY WORK AND CANNOT RECOGNISE/FIND nautilus_trader
-
-- for temporary change to PATH
-'''bash
-export PATH="~/code/hughharford/nautilus_trader:$PATH"
-'''
-- didn't work
-
-
-# INSTALLING FROM CONDORGP LOCATION - NO
-'''bash
-poetry run python ../nautilus_trader/build.py
-'''
-gave:
-  Poetry could not find a pyproject.toml file in /home/hughharford/code/hughharford/condorgp or its parents
-
-# LOCALLING THE PYENV condorgp virtual environment in the nautilus_trader folder
-'''bash
-pyenv local condorgp
-'''
-
-
-# THIS IS HOW TO DO IT, CONDORGP RUN CAN NOW FIND nautilus_trader
+# Enable CondorGP in side by side folder to see nautilus_trader
 - Once nautilus fully installed next to condorgp folder:
   local naut_trader env into condorgp folder
 
 '''bash
 cd ../condorgp
 pyenv local cgp_naut
+pip install -r requirements
 '''
-
-  reinstalling condorgp in it's own folder, now that the nautilus has been localled
--- WORKED
-- Need to give a more considered name to the virtual environment

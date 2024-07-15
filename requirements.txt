@@ -62,4 +62,6 @@ docker
 # ?? docker-compose
 # sudo apt-get install jq.
 jq
-# gpg
+# gpg # useful but installation
+
+ipython
