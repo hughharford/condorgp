@@ -21,12 +21,9 @@ deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
 
 Once you have setup your ssh public key...
 
-# Get and install CondorGP (via SSH if that is setup)
+# Get CondorGP (via SSH if that is setup)
 ```bash
 git clone git@github.com:hughharford/condorgp.git
-cd condorgp
-pip install -r requirements.txt
-make clean install test
 ```
 as per the above but replace this line for HTTPS (not got SSH setup):
 ```bash
@@ -37,10 +34,22 @@ git clone https://github.com/hughharford/condorgp.git
 Follow the instructions in:
 docs/0_Nautilus_Trader_start_instructions/nautilus_start_process.md
 
+#  Once Nautilus_trader folder in place next to condorgp
 
+# Enable CondorGP in side by side folder to see nautilus_trader
+- Once nautilus fully installed next to condorgp folder:
+  local naut_trader env into condorgp folder
+
+'''bash
+cd ../condorgp
+pyenv local cgp_naut
+pip install -r requirements
+'''
 
 # Functional test with a script
 ```bash
-cd condorgp
-condorgp-run
+# cd condorgp - should be here already
+make install test
+# OR
+pytest
 ```

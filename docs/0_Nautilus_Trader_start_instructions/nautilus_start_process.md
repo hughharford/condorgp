@@ -7,7 +7,9 @@ Be careful to follow each step in turn.
 # First update all packages
 sudo apt update && sudo apt upgrade
 
-# First, cloned from:
+# Ensure in the root user_name/code folder, so 'ls' or 'dir' shows the condorgp folder
+
+# First, cloned from: [lengthy step]
 https://github.com/nautechsystems/nautilus_trader
 
 git clone git@github.com:nautechsystems/nautilus_trader.git
@@ -22,11 +24,11 @@ pyenv local cgp_naut
 # from:
 https://docs.nautilustrader.io/getting_started/installation.html
 
-# install Clang
+# install Clang [lengthy step]
 sudo apt update && sudo apt upgrade
 sudo apt install clang
 
-# Install Rustup
+# Install Rustup [lengthy step]
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 - note, default installation will be fine
 # Enable cargo in the current shell:
@@ -38,7 +40,7 @@ curl -sSL https://install.python-poetry.org | python3 -
 echo -e export PATH="/home/hughharford/.local/bin:$PATH" >> ~/.zshrc
 ## NOTE: this uses zsh, which might not be your preference...
 
-# Install with poetry
+# Install with poetry [lengthy step]
 # SKIP THIS___ poetry install --only main --all-extras
 #               EXTRAS would include IB Interactive Brokers, for later
 # OR just
@@ -69,12 +71,4 @@ poetry run python build.py
 make build
 
 
-# Enable CondorGP in side by side folder to see nautilus_trader
-- Once nautilus fully installed next to condorgp folder:
-  local naut_trader env into condorgp folder
-
-'''bash
-cd ../condorgp
-pyenv local cgp_naut
-pip install -r requirements
-'''
+# REVERT BACK TO README instructions... 
