@@ -269,12 +269,12 @@ class GpControl:
             # logging.debug(f"evalSymbRegTest: {tb}")
             return -110.0, # return 110.0 when evolved func fails
         return diff,
-    
+
     def undertake_run(self, gpc=None):
         start_time = time.time()
-        
+
         if not gpc:
-            gpc = GpControl()    
+            gpc = GpControl()
 
         gpc = gpc
         gpc.verbose = 1
@@ -297,7 +297,7 @@ class GpControl:
         gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
         gpc.set_test_evaluator(eval_used)
 
-        gpc.run_backtest = 0
+        gpc.run_backtest = 1
         gpc.inject_strategy = 1 # set to 1, this selects naut_06_gp_strategy
 
         gpc.run_gp()

@@ -28,6 +28,11 @@ cd condorgp
 pip install -r requirements.txt
 make clean install test
 ```
+as per the above but replace this line for HTTPS (not got SSH setup):
+```bash
+git clone https://github.com/hughharford/condorgp.git
+```
+
 # This will fail, now
 Follow the instructions in:
 docs/0_Nautilus_Trader_start_instructions/nautilus_start_process.md

@@ -10,9 +10,9 @@ build/*
 .zip
 
 # ignore logs and checkpoints
-condorgp/util/logs/*
+condorgp/util/logs/*.json
+condorgp/util/logs/*.txt
 condorgp/util/checkpoints/*
 
 .secrets
 .secrets/*
-
