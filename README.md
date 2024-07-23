@@ -21,7 +21,7 @@ deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
 
 Once you have setup your ssh public key...
 
-# Get and install CondorGP
+# Get and install CondorGP (via SSH if that is setup)
 ```bash
 git clone git@github.com:hughharford/condorgp.git
 cd condorgp
