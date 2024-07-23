@@ -47,7 +47,7 @@ scripts/condorgp-run
 tests/__init__.py
 tests/bdd_fixtures.py
 tests/cell_fixtures.py
-tests/gpc_fixtures.py
+tests/conftest.py
 tests/step_defs/__init__.py
 tests/step_defs/test_001_cell_eval_steps.py
 tests/step_defs/test_12_gp_ev_strategy_steps.py

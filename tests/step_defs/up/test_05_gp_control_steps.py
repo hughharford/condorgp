@@ -3,7 +3,7 @@ import os.path
 
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
-from tests.gpc_fixtures import *
+from tests.conftest import *
 from condorgp.params import Params
 
 pytest.DEAP_ONE = ""

@@ -3,7 +3,7 @@ import pytest
 from pytest_bdd import scenarios, given, when, then
 from deap import gp
 import logging
-from tests.gpc_fixtures import *
+from tests.conftest import *
 from condorgp.factories.factory import Factory
 
 
