@@ -53,3 +53,9 @@ make install test
 # OR
 pytest
 ```
+
+# For contributors, do a -e installation to allow updates based on your changes
+```bash
+# cd condorgp - should be here already
+pip install -e .
+```
