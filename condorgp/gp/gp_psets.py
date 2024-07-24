@@ -178,8 +178,8 @@ class GpPsets:
         # primary primitive, to enable function
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
-        # add GpRunStrategyInject as a PRIMITIVE 
-        
+        # add GpRunStrategyInject as a PRIMITIVE
+
         # This didn't throw pset error, but needs GpRunStrategyBaseConfig injection
         #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyInject], GpRunStrategyInject)
         # This was even better:
@@ -191,11 +191,23 @@ class GpPsets:
         # ERROR:root:gp_deap_adf_cp.run_gp restart / start ERROR: 'str' object has no attribute 'fast_ema_period'
         #   This is caused as the eInd uses a str(xxx) where xxx is all sorts of evolved uselessness
         #   So, unsurprising.
-        #   The str() input variable is for 
+        #   The str() input variable is merely a STOP-GAP - needs adjusting to
+        #   actually represent something, and thereby provide a fast_ema_period
+
+        #   Instead of str class input, the requirement is for:
+        #
+        #   The evolved string to be passed in as 'ev_strategy'
+        #   c.f. line59 __init__ of GpRunStrategyInject (gp_run_strat_inject.py)
 
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
-        # first pset terminals:
+        # using specified int and str classes to reduce degress of freedom:
+        self.pset.addPrimitive(BigInt, [BigInt], BigInt)
+        self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
+        self.pset.addPrimitive(str, [StrInstr], StrInstr)
+        self.pset.addPrimitive(str, [StrBar], StrBar)
+
+        # pset terminals:
         self.pset.addTerminal(StrInstr(inst.id), StrInstr)
         self.pset.addTerminal(StrInstr(inst2.id), StrInstr)
         self.pset.addTerminal(bar_type, StrBar)
@@ -209,27 +221,25 @@ class GpPsets:
         self.pset.addTerminal(200, BigInt)
         self.pset.addTerminal(1_000_000, int)
         self.pset.addTerminal(2_000_000, int)
+
         # below here were added to allow DEAP to populate
+
+        # ADDED PRIMITIVES:
         self.pset.addPrimitive(Decimal, [Decimal], Decimal)
         self.pset.addPrimitive(str, [str], str)
         self.pset.addPrimitive(int, [int], int)
-
         self.pset.addPrimitive(GpRunStrategyBaseConfig,
                                [StrInstr, StrBar, Decimal, LittleInt, BigInt],
                                GpRunStrategyBaseConfig)
-
+        # ADDED TERMINALS:
         self.pset.addTerminal(Decimal(1_000_000), Decimal)
         self.pset.addTerminal('GpRunStrategyBaseConfig', GpRunStrategyBaseConfig)
         self.pset.addTerminal('GpRunStrategyInject', GpRunStrategyInject)
 
-        # using specified int and str classes to reduce degress of freedom
-        self.pset.addPrimitive(BigInt, [BigInt], BigInt)
-        self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
-        self.pset.addPrimitive(str, [StrInstr], StrInstr)
-        self.pset.addPrimitive(str, [StrBar], StrBar)
         # add ADF:
         self.pset.addADF(self.adfset0)
 
+        # specify psets, inc adfsets:
         self.psets = (self.pset, self.adfset0)
 
         return self.psets

@@ -62,17 +62,23 @@ class GpDeapAdfCp(GpDeapADF):
             # # Evaluate the entire population
             for ind in self.pop:
                 ind.fitness.values = self.toolbox.evaluate(ind)
-
         except BaseException as e:
             logging.error(f"gp_deap_adf_cp.run_gp restart / start ERROR: {e}")
             tb = ''.join(traceback.format_tb(e.__traceback__))
             logging.debug(f"gp_deap_adf_cp.run_gp ERROR: \n {tb}")
 
-        self.hof.update(self.pop)
-        self.record = self.stats.compile(self.pop)
-        self.logbook.record(gen=0, evals=len(self.pop), **self.record)
-        if self.verbose:
-            logging.info(self.logbook.stream)
+        try:
+            # update population and stats
+            self.hof.update(self.pop)
+            self.record = self.stats.compile(self.pop)
+            self.logbook.record(gen=0, evals=len(self.pop), **self.record)
+            if self.verbose:
+                logging.info(self.logbook.stream)
+        except BaseException as e:
+            logging.error(f"gp_deap_adf_cp.run_gp update population and stats ERROR: {e}")
+            tb = ''.join(traceback.format_tb(e.__traceback__))
+            logging.debug(f"gp_deap_adf_cp.run_gp ERROR: \n {tb}")
+
 
         filenamebase = self.checkpointfilepath.split(".")[0]
 
@@ -84,7 +90,6 @@ class GpDeapAdfCp(GpDeapADF):
                 try:
                     self.offspring = self.toolbox.select(self.pop,
                                                          len(self.pop))
-
                 except BaseException as e:
                     logging.error(f"gp_deap_adf_cp.run_gp 'select' {e}")
                     tb = ''.join(traceback.format_tb(e.__traceback__))

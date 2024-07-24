@@ -287,8 +287,8 @@ class GpControl:
             pset_used = 'naut_pset_01' #  'test_pset5b'
         eval_used = 'eval_nautilus' # evalSymbRegTest
 
-        p = 1
-        g = 1
+        p = 10
+        g = 4
         cp_base = "first_strat"
         cp_freq = g+1
         gpc.set_gp_n_cp(freq=cp_freq, cp_file=cp_base+"")
