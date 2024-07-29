@@ -119,7 +119,7 @@ class GpDeapAdfCp(GpDeapADF):
                 invalids = [ind for ind in self.offspring if not ind.fitness.valid]
                 for ind in invalids:
                     try:
-                        backup_fitness_value = 987.0,
+                        backup_fitness_value = -987.0,
                         error = [0]
                         ind.fitness.values = self.toolbox.evaluate(ind)
                     except TypeError as e:

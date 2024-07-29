@@ -285,7 +285,7 @@ class GpControl:
             pset_used = 'naut_pset_01' #  'test_pset5b'
         eval_used = 'eval_nautilus' # evalSymbRegTest
 
-        p = 1
+        p = 8
         g = 4 # even
         cp_base = "first_strat"
         if not g%2==0:
