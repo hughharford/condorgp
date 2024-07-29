@@ -11,6 +11,7 @@ build/*
 
 # ignore logs and checkpoints
 condorgp/util/logs/*.json
+condorgp/util/logs/*.json.*
 condorgp/util/logs/*.txt
 condorgp/util/checkpoints/*
 

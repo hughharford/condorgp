@@ -273,15 +273,13 @@ class GpControl:
     def undertake_run(self, gpc=None):
         start_time = time.time()
 
-        if not gpc:
-            gpc = GpControl()
+        if not gpc: gpc = GpControl()
+        else:       gpc = gpc
 
-        gpc = gpc
         gpc.verbose = 1
-
         gpc.use_adfs = 1
         if gpc.use_adfs:
-            pset_used = 'naut_pset_03_strategy' # 'naut_pset_03_strategy'
+            pset_used = 'naut_pset_04_strategy' # 'naut_pset_03_strategy'
             # 'naut_pset_02_adf' # 'test_adf_symbreg_pset' # 'test_pset5b'
         else:
             pset_used = 'naut_pset_01' #  'test_pset5b'

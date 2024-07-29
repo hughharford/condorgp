@@ -112,17 +112,6 @@ class GpRunStrategyBase(Strategy):
         self.p = Params()
         self.verbosity = self.p.naut_dict['VERBOSITY']
 
-        # HSTH CHANGE, enabling progress even when condition not met:
-        # take this out:
-        # PyCondition.true(
-        #     config.fast_ema_period < config.slow_ema_period,
-        #     "{config.fast_ema_period=} must be less than {config.slow_ema_period=}",
-        # )
-        # provide an alternative catch and adjust:
-        if not config.fast_ema_period < config.slow_ema_period:
-            config.fast_ema_period = 10 # previous default
-            config.slow_ema_period = 20 # previous default
-
         super().__init__(config)
 
         # Configuration

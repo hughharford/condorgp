@@ -104,8 +104,154 @@ class GpPsets:
 
         return psets
 
+    def get_naut_pset_04_strategy(self):
+        ''' naut_pset_04_strategy
+
+        # NEXT, add:
+        GetStrategies().get_config_strategy_without_full_declaration()
+
+        # looking to evolve a first simple strategy:
+
+        # def get_config_strategy(self):
+        #     config = EMACrossConfig(
+        #         instrument_id=str(self.instrument.id),
+        #         bar_type=self.bar_type,
+        #         trade_size=Decimal(1_000_000),
+        #         fast_ema_period=100,
+        #         slow_ema_period=200,
+        #         )
+        #     return config
+        '''
+
+        # ADF1 pset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        self.adfset1 = gp.PrimitiveSetTyped("ADF1", [LittleInt], LittleInt, "ARG")
+
+                # boolean operators
+        self.adfset1.addPrimitive(operator.and_, [bool, bool], bool)
+        self.adfset1.addPrimitive(operator.or_, [bool, bool], bool)
+        self.adfset1.addPrimitive(operator.not_, [bool], bool)
+
+        # floating point operators
+        # Define a protected division function
+        def protectedDiv(left, right):
+            try: return left / right
+            except ZeroDivisionError: return 1
+
+        self.adfset1.addPrimitive(operator.add, [float,float], float)
+        self.adfset1.addPrimitive(operator.sub, [float,float], float)
+        self.adfset1.addPrimitive(operator.mul, [float,float], float)
+        self.adfset1.addPrimitive(protectedDiv, [float,float], float)
+
+        # logic operators
+        # Define a new if-then-else function
+        def if_then_else(input, output1, output2):
+            if input: return output1
+            else: return output2
+
+        self.adfset1.addPrimitive(operator.lt, [float, float], bool)
+        self.adfset1.addPrimitive(operator.eq, [float, float], bool)
+        self.adfset1.addPrimitive(if_then_else, [bool, float, float], float)
+
+        # terminals
+        # self.adfset1.addEphemeralConstant("rand100", partial(random.uniform, 0, 100), float)
+        self.adfset1.addTerminal(False, bool)
+        self.adfset1.addTerminal(True, bool)
+
+        # ADF0 pset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        self.adfset0 = gp.PrimitiveSetTyped("ADF0", [LittleInt], LittleInt, "ARG")
+        self.adfset0.addPrimitive(operator.add, [LittleInt, LittleInt], LittleInt)
+        self.adfset0.addPrimitive(operator.sub, [LittleInt, LittleInt], LittleInt)
+        self.adfset0.addPrimitive(operator.mul, [LittleInt], LittleInt)
+        # self.adfset0.addPrimitive(protectedDiv, [LittleInt, LittleInt], LittleInt)
+        self.adfset0.addPrimitive(operator.neg, [LittleInt], LittleInt)
+
+        # self.adfset0.addADF(adfset2)
+        # self.adfset0.renameArguments(ARG0='x0')
+
+        # MAIN pset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+        bar_type2 = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+        self.SIM = Venue("SIM")
+        inst = TestInstrumentProvider.default_fx_ccy("AUD/USD", self.SIM)
+        inst2 = TestInstrumentProvider.default_fx_ccy("AUD/USD",self.SIM)
+
+        # # a first basic primitive set for strongly typed GP using Nautilus
+        self.pset = gp.PrimitiveSetTyped("CGPNAUT03",
+                                         [], GpRunStrategyInject, "ARG")
+        # primary primitive, to enable function
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
+        # add GpRunStrategyInject as a PRIMITIVE
+
+        # This didn't throw pset error, but needs GpRunStrategyBaseConfig injection
+        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyInject], GpRunStrategyInject)
+        # This was even better:
+        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig], GpRunStrategyInject)
+        # But it needs ev_strategy input, like so, also seems ok:
+        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
+        # now to try with backtest enabled:
+        # with or without backtest enabled still gives ERROR:
+        # ERROR:root:gp_deap_adf_cp.run_gp restart / start ERROR: 'str' object has no attribute 'fast_ema_period'
+        #   This is caused as the eInd uses a str(xxx) where xxx is all sorts of evolved uselessness
+        #   So, unsurprising.
+        #   The str() input variable is merely a STOP-GAP - needs adjusting to
+        #   actually represent something, and thereby provide a fast_ema_period
+
+        #   Instead of str class input, the requirement is for:
+        #
+        #   The evolved string to be passed in as 'ev_strategy'
+        #   c.f. line59 __init__ of GpRunStrategyInject (gp_run_strat_inject.py)
+
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+        # using specified int and str classes to reduce degress of freedom:
+        self.pset.addPrimitive(BigInt, [BigInt], BigInt)
+        self.pset.addPrimitive(LittleInt, [LittleInt], LittleInt)
+        self.pset.addPrimitive(str, [StrInstr], StrInstr)
+        self.pset.addPrimitive(str, [StrBar], StrBar)
+
+        # pset terminals:
+        self.pset.addTerminal(StrInstr(inst.id), StrInstr)
+        self.pset.addTerminal(StrInstr(inst2.id), StrInstr)
+        self.pset.addTerminal(bar_type, StrBar)
+        self.pset.addTerminal(bar_type2, StrBar)
+        self.pset.addTerminal(10, LittleInt)
+        self.pset.addTerminal(20, LittleInt)
+        self.pset.addTerminal(30, LittleInt)
+        self.pset.addTerminal(40, LittleInt)
+        self.pset.addTerminal(50, BigInt)
+        self.pset.addTerminal(100, BigInt)
+        self.pset.addTerminal(200, BigInt)
+        self.pset.addTerminal(1_000_000, int)
+        self.pset.addTerminal(2_000_000, int)
+
+        # below here were added to allow DEAP to populate
+
+        # ADDED PRIMITIVES:
+        self.pset.addPrimitive(Decimal, [Decimal], Decimal)
+        self.pset.addPrimitive(str, [str], str)
+        self.pset.addPrimitive(int, [int], int)
+        self.pset.addPrimitive(GpRunStrategyBaseConfig,
+                               [StrInstr, StrBar, Decimal, LittleInt, BigInt],
+                               GpRunStrategyBaseConfig)
+        # ADDED TERMINALS:
+        self.pset.addTerminal(Decimal(1_000_000), Decimal)
+        self.pset.addTerminal('GpRunStrategyBaseConfig', GpRunStrategyBaseConfig)
+        self.pset.addTerminal('GpRunStrategyInject', GpRunStrategyInject)
+
+        # add ADF:
+        self.pset.addADF(self.adfset0)
+
+        # specify psets, inc adfsets:
+        self.psets = (self.pset, self.adfset0)
+
+        return self.psets
+
     def get_naut_pset_03_strategy(self):
         ''' naut_pset_03_strategy
+
+        # NEXT, add:
+        GetStrategies().get_config_strategy_without_full_declaration
 
         # looking to evolve a first simple strategy:
 
