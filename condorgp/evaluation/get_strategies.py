@@ -1,4 +1,6 @@
 import logging
+import traceback
+
 from decimal import Decimal
 
 from nautilus_trader.examples.strategies.ema_cross import EMACross
@@ -89,17 +91,15 @@ class GetStrategies():
             # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
             # ###     This replaces what an evolved strategy should be:
             # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
-            self.ev_strategy = GpRunStrategyInject(
-                                            config=config,
-                                            ev_strategy=ev_strategy)
-            # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
-            # holding pattern, just:
-            #
-            # OUT OF DATE< REMOVE WITH NO ISSUE
-            #
-            # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' #
-            # self.ev_strategy = ev_strategy
-
+            try:
+                self.ev_strategy = GpRunStrategyInject(
+                                                config=config,
+                                                ev_strategy=ev_strategy)
+            except BaseException as e:
+                    logging.error(f"GetStrategies.get_evolved_strategy {e}")
+                    tb = ''.join(traceback.format_tb(e.__traceback__))
+                    logging.debug(f"GetStrategies.get_evolved_strategy: \n {tb}")
+            logging.info(f"GetStrategies.get_evolved_strategy: set ev_strategy")
         else:
             # i.e. run standard strategy, but with check_triggers method
             logging.info(
