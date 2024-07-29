@@ -86,7 +86,7 @@ class GpDeapAdfCp(GpDeapADF):
         try:
             for g in range(start_gen, N_GEN):
                 generation_reached = g
-                g_notice = ''.join(5*'%_','gp_deap_adf_cp.run_gp___',f'{g}')
+                g_notice = f'{5*"%_"}gp_deap_adf_cp.run_gp___{g}'
                 logging.debug(f"gp_deap_adf_cp.run_gp 'g_notice': \n {g_notice}")
 
                 # Select the offspring
@@ -152,7 +152,7 @@ class GpDeapAdfCp(GpDeapADF):
                 except BaseException as e:
                     logging.error(f"gp_deap_adf_cp.run_gp 'evaluate' {e}")
                 finally:
-                    if e in locals():
+                    if 'e' in locals():
                         tb = ''.join(traceback.format_tb(e.__traceback__))
                         logging.error(f"gp_deap_adf_cp.run_gp 'evaluate': \n {tb}")
 

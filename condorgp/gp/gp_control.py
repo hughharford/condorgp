@@ -285,9 +285,13 @@ class GpControl:
             pset_used = 'naut_pset_01' #  'test_pset5b'
         eval_used = 'eval_nautilus' # evalSymbRegTest
 
-        p = 1000
-        g = 12 # even only please
+        p = 1
+        g = 4 # even
         cp_base = "first_strat"
+        if not g%2==0:
+            err_note = f'g (no. generations) is odd, adjust: gpc.undertaken run'
+            logging.error(err_note)
+            raise ValueError(err_note)
         cp_freq = g/2
         gpc.set_gp_n_cp(freq=cp_freq, cp_file=cp_base+"")
 

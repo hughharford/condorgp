@@ -208,7 +208,7 @@ class GpPsets:
         #   c.f. line59 __init__ of GpRunStrategyInject (gp_run_strat_inject.py)
 
         # attempt to add GetStrategies with method as primitive...
-        self.pset.addPrimitive(GetStrategies().get_config_strategy_without_full_declaration(), [], Strategy)
+        self.pset.addPrimitive(GetStrategies.get_config_strategy_without_full_declaration, [], Strategy)
         # GetStrategies().get_config_strategy_without_full_declaration()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
