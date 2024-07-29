@@ -132,6 +132,7 @@ class GpDeapAdfCp(GpDeapADF):
                         error_tb = f"gp_deap_adf_cp.run_gp 'evaluate': \n {tb}"
                         error.append(error_tb)
                     finally:
+                        e.add_note('gp_deap_adf_cp "evaluate inds with invalid fitness"')
                         for err in error:
                             logging.error(err)
 
@@ -143,10 +144,14 @@ class GpDeapAdfCp(GpDeapADF):
                      # (not yet understood):
                     self.record = self.stats.compile(self.pop)
                     self.logbook.record(gen=g, evals=len(invalids), **self.record)
+                except RuntimeError as e:
+                    logging.error(f"gp_deap_adf_cp.run_gp 'evaluate' {e}")
                 except BaseException as e:
                     logging.error(f"gp_deap_adf_cp.run_gp 'evaluate' {e}")
-                    tb = ''.join(traceback.format_tb(e.__traceback__))
-                    logging.debug(f"gp_deap_adf_cp.run_gp 'evaluate': \n {tb}")
+                finally:
+                    if e in locals():
+                        tb = ''.join(traceback.format_tb(e.__traceback__))
+                        logging.error(f"gp_deap_adf_cp.run_gp 'evaluate': \n {tb}")
 
                 if self.verbose:
                     logging.info(self.logbook.stream)
