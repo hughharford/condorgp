@@ -286,9 +286,9 @@ class GpControl:
         eval_used = 'eval_nautilus' # evalSymbRegTest
 
         p = 1000
-        g = 12
+        g = 12 # even only please
         cp_base = "first_strat"
-        cp_freq = g+1
+        cp_freq = g/2
         gpc.set_gp_n_cp(freq=cp_freq, cp_file=cp_base+"")
 
         # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints

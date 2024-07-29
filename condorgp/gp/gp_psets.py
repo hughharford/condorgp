@@ -10,6 +10,9 @@ from decimal import Decimal
 from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBase
 from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBaseConfig
 from condorgp.evaluation.gp_run_strat_inject import GpRunStrategyInject
+from condorgp.evaluation.get_strategies import GetStrategies
+
+from nautilus_trader.trading.strategy import Strategy
 
 from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
 from nautilus_trader.test_kit.providers import TestInstrumentProvider
@@ -178,10 +181,12 @@ class GpPsets:
         # # a first basic primitive set for strongly typed GP using Nautilus
         self.pset = gp.PrimitiveSetTyped("CGPNAUT03",
                                          [], GpRunStrategyInject, "ARG")
+
         # primary primitive, to enable function
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-        self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
         # add GpRunStrategyInject as a PRIMITIVE
+        self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
+
 
         # This didn't throw pset error, but needs GpRunStrategyBaseConfig injection
         #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyInject], GpRunStrategyInject)
@@ -202,7 +207,12 @@ class GpPsets:
         #   The evolved string to be passed in as 'ev_strategy'
         #   c.f. line59 __init__ of GpRunStrategyInject (gp_run_strat_inject.py)
 
+        # attempt to add GetStrategies with method as primitive...
+        self.pset.addPrimitive(GetStrategies().get_config_strategy_without_full_declaration(), [], Strategy)
+        # GetStrategies().get_config_strategy_without_full_declaration()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+
 
         # using specified int and str classes to reduce degress of freedom:
         self.pset.addPrimitive(BigInt, [BigInt], BigInt)

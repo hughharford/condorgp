@@ -86,6 +86,9 @@ class GpDeapAdfCp(GpDeapADF):
         try:
             for g in range(start_gen, N_GEN):
                 generation_reached = g
+                g_notice = ''.join(5*'%_','gp_deap_adf_cp.run_gp___',f'{g}')
+                logging.debug(f"gp_deap_adf_cp.run_gp 'g_notice': \n {g_notice}")
+
                 # Select the offspring
                 try:
                     self.offspring = self.toolbox.select(self.pop,
@@ -126,13 +129,13 @@ class GpDeapAdfCp(GpDeapADF):
                         error.append(e)
                         ind.fitness.values = backup_fitness_value
                     except BaseException as e:
+                        e.add_note('gp_deap_adf_cp "evaluate inds with invalid fitness"')
                         error_e = f"gp_deap_adf_cp.run_gp 'evaluate' {e}"
                         error.append(error_e)
                         tb = ''.join(traceback.format_tb(e.__traceback__))
                         error_tb = f"gp_deap_adf_cp.run_gp 'evaluate': \n {tb}"
                         error.append(error_tb)
                     finally:
-                        e.add_note('gp_deap_adf_cp "evaluate inds with invalid fitness"')
                         for err in error:
                             logging.error(err)
 
