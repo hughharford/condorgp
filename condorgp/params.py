@@ -49,15 +49,15 @@ class Params():
             check = ''
             if "AMQP_URL" in os.environ:
                 check = os.environ["AMQP_URL"]
-            # if no error to checking the 
+            # if no error to checking the
             # then on a container using RabbitMQ and thereby needs path below:
             if len(check) > 0:
                 LOCAL_BASE_PATH = '/home/user/code/condorgp/'
         except BaseException as e:
             logging.debug(f"CondorGP Params ERROR: {e}")
             tb = ''.join(traceback.format_tb(e.__traceback__))
-            logging.debug(f"CondorGP Params : {tb}")    
-            
+            logging.debug(f"CondorGP Params : {tb}")
+
 
         # HIGH LEVEL CONFIGURATION OPTIONS:
         ####################################################
@@ -83,6 +83,7 @@ class Params():
         NUM_LOG_BACKUPS = 3
         FITNESS_CRITERIA = 'Sharpe Ratio (252 days)'
         SIMPLE_FITNESS_CRITERIA = 'Risk Return Ratio'
+        BACKTEST_ID_CURRENT = "BACKTESTER-001-naut-run-06"
         CGP_NAUT_STRATEGIES = NAUTILUS_EVAL_PATH + "cgp_naut_strategies.py"
         NAUT_DEFAULT_RUNNER = "naut_03_egFX.py"
         N_DEFAULT_RUN_INC_PATH = NAUTILUS_EVAL_PATH + NAUT_DEFAULT_RUNNER
@@ -101,6 +102,7 @@ class Params():
             'RUN_DONE_TEXT': RUN_DONE_TEXT,
             'FITNESS_CRITERIA': FITNESS_CRITERIA,
             'SIMPLE_FITNESS_CRITERIA': SIMPLE_FITNESS_CRITERIA,
+            'BACKTEST_ID_CURRENT': BACKTEST_ID_CURRENT,
             'CGP_NAUT_STRATEGIES': CGP_NAUT_STRATEGIES,
             'NAUT_DEFAULT_RUNNER': NAUT_DEFAULT_RUNNER,
             'N_DEFAULT_RUN_INC_PATH': N_DEFAULT_RUN_INC_PATH,
