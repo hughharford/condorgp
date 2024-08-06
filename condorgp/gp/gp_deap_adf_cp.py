@@ -129,8 +129,8 @@ class GpDeapAdfCp(GpDeapADF):
                         error.append(e)
                         ind.fitness.values = backup_fitness_value
                     except BaseException as e:
-                        e.add_note('gp_deap_adf_cp "evaluate inds with invalid fitness"')
-                        error_e = f"gp_deap_adf_cp.run_gp 'evaluate' {e}"
+                        # e.add_note('gp_deap_adf_cp "evaluate inds with invalid fitness"')
+                        error_e = f"gp_deap_adf_cp.run_gp 'evaluate inds with invalid fitness' {e}"
                         error.append(error_e)
                         tb = ''.join(traceback.format_tb(e.__traceback__))
                         error_tb = f"gp_deap_adf_cp.run_gp 'evaluate': \n {tb}"
