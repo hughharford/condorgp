@@ -285,9 +285,9 @@ class GpControl:
             pset_used = 'naut_pset_01' #  'test_pset5b'
         eval_used = 'eval_nautilus' # evalSymbRegTest
 
-        p = 50
-        g = 24 # even
-        cp_base = "first_ev_config"
+        p = 2
+        g = 2 # even
+        cp_base = "240808_ev_config_fitness_check"
         if not g%2==0:
             err_note = f'g (no. generations) is odd, adjust: gpc.undertaken run'
             logging.error(err_note)
