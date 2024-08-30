@@ -54,14 +54,15 @@ class GpFunctions():
             from Nautilus logs, within a set no. of lines close to a "run id"
         '''
         f = 0.0
+
+        # key_req = self.naut_dict['FITNESS_CRITERIA_AVG_RETURN']
+        # key_req = self.naut_dict['FITNESS_CRITERIA_RISK_RETURN_RATIO']
+        # key_req = self.naut_dict['FITNESS_CRITERIA_PNL_TOTAL']
         key_req = self.naut_dict['FITNESS_CRITERIA_SHARPE_RATIO']
-        key_req = self.naut_dict['FITNESS_CRITERIA_RISK_RETURN_RATIO']
-        # key_req = self.naut_dict['FITNESS_CRITERIA_2']
-        # key_req = self.naut_dict['FITNESS_CRITERIA_PNL']
-        # key_req = self.naut_dict['FITNESS_CRITERIA_PROFITFACTOR']
 
         if backtest_id == "":
-            backtest_id = "naut-run-05" # Hard coded default if not specified
+            backtest_id = self.naut_dict['BACKTEST_ID_CURRENT'] # preferred
+            # backtest_id = "naut-run-06" # Hard coded default if not specified
         lines_to_check = 7000
         max_lines_diff = 300 #
         try:

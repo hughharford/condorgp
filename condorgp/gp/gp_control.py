@@ -213,6 +213,7 @@ class GpControl:
         First inclusion of Nautilus in evaluation function
         Set as the default evaluator, see gp_control.__init__
         '''
+        set_backtest_id = "naut-run-06"
         evalf_name = 'eval_nautilus'
         # Transform the tree expression in a callable function
         func = self.gp.toolbox.compile(expr=individual)
@@ -226,7 +227,7 @@ class GpControl:
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
                 self.backtester.basic_run(evolved_func=func, gp_strategy=True)
                 new_fitness = self.gpf.find_fitness(
-                                       backtest_id="naut-run-06")
+                                       backtest_id=set_backtest_id)
             else:
                 logging.debug(f"ERROR {evalf_name} {'>'*2} "+
                               f"NAUTILUS {'>'*4} {new_fitness}")
@@ -238,7 +239,7 @@ class GpControl:
                         f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
                     self.backtester.basic_run(evolved_func=func)
                     new_fitness = self.gpf.find_fitness(
-                                           backtest_id="naut-run-05")
+                                           backtest_id=set_backtest_id)
                 elif self.randomised_test_fitness == 1:
                     new_fitness = random.uniform(0, 1)
                 else:
@@ -287,7 +288,7 @@ class GpControl:
 
         p = 2
         g = 2 # even
-        cp_base = "240808_ev_config_fitness_check"
+        cp_base = "240811_ev_cfg_fitness"
         if not g%2==0:
             err_note = f'g (no. generations) is odd, adjust: gpc.undertaken run'
             logging.error(err_note)

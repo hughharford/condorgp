@@ -1,6 +1,5 @@
 MANIFEST.in
 README.md
-pyproject.toml
 requirements.txt
 setup.py
 condorgp/__init__.py
@@ -19,9 +18,6 @@ condorgp/evaluation/__init__.py
 condorgp/evaluation/get_strategies.py
 condorgp/evaluation/gp_run_strat_base.py
 condorgp/evaluation/gp_run_strat_inject.py
-condorgp/evaluation/naut_02_egFX.py
-condorgp/evaluation/naut_03_egFX.py
-condorgp/evaluation/naut_04_egFX.py
 condorgp/evaluation/naut_05_inject.py
 condorgp/evaluation/naut_06_gp_strategy.py
 condorgp/evaluation/run_naut.py
@@ -49,7 +45,6 @@ tests/__init__.py
 tests/bdd_fixtures.py
 tests/cell_fixtures.py
 tests/conftest.py
-tests/test_check_imports.py
 tests/step_defs/__init__.py
 tests/step_defs/test_001_cell_eval_steps.py
 tests/step_defs/test_12_gp_ev_strategy_steps.py
