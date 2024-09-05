@@ -392,7 +392,7 @@ if __name__ == "__main__":
     # seq2 = []
     # u.check_seq_never_decreases(seq1)
     p = Params()
-    key_req = p.naut_dict['FITNESS_CRITERIA']
+    key_req = p.naut_dict['SPECIFIED_FITNESS'] # p.naut_dict['FITNESS_CRITERIA']
     log_file_n_path = p.naut_dict['NAUTILUS_LOG_FILE']
     # print(f'{key_req}, {log_file_n_path}')
     fitness = u.find_fitness_with_matching_backtest(

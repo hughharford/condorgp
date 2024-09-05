@@ -7,3 +7,5 @@
 -8888.8   = no backtest folder found            gp_functions.get_fit_nautilus_1
 -1.0      = len(fitness str found) > 3          gp_functions.get_fit_nautilus_1
 -1111.1   = set low if unrealistic! (>50)       gp_functions.get_fit_nautilus_1
+-9988     = when not running backtest           gp_control.eval_nautilus
+****

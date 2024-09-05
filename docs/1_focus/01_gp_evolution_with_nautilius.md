@@ -19,11 +19,13 @@
       See: nautilus_trader/examples/strategies
       See: condorgp/evaluation/naut_raw/blank_strat_n_strat_config.py
 
+      DONE Then assemble working ADFs for a strategy
 # <<<<<<<< HERE >>>>>>>>
-
-      Then assemble working ADFs for 2 strategies (EMAcross and 2 others)
+# NEXT: get a evolving strategy
       Then work out how to bring them all into a strategy
 
+# 2a #  Add more than 1 strategy (is this the priority...?)
+# SKIP SKIP
       Q - need to understand the implications of adding >1 strategy
 
       Major game could be:
@@ -174,4 +176,4 @@
                It might enable only a single tree individual, in the strategy
                itself.
           02 - Must be able to run a single strategy that has the evolved code
-               injected into it. 
+               injected into it.

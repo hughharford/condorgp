@@ -287,7 +287,7 @@ class GpControl:
         eval_used = 'eval_nautilus' # evalSymbRegTest
 
         p = 10
-        g = 4 # even
+        g = 2 # even
         cp_base = "240811_ev_cfg_fitness"
         if not g%2==0:
             err_note = f'g (no. generations) is odd, adjust: gpc.undertaken run'
