@@ -18,6 +18,7 @@ from nautilus_trader.examples.strategies.ema_cross import EMACrossConfig
 from nautilus_trader.test_kit.providers import TestInstrumentProvider
 from nautilus_trader.model.identifiers import Venue
 from nautilus_trader.model.identifiers import InstrumentId
+from nautilus_trader.model.instruments.currency_pair import CurrencyPair
 
 import logging
 import traceback
@@ -114,7 +115,7 @@ class GpPsets:
         evaluation.GetStrategies().get_evolved_strategy_func
             ...with inputs...
 
-            see progress there 
+            see progress there
 
         # looking to evolve a 2nd simple strategy, where the simple config
         from naut_pset_04_strategy is updated, so that integers can be plugged
@@ -182,7 +183,7 @@ class GpPsets:
 
 
         # # a first basic primitive set for strongly typed GP using Nautilus
-        self.pset = gp.PrimitiveSetTyped("CGPNAUT03",
+        self.pset = gp.PrimitiveSetTyped("CGPNAUT05",
                                          [], GpRunStrategyInject, "ARG")
 
         # primary primitive, to enable function
@@ -190,33 +191,8 @@ class GpPsets:
         # add GpRunStrategyInject as a PRIMITIVE
         self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
 
-
-        # This didn't throw pset error, but needs GpRunStrategyBaseConfig injection
-        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyInject], GpRunStrategyInject)
-        # This was even better:
-        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig], GpRunStrategyInject)
-        # But it needs ev_strategy input, like so, also seems ok:
-        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
-        # now to try with backtest enabled:
-        # with or without backtest enabled still gives ERROR:
-        # ERROR:root:gp_deap_adf_cp.run_gp restart / start ERROR: 'str' object has no attribute 'fast_ema_period'
-        #   This is caused as the eInd uses a str(xxx) where xxx is all sorts of evolved uselessness
-        #   So, unsurprising.
-        #   The str() input variable is merely a STOP-GAP - needs adjusting to
-        #   actually represent something, and thereby provide a fast_ema_period
-
-        #   Instead of str class input, the requirement is for:
-        #
-        #   The evolved string to be passed in as 'ev_strategy'
-        #   c.f. line59 __init__ of GpRunStrategyInject (gp_run_strat_inject.py)
-
         # attempt to add GetStrategies with method as primitive...
-        self.pset.addPrimitive(GetStrategies.get_config_strategy_without_full_declaration, [], Strategy)
-
-        # still checking if the above complications of 'no attribute' still occurring...
-        # possible that the above line - 210 for now - fixes the attribute, as an actual if basic strategy
-        # is being passed across. a -18.8 fitness seems to indicate this.
-
+        self.pset.addPrimitive(GetStrategies.get_config_strategy_no_full_declaration, [], Strategy)
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         # HERE HERE
 
@@ -226,23 +202,13 @@ class GpPsets:
         fast_ema_period = BigInt()
         slow_ema_period = LittleInt()
 
-        self.pset.addPrimitive(GetStrategies.get_evolved_strategy_func,
-                               [
-                                inst
-                                , bar_type
-                                , trade_size
-                                , fast_ema_period
-                                , slow_ema_period
-                                ],
+        self.pset.addPrimitive(GetStrategies.get_evolved_strategy, [], Strategy)
+
+        # need to add the class type, not classes specifically here
+        self.pset.addPrimitive(GetStrategies.get_evolved_strategy_1,
+                               [CurrencyPair,
+                                StrBarType1, Decimal, BigInt, LittleInt],
                                Strategy)
-
-        # SPECIFIC TERMINALS FOR THE ABOVE:
-        # bar_type defined ok in naut_pset_04_strategy but not yet used
-        # ditto inst and inst2... skip: # self.pset.addTerminal(name='instrument_id', ret_type=inst)
-        # likely will get to these, but trying
-        #       self.pset.addTerminal('fast_ema_period', BigInt)
-        #       self.pset.addTerminal('slow_ema_period', BigInt)
-
 
         # using specified int and str classes to reduce degress of freedom:
         self.pset.addPrimitive(BigInt, [BigInt], BigInt)
@@ -285,7 +251,7 @@ class GpPsets:
 
 
         # specify psets, inc adfsets:
-        self.psets = (self.pset, self.adfset0, self.adfset1)
+        self.psets = (self.pset, self.adfset0) #, self.adfset1)
 
         return self.psets
 
@@ -362,7 +328,7 @@ class GpPsets:
         inst2 = TestInstrumentProvider.default_fx_ccy("AUD/USD",self.SIM)
 
         # # a first basic primitive set for strongly typed GP using Nautilus
-        self.pset = gp.PrimitiveSetTyped("CGPNAUT03",
+        self.pset = gp.PrimitiveSetTyped("CGPNAUT04",
                                          [], GpRunStrategyInject, "ARG")
 
         # primary primitive, to enable function
@@ -370,32 +336,9 @@ class GpPsets:
         # add GpRunStrategyInject as a PRIMITIVE
         self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
 
-
-        # This didn't throw pset error, but needs GpRunStrategyBaseConfig injection
-        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyInject], GpRunStrategyInject)
-        # This was even better:
-        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig], GpRunStrategyInject)
-        # But it needs ev_strategy input, like so, also seems ok:
-        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
-        # now to try with backtest enabled:
-        # with or without backtest enabled still gives ERROR:
-        # ERROR:root:gp_deap_adf_cp.run_gp restart / start ERROR: 'str' object has no attribute 'fast_ema_period'
-        #   This is caused as the eInd uses a str(xxx) where xxx is all sorts of evolved uselessness
-        #   So, unsurprising.
-        #   The str() input variable is merely a STOP-GAP - needs adjusting to
-        #   actually represent something, and thereby provide a fast_ema_period
-
-        #   Instead of str class input, the requirement is for:
-        #
-        #   The evolved string to be passed in as 'ev_strategy'
-        #   c.f. line59 __init__ of GpRunStrategyInject (gp_run_strat_inject.py)
-
-        # attempt to add GetStrategies with method as primitive...
-        self.pset.addPrimitive(GetStrategies.get_config_strategy_without_full_declaration, [], Strategy)
+        self.pset.addPrimitive(GetStrategies.get_config_strategy_no_full_declaration, [], Strategy)
         # GetStrategies().get_config_strategy_without_full_declaration()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-
-
 
         # using specified int and str classes to reduce degress of freedom:
         self.pset.addPrimitive(BigInt, [BigInt], BigInt)
@@ -518,27 +461,6 @@ class GpPsets:
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
         # add GpRunStrategyInject as a PRIMITIVE
-
-        # This didn't throw pset error, but needs GpRunStrategyBaseConfig injection
-        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyInject], GpRunStrategyInject)
-        # This was even better:
-        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig], GpRunStrategyInject)
-        # But it needs ev_strategy input, like so, also seems ok:
-        #       self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
-        # now to try with backtest enabled:
-        # with or without backtest enabled still gives ERROR:
-        # ERROR:root:gp_deap_adf_cp.run_gp restart / start ERROR: 'str' object has no attribute 'fast_ema_period'
-        #   This is caused as the eInd uses a str(xxx) where xxx is all sorts of evolved uselessness
-        #   So, unsurprising.
-        #   The str() input variable is merely a STOP-GAP - needs adjusting to
-        #   actually represent something, and thereby provide a fast_ema_period
-
-        #   Instead of str class input, the requirement is for:
-        #
-        #   The evolved string to be passed in as 'ev_strategy'
-        #   c.f. line59 __init__ of GpRunStrategyInject (gp_run_strat_inject.py)
-
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
         # using specified int and str classes to reduce degress of freedom:
         self.pset.addPrimitive(BigInt, [BigInt], BigInt)
@@ -735,6 +657,17 @@ class StrBar(str):
     def __len__(self):
         return 1
 
+class StrBarType1(str):
+    ''' Sets bar type to X, as a class variable for evolution'''
+    def __init__(self):
+        return "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+
+    def pass_method(self):
+        pass
+
+    def __len__(self):
+        return 1
+
 class BigInt(int):
     def pass_method(self):
         pass
@@ -754,10 +687,17 @@ if __name__ == '__main__':
     a = 'naut_pset_03_strategy'
     b = 'test_pset5a'
     c = 'test_adf_symbreg_pset'
+    d = 'naut_pset_04_strategy'
+    e = 'naut_pset_05_strategy'
     gpp = GpPsets()
-    pset_and_adf = gpp.get_named_pset(a)
+    pset_and_adf = gpp.get_named_pset(e)
     print(pset_and_adf)
-    # print(f"{type(pset_and_adf[0])} named: {pset_and_adf[0].name}")
+    print(f"{type(pset_and_adf[0])} named: {pset_and_adf[0].name}")
+
+    # SIM = Venue("SIM")
+    # inst2 = TestInstrumentProvider.default_fx_ccy("AUD/USD",SIM)
+    # print(type(inst2))
+
     # print(f"{type(pset_and_adf[1])} named: {pset_and_adf[1].name}")
     # # print('looking at terminals:')
     # print('count of terminals: ', one.terms_count,

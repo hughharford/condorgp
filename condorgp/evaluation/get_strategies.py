@@ -10,6 +10,10 @@ from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBase
 from condorgp.evaluation.gp_run_strat_base import GpRunStrategyBaseConfig
 from condorgp.evaluation.gp_run_strat_inject import GpRunStrategyInject
 
+from nautilus_trader.test_kit.providers import TestInstrumentProvider
+from nautilus_trader.model.identifiers import Venue
+
+
 from condorgp.params import Params
 
 class GetStrategies():
@@ -28,7 +32,7 @@ class GetStrategies():
         if config_ev:
             config = self.get_injected_config(injected_config=config_ev)
         else:
-            config = self.get_config_strategy_without_full_declaration()
+            config = self.get_config_strategy_no_full_declaration()
         strategy = EMACross(config=config)
         return strategy
 
@@ -48,7 +52,7 @@ class GetStrategies():
             )
         return config
 
-    def get_config_strategy_without_full_declaration(self):
+    def get_config_strategy_no_full_declaration(self):
         config = EMACrossConfig(
             str(self.instrument.id),
             self.bar_type,
@@ -62,7 +66,7 @@ class GetStrategies():
         if injected_config:
             config = injected_config
         else:
-            config = self.get_config_strategy_without_full_declaration()
+            config = self.get_config_strategy_no_full_declaration()
         return config
 
     def get_std_config_for_evolved_strategy(self):
@@ -122,8 +126,25 @@ class GetStrategies():
             self.ev_strategy = GpRunStrategyBase(config=config)
         return self.ev_strategy
 
+    def get_evolved_strategy_1(self, instrument_id, bar_type, trade_size,
+                               fast_ema_period, slow_ema_period):
+        # mandatorily correct values. the other inputs can vary
+        self.SIM = Venue("SIM")
+        logging.debug(f"GetStrategies self.SIM: \n {self.SIM}")
+        bar_type = "AUD/USD.SIM-1-MINUTE-MID-INTERNAL"
+        instrument_id = TestInstrumentProvider.default_fx_ccy("AUD/USD", self.SIM)
 
-    def get_evolved_strategy_func(self
+        config = self.get_simple_evolved_config(self
+                                                , instrument_id
+                                                , bar_type
+                                                , trade_size
+                                                , fast_ema_period
+                                                , slow_ema_period)
+
+        self.ev_strategy = GpRunStrategyBase(config=config)
+        return self.ev_strategy
+
+    def get_evolved_strategy_2(self
                                   , instrument_id
                                   , bar_type
                                   , trade_size
@@ -146,6 +167,7 @@ class GetStrategies():
                                Strategy)
         function definition was:
             def get_evolved_strategy_func(self, ev_strategy=object):
+
 
         '''
         # logic to check all inputs provided:
@@ -171,6 +193,8 @@ class GetStrategies():
                                                         , trade_size
                                                         , fast_ema_period
                                                         , slow_ema_period)
+                self.ev_strategy = GpRunStrategyBase(config=config)
+                return self.ev_strategy
             except BaseException as e:
                     logging.error(f"GetStrategies.get_evolved_strategy {e}")
                     tb = ''.join(traceback.format_tb(e.__traceback__))
@@ -202,5 +226,5 @@ if __name__ == "__main__":
     AUDUSD_SIM = TestInstrumentProvider.default_fx_ccy("AUD/USD", SIM)
 
     ns = GetStrategies(instrument = AUDUSD_SIM)
-    config = ns.get_config_strategy_without_full_declaration()
+    config = ns.get_config_strategy_no_full_declaration()
     print(type(config))

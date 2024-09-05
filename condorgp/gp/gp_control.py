@@ -280,14 +280,14 @@ class GpControl:
         gpc.verbose = 1
         gpc.use_adfs = 1
         if gpc.use_adfs:
-            pset_used = 'naut_pset_04_strategy' # 'naut_pset_03_strategy'
+            pset_used = 'naut_pset_05_strategy' # 'naut_pset_04_strategy' # 'naut_pset_03_strategy'
             # 'naut_pset_02_adf' # 'test_adf_symbreg_pset' # 'test_pset5b'
         else:
             pset_used = 'naut_pset_01' #  'test_pset5b'
         eval_used = 'eval_nautilus' # evalSymbRegTest
 
-        p = 2
-        g = 2 # even
+        p = 10
+        g = 4 # even
         cp_base = "240811_ev_cfg_fitness"
         if not g%2==0:
             err_note = f'g (no. generations) is odd, adjust: gpc.undertaken run'
