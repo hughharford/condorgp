@@ -1,14 +1,17 @@
 # packaging
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 pip>=9
 setuptools>=26
 twine
 wheel>=0.29
 
 # data science
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 numpy
 pandas
 
 # tests/linter
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 black
 coverage
 flake8
@@ -16,25 +19,35 @@ pytest
 yapf
 
 # API
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# s3fs
 # gcsfs
 # google-cloud-storage
 # mlflow
-# s3fs
 
 # utilities
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 six>=1.14
 joblib
 memoized-property
 termcolor
+ipython
 
 # memory:
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 memory_profiler
 line_profiler
 
 # evolution:
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 deap
 
+# living cells & demonstrating them
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pygame>=2.6.0
+
 # trading
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # nautilus_trader
 #             THIS DID NOT INSTALL DATA
 
@@ -45,6 +58,7 @@ deap
   # pip install -U "nautilus_trader[docker,ib]"
 
 # comms
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 pika>=1.3.2
 # rabbitmq-collect-env
 # rabbitmqctl
@@ -54,14 +68,14 @@ pika>=1.3.2
 # see script here
 
 # condorgp utilities etc
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 pytest-bdd
 file-read-backwards # utils
 
 # containerisation
+# ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 docker
 # ?? docker-compose
 # sudo apt-get install jq.
 jq
 # gpg # useful but installation
-
-ipython
