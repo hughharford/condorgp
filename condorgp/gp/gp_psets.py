@@ -204,7 +204,7 @@ class GpPsets:
 
         self.pset.addPrimitive(GetStrategies.get_evolved_strategy, [], Strategy)
 
-        # need to add the class type, not classes specifically here
+        # need to add the class type, not classes specifically
         self.pset.addPrimitive(GetStrategies.get_evolved_strategy_1,
                                [CurrencyPair,
                                 StrBarType1, Decimal, BigInt, LittleInt],
@@ -225,9 +225,16 @@ class GpPsets:
         self.pset.addTerminal(20, LittleInt)
         self.pset.addTerminal(30, LittleInt)
         self.pset.addTerminal(40, LittleInt)
+        self.pset.addTerminal(50, LittleInt)
+        self.pset.addTerminal(70, LittleInt)
+        self.pset.addTerminal(100, LittleInt)
+        self.pset.addTerminal(200, LittleInt)
         self.pset.addTerminal(50, BigInt)
         self.pset.addTerminal(100, BigInt)
         self.pset.addTerminal(200, BigInt)
+        self.pset.addTerminal(500, BigInt)
+        self.pset.addTerminal(1000, BigInt)
+        self.pset.addTerminal(2000, BigInt)
         self.pset.addTerminal(1_000_000, int)
         self.pset.addTerminal(2_000_000, int)
 
@@ -242,6 +249,8 @@ class GpPsets:
                                GpRunStrategyBaseConfig)
         # ADDED TERMINALS:
         self.pset.addTerminal(Decimal(1_000_000), Decimal)
+        self.pset.addTerminal(Decimal(2_000_000), Decimal)
+
         self.pset.addTerminal('GpRunStrategyBaseConfig', GpRunStrategyBaseConfig)
         self.pset.addTerminal('GpRunStrategyInject', GpRunStrategyInject)
 
@@ -251,7 +260,7 @@ class GpPsets:
 
 
         # specify psets, inc adfsets:
-        self.psets = (self.pset, self.adfset0) #, self.adfset1)
+        self.psets = (self.pset, self.adfset0, self.adfset1)
 
         return self.psets
 

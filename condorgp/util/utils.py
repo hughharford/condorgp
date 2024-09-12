@@ -242,16 +242,15 @@ class Utils:
         log_key_END_nb_start_point = "BACKTEST POST-RUN"
         log_key_START_nb_end_point = f'{backtest_id}","message":"DISPOSED'
 
-        v = 0 # view_fitness_search_criteria
+        v = 1 # view_fitness_search_criteria
         if v:
-            print(f'log_key_START_nb_end_point:  {log_key_START_nb_end_point}')
+            print(f'log_key_START_nb_end_point: {log_key_START_nb_end_point}')
             print(f'log_key_END_nb_start_point: {log_key_END_nb_start_point}')
 
         # go through reversed list (it was read from the back of the log)
-        # log_as_list.reverse() # TOOK THIS OUT AND THEN OPERATIONAL. CLASSIC
         initial_cut_list = []
         for i, line in enumerate(log_as_list):
-            # print(line)
+            print(line)
             if str(log_key_START_nb_end_point) in line: # START at end - nb reversed
                 now_searching_for_key = 1 # now know where to start
                 line_search_start = i
