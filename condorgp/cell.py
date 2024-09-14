@@ -1,3 +1,4 @@
+import logging
 
 
 class Cell:
@@ -38,12 +39,9 @@ class Cell:
         else:
             self.celltype = new_cell_type
 
-        # record new cell in Class list of cells
-        internal_cell_list = Cell.get_cell_list()
-        if (not internal_cell_list == None):
-            internal_cell_list.append(self)
-        else:
-            print("internal __cell_list not working")
+        # once defined, add to master list
+        Cell.add_cell_to_cell_list(self)
+
 
     @staticmethod
     def get_cell_list():
@@ -54,14 +52,27 @@ class Cell:
 
     # TODO: witness function
 
+    @staticmethod
+    def add_cell_to_cell_list(cell):
+        '''static method to single cell to list of Cells'''
+        lst = Cell.get_cell_list()
+        lst.append(cell)
+
+    @staticmethod
+    def check_if_cell_ref_exists(cell_ref):
+        for c in Cell.__cell_list:
+            if cell_ref == c.cell_ref: return 1
+            else: return 0
 
     @staticmethod
     def remove_cell(cell_ref_to_remove=''):
         '''static method to remove a single cell'''
         if cell_ref_to_remove:
             print('removing cell with  ref no: ' + cell_ref_to_remove)
-            # TODO:
-            print('MISSING ACTION HERE to actually do specific cell removal!')
+            Cell.__cell_list.remove(cell_ref_to_remove)
+            if cell_ref_to_remove in Cell.__cell_list:
+                Cell.__cell_list.remove(cell_ref_to_remove)
+            print(f'ACTION: to specific cell {cell_ref_to_remove} removed!')
         else:
             # assume the first cell [0]
             cell_list = Cell.get_cell_list()
@@ -79,6 +90,13 @@ class Cell:
             for c in Cell.__cell_list:
                 print('Cell ref:', c.cell_ref, c)
 
+    @staticmethod
+    def get_cell_count():
+        # see the cells
+        if (not Cell.__cell_list):
+            raise AttributeError('no cells found')
+        else:
+            return len(Cell.__cell_list)
 
     @classmethod
     def get_cell_types(cls):
@@ -94,6 +112,15 @@ class Cell:
         '''instance method that sets the cell reference id'''
         self.cell_ref = new_ref
 
+    @staticmethod
+    def cell_death(cell_ref=None):
+        if cell_ref:
+            logging.debug(f'cell.cell_death {cell_ref} removal.')
+            Cell.remove_cell(cell_ref)
+        else:
+            logging.error(f'cell.cell_death cell_ref == None.')
+            return 0
+
 
 def main():
     # access the class type:
@@ -102,10 +129,24 @@ def main():
     # declare cells
     c1 = Cell("001", "PROTOTYPE")
     c2 = Cell("002", "PROTOTYPE")
+    c3 = Cell("003", "PROTOTYPE")
+
+
+    cell_list = Cell.get_cell_list()
+    for c in cell_list:
+        Cell.check_if_cell_ref_exists(c.cell_ref)
 
     Cell.show_cell_list()
+    print(Cell.get_cell_count())
+
     Cell.remove_cell()
-    Cell.show_cell_list()
+    print(Cell.get_cell_count())
+
+    Cell.remove_cell("001")
+    print(Cell.get_cell_count())
+
+    Cell.cell_death("002")
+    print(Cell.get_cell_count())
 
 
 if __name__ == '__main__':
