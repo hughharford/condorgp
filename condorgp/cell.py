@@ -71,7 +71,8 @@ class Cell:
     def get_cell_count():
         # see the cells
         if (not Cell.__cells):
-            raise AttributeError('no cells found')
+            return 0
+            logging.debug('Cell.get_cell_count: __cells !extant')
         else:
             return len(Cell.__cells)
 
@@ -109,10 +110,16 @@ class Cell:
     @classmethod
     def remove_cell(cls, cell_ref_to_remove=()):
         '''static method to remove a single cell'''
+        tempcount = Cell.get_cell_count()
         if cell_ref_to_remove:
             print(f'removing cell with  ref no: {cell_ref_to_remove}')
             Cell.__cells.discard(cell_ref_to_remove)
             print(f'ACTION: to specific cell {cell_ref_to_remove} removed')
+        temp2count = Cell.get_cell_count()
+        if tempcount == temp2count:
+            return (0, "failed to remove a cell")
+        elif tempcount == (temp2count+1):
+            return (0, f"removed cell {cell_ref_to_remove}")
 
 def main():
     # access the class type:
@@ -131,15 +138,21 @@ def main():
 
     Cell.show_cell_list()
 
-    Cell.remove_cell()
-    print(Cell.get_cell_count())
+    result = Cell.remove_cell()
+    print(f'{Cell.get_cell_count()} + {result}')
 
-    Cell.remove_cell(('001','PROTOTYPE'))
-    print(Cell.get_cell_count())
+    result = Cell.remove_cell(('001','PROTOTYPE'))
+    print(f'{Cell.get_cell_count()} + {result}')
     Cell.show_cell_list()
 
-    # Cell.cell_death("002")
-    # print(Cell.get_cell_count())
+    Cell.remove_cell(('004','PROTOTYPE'))
+    print(f'{Cell.get_cell_count()} + {result}')
+    Cell.show_cell_list()
+
+    Cell.remove_cell(('004','DEAD'))
+    print(f'{Cell.get_cell_count()} + {result}')
+    Cell.show_cell_list()
+
 
 
 if __name__ == '__main__':
