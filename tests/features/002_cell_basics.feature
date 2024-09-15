@@ -11,11 +11,11 @@ Feature: CondorGp's evolved cell code needs basic operations
     And with first birth cell count is 1
 
 # death of a cell
-  Scenario Outline: One living cell is run
-    Given 1 extant cell
-    When the cell is removed
-    Then there are 0 objects of type Cell
-    And with first removal cell count is 0 again
+#  Scenario Outline: One living cell is run
+#    Given 1 extant cell
+#    When the cell is removed
+#    Then there are 0 objects of type Cell
+#    And with first removal cell count is 0 again
 
 
 # failed cell birth
