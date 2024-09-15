@@ -22,81 +22,58 @@ class Cell:
     CELL_STATUS = ("PERCENTAGE", "CONSTANT", "BELOW_THRESHOLD")
 
 
-    # class property to hold list of Cells
-    __cell_list = None
+    # class property to hold list of dicts about the Cells
+    __cells = None
 
-    def __init__(self, newref=888, new_cell_type="PROTOTYPE"):
+    def __init__(self, new_cell_ref=888, new_cell_type="PROTOTYPE"):
         '''
         input parameters:
-            ref_id: identifying integer
-            cell_type: one of "PROTOTYPE", "ALIVE", "DEAD", "FOR ANALYSIS"
+            new_cell_ref: identifying integer (888 is default)
+            new_cell_type: one of "PROTOTYPE", "ALIVE", "DEAD", "FOR ANALYSIS"
         '''
-        self.cell_ref = newref
+        self.cell_ref = new_cell_ref
 
         # check type is valid
         if (not new_cell_type in Cell.CELL_TYPES):
             raise ValueError(f'{new_cell_type} is not a valid cell type')
         else:
-            self.celltype = new_cell_type
+            self.cell_type = new_cell_type
 
         # once defined, add to master list
-        Cell.add_cell_to_cell_list(self)
+        Cell.add_cell_to_cell_set(self.cell_ref, self.cell_type)
 
 
-    @staticmethod
-    def get_cell_list():
+    @classmethod
+    def get_cell_list(cls):
         '''static method to retrieve single list of Cells'''
-        if Cell.__cell_list == None:
-            Cell.__cell_list = []
-        return Cell.__cell_list
+        if Cell.__cells == None:
+            Cell.__cells = set()
+        return Cell.__cells
 
     # TODO: witness function
 
-    @staticmethod
-    def add_cell_to_cell_list(cell):
+    @classmethod
+    def add_cell_to_cell_set(cls, newref, newtype):
         '''static method to single cell to list of Cells'''
-        lst = Cell.get_cell_list()
-        lst.append(cell)
-
-    @staticmethod
-    def check_if_cell_ref_exists(cell_ref):
-        for c in Cell.__cell_list:
-            if cell_ref == c.cell_ref: return 1
-            else: return 0
-
-    @staticmethod
-    def remove_cell(cell_ref_to_remove=''):
-        '''static method to remove a single cell'''
-        if cell_ref_to_remove:
-            print('removing cell with  ref no: ' + cell_ref_to_remove)
-            Cell.__cell_list.remove(cell_ref_to_remove)
-            if cell_ref_to_remove in Cell.__cell_list:
-                Cell.__cell_list.remove(cell_ref_to_remove)
-            print(f'ACTION: to specific cell {cell_ref_to_remove} removed!')
-        else:
-            # assume the first cell [0]
-            cell_list = Cell.get_cell_list()
-            cell_for_removal = cell_list[-1]
-            print('cell_for_removal: ' + cell_for_removal.cell_ref)
-            cell_list.pop()
-            print('if there was no error, the last cell has been popped')
+        Cell.get_cell_list()
+        Cell.__cells.add((newref, newtype))
 
     @staticmethod
     def show_cell_list():
         # see the cells
-        if (not Cell.__cell_list):
+        if (not Cell.__cells):
             raise AttributeError('no cells found')
         else:
-            for c in Cell.__cell_list:
-                print('Cell ref:', c.cell_ref, c)
+            for c in Cell.__cells:
+                print(f'Cell: {c}')
 
     @staticmethod
     def get_cell_count():
         # see the cells
-        if (not Cell.__cell_list):
+        if (not Cell.__cells):
             raise AttributeError('no cells found')
         else:
-            return len(Cell.__cell_list)
+            return len(Cell.__cells)
 
     @classmethod
     def get_cell_types(cls):
@@ -121,32 +98,48 @@ class Cell:
             logging.error(f'cell.cell_death cell_ref == None.')
             return 0
 
+    @staticmethod
+    def check_if_cell_ref_exists(cell_ref):
+        '''static method to confirm if cell is extant, by cell_ref'''
+        for c in Cell.__cells:
+            print(c['cell_ref'])
+            if cell_ref == c['cell_ref']: return 1
+            else: return 0
+
+    @classmethod
+    def remove_cell(cls, cell_ref_to_remove=()):
+        '''static method to remove a single cell'''
+        if cell_ref_to_remove:
+            print(f'removing cell with  ref no: {cell_ref_to_remove}')
+            Cell.__cells.discard(cell_ref_to_remove)
+            print(f'ACTION: to specific cell {cell_ref_to_remove} removed')
 
 def main():
     # access the class type:
     print("Cell types: ", Cell.get_cell_types())
 
     # declare cells
-    c1 = Cell("001", "PROTOTYPE")
-    c2 = Cell("002", "PROTOTYPE")
-    c3 = Cell("003", "PROTOTYPE")
-
+    c1 = Cell(new_cell_ref="001", new_cell_type="PROTOTYPE")
+    c2 = Cell(new_cell_ref="002", new_cell_type="PROTOTYPE")
+    print(Cell.get_cell_count())
+    c3 = Cell(new_cell_ref="003", new_cell_type="ALIVE")
+    c4 = Cell(new_cell_ref="004", new_cell_type="DEAD")
+    c5 = Cell(new_cell_ref="005", new_cell_type="FOR ANALYSIS")
+    print(Cell.get_cell_count())
 
     cell_list = Cell.get_cell_list()
-    for c in cell_list:
-        Cell.check_if_cell_ref_exists(c.cell_ref)
 
     Cell.show_cell_list()
-    print(Cell.get_cell_count())
 
     Cell.remove_cell()
     print(Cell.get_cell_count())
 
-    Cell.remove_cell("001")
+    Cell.remove_cell(('001','PROTOTYPE'))
     print(Cell.get_cell_count())
+    Cell.show_cell_list()
 
-    Cell.cell_death("002")
-    print(Cell.get_cell_count())
+    # Cell.cell_death("002")
+    # print(Cell.get_cell_count())
 
 
 if __name__ == '__main__':
