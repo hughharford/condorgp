@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "condorgp"
+version = "0.1.0"
+description = "Genetic Programming fintech AI autotrading project"
+authors = ["Hugh Harford <hugh.harford@poscoconsulting.com>"]
+license = "Apache 2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
