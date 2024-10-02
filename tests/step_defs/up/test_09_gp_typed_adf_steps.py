@@ -4,8 +4,6 @@ import os.path
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from tests.conftest import *
-
 EXTRA_TYPES = {
     'Number': int,
     'String': str,

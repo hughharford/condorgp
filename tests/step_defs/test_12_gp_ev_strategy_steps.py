@@ -1,11 +1,5 @@
-import os
-import os.path
-
-import pytest
 import logging
 from pytest_bdd import scenarios, given, when, then, parsers
-
-from tests.conftest import *
 
 EXTRA_TYPES = {
     'Number': int,
@@ -35,8 +29,6 @@ Feature: CondorGp's evolved code is immediately most effective as a strategy
 
 @given('GpControl with naut_06_gp_strategy')
 def gpcontrol_n_naut_06(gpc):
-    Factory().start_logger()
-
     gpc.use_adfs = 1
     pset = 'naut_pset_02_adf'
     p = 1

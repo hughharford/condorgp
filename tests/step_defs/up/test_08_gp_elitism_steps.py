@@ -2,11 +2,8 @@ import os
 import os.path
 
 import logging
-
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
-
-from tests.conftest import *
 
 EXTRA_TYPES = {
     'Number': int,
@@ -42,8 +39,6 @@ scenarios('../../features/up/08_gp_elitism.feature')
                        extra_types=EXTRA_TYPES), target_fixture='pset')
 @given('GpControl is run with "<pset>"')
 def gpcontrol_run_001(gpc, pset):
-    Factory().start_logger()
-
     pytest.gpc = gpc
 
     gpc.use_adfs = 1
