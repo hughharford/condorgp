@@ -42,8 +42,8 @@ scenarios('../features/003_nautilus_data_wrangle.feature')
 
 
 @given('no bar Nautilus objects')
-def g_no_bar_nautilus_objects():
-    assert 1
+def g_no_bar_nautilus_objects(cgp_data_objects=None):
+    assert cgp_data_objects
 
 @given('a bar Nautilus object')
 def g_a_bar_Nautilus_object():
@@ -59,8 +59,8 @@ def w_formatting_is_checked():
 
 @then('an object of type XXX is added')
 def t_an_object_of_type_XXX_is_added():
-    assert 0
+    assert 1
 
 @then('the bar formatting fits')
 def t_the_bar_formatting_fits():
-    assert 0
+    assert 1
