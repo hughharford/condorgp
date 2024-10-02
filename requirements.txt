@@ -46,7 +46,7 @@ deap
 # ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 pygame>=2.6.0
 
-# trading
+# trading & backtest simulation
 # ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # nautilus_trader
 #             THIS DID NOT INSTALL DATA
