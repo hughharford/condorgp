@@ -11,6 +11,6 @@ Feature: CondorGp's evolutions need fitness checking against data
 
 # wrangled data is correctly formatted
   Scenario Outline: Binance wrangled data format works
-    Given a bar Nautilus object
+    Given a bar Nautilus object in a catalog
     When formatting is checked
     Then the bar formatting fits

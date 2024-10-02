@@ -1,9 +1,9 @@
-import os.path
 import pytest
-import logging
 from pytest_bdd import scenarios, given, when, then, parsers
 
 from condorgp.factories.data_factory import DataFactory
+
+from nautilus_trader.persistence.catalog import ParquetDataCatalog
 
 ''' FEATURE DESCRIPTION:
 Feature: CondorGp's evolutions need fitness checking against data
@@ -16,6 +16,7 @@ EXTRA_TYPES = {
     'Number': int,
     'String': str,
     'Float': float,
+    'nautilus_bar': str,
 }
 
 CONVERTERS = {
@@ -26,6 +27,30 @@ CONVERTERS = {
 
 scenarios('../features/003_nautilus_data_wrangle.feature')
 
+# ----------------------------------------------
+# Fixtures
+# ----------------------------------------------
+@pytest.fixture
+def nautilus_raw():
+    return DataFactory().nautilus_raw()
+
+# ----------------------------------------------
+# pytest-BDD hooks
+# ----------------------------------------------
+@pytest.hookimpl
+def pytest_bdd_before_scenario(request, feature, scenario):
+    print("Before scenario:", scenario.name)
+    # Perform setup actions
+    nautilus_raw.show_expectations()
+    nautilus_raw.setup_catalog()
+    # Access scenario-specific information via the 'scenario' argument
+
+@pytest.hookimpl
+def pytest_bdd_after_scenario(request, feature, scenario, result):
+    print("After scenario:", scenario.name)
+    # Perform cleanup actions
+    # Access scenario-specific information via the 'scenario' argument
+
 # SCENARIO 1
 """
 # wrangle data into bars
@@ -34,23 +59,17 @@ scenarios('../features/003_nautilus_data_wrangle.feature')
     When a data wrangle is run
     Then an object of type XXX is added
 """
-
-# Fixture for the data factory
-@pytest.fixture
-def nautilus_raw():
-    return DataFactory().nautilus_raw()
-
 @given('no bar Nautilus objects')
 def g_no_bar_nautilus_objects(nautilus_raw): # cgp_data_objs=None
-    assert nautilus_raw
-    if nautilus_raw:
-        logging.debug(f"test_003: data objects X {nautilus_raw.get_no_objs}")
-
+    assert nautilus_raw.get_no_objs() == 0
 
 @when('a data wrangle is run')
-def w_a_data_wrangel_is_run():
-    assert 1
-
+def w_a_data_wrangel_is_run(nautilus_raw):
+    before_count = nautilus_raw.get_no_objs()
+    nautilus_raw.default_wrangle()
+    after_count = nautilus_raw.get_no_objs()
+    assert after_count != before_count
+    assert after_count > before_count
 
 @then('an object of type XXX is added')
 def t_an_object_of_type_XXX_is_added():
@@ -60,14 +79,14 @@ def t_an_object_of_type_XXX_is_added():
 """
 # wrangled data is correctly formatted
   Scenario Outline: Binance wrangled data format works
-    Given a bar Nautilus object
+    Given a bar Nautilus object in a catalog
     When formatting is checked
     Then the bar formatting fits
 """
 
-@given('a bar Nautilus object')
-def g_a_bar_Nautilus_object():
-    assert type()
+@given('a bar Nautilus object in a catalog')
+def g_a_bar_Nautilus_object_in_a_catalog(nautilus_raw):
+    assert type(nautilus_raw.get_default_catalog()) == ParquetDataCatalog
 
 @when('formatting is checked')
 def w_formatting_is_checked():
