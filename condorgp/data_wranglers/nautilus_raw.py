@@ -8,13 +8,13 @@ from nautilus_trader.persistence.catalog import ParquetDataCatalog
 class NautilusRaw:
     '''class to prove data wrangling'''
     def __init__(self):
+        logging.debug(f"{__name__} initialising...")
         self.data_objs = []
         self.catalogs = []
         self.data_path = Params().naut_dict['NAUT_DATA_PATH']
         self.posix_data_path = Path(self.data_path)
         assert self.posix_data_path
 
-        # cgp_data_objs.get_no_objs
     def get_no_objs(self):
         '''returns number of wrangled objects in data_objs[]'''
         return len(self.data_objs)
@@ -34,12 +34,24 @@ class NautilusRaw:
 
     def show_expectations(self):
         '''logs the data wrangling setup, for clarity'''
+        return 0
 
     def setup_catalog(self, path):
         '''creates catalog from existing data on the given path'''
 
         CATALOG_PATH = Path.cwd() / "catalog"
-
+        assert CATALOG_PATH
         # Create a new catalog instance
         self.catalog = ParquetDataCatalog(CATALOG_PATH)
-        # THIS GOTTA FAIL, THERE IS NO DATA THERE
+        # Should fail, no data on path
+        assert type(self.catalog) == ParquetDataCatalog
+
+        self.data_objs = self.catalog.bars()
+
+if __name__ == "__main__":
+    nr = NautilusRaw()
+    p = Params()
+    print(f"on objects: {nr.get_no_objs()}")
+    print(f"expectations: {nr.show_expectations()}")
+    nr.setup_catalog(p.naut_dict['NAUT_DATA_PATH'])
+    print(f"on objects: {nr.get_no_objs()}")
