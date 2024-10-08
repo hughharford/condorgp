@@ -8,6 +8,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+google-api-core = "^2.20.0"
+gcloud = "^0.18.3"
+gsutil = "^5.30"
+google-cloud-storage = "*"
 
 
 [build-system]
