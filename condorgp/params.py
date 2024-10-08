@@ -94,6 +94,10 @@ class Params():
         VERBOSITY = RUN_VERBOSE_FOR_DEBUG
         NO_OF_ELITE = 1 # make this 0 to remove elitism
 
+        NAUT_DATA_PATH = LOCAL_BASE_PATH + 'data/'
+        NAUT_RAW_DATA_PATH = LOCAL_BASE_PATH + 'raw_data/'
+
+
         self.naut_dict = {
             'VERBOSITY': VERBOSITY,
             'NAUTILUS_BASE_PATH': NAUTILUS_BASE_PATH,
@@ -117,6 +121,9 @@ class Params():
             'NAUT_DEFAULT_RUNNER': NAUT_DEFAULT_RUNNER,
             'N_DEFAULT_RUN_INC_PATH': N_DEFAULT_RUN_INC_PATH,
             'NO_OF_ELITE': NO_OF_ELITE,
+
+            'NAUT_DATA_PATH': NAUT_DATA_PATH, # wrangled nautilus data
+            'NAUT_RAW_DATA_PATH': NAUT_RAW_DATA_PATH, # downloaded csv's etc
         }
 
         # ################################## ##################################
