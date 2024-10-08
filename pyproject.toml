@@ -12,6 +12,9 @@ google-api-core = "^2.20.0"
 gcloud = "^0.18.3"
 gsutil = "^5.30"
 google-cloud-storage = "*"
+google-cloud-datacatalog = "^3.20.1"
+google-cloud-compute = "^1.19.2"
+requests = "^2.32.3"
 
 
 [build-system]
