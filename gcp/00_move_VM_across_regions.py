@@ -8,8 +8,6 @@ import warnings
 from google.api_core.extended_operation import ExtendedOperation
 from google.cloud import compute_v1
 
-
-
 # REF:
 #       https://cloud.google.com/compute/docs/instances/moving-instance-across-zones#python
 
@@ -827,15 +825,6 @@ def create_with_existing_disks(
 #   After you confirm that your virtual machines are moved, save on storage
 #   costs by deleting the temporary snapshots that you created.
 
-from __future__ import annotations
-
-import sys
-from typing import Any
-
-from google.api_core.extended_operation import ExtendedOperation
-from google.cloud import compute_v1
-
-
 def wait_for_extended_operation(
     operation: ExtendedOperation, verbose_name: str = "operation", timeout: int = 300
 ) -> Any:
@@ -898,3 +887,27 @@ def delete_snapshot(project_id: str, snapshot_name: str) -> None:
 
     wait_for_extended_operation(operation, "snapshot deletion")
 
+
+if __name__ == "__main__":
+    # bucket_name = "cgp_dl"
+    # location = 'us'
+
+    project_id_name = 'le-wagon-bootcamp-347615'
+    zone_name = "europe-west2-c"
+    instance = "lewagon-data-eng-vm-hughharford"
+
+    project_id = ""
+    instance = get_instance(project_id=project_id_name
+                            , zone=zone_name
+                            , instance_name=instance)
+    # print(instance) # this works
+    print(instance.disks[0])
+
+    # vm_disk = instance.disks[0]["device_name"]
+    # print(vm_disk)
+
+    # update = set_disk_autodelete(project_id=project_id_name
+    #                              , zone=zone_name
+    #                              , instance_name=instance
+    #                              , disk_name=vm_disk
+    #                              , autodelete=False)
