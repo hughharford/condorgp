@@ -11,14 +11,14 @@ docker network prune
 docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management
 
 ## check the docker dns status:
-docker network inspect dns_default 
+docker network inspect dns_default
 #### initially:
 Error response from daemon: network dns_default not found
 
 ### https://docs.docker.com/network/drivers/bridge/
 
 # but bridge network default is in place:
-docker network inspect bridge  
+docker network inspect bridge
 
 # this includes the following: unnamed and now named condorgp container:
         "Containers": {
@@ -47,3 +47,17 @@ docker network inspect bridge
 # docker connections for rabbitmq:
 https://github.com/deepshig/rabbitmq-docker
 
+
+
+# create a user managed docker bridge network:
+# REF: https://docs.docker.com/engine/network/drivers/bridge/#manage-a-user-defined-bridge
+e.g. docker network create my-net
+# so:
+docker network create cgp_net
+
+
+# connect a container to a user-specified docker bridge network
+# REF: https://docs.docker.com/engine/network/drivers/bridge/#connect-a-container-to-a-user-defined-bridge
+e.g. docker network connect my-net my-nginx
+# so:
+docker network connect cgp_net rabbitmq
