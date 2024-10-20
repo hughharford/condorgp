@@ -213,6 +213,7 @@ class GpControl:
         First inclusion of Nautilus in evaluation function
         Set as the default evaluator, see gp_control.__init__
         '''
+        set_backtest_id = "naut-run-06"
         evalf_name = 'eval_nautilus'
         # Transform the tree expression in a callable function
         func = self.gp.toolbox.compile(expr=individual)
@@ -226,7 +227,7 @@ class GpControl:
                 logging.debug(f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
                 self.backtester.basic_run(evolved_func=func, gp_strategy=True)
                 new_fitness = self.gpf.find_fitness(
-                                       backtest_id="naut-run-06")
+                                       backtest_id=set_backtest_id)
             else:
                 logging.debug(f"ERROR {evalf_name} {'>'*2} "+
                               f"NAUTILUS {'>'*4} {new_fitness}")
@@ -238,7 +239,7 @@ class GpControl:
                         f"GpControl.{evalf_name} {'>'*2} RUN NAUTILUS")
                     self.backtester.basic_run(evolved_func=func)
                     new_fitness = self.gpf.find_fitness(
-                                           backtest_id="naut-run-05")
+                                           backtest_id=set_backtest_id)
                 elif self.randomised_test_fitness == 1:
                     new_fitness = random.uniform(0, 1)
                 else:
@@ -269,35 +270,37 @@ class GpControl:
             # logging.debug(f"evalSymbRegTest: {tb}")
             return -110.0, # return 110.0 when evolved func fails
         return diff,
-    
+
     def undertake_run(self, gpc=None):
         start_time = time.time()
-        
-        if not gpc:
-            gpc = GpControl()    
 
-        gpc = gpc
+        if not gpc: gpc = GpControl()
+        else:       gpc = gpc
+
         gpc.verbose = 1
-
         gpc.use_adfs = 1
         if gpc.use_adfs:
-            pset_used = 'naut_pset_03_strategy' # 'naut_pset_03_strategy'
+            pset_used = 'naut_pset_05_strategy' # 'naut_pset_04_strategy' # 'naut_pset_03_strategy'
             # 'naut_pset_02_adf' # 'test_adf_symbreg_pset' # 'test_pset5b'
         else:
             pset_used = 'naut_pset_01' #  'test_pset5b'
         eval_used = 'eval_nautilus' # evalSymbRegTest
 
-        p = 1
-        g = 1
-        cp_base = "first_strat"
-        cp_freq = g+1
+        p = 10
+        g = 2 # even
+        cp_base = "240811_ev_cfg_fitness"
+        if not g%2==0:
+            err_note = f'g (no. generations) is odd, adjust: gpc.undertaken run'
+            logging.error(err_note)
+            raise ValueError(err_note)
+        cp_freq = g/2
         gpc.set_gp_n_cp(freq=cp_freq, cp_file=cp_base+"")
 
         # gpc.select_gp_provider_for_ADFs() # call to use ADFs but not checkpoints
         gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
         gpc.set_test_evaluator(eval_used)
 
-        gpc.run_backtest = 0
+        gpc.run_backtest = 1
         gpc.inject_strategy = 1 # set to 1, this selects naut_06_gp_strategy
 
         gpc.run_gp()

@@ -112,10 +112,6 @@ class GpRunStrategyBase(Strategy):
         self.p = Params()
         self.verbosity = self.p.naut_dict['VERBOSITY']
 
-        PyCondition.true(
-            config.fast_ema_period < config.slow_ema_period,
-            "{config.fast_ema_period=} must be less than {config.slow_ema_period=}",
-        )
         super().__init__(config)
 
         # Configuration

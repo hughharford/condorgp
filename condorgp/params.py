@@ -49,15 +49,15 @@ class Params():
             check = ''
             if "AMQP_URL" in os.environ:
                 check = os.environ["AMQP_URL"]
-            # if no error to checking the 
+            # if no error to checking the
             # then on a container using RabbitMQ and thereby needs path below:
             if len(check) > 0:
                 LOCAL_BASE_PATH = '/home/user/code/condorgp/'
         except BaseException as e:
             logging.debug(f"CondorGP Params ERROR: {e}")
             tb = ''.join(traceback.format_tb(e.__traceback__))
-            logging.debug(f"CondorGP Params : {tb}")    
-            
+            logging.debug(f"CondorGP Params : {tb}")
+
 
         # HIGH LEVEL CONFIGURATION OPTIONS:
         ####################################################
@@ -81,13 +81,22 @@ class Params():
         CHECKPOINT_PATH = LOCAL_BASE_PATH + "condorgp/util/checkpoints/"
         RUN_DONE_TEXT = "done"
         NUM_LOG_BACKUPS = 3
-        FITNESS_CRITERIA = 'Sharpe Ratio (252 days)'
-        SIMPLE_FITNESS_CRITERIA = 'Risk Return Ratio'
+
+        FITNESS_CRITERIA_SHARPE_RATIO = 'Sharpe Ratio (252 days)'
+        FITNESS_CRITERIA_RISK_RETURN_RATIO = 'Risk Return Ratio'
+        FITNESS_CRITERIA_PNL_TOTAL = 'PnL (total)'
+        FITNESS_CRITERIA_AVG_RETURN = 'Average (Return)'
+
+        BACKTEST_ID_CURRENT = "BACKTESTER-001-naut-run-06"
         CGP_NAUT_STRATEGIES = NAUTILUS_EVAL_PATH + "cgp_naut_strategies.py"
         NAUT_DEFAULT_RUNNER = "naut_03_egFX.py"
         N_DEFAULT_RUN_INC_PATH = NAUTILUS_EVAL_PATH + NAUT_DEFAULT_RUNNER
         VERBOSITY = RUN_VERBOSE_FOR_DEBUG
         NO_OF_ELITE = 1 # make this 0 to remove elitism
+
+        NAUT_DATA_PATH = LOCAL_BASE_PATH + 'data/'
+        NAUT_RAW_DATA_PATH = LOCAL_BASE_PATH + 'raw_data/'
+
 
         self.naut_dict = {
             'VERBOSITY': VERBOSITY,
@@ -99,12 +108,22 @@ class Params():
             'CONDOR_LOG_FILE': CONDOR_LOG_FILE,
             'CHECKPOINT_PATH': CHECKPOINT_PATH,
             'RUN_DONE_TEXT': RUN_DONE_TEXT,
-            'FITNESS_CRITERIA': FITNESS_CRITERIA,
-            'SIMPLE_FITNESS_CRITERIA': SIMPLE_FITNESS_CRITERIA,
+
+            'FITNESS_CRITERIA_SHARPE_RATIO': FITNESS_CRITERIA_SHARPE_RATIO,
+            'FITNESS_CRITERIA_RISK_RETURN_RATIO': FITNESS_CRITERIA_RISK_RETURN_RATIO,
+            'FITNESS_CRITERIA_PNL_TOTAL': FITNESS_CRITERIA_PNL_TOTAL,
+            'FITNESS_CRITERIA_AVG_RETURN': FITNESS_CRITERIA_AVG_RETURN,
+
+            'SPECIFIED_FITNESS': FITNESS_CRITERIA_SHARPE_RATIO,
+
+            'BACKTEST_ID_CURRENT': BACKTEST_ID_CURRENT,
             'CGP_NAUT_STRATEGIES': CGP_NAUT_STRATEGIES,
             'NAUT_DEFAULT_RUNNER': NAUT_DEFAULT_RUNNER,
             'N_DEFAULT_RUN_INC_PATH': N_DEFAULT_RUN_INC_PATH,
             'NO_OF_ELITE': NO_OF_ELITE,
+
+            'NAUT_DATA_PATH': NAUT_DATA_PATH, # wrangled nautilus data
+            'NAUT_RAW_DATA_PATH': NAUT_RAW_DATA_PATH, # downloaded csv's etc
         }
 
         # ################################## ##################################

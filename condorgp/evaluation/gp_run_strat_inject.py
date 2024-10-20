@@ -65,7 +65,7 @@ class GpRunStrategyInject(GpRunStrategyBase):
 
         self.p = Params()
         self.verbosity = self.p.naut_dict['VERBOSITY']
-        
+
     def __main__():
         return 1
 
@@ -79,6 +79,7 @@ class GpRunStrategyInject(GpRunStrategyBase):
             # THE BELOW IS DIRECTLY FROM EMACROSS
             # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+            # BUY LOGIC
             if self.fast_ema.value >= self.slow_ema.value:
                 if self.portfolio.is_flat(self.instrument_id):
                     self.buy()

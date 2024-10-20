@@ -1,10 +1,13 @@
 [![Build Status](https://dev.azure.com/hughharford/CONDOR_GP/_apis/build/status%2Fhughharford.condorgp?branchName=refs%2Fpull%2F17%2Fmerge)](https://dev.azure.com/hughharford/CONDOR_GP/_build/latest?definitionId=1&branchName=refs%2Fpull%2F17%2Fmerge)
 
 # About CondorGP
-- This is a highly ambitious Fintech AI project. 
-- Description: genetic programming
-- Data Source: various tbc, expected quant market history only, for initial hypothesis
-- Type of analysis: backtested evolving algorithms created by DEAP, with fitness function specified by us.
+- This is a highly ambitious Fintech AI project.
+- Description: the AI used is not Deep Learning (although NNs will be used),
+at the high level, genetic programming (GP) is the approach.
+- - GP outputs are live code, and GP is well known for athropomorphised
+    ingenuity and cleverness.
+- Data Source: various, including quant market history, for initial hypothesis
+- Type of analysis: backtested evolving algorithms created by DEAP, with fitness function specified by GP. Backtesting undertaken by Nautilus Trader.
 
 # Startup the project
 The initial setup.
@@ -15,61 +18,44 @@ sudo apt-get install virtualenv python-pip python-dev
 deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
     pip install pip -U; pip install -r requirements.txt
 ```
-Unittest test:
+
+Once you have setup your ssh public key...
+
+# Get CondorGP (via SSH if that is setup)
 ```bash
-make clean install test
+git clone git@github.com:hughharford/condorgp.git
+```
+as per the above but replace this line for HTTPS (not got SSH setup):
+```bash
+git clone https://github.com/hughharford/condorgp.git
 ```
 
-STANDARD BOILERPLATE FROM HERE DOWN >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# This will fail, now
+Follow the instructions in:
+docs/0_Nautilus_Trader_start_instructions/nautilus_start_process.md
 
-Check for condorgp in gitlab.com/{group}.
-If your project is not set please add it:
+#  Once Nautilus_trader folder in place next to condorgp
 
-- Create a new project on `gitlab.com/{group}/condorgp`
-- Then populate it:
+# Enable CondorGP in side by side folder to see nautilus_trader
+- Once nautilus fully installed next to condorgp folder:
+  local naut_trader env into condorgp folder
 
+'''bash
+cd ../condorgp
+pyenv local cgp_naut
+pip install -r requirements
+'''
+
+# Functional test with a script
 ```bash
-##   e.g. if group is "{group}" and project_name is "condorgp"
-git remote add origin git@github.com:{group}/condorgp.git
-git push -u origin master
-git push -u origin --tags
+# cd condorgp - should be here already
+make install test
+# OR
+pytest
 ```
 
-Functionnal test with a script:
-
+# For contributors, do a -e installation to allow updates based on your changes
 ```bash
-cd
-mkdir tmp
-cd tmp
-condorgp-run
-```
-
-# Install
-
-Go to `https://github.com/{group}/condorgp` to see the project, manage issues,
-setup you ssh public key, ...
-
-Create a python3 virtualenv and activate it:
-
-```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
-```
-
-Clone the project and install it:
-
-```bash
-git clone git@github.com:{group}/condorgp.git
-cd condorgp
-pip install -r requirements.txt
-make clean install test                # install and test
-```
-Functionnal test with a script:
-
-```bash
-cd
-mkdir tmp
-cd tmp
-condorgp-run
+# cd condorgp - should be here already
+pip install -e .
 ```

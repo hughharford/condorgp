@@ -3,9 +3,6 @@ import pytest
 from pytest_bdd import scenarios, given, when, then
 from deap import gp
 import logging
-from tests.fixtures import *
-from condorgp.factories.factory import Factory
-
 
 pytest.DEAP_ONE = ""
 
@@ -23,7 +20,6 @@ scenarios('../../features/up/03_deap_basics.feature')
 """
 @given('Deap is setup')
 def deap_ready(gp_control):
-    Factory().start_logger()
     assert gp_control is not None
 
 @when('an instance of Deap is instantiated')

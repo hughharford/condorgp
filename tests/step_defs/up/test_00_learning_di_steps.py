@@ -1,6 +1,7 @@
 from pytest_bdd import scenarios, given, when, then, parsers
+import pytest
 
-from tests.fixtures import *
+# from tests.conftest import *
 
 scenarios('../../features/up/00_learning_di.feature')
 

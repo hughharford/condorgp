@@ -217,9 +217,9 @@ class Utils:
             e.g.
             log line | text found
             _____________________
-            54532: 'BACKTESTER-001-naut-runner-04","message":"STOPPED."'
-            54554: '\u001b[36m BACKTEST POST-RUN'
-            54620: 'Sharpe Ratio (252 days):        15.966514528587545'
+            6890: 'BACKTEST POST-RUN'
+            6956: 'Sharpe Ratio (252 days):        15.966514528587545'
+            6987: 'BACKTESTER-001-naut-run-06","message":"DISPOSED'
 
         '''
 
@@ -227,34 +227,51 @@ class Utils:
             log_file_n_path = self.NAUT_DICT['NAUTILUS_LOG_FILE']
         if lines == 0:
             lines = self.p.util_dict['NO_LOG_LINES']
+        if backtest_id == "":
+            backtest_id = self.NAUT_DICT['BACKTEST_ID_CURRENT']
 
         log_as_list = self.get_last_x_log_lines(lines, log_file_n_path)
 
-        first_key_for_backtest = f'{backtest_id}","message":"STOPPED."'
-        second_key_for_run_end = "BACKTEST POST-RUN"
-
-
-        line_count = 0
+        line_count = line_search_start = line_search_end = 0
         now_searching_for_key = 0
         if log_as_list is None:
             print("didn't find log list")
             return "nope", -1
 
-        # print(first_key_for_backtest)
-        # print(second_key_for_run_end)
+        # careful here: searching from far end of logs, end/start are switched
+        log_key_END_nb_start_point = "BACKTEST POST-RUN"
+        log_key_START_nb_end_point = f'{backtest_id}","message":"DISPOSED'
+
+        v = 1 # view_fitness_search_criteria
+        if v:
+            print(f'log_key_START_nb_end_point: {log_key_START_nb_end_point}')
+            print(f'log_key_END_nb_start_point: {log_key_END_nb_start_point}')
 
         # go through reversed list (it was read from the back of the log)
-        log_as_list.reverse()
+        initial_cut_list = []
         for i, line in enumerate(log_as_list):
-            # print(line)
-            if str(first_key_for_backtest) in line:
+            print(line)
+            if str(log_key_START_nb_end_point) in line: # START at end - nb reversed
                 now_searching_for_key = 1 # now know where to start
+                line_search_start = i
             if now_searching_for_key == 1:
-                if str(second_key_for_run_end) in line:
+                # print(line)
+                initial_cut_list.append(line)
+                if str(log_key_END_nb_start_point) in line: # END at start - nb reversed
+                    line_search_end = i
                     now_searching_for_key = 2
-                    # print(now_searching_for_key)
-            if now_searching_for_key == 2:
-                if str(key) in line: return line, i
+                    if v ==1: print(now_searching_for_key)
+
+        # print('initial cut list: \n')
+        # print(initial_cut_list)
+        if v ==1: print(f'line_search_start = {line_search_start}')
+        if v ==1: print(f'line_search_end = {line_search_end}')
+
+        if now_searching_for_key == 2:
+            for i, line in enumerate(log_as_list): ## for simplicity
+                if i > line_search_start and i < line_search_end:
+                    # print(line)
+                    if str(key) in line: return line, i
                 line_count += 1
             if line_count > max_lines_diff:
                  return "too many lines", -1
@@ -368,8 +385,19 @@ if __name__ == "__main__":
     pass
     print('going...')
     u = Utils()
-    base = "new"
-    # u.tidy_cp_files(base) # tidying cp files
-    seq1 = [1,1,1,1,1,1,1,1,1,1,1] # 2,3,3,4,5,6]
-    seq2 = []
-    u.check_seq_never_decreases(seq1)
+    # base = "new"
+    # # u.tidy_cp_files(base) # tidying cp files
+    # seq1 = [1,1,1,1,1,1,1,1,1,1,1] # 2,3,3,4,5,6]
+    # seq2 = []
+    # u.check_seq_never_decreases(seq1)
+    p = Params()
+    key_req = p.naut_dict['SPECIFIED_FITNESS'] # p.naut_dict['FITNESS_CRITERIA']
+    log_file_n_path = p.naut_dict['NAUTILUS_LOG_FILE']
+    # print(f'{key_req}, {log_file_n_path}')
+    fitness = u.find_fitness_with_matching_backtest(
+            key = key_req,
+            log_file_n_path = "",
+            backtest_id = "",
+            lines = 0,
+            max_lines_diff = 200)
+    print(fitness)

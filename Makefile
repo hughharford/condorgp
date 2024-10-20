@@ -13,6 +13,7 @@ black:
 
 # tests/*.py
 test:
+	@PYTHONPATH=. pytest
 	@coverage run -m pytest
 	@coverage report -m --omit="${VIRTUAL_ENV}/lib/python*"
 

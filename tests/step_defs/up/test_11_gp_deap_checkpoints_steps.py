@@ -6,8 +6,6 @@ import glob
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from tests.fixtures import *
-
 EXTRA_TYPES = {
     'Number': int,
     'String': str,
@@ -64,7 +62,7 @@ def first_new_checkpoint_file_created(gpc, params):
     pytest.cp_path = params.naut_dict['CHECKPOINT_PATH']
     cp_path = pytest.cp_path + \
         pytest.given_cp_file.split('.')[0] + '_0003.pkl'
-    pytest.checkpointfile = pytest.given_cp_file
+    # pytest.checkpointfile = pytest.given_cp_file
     assert os.path.isfile(cp_path)
     # get time of creation
     ti_c = os.path.getctime(cp_path)

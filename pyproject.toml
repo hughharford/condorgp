@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "condorgp"
+version = "0.1.0"
+description = "Genetic Programming fintech AI autotrading project"
+authors = ["Hugh Harford <hugh.harford@poscoconsulting.com>"]
+license = "Apache 2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+google-api-core = "^2.20.0"
+gcloud = "^0.18.3"
+gsutil = "^5.30"
+google-cloud-storage = "*"
+google-cloud-datacatalog = "^3.20.1"
+google-cloud-compute = "^1.19.2"
+requests = "^2.32.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

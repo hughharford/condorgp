@@ -62,17 +62,23 @@ class GpDeapAdfCp(GpDeapADF):
             # # Evaluate the entire population
             for ind in self.pop:
                 ind.fitness.values = self.toolbox.evaluate(ind)
-
         except BaseException as e:
             logging.error(f"gp_deap_adf_cp.run_gp restart / start ERROR: {e}")
             tb = ''.join(traceback.format_tb(e.__traceback__))
             logging.debug(f"gp_deap_adf_cp.run_gp ERROR: \n {tb}")
 
-        self.hof.update(self.pop)
-        self.record = self.stats.compile(self.pop)
-        self.logbook.record(gen=0, evals=len(self.pop), **self.record)
-        if self.verbose:
-            logging.info(self.logbook.stream)
+        try:
+            # update population and stats
+            self.hof.update(self.pop)
+            self.record = self.stats.compile(self.pop)
+            self.logbook.record(gen=0, evals=len(self.pop), **self.record)
+            if self.verbose:
+                logging.info(self.logbook.stream)
+        except BaseException as e:
+            logging.error(f"gp_deap_adf_cp.run_gp update population and stats ERROR: {e}")
+            tb = ''.join(traceback.format_tb(e.__traceback__))
+            logging.debug(f"gp_deap_adf_cp.run_gp ERROR: \n {tb}")
+
 
         filenamebase = self.checkpointfilepath.split(".")[0]
 
@@ -80,11 +86,13 @@ class GpDeapAdfCp(GpDeapADF):
         try:
             for g in range(start_gen, N_GEN):
                 generation_reached = g
+                g_notice = f'{5*"%_"}gp_deap_adf_cp.run_gp___{g}'
+                logging.debug(f"gp_deap_adf_cp.run_gp 'g_notice': \n {g_notice}")
+
                 # Select the offspring
                 try:
                     self.offspring = self.toolbox.select(self.pop,
                                                          len(self.pop))
-
                 except BaseException as e:
                     logging.error(f"gp_deap_adf_cp.run_gp 'select' {e}")
                     tb = ''.join(traceback.format_tb(e.__traceback__))
@@ -110,20 +118,44 @@ class GpDeapAdfCp(GpDeapADF):
                 # Evaluate the individuals with an invalid fitness
                 invalids = [ind for ind in self.offspring if not ind.fitness.valid]
                 for ind in invalids:
-                    ind.fitness.values = self.toolbox.evaluate(ind)
+                    try:
+                        backup_fitness_value = -987.0,
+                        error = [0]
+                        ind.fitness.values = self.toolbox.evaluate(ind)
+                    except TypeError as e:
+                        error.append(e)
+                        ind.fitness.values = backup_fitness_value
+                    except SyntaxError as e:
+                        error.append(e)
+                        ind.fitness.values = backup_fitness_value
+                    except BaseException as e:
+                        # e.add_note('gp_deap_adf_cp "evaluate inds with invalid fitness"')
+                        error_e = f"gp_deap_adf_cp.run_gp 'evaluate inds with invalid fitness' {e}"
+                        error.append(error_e)
+                        tb = ''.join(traceback.format_tb(e.__traceback__))
+                        error_tb = f"gp_deap_adf_cp.run_gp 'evaluate': \n {tb}"
+                        error.append(error_tb)
+                    finally:
+                        for err in error:
+                            logging.error(err)
 
                 # Replacement of the population by the offspring
                 self.pop = self.offspring
                 self.hof.update(self.pop)
 
-                self.record = self.stats.compile(self.pop)
                 try: # this stats.compile was throwing errors
                      # (not yet understood):
-                    pass
-                except:
-                    pass
+                    self.record = self.stats.compile(self.pop)
+                    self.logbook.record(gen=g, evals=len(invalids), **self.record)
+                except RuntimeError as e:
+                    logging.error(f"gp_deap_adf_cp.run_gp 'evaluate' {e}")
+                except BaseException as e:
+                    logging.error(f"gp_deap_adf_cp.run_gp 'evaluate' {e}")
+                finally:
+                    if 'e' in locals():
+                        tb = ''.join(traceback.format_tb(e.__traceback__))
+                        logging.error(f"gp_deap_adf_cp.run_gp 'evaluate': \n {tb}")
 
-                self.logbook.record(gen=g, evals=len(invalids), **self.record)
                 if self.verbose:
                     logging.info(self.logbook.stream)
 
