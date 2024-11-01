@@ -1,3 +1,9 @@
+#### NB - THIS IS NOW out of date
+# using poetry instead.
+
+# use command:
+# 'poetry install'
+
 # packaging
 # ~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 pip>=9
