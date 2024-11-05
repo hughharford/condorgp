@@ -1,5 +1,10 @@
 FROM condorgp:builder
 
+WORKDIR $HOME/code/
+
+COPY ./scripts/reclone_cgp.sh $HOME/code/
+RUN chmod +x reclone_cgp.sh
+
 WORKDIR $HOME/code/condorgp
 
 # create log folder and empty log file, for ease
@@ -16,6 +21,6 @@ ENV PYENV_GLOBAL=naut_trader
 RUN pyenv global ${PYENV_GLOBAL}
 ENV PYENV_VERSION=naut_trader
 
-  # python3 condorgp/comms/run_condorgp/cgp_cmd_d.py
-CMD ["python3", "condorgp/comms/run_condorgp/cgp_cmd_d.py"]
+# python3 condorgp/comms/run_condorgp/condor_worker_d.py
+CMD ["python3", "condorgp/comms/run_condorgp/cgp_w_d.py"]
 # CMD ["/bin/bash"]

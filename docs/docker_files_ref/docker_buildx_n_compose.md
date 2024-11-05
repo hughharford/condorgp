@@ -14,7 +14,7 @@ These are:
 -5 - condorgp checkpoints - also fictional for now, but functionality required
 
 ### **************** ****************** ****************** ******************
-# TODO: come back to this later 
+# TODO: come back to this later
 # Get started:
 https://docs.docker.com/compose/gettingstarted/
 This works nicely, once docker compose manually installed
@@ -27,7 +27,7 @@ https://docs.docker.com/compose/install/linux/#install-the-plugin-manually
 ## c.f. docker_compose in root folder
 
 ## Up / down
-docker compose up/down to start/stop
+docker compose up/down to start/stopdo
 
 # DOCKER COMPOSE ARCHIVE:
 https://github.com/docker-archive/compose-cli/tree/main/docs
@@ -40,7 +40,7 @@ The docker compose learning is strong.
 PROGRESS:
   AWS environment variables set on home machine
   AWS user group setup that has suitable permissions. Fairly coarse grain for now.
-  Running .sh files works well. 
+  Running .sh files works well.
   Cluster creation succeeded.
 
 BUT
@@ -81,12 +81,8 @@ Does look like it has some useful characteristics...
 
 # manual install
 https://github.com/docker/buildx#manual-download
-This is unattended and will never get support, making it more likely to run 
+This is unattended and will never get support, making it more likely to run
 the above and suffer the KVM overhead etc
 
 
-# TODO: come back to this later 
-
-
-
-
+# TODO: come back to this later
