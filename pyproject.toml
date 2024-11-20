@@ -41,6 +41,7 @@ docker = "^7.1.0"
 jq = "^1.8.0"
 file-read-backwards = "^3.1.0"
 nautilus-trader = "^1.205.0"
+net-tools = "^0.1.2"
 
 
 [build-system]
