@@ -1,0 +1,236 @@
+# from:
+  # built and rabbitmq commands ran 250614
+  # DOCKER_BUILDKIT=1 docker build --target=cgp_base -f docker/Dockerfile . 
+
+FROM ubuntu:22.04 AS cgp_base
+
+ENV PATH=/usr/local/bin:$PATH
+
+# http://bugs.python.org/issue19846
+# > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
+ENV LANG=C.UTF-8
+
+# these get set in zsh but cause local error
+# ENV LANG=en_US.UTF-8
+# ENV LC_ALL=en_US.UTF-8
+
+# set location to avoid hang on tzdata
+ENV TZ=Europe/London
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get update
+
+# extra dependencies (over what base already includes, was buildpack-deps, now ubuntu:20.04)
+RUN apt-get install -y --no-install-recommends apt-utils \
+		libbluetooth-dev \
+		tk-dev \
+		uuid-dev \
+    apt-transport-https \
+    jq \
+    unzip \
+    curl \
+    wget \
+    git \
+    vim \
+    virtualenv \
+    python3-pip \
+    zsh \
+    tree \
+    gh \
+    libgdbm-dev \
+    libc6-dev \
+    libbz2-dev \
+    build-essential \ 
+    net-tools \
+    direnv \
+    # python support packages
+    make \
+    libssl-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    llvm \
+    libncursesw5-dev \
+    xz-utils tk-dev \
+    libxml2-dev \
+    # ibxmlsec1-dev -- # cannot find
+    libffi-dev \
+    liblzma-dev \
+    python3-dev \
+    libncurses5-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update \
+    && echo 'eval "$(direnv hook zsh)"' >> ~/.zshrc \
+    && sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+######
+######
+#		INSTALL NOTES
+######
+######
+
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# # make some useful symlinks that are expected to exist
+ RUN cd /usr/local/bin \
+ 	&& ln -s idle3 idle \
+ 	&& ln -s pydoc3 pydoc \
+ 	&& ln -s python3 python \
+ 	&& ln -s python3-config python-config
+
+############# PYTHON #########################################################
+# ''''''''''''''' ############################# '''''''''''''''''' ####################
+
+WORKDIR /home/user
+
+ARG PYTHON_VERSION=3.12.7
+
+# install pyenv and python
+RUN git clone https://github.com/pyenv/pyenv.git .pyenv
+ENV HOME=/home/user
+ENV PYENV_ROOT=$HOME/.pyenv
+ENV PATH=$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+RUN echo 'export PYENV_ROOT="$HOME/.pyenv"' >> .bashrc \
+  && echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> .bashrc \
+  && echo 'eval "$(pyenv init --path)"' >> .bashrc \
+  && eval "$(pyenv init --path)"
+  
+# install pyenv-virtualenv
+RUN git clone https://github.com/pyenv/pyenv-virtualenv.git .pyenv/plugins/pyenv-virtualenv \
+    && echo 'eval "$(pyenv virtualenv-init -)"' >> .bashrc
+
+RUN pyenv install $PYTHON_VERSION
+
+# additionals
+RUN pip3 install numpy setuptools wheel six auditwheel
+
+# install poetry within virtual env
+ENV PYENV_GLOBAL=cgp \
+    PATH="/home/user/.local/bin:$PATH"
+
+RUN pyenv virtualenv $PYTHON_VERSION $PYENV_GLOBAL
+RUN . /home/user/.pyenv/versions/$PYENV_GLOBAL/bin/activate \
+    && curl -sSL https://install.python-poetry.org | python3 - --version 1.8.3
+
+############# PYTHON #########################################################
+# ''''''''''''''' ############################# '''''''''''''''''' ####################
+
+# again to go past issues:
+RUN pip3 install --ignore-installed six
+
+FROM cgp_base AS cgp_nt
+
+ENV PYTHONUNBUFFERED=1 \
+ PYENV_VERSION=$PYENV_GLOBAL
+
+RUN . /home/user/.pyenv/versions/$PYENV_GLOBAL/bin/activate \
+    && pyenv global $PYENV_GLOBAL
+
+# install nautilus_trader dependencies
+# clang
+RUN apt install -y clang
+# rust
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+ENV PATH=${PATH}:$HOME/.cargo/bin
+
+# TODO: tidy up pyenv usage here. see lines below PYENV_GLOBAL etc
+RUN pip3 install toml Cython requests numpy setuptools
+
+# install nautilus_trader
+WORKDIR $HOME/code
+RUN git clone --single-branch https://github.com/nautechsystems/nautilus_trader.git
+
+WORKDIR $HOME/code/nautilus_trader
+
+RUN . /home/user/.pyenv/versions/$PYENV_GLOBAL/bin/activate && \
+    poetry run python build.py
+
+WORKDIR $HOME/code/nautilus_trader
+
+RUN pip install -U nautilus_trader
+
+
+FROM cgp_nt AS cgp_nt_base 
+#####
+#   Condorgp code, which will update regularly, to be copied after this build
+#   See Dockerfile_latest_<various>
+#   Do this here, so install done once now, not many times later.
+#   The latest copy is just the latest files.
+#####
+
+
+WORKDIR $HOME/code/condorgp
+
+COPY pyproject.toml poetry.lock ./
+
+RUN touch README.md
+
+RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
+
+# PUT TO BEGINNING asap
+RUN poetry remove file-read-backwards pika \
+    && poetry add file-read-backwards pika
+
+WORKDIR $HOME/code/
+
+RUN rm -r $HOME/code/condorgp
+
+RUN . /home/user/.pyenv/versions/$PYENV_GLOBAL/bin/activate \
+    && git clone --single-branch https://github.com/hughharford/condorgp.git
+
+WORKDIR $HOME/code/condorgp
+
+RUN . /home/user/.pyenv/versions/$PYENV_GLOBAL/bin/activate \
+    && poetry install
+
+
+
+WORKDIR $HOME/code/
+
+COPY ./scripts/reclone_cgp.sh $HOME/code/
+RUN chmod +x reclone_cgp.sh
+
+WORKDIR $HOME/code/condorgp
+
+# create log folder and empty log file, for ease
+WORKDIR $HOME/code/condorgp/condorgp/util/logs
+
+RUN touch condor_log.txt
+
+# create checkpoint folder and empty checkpoint file, for ease
+WORKDIR $HOME/code/condorgp/condorgp/util/checkpoints
+
+RUN touch first_strat_done.pkl
+
+WORKDIR $HOME/code/condorgp
+
+ENV PATH="/usr/local/lib/python3.12/dist-packages:$PATH"
+# ENV PYTHONPATH="/usr/local/lib/python3.12/dist-packages:$PYTHONPATH"
+
+# TODO: get this URL working with hostname not potentially changing URL
+# check bridge status with:
+  #                       docker network inspect bridge
+# for rabbitmq
+ENV AMQP_URL='amqp://172.17.0.3?connection_attempts=2&retry_delay=5'
+
+# 5672 and 15672 already in use (by rabbitmq docker)
+# EXPOSE 5672
+# EXPOSE 15672
+
+# will try to communicate via docker dns
+# https://www.baeldung.com/ops/docker-communicating-with-containers-on-same-machine
+
+# for -it interactive running
+CMD ["/bin/bash"]
+
+# ...
+# CMD ["python3", "condorgp/comms/run_condorgp/dry_run.py"]
+# python3 condorgp/comms/run_condorgp/dry_run.py

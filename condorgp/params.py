@@ -51,8 +51,11 @@ class Params():
                 check = os.environ["AMQP_URL"]
             # if no error to checking the
             # then on a container using RabbitMQ and thereby needs path below:
-            if len(check) > 0:
-                LOCAL_BASE_PATH = '/home/user/code/condorgp/'
+                if len(check) > 0:
+                    LOCAL_BASE_PATH = '/home/user/code/condorgp/'
+            if "IN_DOCKER" in os.environ:
+                LOCAL_BASE_PATH = '/condorgp/'
+                
         except BaseException as e:
             logging.debug(f"CondorGP Params ERROR: {e}")
             tb = ''.join(traceback.format_tb(e.__traceback__))

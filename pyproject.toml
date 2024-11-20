@@ -7,7 +7,7 @@ license = "Apache 2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.12,<3.13"
 google-api-core = "^2.20.0"
 gcloud = "^0.18.3"
 gsutil = "^5.30"
@@ -40,6 +40,7 @@ pytest-bdd = "^7.3.0"
 docker = "^7.1.0"
 jq = "^1.8.0"
 file-read-backwards = "^3.1.0"
+nautilus-trader = "^1.205.0"
 
 
 [build-system]

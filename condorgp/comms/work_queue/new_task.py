@@ -5,7 +5,7 @@
 
 import pika, sys
 
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+connection = pika.BlockingConnection(pika.ConnectionParameters('cgp_network'))
 channel = connection.channel()
 
 channel.queue_declare(queue='hello')
