@@ -58,3 +58,22 @@ To add a worker to this swarm, run the following command:
     docker swarm join --token SWMTKN-1-05hcib7uiear72cl41cpbp77n6r0m4rops32718a4jiizpgm1e-2pcl6a15226lk8bqf7vx12j5m [2a02:6b6f:e6ba:f100:cf19:6d36:d780:bc40]:2377
 
 To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+### this initially failed, but took out square brackets:
+
+    docker swarm join --token SWMTKN-1-05hcib7uiear72cl41cpbp77n6r0m4rops32718a4jiizpgm1e-2pcl6a15226lk8bqf7vx12j5m 2a02:6b6f:e6ba:f100:cf19:6d36:d780:bc40:2377
+
+### AND THEN WORKED
+
+docker network create -d overlay --attachable cgp_overlay
+
+# for extra security, encrypting data traffic:
+docker network create -d overlay --opt encrypted --attachable cgp_overlay
+
+
+# run and attached containers:
+# on host1 (will be swarm manager, if not already)
+docker run -it --name cgp_lead --network cgp_overlay cg_nt_base
+
+# on host2
+docker run -it --name cgp_workerdock --network cgp_overlay cg_nt_base

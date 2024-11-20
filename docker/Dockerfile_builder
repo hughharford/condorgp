@@ -1,6 +1,6 @@
 # from:
   # built and rabbitmq commands ran 250614
-  # DOCKER_BUILDKIT=1 docker build --target=cgp_base -f docker/Dockerfile_buildersudo  .
+  # DOCKER_BUILDKIT=1 docker build --target=cgp_base -f docker/Dockerfile_builder  .
 
 FROM ubuntu:22.04 AS cgp_base
 
