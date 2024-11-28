@@ -1,4 +1,4 @@
-# from:
+  # from:
   # built and rabbitmq commands ran 250614
   # DOCKER_BUILDKIT=1 docker build --target=cgp_base -f docker/Dockerfile_builder  .
 
@@ -175,42 +175,37 @@ RUN touch README.md
 
 RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
-# PUT TO BEGINNING asap
-RUN poetry remove file-read-backwards pika \
-    && poetry add file-read-backwards pika
+# # PUT TO BEGINNING asap
+# RUN poetry remove file-read-backwards pika \
+#     && poetry add file-read-backwards pika
 
-WORKDIR $HOME/code/
-
-RUN rm -r $HOME/code/condorgp
-
-RUN . /home/user/.pyenv/versions/$PYENV_GLOBAL/bin/activate \
-    && git clone --single-branch https://github.com/hughharford/condorgp.git
-
-WORKDIR $HOME/code/condorgp
+COPY ./ ./
 
 RUN . /home/user/.pyenv/versions/$PYENV_GLOBAL/bin/activate \
     && poetry install
 
+# WORKDIR $HOME/code/
 
+# COPY ./scripts/reclone_cgp.sh $HOME/code/
+# RUN chmod +x reclone_cgp.sh
 
-WORKDIR $HOME/code/
-
-COPY ./scripts/reclone_cgp.sh $HOME/code/
-RUN chmod +x reclone_cgp.sh
-
-WORKDIR $HOME/code/condorgp
+# WORKDIR $HOME/code/condorgp
 
 # create log folder and empty log file, for ease
-WORKDIR $HOME/code/condorgp/condorgp/util/logs
+# WORKDIR $HOME/code/condorgp
 
-RUN touch condor_log.txt
+RUN touch condorgp/util/logs/condor_log.txt
 
 # create checkpoint folder and empty checkpoint file, for ease
-WORKDIR $HOME/code/condorgp/condorgp/util/checkpoints
+# WORKDIR $HOME/code/condorgp/
 
-RUN touch first_strat_done.pkl
+RUN touch condorgp/util/checkpoints/first_strat_done.pkl
 
-WORKDIR $HOME/code/condorgp
+# WORKDIR $HOME/code/condorgp
+
+RUN pip install pika
+
+RUN chmod +x condorgp/comms/simple_service/serve.py
 
 ENV PATH="/usr/local/lib/python3.12/dist-packages:$PATH"
 # ENV PYTHONPATH="/usr/local/lib/python3.12/dist-packages:$PYTHONPATH"
@@ -219,7 +214,6 @@ ENV PATH="/usr/local/lib/python3.12/dist-packages:$PATH"
 # check bridge status with:
   #                       docker network inspect bridge
 # for rabbitmq
-ENV AMQP_URL='amqp://172.17.0.3?connection_attempts=2&retry_delay=5'
 
 # 5672 and 15672 already in use (by rabbitmq docker)
 # EXPOSE 5672

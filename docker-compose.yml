@@ -1,0 +1,56 @@
+networks:
+  first_ipvlan:
+    driver: ipvlan
+    driver_opts:
+      parent: enxf8e43b7937b7
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.19.0.0/16
+          gateway: 172.19.0.1
+          ip_range: 172.19.0.3/32
+
+services:
+  cgp_01:
+    container_name: cgp1
+    build:
+      context: .
+      dockerfile: docker/Dockerfile_builder
+    restart: on-failure
+    networks:
+      first_ipvlan:
+        ipv4_address: 172.19.0.2
+    ports:
+      - 8221:8221
+    volumes:
+      - type: bind
+        source: /home/hughharford/code/hughharford/condorgp/
+        target: /home/user/code/condorgp
+        read_only: false
+      - cgp_vol:/comms
+    environment:
+      - AMQP_URL='amqp://172.17.0.3?connection_attempts=2&retry_delay=5'
+
+
+
+    # entrypoint: ["poetry", "run"]
+    command: ["python", "condorgp/comms/simple_service/serve.py"]
+
+
+volumes:
+    cgp_vol:
+      driver: local
+
+  # cgp_02:
+  #   container_name: cgp2
+  #   build:
+  #     context: .
+  #     dockerfile: docker/Dockerfile_builder
+  #   restart: always
+  #   volumes:
+  #     - condorgp/:condorgp/
+  #   networks:
+  #     first_ipvlan:
+  #       ipv4_address: 172.19.0.3
+  #   ports:
+  #     - 7002:7000

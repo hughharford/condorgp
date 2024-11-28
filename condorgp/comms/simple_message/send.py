@@ -5,13 +5,22 @@
 
 import pika
 
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-channel = connection.channel()
+import os
 
-channel.queue_declare(queue='hello')
+key = 'PIKA_URL_MANUAL'
+PIKA_URL = os.getenv(key)
 
-channel.basic_publish(exchange='',
-                      routing_key='hello',
-                      body='Hello World!')
-print(" [x] Sent 'Hello World!'")
+def send():
+    connection = pika.BlockingConnection(pika.ConnectionParameters(PIKA_URL))
+    channel = connection.channel()
 
+    channel.queue_declare(queue='hello')
+
+    channel.basic_publish(exchange='',
+                        routing_key='hello',
+                        body='Hello World!')
+    print(" [x] Sent 'Hello World!'")
+
+
+if __name__ == "__main__":
+    send()

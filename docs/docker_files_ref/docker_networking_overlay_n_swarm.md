@@ -76,4 +76,4 @@ docker network create -d overlay --opt encrypted --attachable cgp_overlay
 docker run -it --name cgp_lead --network cgp_overlay cg_nt_base
 
 # on host2
-docker run -it --name cgp_workerdock --network cgp_overlay cg_nt_base
+docker run -it --name cgp_worker --network cgp_overlay cg_nt_base

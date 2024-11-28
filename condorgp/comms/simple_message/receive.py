@@ -6,16 +6,20 @@
 import pika
 import os, sys
 
+key = 'PIKA_URL_MANUAL'
+PIKA_URL = os.getenv(key)
+
+
 def main():
-    
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+
+    connection = pika.BlockingConnection(pika.ConnectionParameters(PIKA_URL))
     channel = connection.channel()
 
     channel.queue_declare(queue='hello')
 
     def callback(ch, method, properties, body):
         print(f" [x] Received {body}")
-        
+
     channel.basic_consume(queue='hello',
                         auto_ack=True,
                         on_message_callback=callback)
