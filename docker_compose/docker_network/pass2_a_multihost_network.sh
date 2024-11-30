@@ -1,4 +1,12 @@
 
+#/bin/bash
+
+# NOTE:
+#
+#
+# This fails as docker won't allow
+# docker0 bridge to be added to br0
+#
 
 
 # https://goldmann.pl/blog/2014/01/21/connecting-docker-containers-on-multiple-hosts/
@@ -8,10 +16,10 @@ STAR_IP=192.168.1.167
 
 
 # The 'other' host
-REMOTE_IP=$STAR_IP
+REMOTE_IP=$ASUS_IP
 
 
-# Name of the bridge
+# Name of the bridge # was docker0 cgp_net
 BRIDGE_NAME=docker0
 # Bridge address
 BRIDGE_ADDRESS=172.17.0.1/16

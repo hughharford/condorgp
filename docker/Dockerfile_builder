@@ -205,7 +205,19 @@ RUN touch condorgp/util/checkpoints/first_strat_done.pkl
 
 RUN pip install pika
 
-RUN chmod +x condorgp/comms/simple_service/serve.py
+# install bridge_utils
+# RUN sudo apt install -y bridge-utils openvswitch-switch
+# not needed on the containers...
+
+# just use package install for openvswitch, can get more advanced later
+# git clone openvswitch itself
+    # git clone https://github.com/openvswitch/ovs.git
+# note general install notes, various packages etc:
+  # https://github.com/openvswitch/ovs/blob/main/Documentation/intro/install/general.rst#id1
+
+
+RUN apt install -y --no-install-recommends iputils-ping
+
 
 ENV PATH="/usr/local/lib/python3.12/dist-packages:$PATH"
 # ENV PYTHONPATH="/usr/local/lib/python3.12/dist-packages:$PYTHONPATH"
