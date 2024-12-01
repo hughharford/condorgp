@@ -18,7 +18,9 @@ condorgp/util/checkpoints/*
 .secrets
 .secrets/*
 
+# cgp_data not to be uploaded
 database/*
+grafana_data/*
 
 #### boilerplate .gitignore
 

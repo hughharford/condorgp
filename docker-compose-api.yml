@@ -37,8 +37,29 @@ services:
     networks:
       - cgp_db_net
 
-
+  cgp_grafana:
+    image: grafana/grafana-enterprise
+    container_name: ${GRAF_NAME}
+    restart: unless-stopped
+    ports:
+     - '3000:3000'
+    environment:
+      - POSTGRES_DATABASE_URL=postgresql+psycopg2://cgp:cgp_pass@cgp_database:5432/cgp_backbone
+      - GRAFANA_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GRAFANA_ADMIN_PASS=${GRAFANA_ADMIN_PASS}
+      - GRAFANA_USER=${GRAFANA_USER}
+      - GRAFANA_PASS=${GRAFANA_PASS}
+    user: '0'
+    volumes:
+      - ./grafana_data:/var/lib/grafana
+    depends_on:
+      - cgp_database
+    networks:
+      - cgp_db_net
 
 networks:
   cgp_db_net:
     driver: bridge
+
+# volumes:
+#   grafana-storage: {}
