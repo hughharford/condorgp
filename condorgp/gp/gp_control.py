@@ -203,7 +203,7 @@ class GpControl:
 
         # show logbook
         logging.info(' deap __ Logbook:')
-        logging.info(self.gp.logbook)
+        logging.info(f"\n{self.gp.logbook}")
 
     def get_logbook(self):
         return self.gp.logbook
@@ -286,7 +286,7 @@ class GpControl:
             pset_used = 'naut_pset_01' #  'test_pset5b'
         eval_used = 'eval_nautilus' # evalSymbRegTest
 
-        p = 10
+        p = 20
         g = 2 # even
         cp_base = "240811_ev_cfg_fitness"
         if not g%2==0:
@@ -300,7 +300,7 @@ class GpControl:
         gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
         gpc.set_test_evaluator(eval_used)
 
-        gpc.run_backtest = 1
+        gpc.run_backtest = 0
         gpc.inject_strategy = 1 # set to 1, this selects naut_06_gp_strategy
 
         gpc.run_gp()
