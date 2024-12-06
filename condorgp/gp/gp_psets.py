@@ -186,24 +186,43 @@ class GpPsets:
         self.pset = gp.PrimitiveSetTyped("CGPNAUT05",
                                          [], GpRunStrategyInject, "ARG")
 
+        # HERE HERE (working downwards)
+        # looking to implement with: GetStrategies().get_evolved_strategy_func()
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
         # primary primitive, to enable function
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+        # get lots of the same error "INCORRECT CONFIG CLASS":
+        # The 'config' argument was not of type <class 'nautilus_trader.trading.config.StrategyConfig'>, was <class 'str'>
+        # or:
+        # error "INCORRECT CONFIG CLASS" & fails even with - Error "CANNOT START"
+        #
+
         # add GpRunStrategyInject as a PRIMITIVE
-        self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
+        #  >>
+        # doesn't cause overall PSET errors
+        # self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig, str], GpRunStrategyInject)
+        #  >>
+        # doesn't cause overall PSET errors
+        self.pset.addPrimitive(GpRunStrategyInject, [GpRunStrategyBaseConfig], GpRunStrategyInject)
+        # error "INCORRECT CONFIG CLASS" but fails without
 
         # attempt to add GetStrategies with method as primitive...
+        # >>> without this second type behaviour, shows errors in individuals
         self.pset.addPrimitive(GetStrategies.get_config_strategy_no_full_declaration, [], Strategy)
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-        # HERE HERE
+        # error "INCORRECT CONFIG CLASS" & fails even with - Error "CANNOT START"
 
-        # looking to implement with: GetStrategies().get_evolved_strategy_func()
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         trade_size = Decimal(1_000_000)
         fast_ema_period = BigInt()
         slow_ema_period = LittleInt()
 
+        # doesn't cause overall PSET errors
+        # >>> without this second type behaviour, shows errors in individuals
         self.pset.addPrimitive(GetStrategies.get_evolved_strategy, [], Strategy)
 
+        # doesn't cause PSET errors
         # need to add the class type, not classes specifically
         self.pset.addPrimitive(GetStrategies.get_evolved_strategy_1,
                                [CurrencyPair,
@@ -244,6 +263,11 @@ class GpPsets:
         self.pset.addPrimitive(Decimal, [Decimal], Decimal)
         self.pset.addPrimitive(str, [str], str)
         self.pset.addPrimitive(int, [int], int)
+
+
+        ## HERE HERE >>
+        # questions about GpRunStrategyBaseConfig - see gp_run_strat_base
+        # and how this is used / could be adapted...
         self.pset.addPrimitive(GpRunStrategyBaseConfig,
                                [StrInstr, StrBar, Decimal, LittleInt, BigInt],
                                GpRunStrategyBaseConfig)
@@ -251,6 +275,7 @@ class GpPsets:
         self.pset.addTerminal(Decimal(1_000_000), Decimal)
         self.pset.addTerminal(Decimal(2_000_000), Decimal)
 
+        # to prevent DEAP complaints of no suitable terminals:
         self.pset.addTerminal('GpRunStrategyBaseConfig', GpRunStrategyBaseConfig)
         self.pset.addTerminal('GpRunStrategyInject', GpRunStrategyInject)
 
@@ -651,6 +676,10 @@ def protectedDiv(left, right):
         return left / right
     except ZeroDivisionError:
         return 1
+
+def if_then_else(input, output1, output2):
+    '''add: pset.addPrimitive(if_then_else, [bool, float, float], float)'''
+    return output1 if input else output2
 
 class StrInstr(str):
     def pass_method(self):

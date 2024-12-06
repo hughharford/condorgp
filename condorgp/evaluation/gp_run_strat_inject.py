@@ -66,8 +66,8 @@ class GpRunStrategyInject(GpRunStrategyBase):
         self.p = Params()
         self.verbosity = self.p.naut_dict['VERBOSITY']
 
-    def __main__():
-        return 1
+    def __main__(self):
+        return self
 
     def check_triggers(self, blank = ""):
 
