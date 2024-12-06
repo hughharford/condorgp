@@ -73,7 +73,7 @@ class GpDeapAdfCp(GpDeapADF):
             self.record = self.stats.compile(self.pop)
             self.logbook.record(gen=0, evals=len(self.pop), **self.record)
             if self.verbose:
-                logging.info(self.logbook.stream)
+                logging.info(f"\n{self.logbook.stream}")
         except BaseException as e:
             logging.error(f"gp_deap_adf_cp.run_gp update population and stats ERROR: {e}")
             tb = ''.join(traceback.format_tb(e.__traceback__))
@@ -137,7 +137,7 @@ class GpDeapAdfCp(GpDeapADF):
                         error.append(error_tb)
                     finally:
                         for err in error:
-                            logging.error(err)
+                            logging.error(f"gp_deap_adf_cp.run_gp >> couldn't set fitness {err}")
 
                 # Replacement of the population by the offspring
                 self.pop = self.offspring
@@ -157,7 +157,7 @@ class GpDeapAdfCp(GpDeapADF):
                         logging.error(f"gp_deap_adf_cp.run_gp 'evaluate': \n {tb}")
 
                 if self.verbose:
-                    logging.info(self.logbook.stream)
+                    logging.info(f"\n{self.logbook.stream}")
 
                 if g % CP_FREQ == 0 and g != 0:
                     # Fill the dictionary using the dict(key=value[, ...]) constructor
@@ -243,6 +243,9 @@ class GpDeapAdfCp(GpDeapADF):
             self.toolbox.register("expr_mut", gp.genFull, min_=0, max_=2)
             self.toolbox.register('mutate', gp.mutUniform, expr=self.toolbox.expr_mut)
 
+            logging.debug(f"""\n   No guarantee that PSETs are operational
+                              0: {type(self.psets[0])}
+                              1: {type(self.psets[1])}""")
             self.ind = self.toolbox.individual()
 
         except BaseException as e:
