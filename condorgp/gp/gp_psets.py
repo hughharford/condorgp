@@ -213,21 +213,27 @@ class GpPsets:
         self.pset.addPrimitive(GetStrategies.get_config_strategy_no_full_declaration, [], Strategy)
         # error "INCORRECT CONFIG CLASS" & fails even with - Error "CANNOT START"
 
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         trade_size = Decimal(1_000_000)
         fast_ema_period = BigInt()
         slow_ema_period = LittleInt()
 
         # doesn't cause overall PSET errors
         # >>> without this second type behaviour, shows errors in individuals
-        self.pset.addPrimitive(GetStrategies.get_evolved_strategy, [], Strategy)
+        # self.pset.addPrimitive(GetStrategies.get_evolved_strategy, [], Strategy)
 
-        # doesn't cause PSET errors
-        # need to add the class type, not classes specifically
-        self.pset.addPrimitive(GetStrategies.get_evolved_strategy_1,
-                               [CurrencyPair,
-                                StrBarType1, Decimal, BigInt, LittleInt],
-                               Strategy)
+        # # doesn't cause PSET errors
+        # # need to add the class type, not classes specifically
+        # self.pset.addPrimitive(GetStrategies.get_evolved_strategy_1,
+        #                        [CurrencyPair,
+        #                         StrBarType1, Decimal, BigInt, LittleInt],
+        #                        Strategy)
+
+
+        self.pset.addPrimitive(get_std_config_for_evolved_strategy, [], GpRunStrategyBaseConfig)
+
+
+
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
         # using specified int and str classes to reduce degress of freedom:
         self.pset.addPrimitive(BigInt, [BigInt], BigInt)
@@ -671,6 +677,24 @@ class GpPsets:
         return self.pset
 
 # Define new functions
+from nautilus_trader.model.identifiers import Venue
+from nautilus_trader.test_kit.providers import TestInstrumentProvider
+
+
+def get_std_config_for_evolved_strategy():
+    SIM = Venue("SIM")
+    AUDUSD_SIM = TestInstrumentProvider.default_fx_ccy("AUD/USD", SIM)
+        # Configure your strategy
+    config = GpRunStrategyBaseConfig(
+        instrument_id=str(AUDUSD_SIM.id),
+        bar_type="AUD/USD.SIM-1-MINUTE-MID-INTERNAL",
+        fast_ema_period=100,
+        slow_ema_period=200,
+        trade_size=Decimal(1_000_000),
+    )
+    return config
+
+
 def protectedDiv(left, right):
     try:
         return left / right
