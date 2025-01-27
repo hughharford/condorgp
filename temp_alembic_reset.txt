@@ -1,0 +1,5 @@
+from cgp_api import models
+target_metadata = models.Base.metadata
+
+
+sqlalchemy.url = postgresql+psycopg2://cgp:cgp_pass@localhost:5432/cgp_backbone

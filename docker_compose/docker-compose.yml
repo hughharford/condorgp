@@ -4,17 +4,47 @@ services:
     image: europe-west1-docker.pkg.dev/data-engineering-students/student-images/base-image-fastapi:dev
     restart: on-failure
     ports:
-      - 8001:8000
+      - 8000:8000
     environment:
       - POSTGRES_DATABASE_URL=postgresql+psycopg2://cgp:cgp_pass@cgp_database:5432/cgp_backbone
       - COMMS_TABLE=comms
     volumes:
-      - ./cgp_api:/app/cgp_api
+      - ../cgp_api:/app/cgp_api
     command: ["uvicorn", "cgp_api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     depends_on:
       - cgp_database
     networks:
-      - cgp_db_net
+      - cgp_net
+
+  rabbitmq:
+    image: "rabbitmq:management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    networks:
+      - cgp_net
+
+  cgp_grafana:
+    image: grafana/grafana-enterprise
+    container_name: ${GRAF_NAME}
+    restart: unless-stopped
+    ports:
+     - 3000:3000
+    environment:
+      POSTGRES_DATABASE_URL: postgresql+psycopg2://cgp:cgp_pass@cgp_database:5432/cgp_backbone
+      GF_SECURITY_ADMIN_USER: "admin"
+    env_file:
+    - ../.env
+    user: '0'
+    volumes:
+      - ../grafana_data:/var/lib/grafana
+    depends_on:
+      - cgp_database
+    networks:
+      - cgp_net
 
   cgp_database:
     image: postgres:14.2
@@ -25,40 +55,20 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - ./scripts/db_init/:/docker-entrypoint-initdb.d/
-      - ./database/:/var/lib/postgresql/data
+      - ../scripts/db_init/:/docker-entrypoint-initdb.d/
+      - ../database/:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - 5432:5432
     environment:
       - POSTGRES_PASSWORD=postgres
       - APP_DB_USER=cgp
       - APP_DB_PASS=cgp_pass
       - APP_DB_NAME=cgp_backbone
     networks:
-      - cgp_db_net
-
-  cgp_grafana:
-    image: grafana/grafana-enterprise
-    container_name: ${GRAF_NAME}
-    restart: unless-stopped
-    ports:
-     - '3000:3000'
-    environment:
-      - POSTGRES_DATABASE_URL=postgresql+psycopg2://cgp:cgp_pass@cgp_database:5432/cgp_backbone
-      - GRAFANA_ADMIN_USER=${GRAFANA_ADMIN_USER}
-      - GRAFANA_ADMIN_PASS=${GRAFANA_ADMIN_PASS}
-      - GRAFANA_USER=${GRAFANA_USER}
-      - GRAFANA_PASS=${GRAFANA_PASS}
-    user: '0'
-    volumes:
-      - ./grafana_data:/var/lib/grafana
-    depends_on:
-      - cgp_database
-    networks:
-      - cgp_db_net
+      - cgp_net
 
 networks:
-  cgp_db_net:
+  cgp_net:
     driver: bridge
 
 # volumes:

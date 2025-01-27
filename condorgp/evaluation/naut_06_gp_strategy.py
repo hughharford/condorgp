@@ -93,6 +93,9 @@ class NautRuns06GpStrategy:
         # CGP CHANGE HERE
         gs = GetStrategies(instrument = AUDUSD_SIM)
         if evolved_strategy:
+            # gp_strategy = gs.get_evolved_strategy(ev_strategy=evolved_strategy)
+            # TRY get_evolved_strategy_1
+
             gp_strategy = gs.get_evolved_strategy(ev_strategy=evolved_strategy)
         else:
             raise ValueError(

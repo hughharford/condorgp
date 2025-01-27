@@ -12,7 +12,7 @@ import logging, time
 
 def main():
     queue='cgp_queue2'
-    
+
     # to connect to docker, but only from local
     credentials = pika.PlainCredentials("guest", "guest")
 
@@ -30,12 +30,12 @@ def main():
         logging.info(f"{'&&&'*3} cgp_w_d: q={queue} [x] Start Task")
 
         gpc = GpControl()
-        gpc.undertake_run()
-        
+        gpc.setup_run_n_start()
+
         logging.info(f"{'&&&'*3} cgp_w_d: q={queue} [x] DONE")
 
         ch.basic_ack(delivery_tag = method.delivery_tag)
-        
+
     channel.basic_consume(queue=queue,
                         on_message_callback=callback)
 
@@ -44,7 +44,7 @@ def main():
         [x] Waiting for messages")
 
     channel.start_consuming()
-    
+
 
 if __name__ == '__main__':
     try:

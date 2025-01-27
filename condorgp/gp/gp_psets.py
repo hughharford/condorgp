@@ -210,7 +210,7 @@ class GpPsets:
 
         # attempt to add GetStrategies with method as primitive...
         # >>> without this second type behaviour, shows errors in individuals
-        self.pset.addPrimitive(GetStrategies.get_config_strategy_no_full_declaration, [], Strategy)
+        # self.pset.addPrimitive(GetStrategies.get_config_strategy_no_full_declaration, [], Strategy)
         # error "INCORRECT CONFIG CLASS" & fails even with - Error "CANNOT START"
 
         trade_size = Decimal(1_000_000)
@@ -287,7 +287,7 @@ class GpPsets:
 
         # add ADF:
         self.pset.addADF(self.adfset0)
-        self.pset.addADF(self.adfset1) # added adfset1, didn't throw errors immediately on addition
+        self.pset.addADF(self.adfset1)
 
 
         # specify psets, inc adfsets:

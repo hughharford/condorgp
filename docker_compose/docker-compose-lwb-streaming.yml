@@ -1,0 +1,32 @@
+version: '3'
+services:
+  rabbitmq:
+    image: "rabbitmq:management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+
+  clickhouse-server:
+    image: "yandex/clickhouse-server:latest"
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    environment:
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+
+  grafana:
+    image: "grafana/grafana:latest"
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
+
+  metabase:
+    image: "metabase/metabase:v0.47.2"
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./mb/plugins/ch.jar:/plugins/clickhouse.jar"

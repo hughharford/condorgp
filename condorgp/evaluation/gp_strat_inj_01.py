@@ -36,7 +36,7 @@ import logging
 # then adapted
 
 
-class GpRunStrategyInject(GpRunStrategyBase):
+class GpStratInject01(GpRunStrategyBase):
     """
     First injection of gp evolved strategies
 
@@ -65,6 +65,8 @@ class GpRunStrategyInject(GpRunStrategyBase):
             # THE BELOW IS DIRECTLY FROM EMACROSS
             # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+            self.log.info("<< WORKING EVOLUTION INJECTION >>", LogColor.YELLOW)
+
             # BUY LOGIC
             if self.fast_ema.value >= self.slow_ema.value:
                 if self.portfolio.is_flat(self.instrument_id):
@@ -72,6 +74,8 @@ class GpRunStrategyInject(GpRunStrategyBase):
                 elif self.portfolio.is_net_short(self.instrument_id):
                     self.close_all_positions(self.instrument_id)
                     self.buy()
+
+
             # SELL LOGIC
             elif self.fast_ema.value < self.slow_ema.value:
                 if self.portfolio.is_flat(self.instrument_id):

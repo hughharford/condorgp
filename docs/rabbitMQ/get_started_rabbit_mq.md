@@ -1,10 +1,13 @@
 # rabbitmqctl install:
 ?
+# once dockers connected on network, try:
+  https://www.rabbitmq.com/tutorials/tutorial-two-python
+
 
 # installing rabbitmq:
 https://www.rabbitmq.com/docs/download
 https://www.rabbitmq.com/docs/install-debian
-### see: 
+### see:
 cloudsmith_quick_start_script.sh
 
 # run local rabbitmq:
@@ -25,7 +28,7 @@ sudo systemctl stop rabbitmq-server
 sudo systemctl start rabbitmq-server
 
 # check rabbitmq server: (only for localhost, not docker)
-sudo rabbitmqctl status 
+sudo rabbitmqctl status
 
 ### at the bottom:
 Listeners
@@ -40,7 +43,7 @@ Interface: [::], port: 5672, protocol: amqp, purpose: AMQP 0-9-1 and AMQP 1.0
 # Stop rabbitmq service:
 sudo rabbitmqctl stop
 ### or
-sudo rabbitmqctl stop_app 
+sudo rabbitmqctl stop_app
 
 
 # to see RabbitMQ management console in the browser:
@@ -62,14 +65,14 @@ then once sudo rabbitmqctl stop ran:
 
 
 
-# Management command line tool: 
+# Management command line tool:
 # rabbitmqadmin
 https://www.rabbitmq.com/docs/management-cli
 ### install via:
 https://stackoverflow.com/questions/36336071/install-rabbitmqadmin-on-linux
 but chmod 755 not 777
 ### also?
-chmod +x 
+chmod +x
 ### list queues:
 rabbitmqadmin -f tsv -q list queues
 ### delete queues:

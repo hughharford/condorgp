@@ -5,7 +5,7 @@ import logging, time
 # def main():
 #     cgp = GpControl()
 #     cgp.main()
-    
+
 def undertake_cgp_run():
     start_time = time.time()
 
@@ -33,7 +33,7 @@ def undertake_cgp_run():
     gpc.run_backtest = 0
     gpc.inject_strategy = 1 # set to 1, this selects naut_06_gp_strategy
 
-    gpc.run_gp()
+    gpc.initiate_gp_run()
 
     # tidy up
     gpc.util.tidy_cp_files(cp_base)
@@ -56,7 +56,7 @@ def undertake_cgp_run():
 if __name__ == '__main__':
     try:
         gpc = GpControl()
-        gpc.undertake_run()
+        gpc.setup_run_n_start()
     except KeyboardInterrupt:
         print('Interrupted')
         try:

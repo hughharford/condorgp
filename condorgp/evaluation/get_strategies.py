@@ -127,7 +127,7 @@ class GetStrategies():
         return self.ev_strategy
 
     def get_evolved_strategy_1(self, instrument_id, bar_type, trade_size,
-                               fast_ema_period, slow_ema_period):
+                               fast_ema_period, slow_ema_period, ev_strategy=""):
         # mandatorily correct values. the other inputs can vary
         self.SIM = Venue("SIM")
         logging.debug(f"GetStrategies self.SIM: \n {self.SIM}")

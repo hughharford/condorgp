@@ -188,7 +188,7 @@ class GpControl:
             logging.error(f"GpControl get_custom_evaluator ERROR: {e_name}")
             return None
 
-    def run_gp(self, inputs = [0,0,0]):
+    def initiate_gp_run(self, inputs = [0,0,0]):
         ''' undertakes the run as specified'''
         logging.debug(f"GpControl: starting GP run now {'_'*10}")
         try:
@@ -256,6 +256,10 @@ class GpControl:
         return new_fitness, # returns a float in a tuple, i.e.  14736.68,
 
     def evalSymbRegTest(self, individual):
+        '''
+        Kept as fallback on error.
+        runs a very simple mathematical evaluation.
+        '''
         # Transform the tree expression in a callable function
         func = self.gp.toolbox.compile(expr=individual)
         # Evaluate the sum of squared difference between the expression
@@ -271,13 +275,14 @@ class GpControl:
             return -110.0, # return 110.0 when evolved func fails
         return diff,
 
-    def undertake_run(self, gpc=None):
+    def setup_run_n_start(self, gpc=None):
         start_time = time.time()
 
         if not gpc: gpc = GpControl()
         else:       gpc = gpc
 
-        gpc.verbose = 1
+        gpc.verbose = 0
+
         gpc.use_adfs = 1
         if gpc.use_adfs:
             pset_used = 'naut_pset_05_strategy' # 'naut_pset_04_strategy' # 'naut_pset_03_strategy'
@@ -286,9 +291,9 @@ class GpControl:
             pset_used = 'naut_pset_01' #  'test_pset5b'
         eval_used = 'eval_nautilus' # evalSymbRegTest
 
-        p = 20
+        p = 1
         g = 2 # even
-        cp_base = "240811_ev_cfg_fitness"
+        cp_base = "250119_fitness_experiments"
         if not g%2==0:
             err_note = f'g (no. generations) is odd, adjust: gpc.undertaken run'
             logging.error(err_note)
@@ -300,10 +305,11 @@ class GpControl:
         gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
         gpc.set_test_evaluator(eval_used)
 
-        gpc.run_backtest = 0
-        gpc.inject_strategy = 1 # set to 1, this selects naut_06_gp_strategy
+        gpc.run_backtest = 1
+        # set to 1, inject_strategy selects naut_06_gp_strategy in run_naut
+        gpc.inject_strategy = 1
 
-        gpc.run_gp()
+        gpc.initiate_gp_run()
 
         # tidy up
         # CUT THIS FOR NOW, CONFUSING ERROR ON PIKA CONTAINER RUNNING...
@@ -328,4 +334,4 @@ class GpControl:
 
 if __name__ == "__main__":
     gpc = GpControl()
-    gpc.undertake_run()
+    gpc.setup_run_n_start()
