@@ -18,37 +18,34 @@ def get_db():
 
 def callback(ch, method, properties, body):
 
-    # db = get_db()
-
     with SessionLocal() as db:
-        print(
-            db.execute(
-                """
-            SELECT * FROM information_schema.tables
-            WHERE table_schema = 'public'
-            """
-            ).fetchall()
-        )
+        # print(
+        #     db.execute(
+        #         """
+        #     SELECT * FROM information_schema.tables
+        #     WHERE table_schema = 'public'
+        #     """
+        #     ).fetchall()
+        # )
 
         # db.execute('USE cgp_backbone')
 
 
         data = body.decode('utf-8').split(":")
-        ind_id = str(uuid.uuid4())
-        time_date_logged = data[0]
-        fit_run = data[1]
-        time_fit_run_start = str(datetime.now(pytz.utc))
-        fitness = data[2]
-        ind_string = data[3]
-        print(f"Received individual {ind_id} with fitness: ${fitness}")
-        # save = (ind_id, time_date_logged, time_fit_run_start, fit_run, fitness, ind_string)
-        # query = f'INSERT INTO individuals VALUES ({ind_id}, "{time_date_logged}", "{time_fit_run_start}", "{fit_run}", "{fitness}", "{ind_string}")'
-        # db.execute(query)
+        print(data)
+        print(f"Received individual {data[2]} with fitness: {data[5]}")
 
-        db_inds = models.Individuals(UUID, time_date_logged, time_fit_run_start, fit_run, fitness, ind_string)
-        db.add(db_inds)
+        db_inds = schemas.IndividualsCreate()
+        db_inds.fit_run = bool(data[4])
+        db_inds.time_fit_run_start = datetime.now(pytz.utc)
+        db_inds.fitness = float(data[5])
+        db_inds.ind_string = str(data[6])
+
+        db_ingoing = models.Individuals(**db_inds.model_dump())
+        db_ingoing.id = uuid.uuid4()
+        db.add(db_ingoing)
         db.commit()
-        db.refresh(db_inds)
+        db.refresh(db_ingoing)
 
 def main():
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))

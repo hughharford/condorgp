@@ -1,5 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
+import pytz
+import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
 ## REF: https://kitt.lewagon.com/camps/1769/challenges?path=02-Database-Fundamentals%2F04-Backend-and-Database-Management%2F01-Twitter-CRUD
@@ -19,16 +21,18 @@ class Comms(CommsBase):
 
 
 # individuals section
-class IndividualBase(BaseModel):
-    ind_string: str
+class IndividualsBase(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
-class IndividualCreate(IndividualBase):
-    time_fit_run_start: datetime
-    fit_run: bool
-    fitness: float
+    ind_string: str | None = None
 
-class Individual(IndividualBase):
-    time_date_logged: datetime
-    id: UUID
+class IndividualsCreate(IndividualsBase):
+    time_fit_run_start: datetime | None = None
+    fit_run: bool | None = False
+    fitness: float | None = -55000
+
+class Individuals(IndividualsBase):
+    time_date_logged: datetime # | None = datetime.now(pytz.utc)
+    id: UUID # | None = uuid.uuid4()
     class Config:
         orm_mode = True

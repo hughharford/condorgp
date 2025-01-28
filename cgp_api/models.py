@@ -30,7 +30,7 @@ class Individuals(Base):
     __tablename__ = os.environ.get("INDIVIDUALS_TABLE", "individuals")
 
     # Columns
-    id = Column(UUID(as_uuid=True), primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
     time_date_logged = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     time_fit_run_start = Column(DateTime(timezone=True))
     fit_run = Column(Boolean, nullable=False)
