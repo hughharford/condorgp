@@ -1,7 +1,5 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
-import pytz
-import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
 ## REF: https://kitt.lewagon.com/camps/1769/challenges?path=02-Database-Fundamentals%2F04-Backend-and-Database-Management%2F01-Twitter-CRUD
