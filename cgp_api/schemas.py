@@ -15,7 +15,7 @@ class Comms(CommsBase):
     time_date: datetime
     id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # individuals section
@@ -33,4 +33,4 @@ class Individuals(IndividualsBase):
     time_date_logged: datetime # | None = datetime.now(pytz.utc)
     id: UUID # | None = uuid.uuid4()
     class Config:
-        orm_mode = True
+        from_attributes = True

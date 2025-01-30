@@ -1,0 +1,261 @@
+  # from:
+  # built and rabbitmq commands ran 250614
+  # DOCKER_BUILDKIT=1 docker build --target=cgp_base -f docker/Dockerfile_builder  .
+
+FROM python:3.12-bullseye AS cgp_base
+
+ENV PATH=/usr/local/bin:$PATH
+
+# http://bugs.python.org/issue19846
+# > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
+ENV LANG=C.UTF-8
+
+# set location to avoid hang on tzdata
+ENV TZ=Europe/London
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get update --fix-missing
+
+# extra dependencies
+## Q: is this all really required?
+RUN apt-get install -y --no-install-recommends apt-utils \
+  libbluetooth-dev \
+  tk-dev \
+  uuid-dev \
+  apt-transport-https \
+  jq \
+  unzip \
+  curl \
+  wget \
+  git \
+  vim \
+## A: taking this out
+  # virtualenv \
+  python3-pip \
+## A: taking this out
+  #  zsh \
+  # tree \
+  # gh \
+  libgdbm-dev \
+  libc6-dev \
+  libbz2-dev \
+  build-essential \
+  net-tools \
+  direnv \
+  # python support packages
+  make \
+  libssl-dev \
+  zlib1g-dev \
+  libbz2-dev \
+  libreadline-dev \
+  libsqlite3-dev \
+  llvm \
+  libncursesw5-dev \
+  xz-utils tk-dev \
+  libxml2-dev \
+  # ibxmlsec1-dev -- # cannot find
+  libffi-dev \
+  liblzma-dev \
+  python3-dev \
+  libncurses5-dev
+
+## Q: is this required?
+# RUN apt-get update \
+#     && echo 'eval "$(direnv hook zsh)"' >> ~/.zshrc \
+#     && sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+######
+######
+#		INSTALL NOTES
+######
+######
+
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# # A: taken this out, not needed with python base image
+# # # make some useful symlinks that are expected to exist
+#  RUN cd /usr/local/bin \
+#  	# && ln -s idle3 idle \
+#  	# && ln -s pydoc3 pydoc \
+#  	# && ln -s python3 python \
+#  	# && ln -s python3-config python-config
+
+############# PYTHON #########################################################
+# ''''''''''''''' ############################# '''''''''''''''''' ####################
+
+WORKDIR /
+
+## GETTING RID of pyenv - experiment - let poetry manage venv
+# # install pyenv
+# RUN git clone https://github.com/pyenv/pyenv.git .pyenv
+ENV HOME=/home/user
+# ENV PYENV_ROOT=$HOME/.pyenv
+# ENV PATH=$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+
+# RUN echo 'export PYENV_ROOT="$HOME/.pyenv"' >> .bashrc \
+#     && echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> .bashrc \
+#     && echo 'eval "$(pyenv init --path)"' >> .bashrc \
+#     && eval "$(pyenv init --path)"
+
+## GETTING RID of pyenv - experiment - let poetry manage venv
+# # install pyenv-virtualenv
+# RUN git clone https://github.com/pyenv/pyenv-virtualenv.git .pyenv/plugins/pyenv-virtualenv \
+#     && echo 'eval "$(pyenv virtualenv-init -)"' >> .bashrc
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+## GETTING RID of pyenv - experiment - let poetry manage venv
+# # install poetry within virtual env
+# ENV PYENV_GLOBAL=cgp /
+ENV PATH="/home/user/.local/bin:$PATH"
+
+# additionals
+RUN pip3 install numpy setuptools wheel six auditwheel poetry==1.8.4
+
+
+## GETTING RID of pyenv - experiment - let poetry manage venv
+# # set with base image, but here for venv
+# ARG PYTHON_VERSION=3.12.8
+
+# RUN pyenv install 3.12.8
+# RUN pyenv virtualenv $PYTHON_VERSION $PYENV_GLOBAL
+# RUN . /home/user/.pyenv/versions/$PYENV_GLOBAL/bin/activate
+
+# again (? it works) to go past issues:
+RUN pip3 install --ignore-installed six
+
+# tidy up
+RUN rm -rf /var/cache/apt/* \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf $POETRY_CACHE_DIR
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+FROM cgp_base AS cgp_nt
+
+ENV PYTHONUNBUFFERED=1
+## GETTING RID of pyenv - experiment - let poetry manage venv
+# \
+#  PYENV_VERSION=$PYENV_GLOBAL
+# RUN . /home/user/.pyenv/versions/$PYENV_GLOBAL/bin/activate \
+#     && pyenv global $PYENV_GLOBAL
+
+# install nautilus_trader dependencies
+# clang
+RUN apt install -y clang
+# rust
+RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+ENV PATH=${PATH}:$HOME/.cargo/bin
+
+# TODO: tidy up pyenv usage here. see lines below PYENV_GLOBAL etc
+RUN pip3 install toml Cython requests numpy setuptools
+
+# install nautilus_trader
+WORKDIR $HOME/code
+RUN git clone --single-branch https://github.com/nautechsystems/nautilus_trader.git
+
+WORKDIR $HOME/code/nautilus_trader
+
+RUN . /home/user/.pyenv/versions/$PYENV_GLOBAL/bin/activate && \
+    poetry run python build.py
+
+WORKDIR $HOME/code/nautilus_trader
+
+RUN pip install -U nautilus_trader
+
+# tidy up
+RUN rm -rf /var/cache/apt/* \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf $POETRY_CACHE_DIR
+
+
+
+FROM cgp_nt AS cgp_nt_base
+#####
+#   Condorgp code, which will update regularly, to be copied after this build
+#   See Dockerfile_latest_<various>
+#   Do this here, so install done once now, not many times later.
+#   The latest copy is just the latest files.
+#####
+
+
+WORKDIR $HOME/code/condorgp
+
+COPY pyproject.toml poetry.lock ./
+
+RUN touch README.md
+
+RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
+
+# # PUT TO BEGINNING asap
+# RUN poetry remove file-read-backwards pika \
+#     && poetry add file-read-backwards pika
+
+COPY ./ ./
+
+RUN . /home/user/.pyenv/versions/$PYENV_GLOBAL/bin/activate \
+    && poetry install
+
+# WORKDIR $HOME/code/
+
+# COPY ./scripts/reclone_cgp.sh $HOME/code/
+# RUN chmod +x reclone_cgp.sh
+
+# WORKDIR $HOME/code/condorgp
+
+# create log folder and empty log file, for ease
+# WORKDIR $HOME/code/condorgp
+
+RUN touch condorgp/util/logs/condor_log.txt
+
+# create checkpoint folder and empty checkpoint file, for ease
+# WORKDIR $HOME/code/condorgp/
+
+RUN touch condorgp/util/checkpoints/first_strat_done.pkl
+
+# WORKDIR $HOME/code/condorgp
+
+RUN pip install pika
+
+# install bridge_utils
+# RUN sudo apt install -y bridge-utils openvswitch-switch
+# not needed on the containers...
+
+# just use package install for openvswitch, can get more advanced later
+# git clone openvswitch itself
+    # git clone https://github.com/openvswitch/ovs.git
+# note general install notes, various packages etc:
+  # https://github.com/openvswitch/ovs/blob/main/Documentation/intro/install/general.rst#id1
+
+
+RUN apt install -y --no-install-recommends iputils-ping
+
+
+ENV PATH="/usr/local/lib/python3.12/dist-packages:$PATH"
+# ENV PYTHONPATH="/usr/local/lib/python3.12/dist-packages:$PYTHONPATH"
+
+# TODO: get this URL working with hostname not potentially changing URL
+# check bridge status with:
+  #                       docker network inspect bridge
+# for rabbitmq
+
+# 5672 and 15672 already in use (by rabbitmq docker)
+# EXPOSE 5672
+# EXPOSE 15672
+
+# will try to communicate via docker dns
+# https://www.baeldung.com/ops/docker-communicating-with-containers-on-same-machine
+
+# for -it interactive running
+CMD ["/bin/bash"]
+
+# ...
+# CMD ["python3", "condorgp/comms/run_condorgp/dry_run.py"]
+# python3 condorgp/comms/run_condorgp/dry_run.py

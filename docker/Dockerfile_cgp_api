@@ -1,0 +1,69 @@
+FROM python:3.12-bullseye AS api_builder
+
+#Do not use env as this would persist after the build and would impact your containers, children images
+ARG DEBIAN_FRONTEND=noninteractive
+# force the stdout and stderr streams to be unbuffered.
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /
+COPY ../pyproject.toml poetry.lock ./
+RUN touch README.md
+
+RUN apt-get -y update \
+    && apt-get -y upgrade \
+    && apt-get -y install \
+      python3-pip \
+      build-essential \
+      gcc \
+      python3-dev
+
+RUN pip install --upgrade pip \
+    && pip install \
+      setuptools \
+      wheel \
+      six \
+      auditwheel
+
+RUN pip install poetry==1.8.4
+
+ENV POETRY_NO_INTERACTION=1 \
+POETRY_VIRTUALENVS_IN_PROJECT=1 \
+POETRY_VIRTUALENVS_CREATE=1 \
+POETRY_CACHE_DIR=/tmp/poetry_cache
+
+RUN poetry install --without evolution \
+--without cluster \
+--without cloud \
+--without test \
+--without dev \
+--without optional
+
+RUN rm -rf /var/cache/apt/* \
+    && rm -rf $POETRY_CACHE_DIR
+    # removing POETRY_CACHE_DIR saves 550mb in the image
+
+EXPOSE 8000
+
+#  ENTRYPOINT [ "poetry", "run" ]
+
+CMD ["uvicorn", "cgp_api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+
+
+
+FROM python:3.12-slim-bullseye AS api_runtime
+
+ENV VIRTUAL_ENV=/.venv \
+    PATH="/.venv/bin:$PATH"
+
+COPY --from=api_builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+
+COPY ../cgp_api  ./cgp_api
+
+EXPOSE 8000
+
+#  ENTRYPOINT [ "poetry", "run" ]
+
+CMD ["uvicorn", "cgp_api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+#size: 184MB
