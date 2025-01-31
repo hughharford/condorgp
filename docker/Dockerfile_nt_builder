@@ -16,7 +16,7 @@ FROM ghcr.io/nautechsystems/nautilus_trader:latest AS cgp_nt_theirs_plus
 # RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # RUN apt-get update --fix-missing
 
-WORKDIR /
+WORKDIR /condorgp
 
 # extra dependencies
 ## Q: is this all really required?
@@ -64,26 +64,42 @@ RUN apt-get update \
     libncurses5-dev \
   && apt-get clean
 
-# ENV PATH="/home/user/.local/bin:$PATH"
+RUN pip3 install numpy setuptools wheel six auditwheel poetry==1.8.4
 
 ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
-    POETRY_CACHE_DIR=/tmp/poetry
+    POETRY_CACHE_DIR=/tmp/poetry \
+    POETRY_HOME="/opt/poetry" \
+    PYSETUP_PATH="/opt/pysetup" \
+    VENV_PATH="condorgp/.venv"
 
+ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
     # additionals
-RUN pip3 install numpy setuptools wheel six auditwheel poetry==1.8.4
 
 # again (? it works) to go past issues:
 RUN pip3 install --ignore-installed six
 
-WORKDIR /condorgp
+# this didn't work
+WORKDIR $PYSETUP_PATH
 
 COPY pyproject.toml poetry.lock ./
 
-RUN poetry install --no-root --only comms \
-    && poetry remove pika \
-    && poetry add file-read-backwards pika
+# install runtime deps - uses $POETRY_VIRTUALENVS_IN_PROJECT internally
+# this just ran:
+  # RUN poetry install --without api
+# rather than:
+RUN poetry install --no-root --without api --without database --without cluster --without cloud --without test --without dev --without optional
+# --without primary \
+# --without evolution \
+# --without comms \
+
+COPY condorgp ./condorgp
+RUN touch README.md
+# build as per Nautilus Trader dockerfile
+RUN poetry build -f wheel
+RUN python -m pip install ./dist/*whl --force --no-deps
+RUN find /usr/local/lib/python3.12/site-packages -name "*.pyc" -exec rm -f {} \;
 
 # tidy up
 RUN rm -rf /var/cache/apt/* \
@@ -97,34 +113,17 @@ RUN rm -rf /var/cache/apt/* \
 
 FROM python:3.12-slim AS runtime
 
-ENV VIRTUAL_ENV=/condorgp/.venv \
-    PATH="/condorgp/.venv/bin:$PATH"
-
-COPY --from=cgp_nt_theirs_plus ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY --from=cgp_nt_theirs_plus /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+# as from Nautilus Trader dockerfile
+ENV PYTHON_SITE_PACKAGES="/usr/local/lib/python3.12/site-packages"
+COPY --from=cgp_nt_theirs_plus $PYTHON_SITE_PACKAGES $PYTHON_SITE_PACKAGES
+ENV PATH="$PYTHON_SITE_PACKAGES:$PATH"
 
 WORKDIR /condorgp
 
 RUN touch README.md
 
-# COPY ./cgp_rabbitmq ./condorgp/cgp_rabbitmq
-# COPY ./condorgp ./condorgp/condorgp
-# can copy, but loading code via compose mounts
+COPY . .
 
-# # create log folder and empty log file, for ease
-# RUN touch condorgp/util/logs/condor_log.txt
-# # create checkpoint folder and empty checkpoint file, for ease
-# RUN touch condorgp/util/checkpoints/first_strat_done.pkl
+# ENTRYPOINT [ "poetry", "run" ]
 
-RUN pip install --ignore-installed pika
-# the line above made all the difference,
-# could suddenly get pika connections working
-
-# RUN apt-get clean
-
-ENV PATH="/usr/local/lib/python3.12/dist-packages:$PATH"
-
-                    #  cgp_rabbitmq/delegate/run_delegated_evals_1.py
-#  ENTRYPOINT ["python", "cgp_rabbitmq/delegate/run_delegated_evals_1.py"]
-# for -it interactive running
 CMD ["/bin/bash"]

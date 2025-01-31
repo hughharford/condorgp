@@ -25,7 +25,11 @@ def run_delegated_evaluation():
         logging.error(" [x] attempting task")
         logging.error(" DEL_1 running >>>> NAUTILUS__TRADER evaluation >>>")
 
-        run_nt.main()
+        logging.error("Running RunNautilus")
+        # script_to_run = "naut_03_egFX.py"
+        n = RunNautilus()
+        # n.basic_run(evolved_func="12345", gp_strategy=True)
+        run_nt.basic_run(evolved_func="12345", gp_strategy=True)
 
         logging.error(" [x] Done")
         ch.basic_ack(delivery_tag = method.delivery_tag)
