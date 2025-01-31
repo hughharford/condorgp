@@ -4,3 +4,5 @@ alembic
 .alembic.ini
 .README.md
 .venv
+database
+grafana_data
