@@ -1,16 +1,46 @@
 services:
+  cgp_rabbitmq:
+    container_name: cgp_rabbit
+    image: rabbitmq:3.13-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - cgp_net
 
   cgp_worker_1:
     container_name: cgp_worker_1
-    image: ghcr.io/nautechsystems/nautilus_trader:latest
-    ports:
-      - 8227:8227
-    # environment:
+    image: cgp_nt_plus_runtime:latest
     volumes:
-      - ../cgp_rabbitmq:/cgp_rabbitmq
-    command: ["python", "cgp_rabbitmq.delegate.run_delegated_evals_1:main"]
+      - ../cgp_rabbitmq:/condorgp/cgp_rabbitmq
+      - ../condorgp:/condorgp/condorgp
+    command: ["python", "cgp_rabbitmq/delegate/run_delegated_evals_1.py"]
+    environment:
+      - IN_DOCKER_COMPOSE=1
+    depends_on:
+      - cgp_rabbitmq
+    restart: unless-stopped
     networks:
       - cgp_net
+
+  cgp_worker_2:
+    container_name: cgp_worker_2
+    image: cgp_nt_plus_runtime:latest
+    volumes:
+      - ../cgp_rabbitmq:/condorgp/cgp_rabbitmq
+      - ../condorgp:/condorgp/condorgp
+    command: ["python", "cgp_rabbitmq/delegate/run_delegated_evals_3_run_naut.py"]
+    environment:
+      - IN_DOCKER_COMPOSE=1
+    depends_on:
+      - cgp_rabbitmq
+    restart: unless-stopped
+    networks:
+      - cgp_net
+
 
   # cgp_api:
   #   container_name: fastapi_cgp_api
@@ -26,17 +56,6 @@ services:
   #   command: ["uvicorn", "cgp_api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
   #   depends_on:
   #     - cgp_database
-  #   networks:
-  #     - cgp_net
-
-  # rabbitmq:
-  #   image: rabbitmq:3.13-management
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
-  #   environment:
-  #     RABBITMQ_DEFAULT_USER: "guest"
-  #     RABBITMQ_DEFAULT_PASS: "guest"
   #   networks:
   #     - cgp_net
 
