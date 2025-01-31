@@ -1,0 +1,127 @@
+  # from:
+  # built and rabbitmq commands ran 250614
+  # DOCKER_BUILDKIT=1 docker build --target=cgp_base -f docker/Dockerfile_builder  .
+
+FROM ghcr.io/nautechsystems/nautilus_trader:latest AS cgp_nt_theirs_plus
+
+# ENV PATH=/usr/local/bin:$PATH
+
+# # http://bugs.python.org/issue19846
+# # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
+# ENV LANG=C.UTF-8
+
+# # set location to avoid hang on tzdata
+# ENV TZ=Europe/London
+# RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# RUN apt-get update --fix-missing
+
+WORKDIR /
+
+# extra dependencies
+## Q: is this all really required?
+# # --no-install-recommends
+RUN apt-get update \
+  && apt-get install -y  \
+    libbluetooth-dev \
+    tk-dev \
+    uuid-dev \
+    apt-transport-https \
+    jq \
+    unzip \
+    curl \
+    wget \
+    git \
+    vim \
+  ## A: taking this out
+    # virtualenv \
+    python3-pip \
+  ## A: taking this out
+    #  zsh \
+    # tree \
+    # gh \
+    libgdbm-dev \
+    libc6-dev \
+    libbz2-dev \
+    build-essential \
+    net-tools \
+    direnv \
+    # python support packages
+    make \
+    libssl-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    llvm \
+    libncursesw5-dev \
+    # xz-utils
+    tk-dev \
+    libxml2-dev \
+    libffi-dev \
+    liblzma-dev \
+    python3-dev \
+    libncurses5-dev \
+  && apt-get clean
+
+# ENV PATH="/home/user/.local/bin:$PATH"
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry
+
+    # additionals
+RUN pip3 install numpy setuptools wheel six auditwheel poetry==1.8.4
+
+# again (? it works) to go past issues:
+RUN pip3 install --ignore-installed six
+
+WORKDIR /condorgp
+
+COPY pyproject.toml poetry.lock ./
+
+RUN poetry install --no-root --only comms \
+    && poetry remove pika \
+    && poetry add file-read-backwards pika
+
+# tidy up
+RUN rm -rf /var/cache/apt/* \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
+    && rm -rf $POETRY_CACHE_DIR
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ##########################################################################
+
+
+FROM python:3.12-slim AS runtime
+
+ENV VIRTUAL_ENV=/condorgp/.venv \
+    PATH="/condorgp/.venv/bin:$PATH"
+
+COPY --from=cgp_nt_theirs_plus ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+COPY --from=cgp_nt_theirs_plus /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+
+WORKDIR /condorgp
+
+RUN touch README.md
+
+COPY ./cgp_rabbitmq ./cgp_rabbitmq
+
+# # create log folder and empty log file, for ease
+# RUN touch condorgp/util/logs/condor_log.txt
+# # create checkpoint folder and empty checkpoint file, for ease
+# RUN touch condorgp/util/checkpoints/first_strat_done.pkl
+
+RUN pip install --ignore-installed pika
+# the line above made all the difference,
+# could suddenly get pika connections working
+
+# RUN apt-get clean
+
+ENV PATH="/usr/local/lib/python3.12/dist-packages:$PATH"
+
+                    #  cgp_rabbitmq/delegate/run_delegated_evals_1.py
+#  ENTRYPOINT ["python", "cgp_rabbitmq/delegate/run_delegated_evals_1.py"]
+# for -it interactive running
+CMD ["/bin/bash"]
