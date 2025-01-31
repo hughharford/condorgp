@@ -35,4 +35,4 @@ class Individuals(Base):
     time_fit_run_start = Column(DateTime(timezone=True))
     fit_run = Column(Boolean, nullable=False)
     fitness = Column(Float, nullable=False)
-    ind_string = Column(TEXT, nullable=False)
+    ind_string = Column(TEXT, nullable=False) # TEXT psql type is very long indeed

@@ -33,6 +33,8 @@ pydantic = "^2.10.6"
 [tool.poetry.group.cluster.dependencies]
 kubernetes = "^32.0.0"
 net-tools = "^0.1.2"
+
+[tool.poetry.group.comms.dependencies]
 pika = ">=1.3.2"
 
 [tool.poetry.group.cloud.dependencies]
@@ -60,7 +62,6 @@ six = ">=1.14"
 gh = "^0.0.4"
 
 [tool.poetry.group.optional.dependencies]
-pydantic = "^2.10.6"
 python-on-whales = "^0.75.1"
 jq = "^1.8.0"
 joblib = "^1.4.2"
