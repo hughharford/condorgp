@@ -38,9 +38,9 @@ from nautilus_trader.test_kit.providers import TestDataProvider
 from nautilus_trader.test_kit.providers import TestInstrumentProvider
 
 from nautilus_trader.config import LoggingConfig
-from condorgp.evaluation.overloaded_nt.cgp_providers import *
 
 # CGP addition
+from condorgp.evaluation.overloaded_nt.cgp_providers import *
 from condorgp.evaluation.get_strategies import GetStrategies
 
 class NautRuns06GpStrategy:

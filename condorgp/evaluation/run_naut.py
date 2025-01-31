@@ -7,7 +7,7 @@ from nautilus_trader.model.identifiers import Venue
 from nautilus_trader.test_kit.providers import TestInstrumentProvider
 from condorgp.evaluation.get_strategies import GetStrategies
 from condorgp.evaluation.naut_06_gp_strategy import NautRuns06GpStrategy
-from condorgp.evaluation.naut_05_inject import NautRuns05Inject
+from condorgp.evaluation.naut_buildup.naut_05_inject import NautRuns05Inject
 from condorgp.evaluation.gp_strat_inj_01 import GpStratInject01
 
 class RunNautilus():

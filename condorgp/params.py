@@ -46,20 +46,21 @@ class Params():
         # now need to set some options, based on os.environ["AMQP_URL"]
         LOCAL_BASE_PATH = '/home/hughharford/code/hughharford/condorgp/'
         try:
-            # check = ''
-            # if "AMQP_URL" in os.environ:
-            #     check = os.environ["AMQP_URL"]
-            # # if no error to checking the
-            # # then on a container using RabbitMQ and thereby needs path below:
-            #     if len(check) > 0:
-            #         LOCAL_BASE_PATH = '/home/user/code/condorgp/'
-            # if "IN_DOCKER" in os.environ:
-            #     LOCAL_BASE_PATH = '/condorgp/'
+            if "IN_DOCKER_COMPOSE" in os.environ:
+                docker_compose_check = os.environ["IN_DOCKER_COMPOSE"]
+                # # if no error to checking the
+                # # then on a container using RabbitMQ and thereby needs path below:
+                if docker_compose_check == 1:
+                    LOCAL_BASE_PATH = '/condorgp'
+            elif "IN_K8S" in os.environ:
+                k8s_check = os.environ["IN_K8S"]
+                if k8s_check == 1:
+                    LOCAL_BASE_PATH = '/condorgp/' # assume for now
             if os.environ['ON_PRIMARY'] == 1:
                 LOCAL_BASE_PATH = '/home/hughharford/code/hughharford/condorgp/'
 
         except BaseException as e:
-            logging.debug(f"CondorGP Params ERROR: {e}")
+            logging.debug(f"CondorGP Params ERROR with local base path: {e}")
             tb = ''.join(traceback.format_tb(e.__traceback__))
             logging.debug(f"CondorGP Params : {tb}")
 
