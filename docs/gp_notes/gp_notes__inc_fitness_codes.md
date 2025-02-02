@@ -8,4 +8,5 @@
 -1.0      = len(fitness str found) > 3          gp_functions.get_fit_nautilus_1
 -1111.1   = set low if unrealistic! (>50)       gp_functions.get_fit_nautilus_1
 -9988     = when not running backtest           gp_control.eval_nautilus
+-8899.12  = not entered into db, not eval'd     cgp_db/crud.py
 ****
