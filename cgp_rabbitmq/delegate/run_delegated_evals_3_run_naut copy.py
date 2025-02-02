@@ -29,6 +29,11 @@ def run_delegated_evaluation():
         # script_to_run = "naut_03_egFX.py"
         n = RunNautilus()
         # n.basic_run(evolved_func="12345", gp_strategy=True)
+
+        # def basic_run(self,
+        #       specified_script: str="",
+        #       evolved_func="",
+        #       gp_strategy=False):
         run_nt.basic_run(evolved_func="12345", gp_strategy=True)
 
         logging.error(" [x] Done")

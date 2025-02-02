@@ -27,7 +27,7 @@ def send_delegate_eval(message):
 
 
 def main():
-    sample_message = "I'm only a sample"
+    sample_message = "I'm only a delegated evaluation sample"
     send_delegate_eval(sample_message)
 
 if __name__ == '__main__':

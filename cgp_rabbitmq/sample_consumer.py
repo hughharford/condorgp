@@ -2,8 +2,8 @@ import pika
 import uuid
 import pytz
 from datetime import datetime
-from cgp_api.database import SessionLocal
-from cgp_api import models, schemas
+from cgp_db.database import SessionLocal
+from cgp_db import models, schemas
 from sqlalchemy.dialects.postgresql import UUID
 
 
