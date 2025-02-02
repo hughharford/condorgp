@@ -3,8 +3,8 @@ from typing import List
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 
-from cgp_api import crud, schemas
-from cgp_api.database import SessionLocal
+from cgp_db import crud, schemas
+from cgp_db.database import SessionLocal
 
 tags = [
     {"name": "CGP Backbone ", "description": "Recorder of CGP"},
