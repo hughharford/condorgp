@@ -1,6 +1,6 @@
 services:
-  cgp_rabbitmq:
-    container_name: cgp_rabbit
+  cgp-rabbitmq:
+    container_name: cgp-rabbit
     image: rabbitmq:3.13-management
     ports:
       - 5672:5672
@@ -9,103 +9,85 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     networks:
-      - cgp_net
+      - cgp-net
 
-  cgp_worker_1:
-    container_name: cgp_worker_1
-    image: cgp_nt_plus_runtime:latest
-    volumes:
-      - ../../condorgp:/condorgp
-      # python cgp_rabbitmq/delegate/run_delegated_evals_1.py
-    # command: ["python", "cgp_rabbitmq/delegate/run_delegated_evals_1.py"]
-    # command: ["python", "cgp_rabbitmq/delegate/run_delegated_evals_3_run_naut.py"]
-    # command: ["python", "condorgp/evaluation/run_naut.py"]
-    command: ["sh", "scripts/install_cgp_n_run_listener.sh"]
+  # cgp-worker-1:
+  #   container_name: cgp-worker-1
+  #   image: cgp-nt-plus-runtime:latest
+  #   volumes:
+  #     - ../../condorgp:/condorgp
+  #     # python cgp_rabbitmq/delegate/run_delegated_evals_1.py
+  #   # command: ["python", "cgp_rabbitmq/delegate/run_delegated_evals_1.py"]
+  #   # command: ["python", "cgp_rabbitmq/delegate/run_delegated_evals_3_run_naut.py"]
+  #   # command: ["python", "condorgp/evaluation/run_naut.py"]
+  #   command: ["sh", "scripts/install_cgp_n_run_listener.sh"]
 
-    environment:
-      - IN_DOCKER_COMPOSE=1
-    # depends_on:
-    #   - cgp_rabbitmq
-    # restart: unless-stopped
-    networks:
-      - cgp_net
-
-  # cgp_worker_2:
-  #   container_name: cgp_worker_2
-  #   image: cgp_nt_plus_runtime:latest
-  #   # volumes:
-  #   #   - ../cgp_rabbitmq:/condorgp/cgp_rabbitmq
-  #   #   - ../condorgp:/condorgp/condorgp
-  #   command: ["python", "cgp_rabbitmq/delegate/run_delegated_evals_3_run_naut.py"]
   #   environment:
   #     - IN_DOCKER_COMPOSE=1
-  #   depends_on:
-  #     - cgp_rabbitmq
-  #   restart: unless-stopped
+  #   # depends_on:
+  #   #   - cgp-rabbitmq
+  #   # restart: unless-stopped
   #   networks:
-  #     - cgp_net
+  #     - cg-net
 
 
-  # cgp_api:
-  #   container_name: fastapi_cgp_api
+  cgp_grafana:
+    image: grafana/grafana-enterprise
+    container_name: ${GRAF_NAME}
+    restart: unless-stopped
+    ports:
+     - 3000:3000
+    environment:
+      POSTGRES_DATABASE_URL: postgresql+psycopg2://cgp:cgp_pass@cgp_database:5432/cgp_backbone
+      GF_SECURITY_ADMIN_USER: "admin"
+    env_file:
+    - ../.env
+    user: '0'
+    volumes:
+      - ../grafana_data:/var/lib/grafana
+    depends_on:
+      - cgp-database
+    networks:
+      - cgp-net
+
+  cgp-database:
+    image: postgres:14.2
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ../scripts/db_init/:/docker-entrypoint-initdb.d/
+      - ../database/:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - APP_DB_USER=cgp
+      - APP_DB_PASS=cgp-pass
+      - APP_DB_NAME=cgp-backbone
+    networks:
+      - cgp-net
+
+  # cgp-api:
+  #   container_name: cgp-api
   #   image: api_runtime
   #   restart: on-failure
   #   ports:
   #     - 8000:8000
   #   environment:
-  #     - POSTGRES_DATABASE_URL=postgresql+psycopg2://cgp:cgp_pass@cgp_database:5432/cgp_backbone
+  #     - POSTGRES_DATABASE_URL=postgresql+psycopg2://cgp:cgp_pass@cgp_database:5432/cgp-backbone
   #     - COMMS_TABLE=comms
   #   volumes:
   #     - ../cgp_api:/cgp_api
   #   command: ["uvicorn", "cgp_api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
   #   depends_on:
-  #     - cgp_database
+  #     - cgp-database
   #   networks:
-  #     - cgp_net
-
-  # cgp_grafana:
-  #   image: grafana/grafana-enterprise
-  #   container_name: ${GRAF_NAME}
-  #   restart: unless-stopped
-  #   ports:
-  #    - 3000:3000
-  #   environment:
-  #     POSTGRES_DATABASE_URL: postgresql+psycopg2://cgp:cgp_pass@cgp_database:5432/cgp_backbone
-  #     GF_SECURITY_ADMIN_USER: "admin"
-  #   env_file:
-  #   - ../.env
-  #   user: '0'
-  #   volumes:
-  #     - ../grafana_data:/var/lib/grafana
-  #   depends_on:
-  #     - cgp_database
-  #   networks:
-  #     - cgp_net
-
-  # cgp_database:
-  #   image: postgres:14.2
-  #   restart: on-failure
-  #   healthcheck:
-  #     test: ["CMD", "pg_isready", "-U", "postgres"]
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 5
-  #   volumes:
-  #     - ../scripts/db_init/:/docker-entrypoint-initdb.d/
-  #     - ../database/:/var/lib/postgresql/data
-  #   ports:
-  #     - 5432:5432
-  #   environment:
-  #     - POSTGRES_PASSWORD=postgres
-  #     - APP_DB_USER=cgp
-  #     - APP_DB_PASS=cgp_pass
-  #     - APP_DB_NAME=cgp_backbone
-  #   networks:
-  #     - cgp_net
+  #     - cg-net
 
 networks:
-  cgp_net:
+  cg-net:
     driver: bridge
-
-# volumes:
-#   grafana-storage: {}
