@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  AMQP_URL: amqp://10.0.1.6?connection_attempts=2&retry_delay=5
+  APP_DB_NAME: cgp-backbone
+  OVERLAY_NETWORK: cgp-overlay
+  PIKA_URL_MANUAL: 10.0.1.6
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: cgp-grafana-env
+  name: env

@@ -21,4 +21,4 @@
 
 pip3 install pika file_read_backwards
 
-python cgp_rabbitmq/delegate/run_delegated_evals_3_run_naut.py
+python cgp_rabbitmq/delegate/run_delegated_evals_4_w_strat.py
