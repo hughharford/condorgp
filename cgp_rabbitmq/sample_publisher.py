@@ -6,7 +6,11 @@ from datetime import datetime
 
 def publish_random_individuals():
 
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+
+    credentials = pika.PlainCredentials("guest", "guest")
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters("localhost", 5672, "/", credentials)
+        )
     channel = connection.channel()
     queue='individuals'
     channel.queue_declare(queue=queue)

@@ -4,15 +4,18 @@
 import pika
 import sys, os
 import logging, time
+from cgp_rabbitmq import get_rabbitmq_connection
 
 QUEUE_DELEG_EVALS = 'cgp_delegated_eval'
 
 def run_delegated_evaluation():
 
-    credentials = pika.PlainCredentials("guest", "guest")
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters("cgp_rabbitmq", 5672, "/", credentials)
-        )
+
+    connection = get_rabbitmq_connection.get_rmq_connection()
+    # credentials = pika.PlainCredentials("guest", "guest")
+    # connection = pika.BlockingConnection(
+    #     pika.ConnectionParameters("localhost", 5672, "/", credentials)
+    #     )
 
     channel = connection.channel()
     channel.queue_declare(queue=QUEUE_DELEG_EVALS, durable=True)
@@ -40,7 +43,7 @@ def main():
 
 if __name__ == '__main__':
     try:
-        time.sleep(10)
+        # time.sleep(10)
         main()
     except KeyboardInterrupt:
         print('Interrupted')
