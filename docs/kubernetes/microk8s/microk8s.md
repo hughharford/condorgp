@@ -9,14 +9,12 @@ sudo snap install microk8s --classic
 
 microk8s status --wait-ready
 
-microk8s enable dashboard
 
 >> enabled user to microk8s group
 
 
 
 
-microk8s dashboard-proxy
 
 
 # ADD NODE
@@ -55,3 +53,72 @@ https://microk8s.io/docs/ports
 sudo snap install microk8s --classic
 
 microk8s join 192.168.1.100:25000/<token> --worker
+
+
+
+# useful commands now K3S up and running
+- nb 'k' is alias for microk3s kubectl
+
+## already done, so not needed on startup:
+- microk8s enable dashboard
+-
+
+## daily, to get started
+
++ provide proxy for dashboard
+microk8s dashboard-proxy
+
++ check services:
+k get service cgp-database
+k get service cgp-grafana
+k get service cgp-rabbitmq
+
++ expose services to access them:
+k port-forward service/cgp-database 5432:5432
+k port-forward service/cgp-grafana 3000:3000
+k port-forward service/cgp-rabbitmq 15672:15672
+k port-forward service/cgp-rabbitmq 5672:5672
+
++ the above will timeout, can try this:
+while true; do <<YOUR COMMAND HERE>>; done
+with one of the commands above in the <<X>>
+
++ connections strings:
+rabbitmq:
+  localhost:5672
+cgp-database:
+  - in general:
+  localhost:5432
+  - via DBeaver:
+  jdbc:postgresql://localhost:5432/
+  - SEE .envrc for Grafana connection
+
+
+## refinding kubeconfig
+Calico config: /var/snap/microk8s/current/args/cni-network/calico-kubeconfig
+Overall at default location:
+  ~/.kube/config
+  // but this is kubernetes overall, not microk8s...
+
+
+Note microk8s args folder and credentials folder:
+  /var/snap/microk8s/current/args
+    admission-control-config-file.yaml  containerd                eventconfig.yaml            k8s-dqlite-env           kubelite
+    apiserver-proxy                     containerd-env            flanneld                    kube-apiserver           kube-proxy
+    certs.d                             containerd-template.toml  flannel-network-mgr-config  kube-controller-manager  kube-scheduler
+    cluster-agent                       containerd.toml           flannel-template.conflist   kubectl                  traefik
+    cni-env                             ctr                       ha-conf                     kubectl-env
+    cni-network                         etcd                      k8s-dqlite                  kubelet
+
+
+  /var/snap/microk8s/current/credentials
+    callback-token.txt        client.config       controller.config  proxy.config
+    certs-request-tokens.txt  cluster-tokens.txt  kubelet.config     scheduler.config
+
+# overall config
+/var/snap/microk8s/current/credentials/client.config
+
+# kubelet config
+/var/snap/microk8s/current/credentials/kubelet.config
+- but really:
+/var/snap/microk8s/current/args/kubelet

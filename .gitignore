@@ -22,6 +22,9 @@ condorgp/util/checkpoints/*
 database/*
 grafana_data/*
 
+# alembic ini file
+alembic.ini
+
 #### boilerplate .gitignore
 
 # Byte-compiled / optimized / DLL files

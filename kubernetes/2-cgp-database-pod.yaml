@@ -11,7 +11,7 @@ spec:
   containers:
     - env:
         - name: APP_DB_NAME
-          value: cgp-backbone
+          value: cgpbackbone
         - name: APP_DB_PASS
           value: cgp-pass
         - name: APP_DB_USER
