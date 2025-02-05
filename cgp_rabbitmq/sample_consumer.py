@@ -6,6 +6,7 @@ from cgp_db.database import SessionLocal
 from cgp_db import models, schemas
 from sqlalchemy.dialects.postgresql import UUID
 
+from cgp_rabbitmq import get_rabbitmq_connection
 
 def get_db():
     """Helper function which opens a connection to the
@@ -49,10 +50,8 @@ def callback(ch, method, properties, body):
 
 def main():
 
-    credentials = pika.PlainCredentials("guest", "guest")
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters("localhost", 5672, "/", credentials)
-        )
+    connection = get_rabbitmq_connection.get_rmq_connection()
+
     channel = connection.channel()
     queue='individuals'
     channel.queue_declare(queue=queue)

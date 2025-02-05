@@ -7,10 +7,17 @@ metadata:
   labels:
     io.kompose.service: cgp-database
   name: cgp-database
+  namespace: default
 spec:
-  ports:
-    - name: "5432"
-      port: 5432
-      targetPort: 5432
   selector:
     io.kompose.service: cgp-database
+    app: cgp-database
+  type: ClusterIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  ports:
+    - name: "port-cgp-database"
+      protocol: TCP
+      port: 5432
+      targetPort: 5432

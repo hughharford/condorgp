@@ -15,4 +15,4 @@ metadata:
   labels:
     io.kompose.service: cgp-database
   name: cgp-database-cm0
-  #    CREATE DATABASE IF NOT EXISTS $APP_DB_NAME;
+  namespace: default

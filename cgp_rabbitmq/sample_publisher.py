@@ -4,13 +4,12 @@ import time
 import pytz
 from datetime import datetime
 
+from cgp_rabbitmq import get_rabbitmq_connection
+
 def publish_random_individuals():
 
+    connection = get_rabbitmq_connection.get_rmq_connection()
 
-    credentials = pika.PlainCredentials("guest", "guest")
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters("localhost", 5672, "/", credentials)
-        )
     channel = connection.channel()
     queue='individuals'
     channel.queue_declare(queue=queue)

@@ -51,7 +51,7 @@ class Params():
                 # # if no error to checking the
                 # # then on a container using RabbitMQ and thereby needs path below:
                 if docker_compose_check == 1:
-                    LOCAL_BASE_PATH = '/condorgp'
+                    LOCAL_BASE_PATH = '/condorgp/'
             elif "IN_K8S" in os.environ:
                 k8s_check = os.environ["IN_K8S"]
                 if k8s_check == 1:

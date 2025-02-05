@@ -3,11 +3,10 @@
 
 
 # MASTER SETUP
-
-
 sudo snap install microk8s --classic
 
-microk8s status --wait-ready
+sudo microk8s start
+sudo microk8s status --wait-ready
 
 
 >> enabled user to microk8s group
@@ -55,13 +54,19 @@ sudo snap install microk8s --classic
 microk8s join 192.168.1.100:25000/<token> --worker
 
 
+## already done, so not needed on startup:
+- microk8s enable dashboard
+- microk8s enable registry
 
 # useful commands now K3S up and running
 - nb 'k' is alias for microk3s kubectl
 
-## already done, so not needed on startup:
-- microk8s enable dashboard
--
+
+
+sudo microk8s start
+sudo microk8s status --wait-ready
+
+
 
 ## daily, to get started
 
@@ -74,7 +79,8 @@ k get service cgp-grafana
 k get service cgp-rabbitmq
 
 + expose services to access them:
-k port-forward service/cgp-database 5432:5432
+<!-- k port-forward service/cgp-database 5432:5432 -->
+k port-forward statefulset/cgp-database-statefulset 5432:5432
 k port-forward service/cgp-grafana 3000:3000
 k port-forward service/cgp-rabbitmq 15672:15672
 k port-forward service/cgp-rabbitmq 5672:5672
@@ -82,6 +88,10 @@ k port-forward service/cgp-rabbitmq 5672:5672
 + the above will timeout, can try this:
 while true; do <<YOUR COMMAND HERE>>; done
 with one of the commands above in the <<X>>
++ have set in:
+  + /var/snap/microk8s/current/args/kubelet
+  + --streaming-connection-idle-timeout=30m
+
 
 + connections strings:
 rabbitmq:

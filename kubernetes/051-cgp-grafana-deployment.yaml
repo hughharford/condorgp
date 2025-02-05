@@ -36,6 +36,8 @@ spec:
                   name: env
             - name: GF_SECURITY_ADMIN_USER
               value: admin
+            - name: GF_SECURITY_ADMIN_PASS
+              value: admin
             - name: OVERLAY_NETWORK
               valueFrom:
                 configMapKeyRef:
@@ -62,4 +64,11 @@ spec:
             limits:
               cpu: 250m # equivalent to 25% of a single CPU core
               memory: 256Mi # mebibits
+          volumeMounts:
+            - mountPath: /grafana_data
+              name: cgp-grafana-cm0
       restartPolicy: Always
+      volumes:
+        - configMap:
+            name: cgp-grafana-cm0
+          name: cgp-grafana-cm0

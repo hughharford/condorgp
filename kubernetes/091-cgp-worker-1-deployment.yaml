@@ -29,8 +29,9 @@ spec:
           env:
             - name: IN_K8S
               value: "1"
-          image: cgp-nt-plus-runtime:latest
           name: cgp-worker-1
+          image: cgp-nt-plus-runtime:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 2271
               protocol: TCP

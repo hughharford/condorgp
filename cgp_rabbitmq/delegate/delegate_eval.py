@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 
-# from:
-# https://www.rabbitmq.com/tutorials/tutorial-two-python
-
 import pika, sys, os
 from cgp_rabbitmq import get_rabbitmq_connection
 
