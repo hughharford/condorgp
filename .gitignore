@@ -8,6 +8,7 @@ build/*
 
 # file types
 .zip
+.tar
 
 # ignore logs and checkpoints
 condorgp/util/logs/*.json
