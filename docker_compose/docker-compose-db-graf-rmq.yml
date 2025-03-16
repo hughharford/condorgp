@@ -1,0 +1,89 @@
+services:
+  cgp-rabbitmq:
+    container_name: cgp-rabbit
+    image: rabbitmq:3.13-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - cgp-net
+
+  cgp-worker-2:
+    container_name: cgp-worker-2
+    image: cgp-nt-again:latest
+    volumes:
+      - ../../condorgp:/condorgp
+    command: ["sh", "scripts/install_cgp_n_run_listener_4.sh"]
+    environment:
+      - IN_DOCKER_COMPOSE=1
+      - WHERE_IS_RABBIT=cgp-rabbit
+      - RMQ_USER=guest
+      - RMQ_PASSWORD=guest
+    depends_on:
+      - cgp-rabbitmq
+    networks:
+      - cgp-net
+
+  cgp_grafana:
+    image: grafana/grafana
+    container_name: ${GRAF_NAME}
+    restart: unless-stopped
+    ports:
+     - 3000:3000
+    environment:
+      POSTGRES_DATABASE_URL: postgresql+psycopg2://cgp:cgp_pass@cgp_database:5432/cgpbackbone
+      GF_SECURITY_ADMIN_USER: "admin"
+    env_file:
+    - ../.env
+    user: '0'
+    volumes:
+      - ../grafana_data:/var/lib/grafana
+    depends_on:
+      - cgp-database
+    networks:
+      - cgp-net
+
+  cgp-database:
+    image: postgres:14.2
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ../scripts/db_init/:/docker-entrypoint-initdb.d/
+      - ../database/:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - APP_DB_USER=${APP_DB_USER}
+      - APP_DB_PASS=${APP_DB_PASS}
+      - APP_DB_NAME=${APP_DB_NAME}
+    networks:
+      - cgp-net
+
+  # cgp-api:
+  #   container_name: cgp-api
+  #   image: api_runtime
+  #   restart: on-failure
+  #   ports:
+  #     - 8000:8000
+  #   environment:
+  #     - POSTGRES_DATABASE_URL=postgresql+psycopg2://cgp:cgp_pass@cgp_database:5432/cgpbackbone
+  #     - COMMS_TABLE=comms
+  #   volumes:
+  #     - ../cgp_api:/cgp_api
+  #   command: ["uvicorn", "cgp_api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+  #   depends_on:
+  #     - cgp-database
+  #   networks:
+  #     - cg-net
+
+networks:
+  cgp-net:
+    driver: bridge

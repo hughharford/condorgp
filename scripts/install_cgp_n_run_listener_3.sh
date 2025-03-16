@@ -1,9 +1,8 @@
 #!/bin/bash
 
 # pip3 install --ignore-installed poetry==1.8.4
+# poetry install
 
-
-# # poetry install
 #     # full install works, but kinda heavy
 # # pip install pika
 
@@ -19,6 +18,5 @@
 #                   # --without evolution \
 #                   # --without comms \
 
-pip3 install pika file_read_backwards
-
-python cgp_rabbitmq/delegate/run_delegated_evals_4_w_strat.py
+pip3 install pika file_read_backwards;
+python cgp_rabbitmq/delegate/run_delegated_evals_3_run_naut.py

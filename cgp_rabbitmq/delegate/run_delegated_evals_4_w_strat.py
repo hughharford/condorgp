@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-
-
 import pika
 import sys, os
 import logging, time
@@ -14,10 +11,6 @@ run_nt = RunNautilus()
 def run_delegated_evaluation():
 
     connection = get_rabbitmq_connection.get_rmq_connection()
-    # credentials = pika.PlainCredentials("guest", "guest")
-    # connection = pika.BlockingConnection(
-    #     pika.ConnectionParameters("localhost", 5672, "/", credentials)
-    #     )
 
     channel = connection.channel()
     channel.queue_declare(queue=QUEUE_DELEG_EVALS, durable=True)

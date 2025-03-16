@@ -3,6 +3,7 @@ import random
 import time
 import pytz
 from datetime import datetime
+import os
 
 from cgp_rabbitmq import get_rabbitmq_connection
 

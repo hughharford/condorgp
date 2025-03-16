@@ -1,7 +1,20 @@
+# to build:
+# cgp_nt_theirs_plus
+# to
+# -t cgp-nt-theirs-plus
+ # DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile_nt_builder --target=cgp_nt_theirs_plus -t cgp-nt-theirs-plus .
+
 # to build through:
-# DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile_nt_builder --target=runtime -t cgp_nt_plus_runtime .
-## should be quick build and just adjust recently adjusted code
-# reinstalls pika at the end, otherwise will not work
+# runtime
+# to
+# cgp-nt-plus-runtime
+# DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile_nt_builder --target=runtime -t cgp-nt-plus-runtime .
+
+
+ ## should be quick build and just adjust recently adjusted code
+
+
+
 
 FROM ghcr.io/nautechsystems/nautilus_trader:latest AS cgp_nt_theirs_plus
 
@@ -15,8 +28,6 @@ FROM ghcr.io/nautechsystems/nautilus_trader:latest AS cgp_nt_theirs_plus
 # ENV TZ=Europe/London
 # RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # RUN apt-get update --fix-missing
-
-WORKDIR /condorgp
 
 # extra dependencies
 ## Q: is this all really required?
@@ -44,7 +55,9 @@ RUN apt-get update \
     libc6-dev \
     libbz2-dev \
     build-essential \
-    net-tools \
+    # net-tools \
+    iproute2 \
+    iputils-ping \
     direnv \
     # python support packages
     make \
@@ -71,19 +84,19 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR=/tmp/poetry \
     POETRY_HOME="/opt/poetry" \
-    PYSETUP_PATH="/opt/pysetup" \
-    VENV_PATH="condorgp/.venv"
+    VENV_PATH="/condorgp/.venv" \
+    CGP_PATH="/condorgp"
 
-ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
+ENV PATH="$POETRY_HOME/bin:$PATH"
+    # :$VENV_PATH/bin
     # additionals
 
 # again (? it works) to go past issues:
 RUN pip3 install --ignore-installed six
 
-# this didn't work
-WORKDIR $PYSETUP_PATH
+WORKDIR $CGP_PATH
 
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml poetry.lock /
 
 # install runtime deps - uses $POETRY_VIRTUALENVS_IN_PROJECT internally
 # this just ran:
@@ -94,8 +107,10 @@ RUN poetry install --no-root --without api --without database --without cluster 
 # --without evolution \
 # --without comms \
 
-COPY condorgp ./condorgp
-RUN touch README.md
+# get latest code in
+COPY ./ ./
+
+RUN touch /README.md
 # build as per Nautilus Trader dockerfile
 RUN poetry build -f wheel
 RUN python -m pip install ./dist/*whl --force --no-deps
@@ -103,9 +118,12 @@ RUN find /usr/local/lib/python3.12/site-packages -name "*.pyc" -exec rm -f {} \;
 
 # tidy up
 RUN rm -rf /var/cache/apt/* \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean \
-    && rm -rf $POETRY_CACHE_DIR
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean \
+&& rm -rf $POETRY_CACHE_DIR
+
+
+CMD ["/bin/bash"]
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ##########################################################################
@@ -113,16 +131,46 @@ RUN rm -rf /var/cache/apt/* \
 
 FROM python:3.12-slim AS runtime
 
+
+RUN pip3 install numpy setuptools wheel six auditwheel poetry==1.8.4
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry \
+    POETRY_HOME="/opt/poetry" \
+    VENV_PATH="/condorgp/.venv" \
+    CGP_PATH="/condorgp"
+
+ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
+
+
+WORKDIR $CGP_PATH
+
 # as from Nautilus Trader dockerfile
 ENV PYTHON_SITE_PACKAGES="/usr/local/lib/python3.12/site-packages"
 COPY --from=cgp_nt_theirs_plus $PYTHON_SITE_PACKAGES $PYTHON_SITE_PACKAGES
 ENV PATH="$PYTHON_SITE_PACKAGES:$PATH"
 
-WORKDIR /condorgp
+# get latest code in
+COPY ./ ./
+RUN touch /README.md
 
-RUN touch README.md
+# this kept failing:
+RUN poetry install --no-root --without api --without database --without cluster --without cloud --without test --without dev --without optional
+# --without primary \
+# --without evolution \
+# --without comms \
 
-COPY . .
+RUN poetry build -f wheel
+RUN python -m pip install ./dist/*whl --force --no-deps
+RUN find /usr/local/lib/python3.12/site-packages -name "*.pyc" -exec rm -f {} \;
+
+# tidy up
+RUN rm -rf /var/cache/apt/* \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean \
+&& rm -rf $POETRY_CACHE_DIR
 
 # ENTRYPOINT [ "poetry", "run" ]
 

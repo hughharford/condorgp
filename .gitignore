@@ -26,6 +26,9 @@ grafana_data/*
 # alembic ini file
 alembic.ini
 
+# cursor settings
+.cursor
+
 #### boilerplate .gitignore
 
 # Byte-compiled / optimized / DLL files

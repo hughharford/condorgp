@@ -11,7 +11,6 @@ class Comms(Base):
     """Class to represent the comms table"""
 
     # Table name
-    # __tablename__ =
     __tablename__ = os.environ.get("COMMS_TABLE", "comms")
 
     # Columns
@@ -26,13 +25,26 @@ class Individuals(Base):
     """Class to represent the individuals table"""
 
     # Table name
-    # __tablename__ =
     __tablename__ = os.environ.get("INDIVIDUALS_TABLE", "individuals")
 
     # Columns
-    id = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
+    ind_id = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
     time_date_logged = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     time_fit_run_start = Column(DateTime(timezone=True))
     fit_run = Column(Boolean, nullable=False)
     fitness = Column(Float, nullable=False)
     ind_string = Column(TEXT, nullable=False) # TEXT psql type is very long indeed
+
+
+class Populations(Base):
+    """Class to represent the populations table"""
+
+    # Table name
+    __tablename__ = os.environ.get("POPULATIONS_TABLE", "populations")
+
+    # Columns
+    pop_id = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
+    pop_name = Column(String, nullable=False)
+    pop_start_time = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    num_gens = Column(Integer, nullable=False)
+    pop_size = Column(Integer, nullable=False)

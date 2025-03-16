@@ -2,6 +2,7 @@ import pika
 import uuid
 import pytz
 from datetime import datetime
+import os
 from cgp_db.database import SessionLocal
 from cgp_db import models, schemas
 from sqlalchemy.dialects.postgresql import UUID

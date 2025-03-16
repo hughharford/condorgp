@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+import os
 
 from cgp_db import models, schemas
 import datetime
@@ -42,8 +43,6 @@ def record_individual(db: Session, message_body):
     Records individual before fitness check in cgp_backbone db
     In table "individuals"
     '''
-
-
 
     data = message_body.values
     print(data)
