@@ -1,5 +1,6 @@
 import os
 from sqlalchemy import Column, Integer, Float, String, DateTime, Boolean, func
+from sqlalchemy import ForeignKey, ForeignKeyConstraint
 from sqlalchemy.dialects.postgresql import UUID, TEXT
 from sqlalchemy.orm import declarative_base
 
@@ -34,7 +35,7 @@ class Individuals(Base):
     fit_run = Column(Boolean, nullable=False)
     fitness = Column(Float, nullable=False)
     ind_string = Column(TEXT, nullable=False) # TEXT psql type is very long indeed
-
+    population_id = Column(UUID(as_uuid=True), ForeignKey("populations.pop_id"), nullable=False)
 
 class Populations(Base):
     """Class to represent the populations table"""
