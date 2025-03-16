@@ -10,6 +10,17 @@ check_code:
 black:
 	@black scripts/* condorgp/*.py
 
+k8s_forwarding:
+	@microk8s kubectl port-forward service/cgp-grafana 3000:3000  -n cgp-system --request-timeout='0' &
+	@microk8s kubectl port-forward service/cgp-rabbitmq 15672:15672  -n cgp-system --request-timeout='0' &
+	@microk8s kubectl port-forward service/cgp-rabbitmq 5672:5672  -n cgp-system --request-timeout='0' &
+	@microk8s kubectl  port-forward service/cgp-database 5432:5432 -n cgp-system --request-timeout='0'  &
+
+k8s_start:
+	@ sh reg_k8s_start.sh
+
+k8s_apply:
+	@ sh k8s_apply.sh
 
 # tests/*.py
 test:

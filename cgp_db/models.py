@@ -48,3 +48,14 @@ class Populations(Base):
     pop_start_time = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     num_gens = Column(Integer, nullable=False)
     pop_size = Column(Integer, nullable=False)
+
+# class Checkpoints(Base):
+#     """Class to represent the checkpoints table"""
+
+#     # Table name
+#     __tablename__ = os.environ.get("CHECKPOINTS_TABLE", "checkpoints")
+
+#     # Columns
+#     checkpoint_id = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
+#     checkpoint_time = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+#     checkpoint_path = Column(String, nullable=False)

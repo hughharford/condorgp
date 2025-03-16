@@ -101,6 +101,9 @@ k port-forward statefulset/cgp-database-statefulset 5432:5432 --request-timeout=
 k port-forward pod/cgp-database-statefulset-0 5432:5432 --request-timeout='0'
 
 
+# cf. k8s_forwarding:
+# run with "make k8s_forwarding" on the command line
+
 k port-forward service/cgp-grafana 3000:3000  -n cgp-system --request-timeout='0'
 k port-forward service/cgp-rabbitmq 15672:15672  -n cgp-system --request-timeout='0'
 k port-forward service/cgp-rabbitmq 5672:5672  -n cgp-system --request-timeout='0'

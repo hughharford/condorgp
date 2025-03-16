@@ -19,9 +19,9 @@
 #                   # --without comms \
 
 pwd;
-poetry install --only-root;
-# poetry install;
-#  pip3 install pika file_read_backwards;
+# poetry install --only-root;
+poetry install; # full install somehow required, worth it for now
+# pip3 install pika file_read_backwards;
 poetry run python cgp_rabbitmq/delegate/run_delegated_evals_4_w_strat.py
 # while :
 # do

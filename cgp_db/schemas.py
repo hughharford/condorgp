@@ -48,6 +48,22 @@ class PopulationsCreate(PopulationsBase):
     pop_size: int | None = 0
 
 class Populations(PopulationsBase):
-    pop_id: UUID 
+    pop_id: UUID
     class Config:
         from_attributes = True
+
+
+# # checkpoints
+# class CheckpointsBase(BaseModel):
+#     model_config = ConfigDict(arbitrary_types_allowed=True)
+
+#     checkpoint_path: str | None = None
+
+# class CheckpointsCreate(CheckpointsBase):
+#     checkpoint_time: datetime
+#     ind_string: str | None = None
+
+# class Checkpoints(CheckpointsBase):
+#     checkpoint_id: UUID
+#     class Config:
+#         from_attributes = True
