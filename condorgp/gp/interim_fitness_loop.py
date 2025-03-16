@@ -22,7 +22,7 @@ def interim_fitness_loop():
             #               4                           5                   6=ind_string
             message = {"fit_run":fit_run,"fitness":fitness,"ind_instring":ind_string}
             print(message)
-            db_inds.append(crud.record_individual(db, message))
+            db_inds.append(crud.record_individual_from_rmq(db, message))
 
     print(db_inds)
 

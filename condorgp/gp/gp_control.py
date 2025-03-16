@@ -283,6 +283,8 @@ class GpControl:
 
         gpc.verbose = 0
 
+        gpc.use_k8s = False
+
         gpc.use_adfs = 1
         if gpc.use_adfs:
             pset_used = 'naut_pset_05_strategy' # 'naut_pset_04_strategy' # 'naut_pset_03_strategy'

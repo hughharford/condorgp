@@ -22,27 +22,17 @@ def create_comms(db: Session, comms: schemas.CommsCreate):
     return db_comms
 
 
-###### Individuals section ######
-# for api only..
-
-# def read_comms(db: Session, skip: int = 0, limit: int = 100):
-#     """Function should return all individuals with a skip and limit param"""
-#     return db.query(models.Individuals).offset(skip).limit(limit).all()
-
-# def create_individuals(db: Session, individuals: schemas.IndividualCreate):
-#     """Function should create a new individual in the database"""
-#     db_inds = models.Individuals(**individuals.model_dump())
-#     db.add(db_inds)
-#     db.commit()
-#     db.refresh(db_inds)
-#     return db_inds
 
 
-def record_individual(db: Session, message_body):
+
+def record_individual_from_rmq(db: Session, message_body):
     '''
     Records individual before fitness check in cgp_backbone db
     In table "individuals"
     '''
+
+     # ??   # data = body.decode('utf-8').split(":")
+
 
     data = message_body.values
     print(data)
@@ -58,6 +48,9 @@ def record_individual(db: Session, message_body):
 
     db_inds.time_fit_run_start = datetime.now(pytz.utc)
     db_inds.ind_string = str(data[6])
+
+    # foreign key population_id = populations.pop_id
+    db_inds.population_id = uuid.uuid4() # for now...
 
     db_ingoing = models.Individuals(**db_inds.model_dump())
     db_ingoing.id = uuid.uuid4()

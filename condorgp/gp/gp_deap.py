@@ -17,6 +17,7 @@ class GpDeap(GpProvider):
             Provides the workings for Deap to operate.
         '''
         self.verbose = 0
+        self.use_k8s = False
 
     def set_defined_pset(self, pset_obj,
                  new_pset_name = '',

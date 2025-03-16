@@ -28,7 +28,7 @@ class IndividualsCreate(IndividualsBase):
     time_fit_run_start: datetime | None = None
     fit_run: bool | None = False
     fitness: float | None = -55000
-    pop_id: UUID
+    population_id: UUID
 
 class Individuals(IndividualsBase):
     time_date_logged: datetime # | None = datetime.now(pytz.utc)
