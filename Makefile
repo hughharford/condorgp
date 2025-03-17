@@ -16,8 +16,14 @@ k8s_forwarding:
 	@microk8s kubectl port-forward service/cgp-rabbitmq 5672:5672  -n cgp-system --request-timeout='0' &
 	@microk8s kubectl  port-forward service/cgp-database 5432:5432 -n cgp-system --request-timeout='0'  &
 
+k8s_images:
+	@sh k8s/k8s_images_push.sh
+
 k8s_start:
-	@ sh k8s/reg_k8s_start.sh
+	@sh k8s/reg_k8s_start.sh
+
+k8s_stop:
+	@sudo microk8s stop
 
 k8s_apply:
 	@ sh k8s/k8s_apply.sh

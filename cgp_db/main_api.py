@@ -31,7 +31,7 @@ def read_root():
 
 ####### Comms section #######
 @app.post("/comms/", response_model=schemas.Comms, tags=["comms"])
-def create_comms_for_node(comms: schemas.CommsCreate, db: Session = Depends(get_db)):
+def create_comms_for_node(comms: schemas.CommCreate, db: Session = Depends(get_db)):
     """post endpoint to create a new comms for a given node id"""
     return crud.create_comms(db=db, comms=comms)
 

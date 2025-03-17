@@ -26,7 +26,7 @@ def callback(ch, method, properties, body):
         print(data)
         print(f"Received individual {data[2]} with fitness: {data[5]}")
 
-        db_pops = schemas.PopulationsCreate()
+        db_pops = schemas.PopulationCreate()
         db_pops.pop_name = "trial"
         db_pops.pop_size = 10
         db_pops.num_gens = 2
@@ -43,7 +43,7 @@ def callback(ch, method, properties, body):
         db.refresh(db_ingoing)
 
 
-        db_inds = schemas.IndividualsCreate()
+        db_inds = schemas.IndividualCreate()
         db_inds.fit_run = bool(data[4])
         db_inds.time_fit_run_start = datetime.now(pytz.utc)
         db_inds.fitness = float(data[5])

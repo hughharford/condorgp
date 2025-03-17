@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cgp-ingress-tls
+  namespace: cgp-system
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  tls:
+  - hosts:
+    - cgp.example.com
+    secretName: cgp-tls-secret
+  rules:
+  - host: cgp.example.com
+    http:
+      paths:
+      - path: /grafana
+        pathType: Prefix
+        backend:
+          service:
+            name: cgp-grafana
+            port:
+              number: 3000
+      - path: /rabbitmq
+        pathType: Prefix
+        backend:
+          service:
+            name: cgp-rabbitmq
+            port:
+              number: 15672
+      - path: /worker
+        pathType: Prefix
+        backend:
+          service:
+            name: cgp-worker-1
+            port:
+              number: 2727 

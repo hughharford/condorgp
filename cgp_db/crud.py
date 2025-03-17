@@ -13,7 +13,7 @@ def read_comms(db: Session, skip: int = 0, limit: int = 100):
     """Function should return all comms with a skip and limit param"""
     return db.query(models.Comms).offset(skip).limit(limit).all()
 
-def create_comms(db: Session, comms: schemas.CommsCreate):
+def create_comms(db: Session, comms: schemas.CommCreate):
     """Function should create a new communication in the database"""
     db_comms = models.Comms(**comms.model_dump())
     db.add(db_comms)
@@ -38,7 +38,7 @@ def record_individual_from_rmq(db: Session, message_body):
     print(data)
     print(f"Received individual {data[2]} with fitness: {data[5]}")
 
-    db_inds = schemas.IndividualsCreate()
+    db_inds = schemas.IndividualCreate()
 
     db_inds.fit_run = bool(data[4])
     if db_inds.fit_run:

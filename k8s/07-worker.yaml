@@ -17,6 +17,8 @@ spec:
       - name: worker
         image: cgp-nt-again:latest
         imagePullPolicy: Never
+        ports:
+        - containerPort: 2727
         resources:
           limits:
             memory: "1Gi"
@@ -47,3 +49,15 @@ spec:
       - name: condorgp-volume
         hostPath:
           path: $LOCAL_PATHcondorgp  # Updated this path
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cgp-worker-1
+  namespace: cgp-system
+spec:
+  selector:
+    app: cgp-worker-1
+  ports:
+  - port: 2727
+    targetPort: 2727
