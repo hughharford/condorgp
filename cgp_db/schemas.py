@@ -1,6 +1,9 @@
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from sqlalchemy.dialects.postgresql import UUID
+import pytz
+import uuid
+
 
 ## REF: https://kitt.lewagon.com/camps/1769/challenges?path=02-Database-Fundamentals%2F04-Backend-and-Database-Management%2F01-Twitter-CRUD
 
@@ -28,11 +31,12 @@ class IndividualsCreate(IndividualsBase):
     time_fit_run_start: datetime | None = None
     fit_run: bool | None = False
     fitness: float | None = -55000
-    population_id: UUID
 
 class Individuals(IndividualsBase):
-    time_date_logged: datetime # | None = datetime.now(pytz.utc)
-    ind_id: UUID # | None = uuid.uuid4()
+    time_date_logged: datetime
+    ind_id: UUID
+
+    pop_id: UUID
     class Config:
         from_attributes = True
 
@@ -44,7 +48,7 @@ class PopulationsBase(BaseModel):
     pop_name: str | None = None
 
 class PopulationsCreate(PopulationsBase):
-    pop_start_time: datetime
+    pop_start_time: datetime | None = datetime.now(pytz.utc)
     num_gens: int | None = 0
     pop_size: int | None = 0
 

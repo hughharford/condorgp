@@ -17,10 +17,10 @@ k8s_forwarding:
 	@microk8s kubectl  port-forward service/cgp-database 5432:5432 -n cgp-system --request-timeout='0'  &
 
 k8s_start:
-	@ sh reg_k8s_start.sh
+	@ sh k8s/reg_k8s_start.sh
 
 k8s_apply:
-	@ sh k8s_apply.sh
+	@ sh k8s/k8s_apply.sh
 
 # tests/*.py
 test:

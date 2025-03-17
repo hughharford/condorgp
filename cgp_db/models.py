@@ -2,7 +2,12 @@ import os
 from sqlalchemy import Column, Integer, Float, String, DateTime, Boolean, func
 from sqlalchemy import ForeignKey, ForeignKeyConstraint
 from sqlalchemy.dialects.postgresql import UUID, TEXT
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, relationship
+
+# is this really a good idea?
+# from cgp_db.schemas import Populations, Individuals, Comms
+import sys
+sys.path.append('..')
 
 Base = declarative_base()
 
@@ -35,7 +40,20 @@ class Individuals(Base):
     fit_run = Column(Boolean, nullable=False)
     fitness = Column(Float, nullable=False)
     ind_string = Column(TEXT, nullable=False) # TEXT psql type is very long indeed
-    population_id = Column(UUID(as_uuid=True), ForeignKey("populations.pop_id"), nullable=False)
+    pop_id = Column(UUID(as_uuid=True), ForeignKey("populations.pop_id"), nullable=False)
+
+    population = relationship("populations", foreign_keys='individuals.pop_id')
+
+
+# sample only - to delete
+# class Friend(Base):
+#     __tablename__ = 'friend'
+
+#     user_id = Column(Integer, ForeignKey(User.id), primary_key=True)
+#     user = relationship('User', foreign_keys='Friend.user_id')
+
+#     friend_id = Column(Integer, ForeignKey(User.id), primary_key=True)
+#     friend = relationship('User', foreign_keys='Friend.friend_id')
 
 class Populations(Base):
     """Class to represent the populations table"""
@@ -49,6 +67,11 @@ class Populations(Base):
     pop_start_time = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     num_gens = Column(Integer, nullable=False)
     pop_size = Column(Integer, nullable=False)
+
+    individual = relationship("individuals", foreign_keys='populations.pop_id')
+
+
+
 
 # class Checkpoints(Base):
 #     """Class to represent the checkpoints table"""

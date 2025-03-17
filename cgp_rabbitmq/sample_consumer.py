@@ -21,21 +21,27 @@ def get_db():
 def callback(ch, method, properties, body):
 
     with SessionLocal() as db:
-        # print(
-        #     db.execute(
-        #         """
-        #     SELECT * FROM information_schema.tables
-        #     WHERE table_schema = 'public'
-        #     """
-        #     ).fetchall()
-        # )
-
-        # db.execute('USE cgp_backbone')
-
 
         data = body.decode('utf-8').split(":")
         print(data)
         print(f"Received individual {data[2]} with fitness: {data[5]}")
+
+        db_pops = schemas.PopulationsCreate()
+        db_pops.pop_name = "trial"
+        db_pops.pop_size = 10
+        db_pops.num_gens = 2
+        db_pops.pop_start_time = datetime.now(pytz.utc)
+
+        print(db_pops.__dict__)
+        db_ingoing = models.Populations(**db_pops.model_dump())
+
+        newpopid = uuid.uuid4()
+        db_ingoing.pop_id = newpopid
+
+        db.add(db_ingoing)
+        db.commit()
+        db.refresh(db_ingoing)
+
 
         db_inds = schemas.IndividualsCreate()
         db_inds.fit_run = bool(data[4])
@@ -44,10 +50,10 @@ def callback(ch, method, properties, body):
         db_inds.ind_string = str(data[6])
 
         # foreign key population_id = populations.pop_id
-        db_inds.population_id = uuid.uuid4() # for now...
 
         db_ingoing = models.Individuals(**db_inds.model_dump())
-        db_ingoing.id = uuid.uuid4()
+        db_ingoing.pop_id = uuid.uuid4() # newpopid
+        db_ingoing.ind_id = uuid.uuid4()
         db.add(db_ingoing)
         db.commit()
         db.refresh(db_ingoing)

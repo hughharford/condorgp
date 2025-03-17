@@ -1,8 +1,8 @@
-"""changes to individuals schema for pydantic v2
+"""adj foreign key individuals to populations pop_id 1
 
-Revision ID: 50b4d39b1e33
-Revises: 6a8c342f3321
-Create Date: 2025-01-28 09:51:35.553557
+Revision ID: c6021a6c4f31
+Revises: 6dfd967bd9dc
+Create Date: 2025-03-17 09:20:46.454842
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '50b4d39b1e33'
-down_revision: Union[str, None] = '6a8c342f3321'
+revision: str = 'c6021a6c4f31'
+down_revision: Union[str, None] = '6dfd967bd9dc'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

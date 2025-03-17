@@ -1,4 +1,4 @@
-from cgp_api import models
+from cgp_db import models
 target_metadata = models.Base.metadata
 
 

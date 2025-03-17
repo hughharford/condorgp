@@ -50,9 +50,9 @@ def record_individual_from_rmq(db: Session, message_body):
     db_inds.ind_string = str(data[6])
 
     # foreign key population_id = populations.pop_id
-    db_inds.population_id = uuid.uuid4() # for now...
 
     db_ingoing = models.Individuals(**db_inds.model_dump())
+    db_ingoing.population_id = uuid.uuid4() # for now...
     db_ingoing.id = uuid.uuid4()
     db.add(db_ingoing)
     db.commit()
