@@ -57,7 +57,7 @@ spec:
           claimName: postgres-data
       - name: init-scripts
         hostPath:
-          path: $LOCAL_PATHcondorgp/scripts/db_init  # Updated this path
+          path: /home/hsth/code/hughharford/condorgp/scripts/db_init  # Updated this path
 ---
 apiVersion: v1
 kind: Service

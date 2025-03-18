@@ -2,7 +2,8 @@
 #          INSTALL & TEST
 # ----------------------------------
 install_requirements:
-	@pip install -r requirements.txt
+	@sudo pip install poetry
+	@poetry install
 
 check_code:
 	@flake8 scripts/* condorgp/*.py
@@ -10,23 +11,37 @@ check_code:
 black:
 	@black scripts/* condorgp/*.py
 
+k8s_install_new:
+	@zsh k8s/install_microk8s.sh;
+
+k8s_cgp_builds:
+	@sudo DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile_start_again --target=cgp-nt-again -t cgp-nt-again .
+
+k8s_reset_cgp:
+	@sudo microk8s kubectl delete -f k8s/07-worker.yaml
+	@sudo microk8s kubectl apply -f k8s/07-worker.yaml
+
+k8s_apply:
+	@sudo sh k8s/k8s_apply.sh;
+
+k8s_delete:
+	@sudo sh k8s/k8s_delete.sh;
+
+k8s_cgp_images:
+	@sudo sh k8s/k8s_images_push.sh;
+
 k8s_forwarding:
 	@microk8s kubectl port-forward service/cgp-grafana 3000:3000  -n cgp-system --request-timeout='0' &
 	@microk8s kubectl port-forward service/cgp-rabbitmq 15672:15672  -n cgp-system --request-timeout='0' &
 	@microk8s kubectl port-forward service/cgp-rabbitmq 5672:5672  -n cgp-system --request-timeout='0' &
 	@microk8s kubectl  port-forward service/cgp-database 5432:5432 -n cgp-system --request-timeout='0'  &
 
-k8s_images:
-	@sh k8s/k8s_images_push.sh
+k8s_st_start:
+	@sudo sh k8s/reg_k8s_start.sh;
 
-k8s_start:
-	@sh k8s/reg_k8s_start.sh
+k8s_sp_stop:
+	@sudo microk8s stop;
 
-k8s_stop:
-	@sudo microk8s stop
-
-k8s_apply:
-	@ sh k8s/k8s_apply.sh
 
 # tests/*.py
 test:
@@ -46,7 +61,7 @@ clean:
 	@rm -fr condorgp.egg-info
 
 install:
-	@pip install . -U
+	@poetry install
 
 all: clean install test black check_code
 

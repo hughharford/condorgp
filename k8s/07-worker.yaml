@@ -48,7 +48,7 @@ spec:
       volumes:
       - name: condorgp-volume
         hostPath:
-          path: $LOCAL_PATHcondorgp  # Updated this path
+          path: /home/hsth/code/hughharford/condorgp  # Updated this path
 ---
 apiVersion: v1
 kind: Service

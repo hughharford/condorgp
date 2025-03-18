@@ -45,6 +45,8 @@ class Params():
         # Set here only:
         # now need to set some options, based on os.environ["AMQP_URL"]
         LOCAL_BASE_PATH = os.getenv("LOCAL_PATH")
+        print(LOCAL_BASE_PATH)
+        LOCAL_BASE_PATH=LOCAL_BASE_PATH+"condorgp/"
         try:
             if "IN_DOCKER_COMPOSE" in os.environ:
                 docker_compose_check = os.environ["IN_DOCKER_COMPOSE"]
@@ -58,7 +60,7 @@ class Params():
                     LOCAL_BASE_PATH = '/condorgp/' # assume for now
             if os.environ['ON_PRIMARY'] == 1:
                 LOCAL_BASE_PATH = os.getenv("LOCAL_PATH")
-                # was, but moved... '/home/hughharford/code/hughharford/condorgp/'
+                # was, but moved... '/home/hsth/code/hughharford/condorgp/'
 
         except BaseException as e:
             logging.debug(f"CondorGP Params ERROR with local base path: {e}")

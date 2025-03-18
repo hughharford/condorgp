@@ -8,26 +8,29 @@ sudo snap install microk8s --classic
 
 # Add current user to microk8s group
 sudo usermod -a -G microk8s $USER
-sudo chown -R $USER ~/.kube
 
 # Create .kube directory if it doesn't exist
 mkdir -p ~/.kube
+sudo chown -R $USER ~/.kube
+
 
 # Wait for MicroK8s to be ready
 microk8s status --wait-ready
 
 # Enable necessary addons
 microk8s enable dns
-microk8s enable storage
+microk8s enable hostpath-storage
 microk8s enable ingress
 microk8s enable registry
 microk8s enable dashboard
 
 # Configure kubectl alias (optional)
-echo "alias kubectl='microk8s kubectl'" >> ~/.bashrc
+echo "alias k='sudo microk8s kubectl'" >> ~/.zshrc
 
 # Generate and save kubeconfig
 microk8s config > ~/.kube/config
 
 # Reload shell to apply group changes
-echo "Please log out and log back in to apply group changes, or run: 'newgrp microk8s'"
+
+echo "NOW _______________________________________ reload shell to apply changes.."
+source ~/.zshrc
