@@ -35,7 +35,7 @@ alembic = "^1.14.0"
 pydantic = "^2.10.6"
 
 [tool.poetry.group.cluster.dependencies]
-kubernetes = "^32.0.0"
+# kubernetes = "^32.0.0" # taken out so doesn't build on the worker, for now
 net-tools = "^0.1.2"
 
 [tool.poetry.group.comms.dependencies]

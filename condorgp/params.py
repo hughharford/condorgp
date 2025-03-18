@@ -46,6 +46,7 @@ class Params():
         # now need to set some options, based on os.environ["AMQP_URL"]
         LOCAL_BASE_PATH = os.getenv("LOCAL_PATH")
         print(LOCAL_BASE_PATH)
+        print(type(LOCAL_BASE_PATH))
         LOCAL_BASE_PATH=LOCAL_BASE_PATH+"condorgp/"
         try:
             if "IN_DOCKER_COMPOSE" in os.environ:
