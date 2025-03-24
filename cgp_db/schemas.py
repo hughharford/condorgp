@@ -25,8 +25,8 @@ class Comm(CommBase):
 class IndividualBase(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    ind_string: str | None = None
-    pop_id: int # UUID
+    ind_string: str
+    pop_id: uuid.UUID
 
 class IndividualCreate(IndividualBase):
     time_fit_run_start: datetime | None = None
@@ -45,15 +45,18 @@ class Individual(IndividualBase):
 class PopulationBase(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    pop_name: str | None = None
+    pop_name: str
+    pop_size: int
+    num_gens: int
 
 class PopulationCreate(PopulationBase):
     pop_start_time: datetime | None = datetime.now(pytz.utc)
-    num_gens: int | None = 0
-    pop_size: int | None = 0
 
 class Population(PopulationBase):
-    pop_id: int # UUID
+    pop_id: uuid.UUID
+    pop_start_time: datetime
+    individuals: list["Individual"] = []
+
     class Config:
         from_attributes = True
 
