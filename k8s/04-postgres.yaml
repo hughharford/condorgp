@@ -26,29 +26,59 @@ spec:
         ports:
         - containerPort: 5432
         env:
+        # # NB in .env:
+          # POSTGRES_USER=postgres # ? do ${POSTGRES_USER}, ${APP_DB_USER}, ${APP_DB_NAME} work
+          # POSTGRES_PASSWORD=postgres
+          # APP_DB_NAME=cgpbackbone
+
+# CHECKLIST
+          # POSTGRES_PASSWORD
+          # POSTGRES_USER
+          # POSTGRES_DB
+          # APP_DB_USER
+          # APP_DB_PASS
+          # APP_DB_NAME
+
+        # POSTGRES_PASSWORD
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               name: cgp-secrets
-              key: postgres-password
-        - name: APP_DB_USER
-          valueFrom:
-            configMapKeyRef:
-              name: cgp-config
-              key: APP_DB_USER
+              key: postgres-password # postgres-password: cG9zdGdyZXM=  # 'postgres' in base64 cf 02-secrets.yaml
+        # APP_DB_PASS
         - name: APP_DB_PASS
           valueFrom:
             secretKeyRef:
               name: cgp-secrets
-              key: app-db-pass
+              key: app-db-pass #  app-db-pass: Y2dwLXBhc3M=        # 'cgp-pass' in base64 cf 02-secrets.yaml
+        # APP_DB_USER
+        - name: APP_DB_USER         # cgp-config set in 01-configmap
+          valueFrom:
+            configMapKeyRef:
+              name: cgp-config
+              key: APP_DB_USER #   APP_DB_USER: ${APP_DB_USER} cf 01-configmap.yaml
+        # APP_DB_NAME
         - name: APP_DB_NAME
           valueFrom:
             configMapKeyRef:
               name: cgp-config
-              key: APP_DB_NAME
+              key: APP_DB_NAME #  APP_DB_NAME: ${APP_DB_NAME}  cf 01-configmap.yaml
+        # POSTGRES_USER
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: cgp-config
+              key: POSTGRES_USER # POSTGRES_USER: ${POSTGRES_USER} cf 01-configmap.yaml
+        # POSTGRES_DB
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: cgp-config
+              key: POSTGRES_DB #   cf 01-configmap.yaml
+
         volumeMounts:
         - name: postgres-data
-          mountPath: /var/lib/postgresql/data
+          mountPath: host-data-postgres
         - name: init-scripts
           mountPath: /docker-entrypoint-initdb.d/
       volumes:
@@ -58,6 +88,7 @@ spec:
       - name: init-scripts
         hostPath:
           path: /home/hsth/code/hughharford/condorgp/scripts/db_init  # Updated this path
+
 ---
 apiVersion: v1
 kind: Service
@@ -65,6 +96,7 @@ metadata:
   name: cgp-database
   namespace: cgp-system
 spec:
+  type: NodePort
   selector:
     app: cgp-database
   ports:

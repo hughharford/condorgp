@@ -37,7 +37,7 @@ spec:
           value: "admin"
         volumeMounts:
         - name: grafana-data
-          mountPath: /var/lib/grafana
+          mountPath: host-data-grafana
       volumes:
       - name: grafana-data
         persistentVolumeClaim:

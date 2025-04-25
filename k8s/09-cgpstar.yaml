@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cgp-worker-1
+  name: cgpstar
   namespace: cgp-system
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cgp-worker-1
+      app: cgpstar
   template:
     metadata:
       labels:
-        app: cgp-worker-1
+        app: cgpstar
     spec:
       containers:
-      - name: worker
-        image: cgp-nt-again:latest
+      - name: star
+        image: cgpstar:latest
         imagePullPolicy: Never
         ports:
-        - containerPort: 2782
+        - containerPort: 2727
         resources:
           limits:
             memory: "1Gi"
@@ -26,7 +26,7 @@ spec:
           requests:
             memory: "512Mi"
             cpu: "500m"
-        command: ["sh", "scripts/install_cgp_n_run_listener_4.sh"]
+        command: ["sh", "scripts/install_cgp_star.sh"]
         env:
         - name: IN_DOCKER_COMPOSE
           value: "1"
@@ -53,12 +53,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cgp-worker-1
+  name: cgpstar
   namespace: cgp-system
 spec:
   type: NodePort
   selector:
-    app: cgp-worker-1
+    app: cgpstar
   ports:
-  - port: 2782
-    targetPort: 2782
+  - port: 2727
+    targetPort: 2727

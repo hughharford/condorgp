@@ -1,5 +1,8 @@
 # delete this set:
 
+microk8s kubectl delete -f k8s/09-cgpstar.yaml
+
+microk8s kubectl delete -f k8s/08-ingress.yaml
 microk8s kubectl delete -f k8s/07-worker.yaml
 microk8s kubectl delete -f k8s/06-grafana.yaml
 microk8s kubectl delete -f k8s/05-rabbitmq.yaml

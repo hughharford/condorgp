@@ -31,4 +31,11 @@ spec:
           service:
             name: cgp-worker-1
             port:
-              number: 2727 
+              number: 2727
+      - path: /db
+        pathType: Prefix
+        backend:
+          service:
+            name: cgp-database
+            port:
+              number: 5432

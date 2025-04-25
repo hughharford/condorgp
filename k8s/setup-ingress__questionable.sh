@@ -7,12 +7,12 @@ helm install ingress-nginx ingress-nginx/ingress-nginx
 
 # Wait for the Ingress Controller to be ready
 echo "Waiting for Ingress Controller to be ready..."
-kubectl wait --namespace default \
+microk8s kubectl wait --namespace cgp-system \
   --for=condition=ready pod \
   --selector=app.kubernetes.io/component=controller \
   --timeout=120s
 
 # Apply the Ingress configuration
-kubectl apply -f ingress.yaml
+microk8s kubectl apply -f k8s/08-ingress.yaml
 
-echo "Ingress Controller and configuration have been set up!" 
+echo "Ingress Controller and configuration have been set up!"

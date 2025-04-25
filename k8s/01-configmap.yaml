@@ -4,11 +4,11 @@ metadata:
   name: cgp-config
   namespace: cgp-system
 data:
-  POSTGRES_DATABASE_URL: "postgresql+psycopg2://cgp:cgp_pass@cgp-database:5432/cgpbackbone"
-  APP_DB_PASS: ${APP_DB_PASS}
-  APP_DB_USER: ${APP_DB_USER}
-  APP_DB_NAME: ${APP_DB_NAME}
-  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  POSTGRES_USER: ${POSTGRES_USER}
-  POSTGRES_DB: ${APP_DB_NAME}
-  LOCAL_PATH: ${LOCAL_PATH}
+  POSTGRES_DATABASE_URL: "postgresql+psycopg2://cgp:cgp-pass@cgp-database:5432/cgpbackbone"
+  POSTGRES_DB: cgpbackbone # ${APP_DB_NAME}
+  APP_DB_NAME: cgpbackbone # ${APP_DB_NAME}
+  APP_DB_USER: cgp # ${APP_DB_USER}
+  POSTGRES_USER: postgres # ${POSTGRES_USER}
+  # APP_DB_PASS: ${APP_DB_PASS} - in secrets
+  # POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} - in secrets
+  # LOCAL_PATH: ${LOCAL_PATH} # utility?

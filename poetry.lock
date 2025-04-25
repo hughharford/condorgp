@@ -760,6 +760,17 @@ files = [
 ]
 
 [[package]]
+name = "envsubst"
+version = "0.1.5"
+description = "Substitute environment variables in a string"
+optional = false
+python-versions = "*"
+files = [
+    {file = "envsubst-0.1.5-py2.py3-none-any.whl", hash = "sha256:7188f9f2a046e45b63098ce5a7fd84126cbe9e5b73b8ff78eaf6e32122c0caaf"},
+    {file = "envsubst-0.1.5.tar.gz", hash = "sha256:d8e402984a84dda4ea7a8a1f7afe1c41e54a1257cfb74c80cb8f991053d97b9b"},
+]
+
+[[package]]
 name = "executing"
 version = "2.2.0"
 description = "Get the currently executing AST node of a frame, and other information"
@@ -4180,4 +4191,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<3.13"
-content-hash = "131c4f4feb23ae6d70cdcd3ce6103914f676ee80864c6c4c5ca14654e27276db"
+content-hash = "9fc1c6b5e077a63a20d33bea0dc4f9ab08a44d20386a81fd6e9742c92ce16c25"

@@ -28,10 +28,10 @@ For applications within the cluster:
   ```python
   # RabbitMQ AMQP connection
   rabbitmq_url = "amqp://guest:guest@cgp-rabbitmq:5672/"
-  
+
   # Grafana API
   grafana_url = "http://cgp-grafana:3000/api/v1/..."
-  
+
   # Worker API
   worker_url = "http://cgp-worker-1:2727/..."
   ```
@@ -41,10 +41,10 @@ For applications outside the cluster:
   ```python
   # RabbitMQ Management API
   rabbitmq_api_url = "http://cgp.local/rabbitmq/api/"
-  
+
   # Grafana API
   grafana_api_url = "http://cgp.local/grafana/api/v1/..."
-  
+
   # Worker API
   worker_api_url = "http://cgp.local/worker/..."
   ```
@@ -72,15 +72,15 @@ For applications outside the cluster:
 Using curl:
 
 ```bash
-curl -k https://cgp.example.com/rabbitmq
+curl -k https://cgp.local/rabbitmq
 ```
 
 ```bash
-curl -k https://cgp.example.com/grafana
+curl -k https://cgp.local/grafana
 ```
 
 ```bash
-curl -k https://cgp.example.com/worker
+curl -k https://cgp.local/worker
 ```
 
 ```bash

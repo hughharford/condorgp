@@ -47,7 +47,7 @@ class Params():
         LOCAL_BASE_PATH = os.getenv("LOCAL_PATH")
         print(LOCAL_BASE_PATH)
         print(type(LOCAL_BASE_PATH))
-        LOCAL_BASE_PATH=LOCAL_BASE_PATH+"condorgp/"
+        LOCAL_BASE_PATH=f"{LOCAL_BASE_PATH}condorgp/"
         try:
             if "IN_DOCKER_COMPOSE" in os.environ:
                 docker_compose_check = os.environ["IN_DOCKER_COMPOSE"]

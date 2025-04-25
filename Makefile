@@ -11,36 +11,53 @@ check_code:
 black:
 	@black scripts/* condorgp/*.py
 
-k8s_install_new:
+# K8S COMMANDS:
+# *****************************************************************************
+k_install_new:
 	@zsh k8s/install_microk8s.sh;
 
-k8s_cgp_builds:
+k_cgp_builds:
 	@sudo DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile_start_again --target=cgp-nt-again -t cgp-nt-again .
 
-k8s_reset_cgp:
+k_cgp_images:
+	@sudo sh k8s/k8s_images_push.sh;
+
+k_reset_cgp:
 	@sudo microk8s kubectl delete -f k8s/07-worker.yaml
 	@sudo microk8s kubectl apply -f k8s/07-worker.yaml
 
-k8s_apply:
+k_reset_star:
+	@sudo microk8s kubectl delete -f k8s/09-cgpstar.yaml
+	@sudo microk8s kubectl apply -f k8s/09-cgpstar.yaml
+
+k_apply_2:
+	@sudo sh k8s/k8s_apply_2.sh;
+
+k_apply:
 	@sudo sh k8s/k8s_apply.sh;
 
-k8s_delete:
+k_delete:
 	@sudo sh k8s/k8s_delete.sh;
 
-k8s_cgp_images:
-	@sudo sh k8s/k8s_images_push.sh;
+k_pdash:
+	@microk8s dashboard-proxy --token-ttl=43200
 
-k8s_forwarding:
-	@microk8s kubectl port-forward service/cgp-grafana 3000:3000  -n cgp-system --request-timeout='0' &
-	@microk8s kubectl port-forward service/cgp-rabbitmq 15672:15672  -n cgp-system --request-timeout='0' &
-	@microk8s kubectl port-forward service/cgp-rabbitmq 5672:5672  -n cgp-system --request-timeout='0' &
-	@microk8s kubectl  port-forward service/cgp-database 5432:5432 -n cgp-system --request-timeout='0'  &
+k_f_graf:
+	@microk8s kubectl port-forward service/cgp-grafana 3000:3000  -n cgp-system --request-timeout='0'
+k_f_rmq1:
+	@microk8s kubectl port-forward service/cgp-rabbitmq 15672:15672  -n cgp-system --request-timeout='0'
+k_f_rmq2:
+	@microk8s kubectl port-forward service/cgp-rabbitmq 5672:5672  -n cgp-system --request-timeout='0'
+k_f_db:
+	@microk8s kubectl port-forward service/cgp-database 5432:5432 -n cgp-system --request-timeout='0'
 
-k8s_st_start:
+k_st:
 	@sudo sh k8s/reg_k8s_start.sh;
 
-k8s_sp_stop:
+k_sp:
 	@sudo microk8s stop;
+
+# *****************************************************************************
 
 
 # tests/*.py

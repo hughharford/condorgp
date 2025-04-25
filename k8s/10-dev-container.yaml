@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev
+  namespace: cgp-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dev
+  template:
+    metadata:
+      labels:
+        app: dev
+    spec:
+      containers:
+      - name: dev
+        image: vsc-basic-python-7a94d97c7e4ae30dc4170673c9f8c8992e1b9f31abebe48ebc3675d5c971eeb6:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 1111
+        resources:
+          limits:
+            memory: "1.5Gi"
+            cpu: "2000m"
+          requests:
+            memory: "1024Mi"
+            cpu: "1000m"
+        env:
+        - name: DEV_CONTAINER
+          value: "1"
+        volumeMounts:
+        - name: condorgp-volume
+          mountPath: /condorgp
+      volumes:
+      - name: condorgp-volume
+        hostPath:
+          path: /home/hsth/code/hughharford/condorgp  # Updated this path
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dev
+  namespace: cgp-system
+spec:
+  type: NodePort
+  selector:
+    app: dev
+  ports:
+  - port: 1111
+    targetPort: 1111
