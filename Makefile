@@ -30,6 +30,10 @@ k_reset_star:
 	@sudo microk8s kubectl delete -f k8s/09-cgpstar.yaml
 	@sudo microk8s kubectl apply -f k8s/09-cgpstar.yaml
 
+k_reset_dev:
+	@sudo microk8s kubectl delete -f k8s/10-dev-container.yaml
+	@sudo microk8s kubectl apply -f k8s/10-dev-container.yaml
+
 k_apply_2:
 	@sudo sh k8s/k8s_apply_2.sh;
 

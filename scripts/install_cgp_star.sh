@@ -14,26 +14,18 @@
 pwd;
 
 # trying this, to avoid all sorts of long installs on the worker start
-# poetry install --without api
-              #  --without database \
-              #  --without cluster \
-              #  --without cloud \
-              #  --without test \
-              #  --without dev \
-              #  --without optional
+# poetry install
+# should be able to avoid this install....
 
-#                   # --without primary \
-#                   # --without evolution \
-#                   # --without comms \
-
-# poetry run python scripts/blank.sh
+# poetry run python cgp_db/main_api.py
 
 # NEEDS A SERVICE
-# code .
 
-# # for use to keep the container runnning in case of debug need
+# # # for use to keep the container runnning in case of debug need
 while :
 do
 	echo "Press [CTRL+C] to stop.."
 	sleep 1
 done
+
+# WORKS ON STAR

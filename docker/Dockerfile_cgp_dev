@@ -1,4 +1,4 @@
-FROM cgp-nt-again:latest AS cgpstar
+FROM vsc-basic-python-7a94d97c7e4ae30dc4170673c9f8c8992e1b9f31abebe48ebc3675d5c971eeb6:latest AS cgp_dev
 
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
@@ -20,17 +20,17 @@ ENV TZ=Europe/London
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ENV PYTHON_VERSION 3.12.0
+# but installed previously
 
-# always:
-RUN apt-get update
-
+RUN apt update
 
 WORKDIR /condorgp
 
 COPY ./ ./
 
-RUN poetry install
+RUN pip install poetry==1.8.4
 
+RUN poetry install
 
 
 CMD ["/bin/bash"]

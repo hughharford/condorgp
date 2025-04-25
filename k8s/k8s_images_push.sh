@@ -1,7 +1,9 @@
 # copy images
 export CGP_WORKER_IMAGE_NAME_1="cgp-nt-again"
 export CGP_WORKER_IMAGE_NAME_2="cgpstar"
-export CGP_WORKER_IMAGE_NAME_3="vsc-basic-python-7a94d97c7e4ae30dc4170673c9f8c8992e1b9f31abebe48ebc3675d5c971eeb6"
+export CGP_WORKER_IMAGE_NAME_3="dev-01-ppg"
+
+# was: vsc-basic-python-7a94d97c7e4ae30dc4170673c9f8c8992e1b9f31abebe48ebc3675d5c971eeb6
 
 # ONE
 

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: dev
-        image: vsc-basic-python-7a94d97c7e4ae30dc4170673c9f8c8992e1b9f31abebe48ebc3675d5c971eeb6:latest
+        image: dev-01-ppg:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 1111
@@ -26,6 +26,7 @@ spec:
           requests:
             memory: "1024Mi"
             cpu: "1000m"
+        command: ["sh", "scripts/service_run_api.sh"]
         env:
         - name: DEV_CONTAINER
           value: "1"

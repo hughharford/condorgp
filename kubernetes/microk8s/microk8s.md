@@ -230,3 +230,17 @@ Note microk8s args folder and credentials folder:
 /var/snap/microk8s/current/credentials/kubelet.config
 but really:
 /var/snap/microk8s/current/args/kubelet
+
+## latest updates to cover dev container and cgpstar
+
+### updating star
+
+docker build . -f docker/Dockerfile_cgpstar -t cgpstar:latest
+
+### updating dev
+
+docker build . -f docker/Dockerfile_cgp_dev -t dev-01-ppg:latest
+
+### then pushing images x3
+
+make k_cgp_images
