@@ -11,6 +11,37 @@ check_code:
 black:
 	@black scripts/* condorgp/*.py
 
+# K3S Commands:
+# #############################################################################
+k3_stop:
+	sudo systemctl stop k3s;
+
+k3_start:
+	sudo systemctl start k3s;
+
+k3_status:
+	systemctl status k3s;
+
+k3_server_etc:
+	sudo k3s server;
+	sudo k3s agent;
+
+k3_kubectl:
+	k3s kubectl;
+
+k3_kapply:
+	k3s kubectl apply -f k8s/00-namespace.yaml
+	k3s kubectl apply -f k8s/01-configmap.yaml
+	k3s kubectl apply -f k8s/02-secrets.yaml
+	k3s kubectl apply -f k8s/03-persistent-volumes.yaml
+	k3s kubectl apply -f k8s/04-postgres.yaml
+	k3s kubectl apply -f k8s/05-rabbitmq.yaml
+	k3s kubectl apply -f k8s/06-grafana.yaml
+	k3s kubectl apply -f k8s/07-worker.yaml
+	k3s kubectl apply -f k8s/08-ingress.yaml
+	k3s kubectl apply -f k8s/09-cgpstar.yaml
+	k3s kubectl apply -f k8s/10-dev-container.yaml
+
 # K8S COMMANDS:
 # *****************************************************************************
 k_install_new:

@@ -39,6 +39,9 @@ __pycache__/
 # C extensions
 *.so
 
+# k3s files
+*.kubeconfig
+
 # Distribution / packaging
 .Python
 build/
