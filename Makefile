@@ -1,15 +1,35 @@
 # ----------------------------------
-#          INSTALL & TEST
+#          INSTALL
 # ----------------------------------
 install_requirements:
 	@sudo pip install poetry
 	@poetry install
 
-check_code:
-	@flake8 scripts/* condorgp/*.py
+install:
+	@poetry install
 
-black:
-	@black scripts/* condorgp/*.py
+fresh_install:
+	@make install_requirements
+	@make new_install
+	@sh scripts/establish_logs_n_checkpoints.sh
+
+new_install:
+ifneq ($$LOCAL_PATH, "")
+	@echo "local path set as: " $$LOCAL_PATH
+	@echo "path set ok, assuming environment variables setup."
+else
+	@echo "Looks as though your environment variables aren't set up. Attempting now."
+	@if [ -f .env ]; then echo .env present; else echo .env is missing; fi;
+	@if [ -f .envrc ]; then echo .envrc present; else echo .envrc is missing; fi;
+	@sudo apt install direnv
+	@direnv allow
+endif
+
+# ----------------------------------
+#          Kubernetes - microk8s
+# ----------------------------------
+
+
 
 k8s_install_new:
 	@zsh k8s/install_microk8s.sh;
@@ -34,7 +54,7 @@ k8s_forwarding:
 	@microk8s kubectl port-forward service/cgp-grafana 3000:3000  -n cgp-system --request-timeout='0' &
 	@microk8s kubectl port-forward service/cgp-rabbitmq 15672:15672  -n cgp-system --request-timeout='0' &
 	@microk8s kubectl port-forward service/cgp-rabbitmq 5672:5672  -n cgp-system --request-timeout='0' &
-	@microk8s kubectl  port-forward service/cgp-database 5432:5432 -n cgp-system --request-timeout='0'  &
+	@microk8s kubectl port-forward service/cgp-database 5432:5432 -n cgp-system --request-timeout='0'  &
 
 k8s_st_start:
 	@sudo sh k8s/reg_k8s_start.sh;
@@ -42,6 +62,16 @@ k8s_st_start:
 k8s_sp_stop:
 	@sudo microk8s stop;
 
+
+# ----------------------------------
+#          TEST
+# ----------------------------------
+
+check_code:
+	@flake8 scripts/* condorgp/*.py
+
+black:
+	@black scripts/* condorgp/*.py
 
 # tests/*.py
 test:
@@ -60,8 +90,7 @@ clean:
 	@rm -fr condorgp-*.dist-info
 	@rm -fr condorgp.egg-info
 
-install:
-	@poetry install
+
 
 all: clean install test black check_code
 
