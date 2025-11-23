@@ -17,6 +17,18 @@ class GpControl:
             Setup, sizing, initiation of gp runs: psets, operators, evaluator.
             The major dependency is DEAP.
         '''
+
+        try:
+            self.factory = Factory()
+            self.inject_utils()
+            if not self.util.check_paths_and_logs_extant():
+                raise ValueError(f"paths etc failed")
+        except BaseException as e:
+            logging.error(f"GPC PATHS ERROR: {e}")
+            tb = ''.join(traceback.format_tb(e.__traceback__))
+            logging.debug(f"GPC: {tb}")
+            return False
+
         try:
             logging.info(f"{'>'*5}, GpControl Initialising {'>'*5}")
 
@@ -27,9 +39,7 @@ class GpControl:
             self.verbose = 1 # default to print out
             # gather resources
             self.p = Params()
-            self.factory = Factory()
             self.initiate_logger()
-            self.inject_utils()
             self.keep_logs_tidy()
             self.inject_backtest_runner()
 
@@ -281,7 +291,7 @@ class GpControl:
         if not gpc: gpc = GpControl()
         else:       gpc = gpc
 
-        gpc.verbose = 0
+        gpc.verbose = 1
 
         gpc.use_k8s = False
 

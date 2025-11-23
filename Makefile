@@ -14,16 +14,11 @@ fresh_install:
 	@sh scripts/establish_logs_n_checkpoints.sh
 
 new_install:
-ifneq ($$LOCAL_PATH, "")
-	@echo "local path set as: " $$LOCAL_PATH
-	@echo "path set ok, assuming environment variables setup."
-else
-	@echo "Looks as though your environment variables aren't set up. Attempting now."
-	@if [ -f .env ]; then echo .env present; else echo .env is missing; fi;
-	@if [ -f .envrc ]; then echo .envrc present; else echo .envrc is missing; fi;
-	@sudo apt install direnv
+	@echo checking paths
+	@sh scripts/checking_env.sh
+
+update_env:
 	@direnv allow
-endif
 
 # ----------------------------------
 #          Kubernetes - microk8s

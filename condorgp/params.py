@@ -45,20 +45,24 @@ class Params():
         # Set here only:
         # now need to set some options, based on os.environ["AMQP_URL"]
         LOCAL_BASE_PATH = os.getenv("LOCAL_PATH")
-        print(LOCAL_BASE_PATH)
-        print(type(LOCAL_BASE_PATH))
-        LOCAL_BASE_PATH=LOCAL_BASE_PATH+"condorgp/"
+
+        # note, the above pulls from environment variables set by direnv
+        #       these required .env and .envrc without which all stops
+
+        # print(LOCAL_BASE_PATH)
+        # print(type(LOCAL_BASE_PATH))
+
         try:
-            if "IN_DOCKER_COMPOSE" in os.environ:
-                docker_compose_check = os.environ["IN_DOCKER_COMPOSE"]
-                # # if no error to checking the
-                # # then on a container using RabbitMQ and thereby needs path below:
-                if docker_compose_check == 1:
-                    LOCAL_BASE_PATH = '/condorgp/'
-            elif "IN_K8S" in os.environ:
-                k8s_check = os.environ["IN_K8S"]
-                if k8s_check == 1:
-                    LOCAL_BASE_PATH = '/condorgp/' # assume for now
+            # if "IN_DOCKER_COMPOSE" in os.environ:
+            #     docker_compose_check = os.environ["IN_DOCKER_COMPOSE"]
+            #     # # if no error to checking the
+            #     # # then on a container using RabbitMQ and thereby needs path below:
+            #     if docker_compose_check == 1:
+            #         LOCAL_BASE_PATH = '/condorgp/'
+            # elif "IN_K8S" in os.environ:
+            #     k8s_check = os.environ["IN_K8S"]
+            #     if k8s_check == 1:
+            #         LOCAL_BASE_PATH = '/condorgp/' # assume for now
             if os.environ['ON_PRIMARY'] == 1:
                 LOCAL_BASE_PATH = os.getenv("LOCAL_PATH")
                 # was, but moved... '/home/hsth/code/hughharford/condorgp/'
@@ -83,7 +87,7 @@ class Params():
         #           MAIN NAUTILUS PARAMS
         # ################################## ##################################
 
-        NAUTILUS_BASE_PATH = '/home/hughharford/code/hughharford/nautilus_trader/'
+        NAUTILUS_BASE_PATH = '/home/hsth/code/hughharford/nautilus_trader/'
         NAUTILUS_EVAL_PATH = LOCAL_BASE_PATH + "condorgp/evaluation/"
         NAUTILUS_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/nautilus_log.json'
         CONDOR_LOG_FILE = LOCAL_BASE_PATH + 'condorgp/util/logs/condor_log.txt'

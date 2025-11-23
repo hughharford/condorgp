@@ -381,6 +381,33 @@ class Utils:
                 pass
                 os.remove(to_delete[f])
 
+    def check_paths_and_logs_extant(self):
+        print("checking env and key folders established:")
+        pathsetc = self.p.get_params("naut_dict")
+
+        # 3 paths must exist
+        LOGSFOLDER = os.path.isdir(pathsetc["LOGS_FOLDER"])
+        CPFOLDER = os.path.isdir(pathsetc["CHECKPOINT_PATH"])
+        NAUTILUSBASEFOLDER = os.path.isdir(pathsetc["NAUTILUS_BASE_PATH"])
+        #2 log files must be extant:
+        NAUTLOG = os.path.isfile(pathsetc["NAUTILUS_LOG_FILE"])
+        CONDORLOG = os.path.isfile(pathsetc["CONDOR_LOG_FILE"])
+        if LOGSFOLDER:
+            print(f"Logs path present: {pathsetc["LOGS_FOLDER"]}")
+        if CPFOLDER:
+            print(f"Checkpoint path present: {pathsetc["CHECKPOINT_PATH"]}")
+        if NAUTILUSBASEFOLDER:
+            print(f"Nautilus path present, assumes installed: {pathsetc["NAUTILUS_BASE_PATH"]}")
+        if CONDORLOG:
+            print(f"Checkpoint path present: {pathsetc["NAUTILUS_LOG_FILE"]}")
+        if CONDORLOG:
+            print(f"Checkpoint path present: {pathsetc["CONDOR_LOG_FILE"]}")
+
+        if all([CONDORLOG, CONDORLOG, NAUTILUSBASEFOLDER, CPFOLDER, LOGSFOLDER]):
+            return True
+        else:
+            return False
+
 if __name__ == "__main__":
     pass
     print('going...')
@@ -391,13 +418,15 @@ if __name__ == "__main__":
     # seq2 = []
     # u.check_seq_never_decreases(seq1)
     p = Params()
-    key_req = p.naut_dict['SPECIFIED_FITNESS'] # p.naut_dict['FITNESS_CRITERIA']
-    log_file_n_path = p.naut_dict['NAUTILUS_LOG_FILE']
-    # print(f'{key_req}, {log_file_n_path}')
-    fitness = u.find_fitness_with_matching_backtest(
-            key = key_req,
-            log_file_n_path = "",
-            backtest_id = "",
-            lines = 0,
-            max_lines_diff = 200)
-    print(fitness)
+    # key_req = p.naut_dict['SPECIFIED_FITNESS'] # p.naut_dict['FITNESS_CRITERIA']
+    # log_file_n_path = p.naut_dict['NAUTILUS_LOG_FILE']
+    # # print(f'{key_req}, {log_file_n_path}')
+    # fitness = u.find_fitness_with_matching_backtest(
+    #         key = key_req,
+    #         log_file_n_path = "",
+    #         backtest_id = "",
+    #         lines = 0,
+    #         max_lines_diff = 200)
+    # print(fitness)
+
+    print(u.check_paths_and_logs_extant())
