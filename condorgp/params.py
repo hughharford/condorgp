@@ -111,6 +111,11 @@ class Params():
         NAUT_DATA_PATH = LOCAL_BASE_PATH + 'data/'
         NAUT_RAW_DATA_PATH = LOCAL_BASE_PATH + 'raw_data/'
 
+        # These are critical to locate fitness in the log files
+        LOG_LINES_TO_CHECK = 3000 # keep above 3000
+        MAX_LINES_DIFF = 400
+
+
 
         self.naut_dict = {
             'VERBOSITY': VERBOSITY,
@@ -122,6 +127,9 @@ class Params():
             'CONDOR_LOG_FILE': CONDOR_LOG_FILE,
             'CHECKPOINT_PATH': CHECKPOINT_PATH,
             'RUN_DONE_TEXT': RUN_DONE_TEXT,
+
+            'LOG_LINES_TO_CHECK': LOG_LINES_TO_CHECK,
+            'MAX_LINES_DIFF': MAX_LINES_DIFF,
 
             'FITNESS_CRITERIA_SHARPE_RATIO': FITNESS_CRITERIA_SHARPE_RATIO,
             'FITNESS_CRITERIA_RISK_RETURN_RATIO': FITNESS_CRITERIA_RISK_RETURN_RATIO,

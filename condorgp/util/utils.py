@@ -397,11 +397,9 @@ class Utils:
         if CPFOLDER:
             print(f"Checkpoint path present: {pathsetc["CHECKPOINT_PATH"]}")
         if NAUTILUSBASEFOLDER:
-            print(f"Nautilus path present, assumes installed: {pathsetc["NAUTILUS_BASE_PATH"]}")
+            print(f"Nautilus log present, assumes installed: {pathsetc["NAUTILUS_BASE_PATH"]}")
         if CONDORLOG:
-            print(f"Checkpoint path present: {pathsetc["NAUTILUS_LOG_FILE"]}")
-        if CONDORLOG:
-            print(f"Checkpoint path present: {pathsetc["CONDOR_LOG_FILE"]}")
+            print(f"Condor log present: {pathsetc["CONDOR_LOG_FILE"]}")
 
         if all([CONDORLOG, CONDORLOG, NAUTILUSBASEFOLDER, CPFOLDER, LOGSFOLDER]):
             return True
@@ -410,7 +408,7 @@ class Utils:
 
 if __name__ == "__main__":
     pass
-    print('going...')
+    print('Utils run going...')
     u = Utils()
     # base = "new"
     # # u.tidy_cp_files(base) # tidying cp files
@@ -429,4 +427,38 @@ if __name__ == "__main__":
     #         max_lines_diff = 200)
     # print(fitness)
 
-    print(u.check_paths_and_logs_extant())
+    # print(u.check_paths_and_logs_extant())
+
+    f = 0.0
+
+
+    # key_req = self.naut_dict['FITNESS_CRITERIA_AVG_RETURN']
+    # key_req = self.naut_dict['FITNESS_CRITERIA_RISK_RETURN_RATIO']
+    # key_req = self.naut_dict['FITNESS_CRITERIA_PNL_TOTAL']
+    # key_req = self.naut_dict['FITNESS_CRITERIA_SHARPE_RATIO']
+    key_req = p.naut_dict['SPECIFIED_FITNESS']
+
+    log_file_n_path = p.naut_dict['NAUTILUS_LOG_FILE']
+
+    backtest_id="naut-run-06"
+
+    lines_to_check = 7000 # CAREFUL: TOO MANY LINES AND FAILS, default = 400
+    max_lines_diff = 7000 # default 500
+    try:
+        got = u.find_fitness_with_matching_backtest(
+                key = key_req
+                , log_file_n_path = log_file_n_path # default: Nautilus log
+                , backtest_id = backtest_id
+                , lines = lines_to_check
+                , max_lines_diff = max_lines_diff
+                )
+        foundfit = "" # if poor, set v low as < bad algorithms getting <0
+        if got[1] != -1:
+            foundfit = u.get_last_chars(got[0],2)
+            f = -22000 # nan
+        else:
+            f = -111000 # not found
+        if len(foundfit) > 3:
+            f = float(u.get_last_chars(got[0],2))
+    except BaseException as e:
+        logging.error(f"ERROR {__name__}: {e}")

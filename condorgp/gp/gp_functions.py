@@ -64,8 +64,10 @@ class GpFunctions():
         if backtest_id == "":
             backtest_id = self.naut_dict['BACKTEST_ID_CURRENT'] # preferred
             # backtest_id = "naut-run-06" # Hard coded default if not specified
-        lines_to_check = 400 # CAREFUL: TOO MANY LINES AND FAILS, default = 400
-        max_lines_diff = 500 # default 500
+        lines_to_check = self.naut_dict['LOG_LINES_TO_CHECK']
+        # CAREFUL: TOO MANY LINES AND FAILS, default = 400
+        max_lines_diff = self.naut_dict['MAX_LINES_DIFF'] # default 500
+
         try:
             got = self.util.find_fitness_with_matching_backtest(
                     key = key_req

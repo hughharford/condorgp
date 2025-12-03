@@ -303,7 +303,7 @@ class GpControl:
             pset_used = 'naut_pset_01' #  'test_pset5b'
         eval_used = 'eval_nautilus' # evalSymbRegTest
 
-        p = 1
+        p = 3
         g = 2 # even
         cp_base = "250119_fitness_experiments"
         if not g%2==0:
