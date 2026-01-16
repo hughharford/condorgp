@@ -9,42 +9,34 @@ at the high level, genetic programming (GP) is the approach.
 - Data Source: various, including quant market history, for initial hypothesis
 - Type of analysis: backtested evolving algorithms created by DEAP, with fitness function specified by GP. Backtesting undertaken by Nautilus Trader.
 
-# Startup the project
-The initial setup.
-
-Create virtualenv and install the project:
+# Install the project
+- First update all packages
 ```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
-    pip install pip -U; pip install -r requirements.txt
+sudo apt update && sudo apt upgrade
 ```
-
-Once you have setup your ssh public key...
-
-# Get CondorGP (via SSH if that is setup)
+- Install poetry, with specific version:
+```bash
+pipx install poetry==1.8.4
+```
+- Ensure you have setup your ssh public key...
+- Then clone the repo
 ```bash
 git clone git@github.com:hughharford/condorgp.git
 ```
-as per the above but replace this line for HTTPS (not got SSH setup):
-```bash
-git clone https://github.com/hughharford/condorgp.git
-```
+
+# poetry install
 
 # This will fail, now
 Follow the instructions in:
 docs/0_Nautilus_Trader_start_instructions/nautilus_start_process.md
 
 #  Once Nautilus_trader folder in place next to condorgp
+- Check nautilus can be run from CondorGP
+```bash
+poetry run python ./condorgp/evaluation/run_naut.py
+```
+- If this runs many lines of output, it's working
 
-# Enable CondorGP in side by side folder to see nautilus_trader
-- Once nautilus fully installed next to condorgp folder:
-  local naut_trader env into condorgp folder
-
-'''bash
-cd ../condorgp
-pyenv local cgp_naut
-pip install -r requirements
-'''
 
 # Functional test with a script
 ```bash

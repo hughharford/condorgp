@@ -1,4 +1,4 @@
-from condorgp.learning.dependency_injection.dependency import Dependency
+from learning.dependency_injection.dependency import Dependency
 
 
 class DependencyFactory:

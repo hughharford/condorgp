@@ -1,4 +1,4 @@
-
+import logging
 
 class CellEvaluator():
 # ''' defines fitness function for CondorGP Living Cell approach
@@ -17,6 +17,8 @@ class CellEvaluator():
     @classmethod
     def get_all_for_score(cls):
         '''class method to return class type, e.g. CELL_TYPES'''
+        if len(CellEvaluator.__extant_score_names) == 0:
+            logging.debug("EMPTY: CellEvaluator.__extant_score_names is of length 0")
         return CellEvaluator.__extant_score_names
 
     @staticmethod

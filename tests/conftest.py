@@ -1,10 +1,5 @@
 import pytest
 
-# # this didn't work
-# import sys
-# sys.path.append('.')
-
-# from condorgp.params import *
 
 from condorgp.params import Params
 from condorgp.util.utils import Utils

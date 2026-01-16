@@ -2,7 +2,7 @@
 #          INSTALL
 # ----------------------------------
 install_requirements:
-	@sudo pip install poetry
+	@sudo pip install poetry==1.8.4
 	@poetry install
 
 install:

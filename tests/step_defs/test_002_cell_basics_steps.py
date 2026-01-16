@@ -5,7 +5,7 @@ import logging
 from pytest_bdd import scenarios, given, when, then, parsers
 
 from condorgp.params import Params
-from condorgp.cell import Cell
+from condorgp.cells.cell import Cell
 # from tests.cell_fixtures import *
 # from tests.cell_fixtures import CellEvaluator, UtilFactory
 

@@ -23,9 +23,15 @@ class Cell:
 
 
     # class property to hold list of dicts about the Cells
-    __cells = None
+    __cells = []
 
-    def __init__(self, new_cell_ref=888, new_cell_type="PROTOTYPE"):
+    def __init__(self):
+        '''
+        '''
+        pass
+
+
+    def new_cell(self, new_cell_ref=888, new_cell_type="PROTOTYPE"):
         '''
         input parameters:
             new_cell_ref: identifying integer (888 is default)
@@ -40,7 +46,7 @@ class Cell:
             self.cell_type = new_cell_type
 
         # once defined, add to master list
-        Cell.add_cell_to_cell_set(self.cell_ref, self.cell_type)
+        Cell.append_cell_to_cell_list(self.cell_ref, self.cell_type)
 
 
     @classmethod
@@ -53,14 +59,14 @@ class Cell:
     # TODO: witness function
 
     @classmethod
-    def add_cell_to_cell_set(cls, newref, newtype):
+    def append_cell_to_cell_list(cls, newref, newtype):
         '''static method to single cell to list of Cells'''
         Cell.get_cell_list()
-        Cell.__cells.add((newref, newtype))
+        Cell.__cells.append((newref, newtype))
 
     @staticmethod
     def show_cell_list():
-        # see the cells
+        ''' see the cells '''
         if (not Cell.__cells):
             raise AttributeError('no cells found')
         else:
@@ -71,8 +77,8 @@ class Cell:
     def get_cell_count():
         # see the cells
         if (not Cell.__cells):
-            return 0
             logging.debug('Cell.get_cell_count: __cells !extant')
+            return 0
         else:
             return len(Cell.__cells)
 
@@ -121,36 +127,50 @@ class Cell:
         elif tempcount == (temp2count+1):
             return (0, f"removed cell {cell_ref_to_remove}")
 
+    @classmethod
+    def pop_random_cell(cls):
+        '''static method to reduce cell count randomly by one'''
+        Cell.__cells.pop()
+
 def main():
     # access the class type:
     print("Cell types: ", Cell.get_cell_types())
 
-    # declare cells
-    c1 = Cell(new_cell_ref="001", new_cell_type="PROTOTYPE")
-    c2 = Cell(new_cell_ref="002", new_cell_type="PROTOTYPE")
-    print(Cell.get_cell_count())
-    c3 = Cell(new_cell_ref="003", new_cell_type="ALIVE")
-    c4 = Cell(new_cell_ref="004", new_cell_type="DEAD")
-    c5 = Cell(new_cell_ref="005", new_cell_type="FOR ANALYSIS")
+    cell_central = Cell()
+    cell_list = cell_central.get_cell_list()
+
+
+    # # declare cells
+    cell_central.new_cell(new_cell_ref="001", new_cell_type="PROTOTYPE")
+    cell_central.show_cell_list()
+    # c2 = Cell(new_cell_ref="002", new_cell_type="PROTOTYPE")
+    # print(Cell.get_cell_count())
+    # c3 = Cell(new_cell_ref="003", new_cell_type="ALIVE")
+    # c4 = Cell(new_cell_ref="004", new_cell_type="DEAD")
+    # c5 = Cell(new_cell_ref="005", new_cell_type="FOR ANALYSIS")
     print(Cell.get_cell_count())
 
     cell_list = Cell.get_cell_list()
 
-    Cell.show_cell_list()
+    # Cell.show_cell_list()
 
-    result = Cell.remove_cell()
-    print(f'{Cell.get_cell_count()} + {result}')
+    # result = Cell.remove_cell()
+    # print(f'{Cell.get_cell_count()} + {result}')
 
-    result = Cell.remove_cell(('001','PROTOTYPE'))
-    print(f'{Cell.get_cell_count()} + {result}')
-    Cell.show_cell_list()
+    # Cell.pop_random_cell()
+    # print(f'{Cell.get_cell_count()}')
 
-    Cell.remove_cell(('004','PROTOTYPE'))
-    print(f'{Cell.get_cell_count()} + {result}')
-    Cell.show_cell_list()
+    # result = Cell.remove_cell(('001','PROTOTYPE'))
+    # print(f'{Cell.get_cell_count()} + {result}')
+    # Cell.show_cell_list()
 
-    Cell.remove_cell(('004','DEAD'))
-    print(f'{Cell.get_cell_count()} + {result}')
+    # Cell.remove_cell(('004','PROTOTYPE'))
+    # print(f'{Cell.get_cell_count()} + {result}')
+    # Cell.show_cell_list()
+
+    # Cell.remove_cell(('004','DEAD'))
+    # print(f'{Cell.get_cell_count()} + {result}')
+
     Cell.show_cell_list()
 
 

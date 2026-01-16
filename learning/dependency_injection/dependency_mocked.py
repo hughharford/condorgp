@@ -1,4 +1,4 @@
-from condorgp.learning.dependency_injection.dependency import Dependency
+from learning.dependency_injection.dependency import Dependency
 
 class DependencyMocked(Dependency):
     def __init__(self) -> None:

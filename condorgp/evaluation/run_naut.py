@@ -30,6 +30,7 @@ class RunNautilus():
 
     def basic_run(self,
                   specified_script: str="",
+                  specified_sub_path: str="",
                   evolved_func="",
                   gp_strategy=False):
         '''
@@ -62,6 +63,8 @@ class RunNautilus():
             else:
                 # run without injecting code, i.e. a script in a sub-process
                 if specified_script != "": # use specified script for further runs
+                    if specified_script and specified_sub_path:
+                        self.eval_path = f"{self.eval_path}{specified_sub_path}"
                     self.script_str = f"{self.eval_path}{specified_script}"
                 else:
                     self.script_str = self.n_runner_inc_path
@@ -76,6 +79,8 @@ class RunNautilus():
 
 if __name__ == "__main__":
     logging.info("Running RunNautilus")
+
     script_to_run = "naut_03_egFX.py"
+    print(f"Running RunNautilus, script: {script_to_run}")
     n = RunNautilus()
-    n.basic_run(evolved_func="12345", gp_strategy=True)
+    n.basic_run(specified_script=script_to_run, specified_sub_path="naut_buildup/")

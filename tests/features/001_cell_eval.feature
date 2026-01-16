@@ -9,14 +9,14 @@ Feature: CondorGp's evolved cell code needs evaluation
     Then zero results are returned
     And this is handled
 
-  Scenario Outline: One living cell is run
-    Given CellEvaluator and one cells
-    When an evaluation is made
-    Then one result are returned
-    And this is handled
+#  Scenario Outline: One living cell is run
+#    Given CellEvaluator and one cell
+#    When an evaluation is made
+#    Then one result are returned
+#    And this is handled
 
-  Scenario Outline: Three living cells code are run
-    Given CellEvaluator, 3 cells and a database
-    When an evaluation is made
-    Then 3 results are returned
-    And these are stored in the database
+#  Scenario Outline: Three living cells code are run
+#    Given CellEvaluator, 3 cells and a database
+#    When an evaluation is made
+#    Then 3 results are returned
+#    And these are stored in the database

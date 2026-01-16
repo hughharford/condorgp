@@ -1,7 +1,7 @@
 from pytest_bdd import scenarios, given, when, then, parsers
 import pytest
 
-# from tests.conftest import *
+from tests.bdd_fixtures import dep_di, dep_di_mock
 
 scenarios('../../features/up/00_learning_di.feature')
 
@@ -24,12 +24,10 @@ Scenario: With our mocked dependency
 
 INPUT = 7
 
-@pytest.mark.usefixtures("dep_di")
 @given('a fixture providing the class')
 def with_dependency(dep_di):
     assert dep_di is not None
 
-@pytest.mark.usefixtures("dep_di_mock")
 @given('a fixture providing the mocked class')
 def with_mocked_dependency(dep_di_mock):
     assert dep_di_mock is not None

@@ -1,6 +1,6 @@
 import pytest
-from condorgp.learning.dependency_injection.dependency_factory import DependencyFactory
-from condorgp.learning.dependency_injection.dependency_factory_overridden import DependencyFactoryOverridden
+from learning.dependency_injection.dependency_factory import DependencyFactory
+from learning.dependency_injection.dependency_factory_overridden import DependencyFactoryOverridden
 
 @pytest.fixture
 def dep_di():

@@ -66,7 +66,7 @@ def run_nautilus_and_evaluator(input_ind, initial_factory):
     script_to_run = input_ind
     nt = initial_factory.get_backtest_runner()
     logging.info("test_02 >> Running RunNautilus")
-    nt.basic_run(specified_script=script_to_run)
+    nt.basic_run(specified_script=script_to_run,specified_sub_path='naut_buildup/')
 
 @then(parsers.cfparse('the "{output_ind:String}" is found',
                        extra_types=EXTRA_TYPES), target_fixture='output_ind')
@@ -85,7 +85,7 @@ def results_files_are_updated(output_ind):
 @then('the result: "<expected_value>" is reported',
                     target_fixture='expected_value')
 def check_results(expected_value, utils, params):
-    key_req = params.naut_dict['FITNESS_CRITERIA']
+    key_req = params.naut_dict['FITNESS_CRITERIA_SHARPE_RATIO']
     logging.info(key_req)
     backtest_id = pytest.OUTPUT_IND
     lines = 10000

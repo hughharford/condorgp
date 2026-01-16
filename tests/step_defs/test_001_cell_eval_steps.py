@@ -6,7 +6,7 @@ import logging
 from pytest_bdd import scenarios, given, when, then, parsers
 
 # from tests.cell_fixtures import *
-# from tests.cell_fixtures import CellEvaluator, UtilFactory
+from tests.cell_fixtures import CellEvaluator, UtilFactory
 
 ''' FEATURE DESCRIPTION:
 Feature: CondorGp's evolved cell code needs evaluation
@@ -41,24 +41,23 @@ scenarios('../features/001_cell_eval.feature')
 
 @given('CellEvaluator and no cells')
 def cell_eval_no_cells(cell_evaluator):
-    # UtilFactory().start_logger()
-
-    assert cell_evaluator.get_all_for_score()
+    assert not cell_evaluator.get_all_for_score()
 
 @when('an evaluation is made')
 def this_evaluation_is_made(cell_evaluator):
     assert cell_evaluator
 
-@then('the initial strategy fitness is not zero')
-def adf_fitness_is_not_zero(gpc):
-    max_fitness_found = gpc.gp.logbook.select("max")[-1]
-    logging.info(f'max_fitness_found = {max_fitness_found}')
-    assert max_fitness_found > -21000
+@then('zero results are returned')
+def zero_length_result(cell_evaluator):
+    assert len(cell_evaluator.get_all_for_score()) == 0
 
+@then('this is handled')
+def zero_length_handled():
+    pass
 
 """
 #   Scenario Outline: One living cell is run
-#     Given CellEvaluator and one cells
+#     Given CellEvaluator and one cell
 #     When an evaluation is made
 #     Then one result are returned
 #     And this is handled

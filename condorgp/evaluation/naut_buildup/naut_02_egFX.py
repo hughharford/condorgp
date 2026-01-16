@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
+
+# copied in full directly from:
+# nautilus_trader/examples/strategies/ema_cross_trailing_stop.py
+
 # -------------------------------------------------------------------------------------------------
-#  Copyright (C) 2015-2023 Nautech Systems Pty Ltd. All rights reserved.
+#  Copyright (C) 2015-2025 Nautech Systems Pty Ltd. All rights reserved.
 #  https://nautechsystems.io
 #
 #  Licensed under the GNU Lesser General Public License Version 3.0 (the "License");
@@ -14,139 +18,413 @@
 #  limitations under the License.
 # -------------------------------------------------------------------------------------------------
 
-# copied in full directly from:
-# https://github.com/nautechsystems/nautilus_trader/blob/master/examples/backtest/fx_ema_cross_bracket_gbpusd_bars_external.py
-
-import time
 from decimal import Decimal
 
 import pandas as pd
 
-from nautilus_trader.backtest.engine import BacktestEngine
-from nautilus_trader.backtest.engine import BacktestEngineConfig
-from nautilus_trader.backtest.models import FillModel
-from nautilus_trader.backtest.modules import FXRolloverInterestConfig
-from nautilus_trader.backtest.modules import FXRolloverInterestModule
-from nautilus_trader.config.common import LoggingConfig
-from nautilus_trader.config.common import RiskEngineConfig
-from nautilus_trader.examples.strategies.ema_cross_bracket import EMACrossBracket
-from nautilus_trader.examples.strategies.ema_cross_bracket import EMACrossBracketConfig
-from nautilus_trader.model.currencies import USD
+from nautilus_trader.common.enums import LogColor
+from nautilus_trader.config import PositiveFloat
+from nautilus_trader.config import PositiveInt
+from nautilus_trader.config import StrategyConfig
+from nautilus_trader.core.correctness import PyCondition
+from nautilus_trader.core.data import Data
+from nautilus_trader.core.message import Event
+from nautilus_trader.indicators import AverageTrueRange
+from nautilus_trader.indicators import ExponentialMovingAverage
+from nautilus_trader.model.book import OrderBook
+from nautilus_trader.model.data import Bar
 from nautilus_trader.model.data import BarType
-from nautilus_trader.model.enums import AccountType
-from nautilus_trader.model.enums import OmsType
-from nautilus_trader.model.identifiers import Venue
-from nautilus_trader.model.objects import Money
-from nautilus_trader.persistence.wranglers import BarDataWrangler
-from nautilus_trader.test_kit.providers import TestDataProvider
-from nautilus_trader.test_kit.providers import TestInstrumentProvider
+from nautilus_trader.model.data import QuoteTick
+from nautilus_trader.model.data import TradeTick
+from nautilus_trader.model.enums import OrderSide
+from nautilus_trader.model.enums import TrailingOffsetType
+from nautilus_trader.model.enums import TriggerType
+from nautilus_trader.model.events import OrderFilled
+from nautilus_trader.model.events import PositionChanged
+from nautilus_trader.model.events import PositionClosed
+from nautilus_trader.model.events import PositionOpened
+from nautilus_trader.model.identifiers import InstrumentId
+from nautilus_trader.model.instruments import Instrument
+from nautilus_trader.model.orders import MarketOrder
+from nautilus_trader.model.orders import TrailingStopMarketOrder
+from nautilus_trader.trading.strategy import Strategy
 
-from nautilus_trader.config import LoggingConfig
 
-if __name__ == "__main__":
-    # Configure backtest engine
-    config = BacktestEngineConfig(
-        trader_id="BACKTESTER-001-naut-run-02",
-        logging=LoggingConfig(log_level="ERROR",
-            log_level_file="INFO",
-            log_file_format="json",
-            log_file_name="nautilus_log",
-            log_directory="condorgp/util/logs/",
-            log_component_levels={ "Portfolio": "ERROR" }),
-        risk_engine=RiskEngineConfig(
-            bypass=True,  # Example of bypassing pre-trade risk checks for backtests
-        ),
-    )
+# *** THIS IS A TEST STRATEGY WITH NO ALPHA ADVANTAGE WHATSOEVER. ***
+# *** IT IS NOT INTENDED TO BE USED TO TRADE LIVE WITH REAL MONEY. ***
 
-    # Build backtest engine
-    engine = BacktestEngine(config=config)
 
-    # Optional plug in module to simulate rollover interest,
-    # the data is coming from packaged test data.
-    provider = TestDataProvider()
-    interest_rate_data = provider.read_csv("short-term-interest.csv")
-    config = FXRolloverInterestConfig(interest_rate_data)
-    fx_rollover_interest = FXRolloverInterestModule(config=config)
+class EMACrossTrailingStopConfig(StrategyConfig, frozen=True):
+    """
+    Configuration for ``EMACrossTrailingStop`` instances.
 
-    # Create a fill model (optional)
-    fill_model = FillModel(
-        prob_fill_on_limit=0.2,
-        prob_fill_on_stop=0.95,
-        prob_slippage=0.5,
-        random_seed=42,
-    )
+    Parameters
+    ----------
+    instrument_id : InstrumentId
+        The instrument ID for the strategy.
+    bar_type : BarType
+        The bar type for the strategy.
+    atr_period : PositiveInt
+        The period for the ATR indicator.
+    trailing_atr_multiple : PositiveFloat
+        The ATR multiple for the trailing stop.
+    trailing_offset_type : str
+        The trailing offset type (interpreted as `TrailingOffsetType`).
+    trigger_type : str
+        The trailing stop trigger type (interpreted as `TriggerType`).
+    trade_size : Decimal
+        The position size per trade.
+    fast_ema_period : PositiveInt, default 10
+        The fast EMA period.
+    slow_ema_period : PositiveInt, default 20
+        The slow EMA period.
+    emulation_trigger : str, default 'NO_TRIGGER'
+        The emulation trigger for submitting emulated orders.
+        If 'NONE' then orders will not be emulated.
 
-    # Add a trading venue (multiple venues possible)
-    SIM = Venue("SIM")
-    engine.add_venue(
-        venue=SIM,
-        oms_type=OmsType.HEDGING,  # Venue will generate position IDs
-        account_type=AccountType.MARGIN,
-        base_currency=USD,  # Standard single-currency account
-        starting_balances=[Money(100_000, USD)],  # Single-currency or multi-currency accounts
-        fill_model=fill_model,
-        modules=[fx_rollover_interest],
-        bar_execution=True,  # If bar data should move the market (True by default)
-    )
+    """
 
-    # Add instruments
-    GBPUSD_SIM = TestInstrumentProvider.default_fx_ccy("GBP/USD", SIM)
-    engine.add_instrument(GBPUSD_SIM)
+    instrument_id: InstrumentId
+    bar_type: BarType
+    atr_period: PositiveInt
+    trailing_atr_multiple: PositiveFloat
+    trailing_offset_type: str
+    trigger_type: str
+    trade_size: Decimal
+    fast_ema_period: PositiveInt = 10
+    slow_ema_period: PositiveInt = 20
+    emulation_trigger: str = "NO_TRIGGER"
 
-    # Setup wranglers
-    bid_wrangler = BarDataWrangler(
-        bar_type=BarType.from_str("GBP/USD.SIM-1-MINUTE-BID-EXTERNAL"),
-        instrument=GBPUSD_SIM,
-    )
-    ask_wrangler = BarDataWrangler(
-        bar_type=BarType.from_str("GBP/USD.SIM-1-MINUTE-ASK-EXTERNAL"),
-        instrument=GBPUSD_SIM,
-    )
 
-    # Add data
-    bid_bars = bid_wrangler.process(
-        data=provider.read_csv_bars("fxcm/gbpusd-m1-bid-2012.csv")[:10_000],
-    )
-    ask_bars = ask_wrangler.process(
-        data=provider.read_csv_bars("fxcm/gbpusd-m1-ask-2012.csv")[:10_000],
-    )
-    engine.add_data(bid_bars)
-    engine.add_data(ask_bars)
+class EMACrossTrailingStop(Strategy):
+    """
+    A simple moving average cross example strategy with a stop-market entry and trailing
+    stop.
 
-    # Configure your strategy
-    config = EMACrossBracketConfig(
-        instrument_id=str(GBPUSD_SIM.id),
-        bar_type="GBP/USD.SIM-1-MINUTE-BID-EXTERNAL",
-        fast_ema_period=30, # 10
-        slow_ema_period=50, # 20
-        bracket_distance_atr=3.0,
-        trade_size=Decimal(1_000),
-    )
-    # Instantiate and add your strategy
-    strategy = EMACrossBracket(config=config)
-    engine.add_strategy(strategy=strategy)
+    When the fast EMA crosses the slow EMA then submits a stop-market order one
+    tick above the current bar for BUY, or one tick below the current bar
+    for SELL.
 
-    # time.sleep(0.1)
-    # input("Press Enter to continue...")
+    If the entry order is filled then a trailing stop at a specified ATR
+    distance is submitted and managed.
 
-    # Run the engine (from start to end of data)
-    engine.run()
+    Cancels all orders and closes all positions on stop.
 
-    # Optionally view reports
-    with pd.option_context(
-        "display.max_rows",
-        100,
-        "display.max_columns",
-        None,
-        "display.width",
-        300,
-    ):
-        print(engine.trader.generate_account_report(SIM))
-        print(engine.trader.generate_order_fills_report())
-        print(engine.trader.generate_positions_report())
+    Parameters
+    ----------
+    config : EMACrossTrailingStopConfig
+        The configuration for the instance.
 
-    # For repeated backtest runs make sure to reset the engine
-    engine.reset()
+    Raises
+    ------
+    ValueError
+        If `config.fast_ema_period` is not less than `config.slow_ema_period`.
 
-    # Good practice to dispose of the object when done
-    engine.dispose()
+    """
+
+    def __init__(self, config: EMACrossTrailingStopConfig) -> None:
+        PyCondition.is_true(
+            config.fast_ema_period < config.slow_ema_period,
+            "{config.fast_ema_period=} must be less than {config.slow_ema_period=}",
+        )
+        super().__init__(config)
+
+        # Initialized in on_start
+        self.instrument: Instrument | None = None
+        self.tick_size = None
+
+        # Create the indicators for the strategy
+        self.fast_ema = ExponentialMovingAverage(config.fast_ema_period)
+        self.slow_ema = ExponentialMovingAverage(config.slow_ema_period)
+        self.atr = AverageTrueRange(config.atr_period)
+
+        # Users order management variables
+        self.entry = None
+        self.trailing_stop = None
+        self.position_id = None
+
+    def on_start(self) -> None:
+        """
+        Actions to be performed on strategy start.
+        """
+        self.instrument = self.cache.instrument(self.config.instrument_id)
+        if self.instrument is None:
+            self.log.error(f"Could not find instrument for {self.config.instrument_id}")
+            self.stop()
+            return
+
+        self.tick_size = self.instrument.price_increment
+
+        # Register the indicators for updating
+        self.register_indicator_for_bars(self.config.bar_type, self.fast_ema)
+        self.register_indicator_for_bars(self.config.bar_type, self.slow_ema)
+        self.register_indicator_for_bars(self.config.bar_type, self.atr)
+
+        # Get historical data
+        self.request_bars(
+            self.config.bar_type,
+            start=self._clock.utc_now() - pd.Timedelta(days=1),
+        )
+
+        # Subscribe to live data
+        self.subscribe_quote_ticks(self.config.instrument_id)
+        self.subscribe_bars(self.config.bar_type)
+
+    def on_stop(self) -> None:
+        """
+        Actions to be performed when the strategy is stopped.
+        """
+        self.cancel_all_orders(self.config.instrument_id)
+        self.close_all_positions(self.config.instrument_id)
+
+        # Unsubscribe from data
+        self.unsubscribe_quote_ticks(self.config.instrument_id)
+        self.unsubscribe_bars(self.config.bar_type)
+
+    def on_reset(self) -> None:
+        """
+        Actions to be performed when the strategy is reset.
+        """
+        # Reset indicators here
+        self.fast_ema.reset()
+        self.slow_ema.reset()
+        self.atr.reset()
+
+    def on_instrument(self, instrument: Instrument) -> None:
+        """
+        Actions to be performed when the strategy is running and receives an instrument.
+
+        Parameters
+        ----------
+        instrument : Instrument
+            The instrument received.
+
+        """
+
+    def on_order_book(self, order_book: OrderBook) -> None:
+        """
+        Actions to be performed when the strategy is running and receives an order book.
+
+        Parameters
+        ----------
+        order_book : OrderBook
+            The order book received.
+
+        """
+        # self.log.info(f"Received {order_book}")  # For debugging (must add a subscription)
+
+    def on_quote_tick(self, tick: QuoteTick) -> None:
+        """
+        Actions to be performed when the strategy is running and receives a quote tick.
+
+        Parameters
+        ----------
+        tick : QuoteTick
+            The tick received.
+
+        """
+
+    def on_trade_tick(self, tick: TradeTick) -> None:
+        """
+        Actions to be performed when the strategy is running and receives a trade tick.
+
+        Parameters
+        ----------
+        tick : TradeTick
+            The tick received.
+
+        """
+
+    def on_bar(self, bar: Bar) -> None:
+        """
+        Actions to be performed when the strategy is running and receives a bar.
+
+        Parameters
+        ----------
+        bar : Bar
+            The bar received.
+
+        """
+        # self.log.info(f"Received {bar!r}")
+
+        # Check if indicators ready
+        if not self.indicators_initialized():
+            self.log.info(
+                f"Waiting for indicators to warm up [{self.cache.bar_count(self.config.bar_type)}]",
+                color=LogColor.BLUE,
+            )
+            return  # Wait for indicators to warm up...
+
+        if self.portfolio.is_flat(self.config.instrument_id):
+            # BUY LOGIC
+            if self.fast_ema.value >= self.slow_ema.value:
+                self.entry_buy()
+            # SELL LOGIC
+            else:  # fast_ema.value < self.slow_ema.value
+                self.entry_sell()
+
+    def entry_buy(self) -> None:
+        """
+        Users simple buy entry method (example).
+        """
+        if not self.instrument:
+            self.log.error("No instrument loaded")
+            return
+
+        order: MarketOrder = self.order_factory.market(
+            instrument_id=self.config.instrument_id,
+            order_side=OrderSide.BUY,
+            quantity=self.instrument.make_qty(self.config.trade_size),
+        )
+
+        self.entry = order
+        self.submit_order(order)
+
+    def entry_sell(self) -> None:
+        """
+        Users simple sell entry method (example).
+        """
+        if not self.instrument:
+            self.log.error("No instrument loaded")
+            return
+
+        order: MarketOrder = self.order_factory.market(
+            instrument_id=self.config.instrument_id,
+            order_side=OrderSide.SELL,
+            quantity=self.instrument.make_qty(self.config.trade_size),
+        )
+
+        self.entry = order
+        self.submit_order(order)
+
+    def trailing_stop_buy(self) -> None:
+        """
+        Users simple trailing stop BUY for (``SHORT`` positions).
+        """
+        if not self.instrument:
+            self.log.error("No instrument loaded")
+            return
+
+        last_quote = self.cache.quote_tick(self.config.instrument_id)
+        if not last_quote:
+            self.log.warning("Cannot submit order: no quotes yet")
+            return
+
+        offset = self.atr.value * self.config.trailing_atr_multiple
+        order: TrailingStopMarketOrder = self.order_factory.trailing_stop_market(
+            instrument_id=self.config.instrument_id,
+            order_side=OrderSide.BUY,
+            quantity=self.instrument.make_qty(self.config.trade_size),
+            # limit_offset=Decimal(f"{offset / 2:.{self.instrument.price_precision}f}"),
+            # price=self.instrument.make_price(last_quote.ask_price.as_double() + offset),
+            trailing_offset=Decimal(f"{offset:.{self.instrument.price_precision}f}"),
+            trailing_offset_type=TrailingOffsetType[self.config.trailing_offset_type],
+            trigger_type=TriggerType[self.config.trigger_type],
+            reduce_only=True,
+            emulation_trigger=TriggerType[self.config.emulation_trigger],
+        )
+
+        self.trailing_stop = order
+        self.submit_order(order, position_id=self.position_id)
+
+    def trailing_stop_sell(self) -> None:
+        """
+        Users simple trailing stop SELL for (LONG positions).
+        """
+        if not self.instrument:
+            self.log.error("No instrument loaded")
+            return
+
+        last_quote = self.cache.quote_tick(self.config.instrument_id)
+        if not last_quote:
+            self.log.warning("Cannot submit order: no quotes yet")
+            return
+
+        offset = self.atr.value * self.config.trailing_atr_multiple
+        order: TrailingStopMarketOrder = self.order_factory.trailing_stop_market(
+            instrument_id=self.config.instrument_id,
+            order_side=OrderSide.SELL,
+            quantity=self.instrument.make_qty(self.config.trade_size),
+            # limit_offset=Decimal(f"{offset / 2:.{self.instrument.price_precision}f}"),
+            # price=self.instrument.make_price(last_quote.bid_price.as_double() - offset),
+            trailing_offset=Decimal(f"{offset:.{self.instrument.price_precision}f}"),
+            trailing_offset_type=TrailingOffsetType[self.config.trailing_offset_type],
+            trigger_type=TriggerType[self.config.trigger_type],
+            reduce_only=True,
+            emulation_trigger=TriggerType[self.config.emulation_trigger],
+        )
+
+        self.trailing_stop = order
+        self.submit_order(order, position_id=self.position_id)
+
+    def on_data(self, data: Data) -> None:
+        """
+        Actions to be performed when the strategy is running and receives data.
+
+        Parameters
+        ----------
+        data : Data
+            The data received.
+
+        """
+
+    def on_event(self, event: Event) -> None:
+        """
+        Actions to be performed when the strategy is running and receives an event.
+
+        Parameters
+        ----------
+        event : Event
+            The event received.
+
+        """
+        if isinstance(event, OrderFilled):
+            if self.trailing_stop and event.client_order_id == self.trailing_stop.client_order_id:
+                self.trailing_stop = None
+        elif isinstance(event, PositionOpened | PositionChanged):
+            if self.trailing_stop:
+                return  # Already a trailing stop
+            if self.entry and event.opening_order_id == self.entry.client_order_id:
+                if event.entry == OrderSide.BUY:
+                    self.position_id = event.position_id
+                    self.trailing_stop_sell()
+                elif event.entry == OrderSide.SELL:
+                    self.position_id = event.position_id
+                    self.trailing_stop_buy()
+        elif isinstance(event, PositionClosed):
+            self.position_id = None
+
+    def on_save(self) -> dict[str, bytes]:
+        """
+        Actions to be performed when the strategy is saved.
+
+        Create and return a state dictionary of values to be saved.
+
+        Returns
+        -------
+        dict[str, bytes]
+            The strategy state dictionary.
+
+        """
+        return {}
+
+    def on_load(self, state: dict[str, bytes]) -> None:
+        """
+        Actions to be performed when the strategy is loaded.
+
+        Saved state values will be contained in the give state dictionary.
+
+        Parameters
+        ----------
+        state : dict[str, bytes]
+            The strategy state dictionary.
+
+        """
+
+    def on_dispose(self) -> None:
+        """
+        Actions to be performed when the strategy is disposed.
+
+        Cleanup any resources used by the strategy here.
+
+        """

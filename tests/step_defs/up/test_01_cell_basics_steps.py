@@ -1,6 +1,6 @@
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from condorgp.cell import Cell
+from cell_fixtures import cell_central
 
 EXTRA_TYPES = {
     'Number': int,
@@ -12,6 +12,8 @@ CONVERTERS = {
     'some': int,
     'total': int,
 }
+
+
 
 scenarios('../../features/up/01_cell_basics.feature')
 
@@ -28,21 +30,21 @@ Scenario Outline: Add cells
 @given(parsers.cfparse('the nest has "{initial:Number}" cells',
                        extra_types=EXTRA_TYPES), target_fixture='cells')
 @given('the next has "<initial>" cells', target_fixture='cells')
-def cells_add(initial):
-    assert len(Cell.get_cell_list()) == initial
+def cells_add(initial, cell_central):
+    assert len(cell_central.get_cell_list()) == initial
 
 @when(parsers.cfparse('"{some:Number}" cells are added to the nest',
                       extra_types=EXTRA_TYPES))
 @when('"<some>"  cells are added to the nest')
-def when_somecellsarecreated(some):
+def when_some_cells_are_created(some, cell_central):
     for i in range(some):
-        Cell(f'dummy_ref1 {i}','PROTOTYPE')
+        cell_central.new_cell(new_cell_ref=f'dummy_ref1 {i}', new_cell_type='PROTOTYPE')
 
 @then(parsers.cfparse('the nest contains "{total:Number}" cells',
                       extra_types=EXTRA_TYPES))
 @then('the nest contains "<total>" cells')
-def then_the_cell_list_is_incremented(total):
-    assert len(Cell.get_cell_list()) == total
+def then_the_cell_list_is_incremented(total, cell_central):
+    assert len(cell_central.get_cell_list()) == total
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             REMOVE CELLS
@@ -56,20 +58,19 @@ Scenario Outline: Remove cells
 
 @given(parsers.cfparse('the existing nest has "{initial:Number}" cells', extra_types=EXTRA_TYPES), target_fixture='cells')
 @given('the existing nest has "<initial>" cells', target_fixture='cells')
-def cells_remove(initial):
-    assert len(Cell.get_cell_list()) == initial
+def cells_remove(initial, cell_central):
+    assert len(cell_central.get_cell_list()) == initial
 
 @when(parsers.cfparse('"{some:Number}" cells are removed', extra_types=EXTRA_TYPES))
 @when('"<some>"  cells are removed')
-def when_somecellsareremoved(some):
+def when_some_cells_are_removed(some, cell_central):
     for i in range(some):
-        pass
-        Cell.remove_cell()
+        cell_central.pop_random_cell()
 
 @then(parsers.cfparse('the nest now contains "{total:Number}" cells', extra_types=EXTRA_TYPES))
 @then('the nest now contains "<total>" cells')
-def then_thecelllistisdecremented(total):
-    assert len(Cell.get_cell_list()) == total
+def then_the_cell_list_has_been_decremented(total, cell_central):
+    assert len(cell_central.get_cell_list()) == total
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

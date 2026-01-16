@@ -4,11 +4,11 @@ Feature: condorGP cells basics
     So that we can be sure of our foundations
 
     Scenario: Cell creation
-    Given pre-created cells
-    When another cell is created
-    Then the celllist is incremented
+      Given pre-created cells
+      When another cell is created
+      Then the celllist is incremented
 
     Scenario: Cell id
-    Given a pre-created cell
-    When the cell id is changed
-    Then the new cell id is as expected
+      Given a pre-created cell
+      When the cell id is changed
+      Then the new cell id is as expected
