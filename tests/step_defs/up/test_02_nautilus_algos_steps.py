@@ -2,6 +2,7 @@ import os.path
 from pytest_bdd import scenarios, given, when, then, parsers
 import logging
 import pytest
+from gp_fixtures import initial_factory, utils, params
 
 EXTRA_TYPES = {
     'Number': int,
@@ -23,25 +24,6 @@ scenarios('../../features/up/02_nautilus_algos.feature')
 #             Nautilus tests each evolved individual
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-'''
-Feature: Nautilus tests each evolved individual
-  As a fitness function,
-  I want to Nautilus to run each fitness test,
-  So that I can get a fitness score for each.
-
-  Scenario Outline: Nautilus tests each individual
-    Given a Nautilus setup ready to run
-    And an evolved "<input_ind>" is specified
-    When Nautilus runs the "<input_ind>"
-    Then the "<output_ind>" is found
-    And the result: "<expected_value>" is reported
-
-    Examples:
-      | input_ind        |   output_ind   |   expected_value      |
-      | naut_03_egFX.py  |   naut-run-03  |   -21.49663142709111  |
-      | naut_04_egFX.py  |   naut-run-04  |   -16.160361991815254 |
-
-'''
 
 @given('a Nautilus setup ready to run')
 def nautilus_setup_is_ready():
@@ -85,17 +67,18 @@ def results_files_are_updated(output_ind):
 @then('the result: "<expected_value>" is reported',
                     target_fixture='expected_value')
 def check_results(expected_value, utils, params):
-    key_req = params.naut_dict['FITNESS_CRITERIA_RISK_RETURN_RATIO']
+    key_req = params.naut_dict['FITNESS_CRITERIA_SORTINO_RATIO']
+    log_file_n_path = params.naut_dict['NAUTILUS_LOG_FILE']
     # adapted from ['FITNESS_CRITERIA_SHARPE_RATIO'] as short test run
     # no longer return Sharpe's
     logging.info(key_req)
     backtest_id = pytest.OUTPUT_IND
     lines = 5000
-    max_lines_diff = 300 #
+    max_lines_diff = 500 #
 
     got2 = utils.find_fitness_with_matching_backtest(
             key = key_req,
-            log_file_n_path = "",
+            log_file_n_path = log_file_n_path,
             backtest_id = backtest_id,
             lines = lines,
             max_lines_diff = max_lines_diff)
@@ -103,5 +86,5 @@ def check_results(expected_value, utils, params):
     assert got2[1] != -1
     found_fitness = ""
     if got2[1] != -1:
-        found_fitness = float(utils.get_last_chars(got2[0],2))
+        found_fitness = float(utils.get_last_chars(got2[0],3))
     assert found_fitness == expected_value

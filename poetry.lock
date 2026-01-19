@@ -837,18 +837,6 @@ files = [
 ]
 
 [[package]]
-name = "file-read-backwards"
-version = "3.1.0"
-description = "Memory efficient way of reading files line-by-line from the end of file"
-optional = false
-python-versions = "*"
-groups = ["evolution"]
-files = [
-    {file = "file_read_backwards-3.1.0-py2.py3-none-any.whl", hash = "sha256:3dbb65559ca441ea2f5c94121e15e30040fbe9f8b23dff23f979553523c9c303"},
-    {file = "file_read_backwards-3.1.0.tar.gz", hash = "sha256:bd04593bc1938a003224be451d5d735f1f4490e1e70a568ce8d330bb7652a684"},
-]
-
-[[package]]
 name = "flake8"
 version = "7.1.2"
 description = "the modular source code checker: pep8 pyflakes and co"
@@ -4456,4 +4444,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.13"
-content-hash = "acf82a0dc73c575fa6b286b596a1b3d68c76fd0e1abe81028a0721081b5bd138"
+content-hash = "41207540794f2bdfae0a28f03c4ae71d7be6a700e9658cc144bce3ab32535fcf"

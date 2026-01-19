@@ -3,6 +3,7 @@ import pytest
 from pytest_bdd import scenarios, given, when, then
 from deap import gp
 import logging
+from gp_fixtures import gp_control
 
 pytest.DEAP_ONE = ""
 
