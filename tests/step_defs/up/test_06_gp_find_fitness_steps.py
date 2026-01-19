@@ -4,9 +4,11 @@ import os.path
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 from condorgp.gp.gp_functions import GpFunctions
-from condorgp.params import Params
+# from condorgp.params import Params
 
-pytest.p = Params()
+from gp_fixtures import params, utils, gpf
+
+
 pytest.r_name_1 = ""
 pytest.r_name_2 = ""
 pytest.log1 = ""
@@ -54,8 +56,8 @@ Feature: Finding the fitness after every test is critcal
 @given('the test_find_fitness_1.json')
 def check_json_in_test_data_1(utils, params):
     ''' confirms test json log in place '''
-    json_path = pytest.p.test_dict["CGP_TEST_DATA"]+"test_find_fitness_1.json"
-    false_json_path = pytest.p.test_dict["CGP_TEST_DATA"]+"test_find_fitness_3.json"
+    json_path = params.test_dict["CGP_TEST_DATA"]+"test_find_fitness_1.json"
+    false_json_path = params.test_dict["CGP_TEST_DATA"]+"test_find_fitness_3.json"
     assert utils.confirm_file_extant(json_path)
     assert not utils.confirm_file_extant(false_json_path)
     pytest.log1 = json_path
@@ -104,9 +106,9 @@ Scenario Outline: find_fitness finds the latest fitness from logs
 '''
 
 @given('the test_find_fitness_2.json')
-def check_json_in_test_data_2(utils):
+def check_json_in_test_data_2(utils, params):
     ''' confirms test json log in place '''
-    json_path = pytest.p.test_dict["CGP_TEST_DATA"]+"test_find_fitness_2.json"
+    json_path = params.test_dict["CGP_TEST_DATA"]+"test_find_fitness_2.json"
     assert utils.confirm_file_extant(json_path)
     pytest.log2 = json_path
 

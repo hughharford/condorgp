@@ -85,10 +85,12 @@ def results_files_are_updated(output_ind):
 @then('the result: "<expected_value>" is reported',
                     target_fixture='expected_value')
 def check_results(expected_value, utils, params):
-    key_req = params.naut_dict['FITNESS_CRITERIA_SHARPE_RATIO']
+    key_req = params.naut_dict['FITNESS_CRITERIA_RISK_RETURN_RATIO']
+    # adapted from ['FITNESS_CRITERIA_SHARPE_RATIO'] as short test run
+    # no longer return Sharpe's
     logging.info(key_req)
     backtest_id = pytest.OUTPUT_IND
-    lines = 10000
+    lines = 5000
     max_lines_diff = 300 #
 
     got2 = utils.find_fitness_with_matching_backtest(

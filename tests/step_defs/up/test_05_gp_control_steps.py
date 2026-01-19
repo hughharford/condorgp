@@ -5,6 +5,8 @@ import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 from condorgp.params import Params
 
+from gp_fixtures import gp_control
+
 pytest.DEAP_ONE = ""
 
 EXTRA_TYPES = {

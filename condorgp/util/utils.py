@@ -240,7 +240,7 @@ class Utils:
 
         # careful here: searching from far end of logs, end/start are switched
         log_key_END_nb_start_point = "BACKTEST POST-RUN"
-        log_key_START_nb_end_point = f'{backtest_id}","message":"DISPOSED'
+        log_key_START_nb_end_point = f'{backtest_id}","message":"STOPPED'
 
         v = 1 # view_fitness_search_criteria
         if v:
@@ -250,7 +250,7 @@ class Utils:
         # go through reversed list (it was read from the back of the log)
         initial_cut_list = []
         for i, line in enumerate(log_as_list):
-            print(line)
+            # print(line)
             if str(log_key_START_nb_end_point) in line: # START at end - nb reversed
                 now_searching_for_key = 1 # now know where to start
                 line_search_start = i
@@ -433,14 +433,14 @@ if __name__ == "__main__":
 
 
     # key_req = self.naut_dict['FITNESS_CRITERIA_AVG_RETURN']
-    # key_req = self.naut_dict['FITNESS_CRITERIA_RISK_RETURN_RATIO']
+    key_req = p.naut_dict['FITNESS_CRITERIA_RISK_RETURN_RATIO']
     # key_req = self.naut_dict['FITNESS_CRITERIA_PNL_TOTAL']
     # key_req = self.naut_dict['FITNESS_CRITERIA_SHARPE_RATIO']
-    key_req = p.naut_dict['SPECIFIED_FITNESS']
+    # key_req = p.naut_dict['SPECIFIED_FITNESS']
 
     log_file_n_path = p.naut_dict['NAUTILUS_LOG_FILE']
 
-    backtest_id="naut-run-06"
+    backtest_id="naut-run-03"
 
     lines_to_check = 7000 # CAREFUL: TOO MANY LINES AND FAILS, default = 400
     max_lines_diff = 7000 # default 500

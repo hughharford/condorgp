@@ -12,5 +12,9 @@ Feature: Nautilus tests each evolved individual
 
     Examples:
       | input_ind        |   output_ind   |   expected_value      |
-      | naut_03_egFX.py  |   naut-run-03  |   -21.49663142709111  |
-      | naut_04_egFX.py  |   naut-run-04  |   -16.160361991815254 |
+      | naut_03_egFX.py  |   naut-run-03  |   -0.5296526822307815 |
+      | naut_04_egFX.py  |   naut-run-04  |   -0.5296526822307815 |
+
+
+# 03: -21.49663142709111
+# 04: -16.160361991815254

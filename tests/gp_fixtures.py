@@ -27,7 +27,3 @@ def gpf():
 @pytest.fixture
 def gp_control():
     return GpControl()
-
-@pytest.fixture
-def gpc():
-    return GpControl()
