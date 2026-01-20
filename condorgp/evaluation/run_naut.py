@@ -79,8 +79,9 @@ class RunNautilus():
 
 if __name__ == "__main__":
     logging.info("Running RunNautilus")
+    # naut_03_egFX  naut_03_egFX_copy_for_2.py
 
-    script_to_run = "naut_03_egFX.py"
+    script_to_run = "naut_03_egFX_copy_for_2.py"
     print(f"Running RunNautilus, script: {script_to_run}")
     n = RunNautilus()
     n.basic_run(specified_script=script_to_run, specified_sub_path="naut_buildup/")

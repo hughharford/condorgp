@@ -113,7 +113,7 @@ class Params():
         NAUT_RAW_DATA_PATH = LOCAL_BASE_PATH + 'raw_data/'
 
         # These are critical to locate fitness in the log files
-        LOG_LINES_TO_CHECK = 3000 # keep above 3000
+        LOG_LINES_TO_CHECK = 7000 # keep above 3000
         MAX_LINES_DIFF = 400
 
 

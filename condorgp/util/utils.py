@@ -126,8 +126,7 @@ class Utils:
                 list_lines.append(str(l))
         return list_lines
 
-    # def actually_get_last_x_lines()
-
+    # def actually_get_last_x_lines() taking out FileReadBackwards
     def last_n_lines(self, fname, N):
         # opening file using with() method
         # so that file get closed
@@ -137,9 +136,6 @@ class Utils:
             # last n lines and print it
             for line in (file.readlines() [-N:]):
                 print(line, end ='')
-
-
-
 
     def confirm_ind_name_in_log_lines(self,output_ind, log_file_n_path = ""):
         '''
@@ -423,6 +419,13 @@ class Utils:
         else:
             return False
 
+    def reset_logfile(self):
+        log_file_n_path = p.naut_dict['NAUTILUS_LOG_FILE']
+        print("resetting log")
+        with open(log_file_n_path, 'w'):
+            pass
+
+
 if __name__ == "__main__":
     pass
     print('Utils run going...')
@@ -465,16 +468,11 @@ if __name__ == "__main__":
 
     log_file_n_path = p.naut_dict['NAUTILUS_LOG_FILE']
 
-    log_file_n_path = '/home/hsth/code/hughharford/condorgp/condorgp/util/logs/nautilus_log_TEST_LOG_FIND_FITNESS_03.json'
 
     # @@@@@@@@@@@@@@@@@@@@@@@@@
-    reset_logs = 0
-
+    reset_logs = 1
     if reset_logs:
-
-        print("resetting log")
-        with open(log_file_n_path, 'w'):
-            pass
+        u.reset_logfile()
 
     # @@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -498,7 +496,7 @@ if __name__ == "__main__":
             print('File not found')
 
 
-    find_fitness = 1
+    find_fitness = 0
     if find_fitness:
         print("finding fitness with: >>>>> find_fitness_with_matching_backtest")
         try:

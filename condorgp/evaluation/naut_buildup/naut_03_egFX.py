@@ -92,8 +92,8 @@ if __name__ == "__main__":
     config = EMACrossConfig(
         instrument_id=AUDUSD_SIM.id,
         bar_type=BarType.from_str("AUD/USD.SIM-100-TICK-MID-INTERNAL"),
-        fast_ema_period=10,
-        slow_ema_period=20,
+        fast_ema_period=12,
+        slow_ema_period=18,
         trade_size=Decimal(1_000_000),
     )
 
