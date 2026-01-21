@@ -4,6 +4,8 @@ import os.path
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
+from gp_fixtures import gp_control
+
 EXTRA_TYPES = {
     'Number': int,
     'String': str,
@@ -38,22 +40,22 @@ Feature: GpControl's typed evolved code must be runnable
 @given(parsers.cfparse('GpControl with "{pset_ADF:String}"',
                         extra_types=EXTRA_TYPES), target_fixture='pset_ADF')
 @given('GpControl with "<pset_ADF>"', target_fixture='<pset_ADF>')
-def gpcontrol_with_typed_ADF(gpc, pset_ADF):
+def gpcontrol_with_typed_ADF(gp_control, pset_ADF):
     p = 1
     g = 1
-    gpc.use_adfs = 1
-    gpc.select_gp_provider_for_ADFs()
-    gpc.setup_gp(pset_spec=pset_ADF, pop_size=p, no_gens=g)
-    gpc.run_backtest = 1
+    gp_control.use_adfs = 1
+    gp_control.select_gp_provider_for_ADFs()
+    gp_control.setup_gp(pset_spec=pset_ADF, pop_size=p, no_gens=g)
+    gp_control.run_backtest = 1
 
 @when(parsers.cfparse('a short ADF run is made with "{evaluator:String}"',
                         extra_types=EXTRA_TYPES), target_fixture='evaluator')
 @when('a short ADF run is made with "<evaluator>"', target_fixture='<evaluator>')
-def first_ADF_run(gpc, evaluator):
-    gpc.set_test_evaluator(evaluator)
-    gpc.run_gp()
+def first_ADF_run(gp_control, evaluator):
+    gp_control.set_test_evaluator(evaluator)
+    gp_control.initiate_gp_run()
 
 @then('the fitness is not zero')
-def adf_fitness_is_not_zero(gpc):
-    max_fitness_found = gpc.gp.logbook.select("max")[-1]
+def adf_fitness_is_not_zero(gp_control):
+    max_fitness_found = gp_control.gp.logbook.select("max")[-1]
     assert max_fitness_found != 0

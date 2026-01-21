@@ -334,7 +334,7 @@ class Utils:
         os.remove(log_file_path)
         with open(log_file_path, "w") as renewed_log:
             for line in last_lines:
-                renewed_log.write(line + '\n')
+                renewed_log.write(line)
         renewed_log.close()
 
     def make_no_log_backups(self, log_file_path, no_backups=""):
