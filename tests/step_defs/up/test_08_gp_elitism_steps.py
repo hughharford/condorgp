@@ -5,6 +5,8 @@ import logging
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
+from gp_fixtures import gp_control, utils
+
 EXTRA_TYPES = {
     'Number': int,
     'String': str,
@@ -38,29 +40,28 @@ scenarios('../../features/up/08_gp_elitism.feature')
 @given(parsers.cfparse('GpControl is run with "{pset:String}"',
                        extra_types=EXTRA_TYPES), target_fixture='pset')
 @given('GpControl is run with "<pset>"')
-def gpcontrol_run_001(gpc, pset):
-    pytest.gpc = gpc
+def gpcontrol_run_001(gp_control, pset):
+    pytest.gpc = gp_control
 
-    gpc.use_adfs = 1
+    gp_control.use_adfs = 1
     pset_used = pset # 'test_adf_symbreg_pset' - see .feature
 
     p = 15
     g = 30
     cp_base = "test_08_fitmax"
     cp_freq = g+1
-    gpc.set_gp_n_cp(freq=cp_freq, cp_file=cp_base+"")
-    gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
+    gp_control.set_gp_n_cp(freq=cp_freq, cp_file=cp_base+"")
+    gp_control.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
 
-    gpc.run_backtest = 0
-    gpc.inject_strategy = 0 # set to 1, this selects naut_06_gp_strategy
+    gp_control.run_backtest = 0
+    gp_control.inject_strategy = 0 # set to 1, this selects naut_06_gp_strategy
 
 @when(parsers.cfparse('run with evaluator "{evaluator:String}"',
                        extra_types=EXTRA_TYPES), target_fixture='evaluator')
 @when('run with evaluator "<evaluator>"')
 def gpc_with_set_evaluator(evaluator):
-    eval_used = 'evalSymbRegTest' # - see .feature
     pytest.gpc.set_test_evaluator(evaluator)
-    pytest.gpc.run_gp()
+    pytest.gpc.initiate_gp_run()
 
 @then('max fitness is static or improves over generations')
 def either_max_fitness_improves(utils):

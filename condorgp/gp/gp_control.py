@@ -285,7 +285,7 @@ class GpControl:
             return -110.0, # return 110.0 when evolved func fails
         return diff,
 
-    def setup_run_n_start(self, gpc=None):
+    def setup_run(self, gpc=None):
         start_time = time.time()
 
         if not gpc: gpc = GpControl()
@@ -321,7 +321,7 @@ class GpControl:
         # set to 1, inject_strategy selects naut_06_gp_strategy in run_naut
         gpc.inject_strategy = 1
 
-        gpc.initiate_gp_run()
+
 
         # tidy up
         # CUT THIS FOR NOW, CONFUSING ERROR ON PIKA CONTAINER RUNNING...
@@ -346,4 +346,5 @@ class GpControl:
 
 if __name__ == "__main__":
     gpc = GpControl()
-    gpc.setup_run_n_start()
+    gpc.setup_run()
+    gpc.initiate_gp_run()

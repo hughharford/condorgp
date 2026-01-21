@@ -4,6 +4,8 @@ import os.path
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
+from gp_fixtures import gp_control
+
 EXTRA_TYPES = {
     'Number': int,
     'String': str,
@@ -55,7 +57,7 @@ def gpcontrol_run_with(gp_control, pset_input):
 @when('the evolved code is used')
 def injected_algo_includes(gp_control):
     ''' starts gp run with set parameters '''
-    gp_control.run_gp()
+    gp_control.initiate_gp_run()
 
 @then(parsers.cfparse('Nautilus o/p is NEITHER "{expected_A:Float}"',
                         extra_types=EXTRA_TYPES),

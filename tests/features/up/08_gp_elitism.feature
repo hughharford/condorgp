@@ -10,5 +10,5 @@ Feature: GpControl's evolved code must improve fitness
 
   Examples:
     |  pset                  |   evaluator          |
-#   |  naut_pset_01          |   eval_nautilus      |
+#    |  naut_pset_01          |   eval_nautilus      |
     |  test_adf_symbreg_pset |   evalSymbRegTest    |
