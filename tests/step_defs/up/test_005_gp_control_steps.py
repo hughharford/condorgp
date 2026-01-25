@@ -21,24 +21,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../../features/up/05_gp_control.feature')
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             GpControl can set different psets as needed
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"""
-  Scenario Outline: GpControl can set different psets as needed
-    Given a specific pset is needed
-    When GpControl gets a requirement for "<pset_input>"
-    And GpControl is checked
-    Then the pset returned is not the same as the base_pset
-    And the pset returns contains "<primitive_name>"
-
-    Examples:
-      | pset_input       |  primitive_name   |
-      | test_pset5a      |  vmul             |
-      | test_pset5b      |  vadd             |
-"""
+scenarios('../../features/up/005_gp_control.feature')
 
 @given('a specific pset is needed')
 def setup_ready(gp_control):

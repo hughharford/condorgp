@@ -4052,6 +4052,17 @@ files = [
 tests = ["pytest", "pytest-cov"]
 
 [[package]]
+name = "time-uuid"
+version = "0.2.0"
+description = "A sensible class for dealing with UUIDv1"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "time-uuid-0.2.0.tar.gz", hash = "sha256:1737c510a2db5dee5848a4855ca18562591915be0cbf6f4f9c31e03a4a57060d"},
+]
+
+[[package]]
 name = "tomli"
 version = "2.2.1"
 description = "A lil' TOML parser"
@@ -4444,4 +4455,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.13"
-content-hash = "41207540794f2bdfae0a28f03c4ae71d7be6a700e9658cc144bce3ab32535fcf"
+content-hash = "b8e0b4f292fe72fd9fab504cd7ae29d8b8a5b69263b01683c725228c05415b99"

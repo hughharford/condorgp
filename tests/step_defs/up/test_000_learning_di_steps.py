@@ -3,7 +3,7 @@ import pytest
 
 from tests.bdd_fixtures import dep_di, dep_di_mock
 
-scenarios('../../features/up/00_learning_di.feature')
+scenarios('../../features/up/000_learning_di.feature')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             REAL AND MOCK DEPENDENCIES

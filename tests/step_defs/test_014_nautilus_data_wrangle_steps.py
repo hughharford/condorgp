@@ -25,7 +25,7 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/003_nautilus_data_wrangle.feature')
+scenarios('../features/014_nautilus_data_wrangle.feature')
 
 # ----------------------------------------------
 # Fixtures

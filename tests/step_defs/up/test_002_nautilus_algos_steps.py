@@ -18,11 +18,7 @@ CONVERTERS = {
 
 pytest.OUTPUT_IND = ""
 
-scenarios('../../features/up/02_nautilus_algos.feature')
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             Nautilus tests each evolved individual
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+scenarios('../../features/up/002_nautilus_algos.feature')
 
 
 @given('a Nautilus setup ready to run')

@@ -20,7 +20,7 @@ CONVERTERS = {
 
 pytest.gpc = None
 
-scenarios('../../features/up/09_gp_typed_adf.feature')
+scenarios('../../features/up/009_gp_typed_adf.feature')
 
 """
 Feature: GpControl's typed evolved code must be runnable

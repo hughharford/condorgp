@@ -7,18 +7,8 @@ from gp_fixtures import gp_control
 
 pytest.DEAP_ONE = ""
 
-scenarios('../../features/up/03_deap_basics.feature')
+scenarios('../../features/up/003_deap_basics.feature')
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#             Deap basic operations
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"""
-  Scenario Outline: Deap instanciation includes functions
-    Given Deap is setup
-    When an instance of Deap is instantiated
-    And the functions are added
-    Then the fundamental functions are found
-"""
 @given('Deap is setup')
 def deap_ready(gp_control):
     assert gp_control is not None

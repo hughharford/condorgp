@@ -5,8 +5,7 @@ import pytest
 import logging
 from pytest_bdd import scenarios, given, when, then, parsers
 
-# from tests.cell_fixtures import *
-from tests.cell_fixtures import CellEvaluator, UtilFactory
+from tests.cell_fixtures import cell_factory, cells
 
 ''' FEATURE DESCRIPTION:
 Feature: CondorGp's evolved cell code needs evaluation
@@ -28,28 +27,19 @@ CONVERTERS = {
     'total': int,
 }
 
-scenarios('../features/001_cell_eval.feature')
-
-"""
-  Scenario Outline: Evolved living cell code is run
-    Given CellEvaluator and no cells
-    When an evaluation is made
-    Then zero results are returned
-    And this is handled
-"""
-
+scenarios('../features/013_cell_eval.feature')
 
 @given('CellEvaluator and no cells')
-def cell_eval_no_cells(cell_evaluator):
-    assert not cell_evaluator.get_all_for_score()
+def cell_eval_no_cells(cells):
+    assert not cells.get_all_for_score()
 
 @when('an evaluation is made')
-def this_evaluation_is_made(cell_evaluator):
-    assert cell_evaluator
+def this_evaluation_is_made(cells):
+    assert cells
 
 @then('zero results are returned')
-def zero_length_result(cell_evaluator):
-    assert len(cell_evaluator.get_all_for_score()) == 0
+def zero_length_result(cells):
+    assert len(cells.get_all_for_score()) == 0
 
 @then('this is handled')
 def zero_length_handled():

@@ -24,7 +24,7 @@ pytest.checkpointfile = ""
 pytest.cp_path = ""
 pytest.given_cp_file = ""
 
-scenarios('../../features/up/11_gp_deap_checkpoints.feature')
+scenarios('../../features/up/011_gp_deap_checkpoints.feature')
 
 """
 Feature: GpControl's evolution improves fitness over time
