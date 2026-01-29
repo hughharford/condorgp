@@ -1,6 +1,9 @@
+#!/bin/bash
+
 # copy images
 export CGP_WORKER_IMAGE_NAME="cgp-nt-again"
 
+microk8s ctr images rm docker.io/library/${CGP_WORKER_IMAGE_NAME}:latest
 
 #check images with
 microk8s ctr images ls | grep cgp

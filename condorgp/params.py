@@ -44,34 +44,16 @@ class Params():
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         # Set here only:
         # now need to set some options, based on os.environ["AMQP_URL"]
-        LOCAL_BASE_PATH = os.getenv("LOCAL_PATH")
-
+        # LOCAL_BASE_PATH = os.getenv("LOCAL_PATH")
         # note, the above pulls from environment variables set by direnv
         #       these required .env and .envrc without which all stops
 
+
+        LOCAL_BASE_PATH = f"{os.getcwd()}/"
+
+
         # print(LOCAL_BASE_PATH)
         # print(type(LOCAL_BASE_PATH))
-
-        try:
-            # if "IN_DOCKER_COMPOSE" in os.environ:
-            #     docker_compose_check = os.environ["IN_DOCKER_COMPOSE"]
-            #     # # if no error to checking the
-            #     # # then on a container using RabbitMQ and thereby needs path below:
-            #     if docker_compose_check == 1:
-            #         LOCAL_BASE_PATH = '/condorgp/'
-            # elif "IN_K8S" in os.environ:
-            #     k8s_check = os.environ["IN_K8S"]
-            #     if k8s_check == 1:
-            #         LOCAL_BASE_PATH = '/condorgp/' # assume for now
-            if os.environ['ON_PRIMARY'] == 1:
-                LOCAL_BASE_PATH = os.getenv("LOCAL_PATH")
-                # was, but moved... '/home/hsth/code/hughharford/condorgp/'
-
-        except BaseException as e:
-            logging.debug(f"CondorGP Params ERROR with local base path: {e}")
-            tb = ''.join(traceback.format_tb(e.__traceback__))
-            logging.debug(f"CondorGP Params : {tb}")
-
 
         # HIGH LEVEL CONFIGURATION OPTIONS:
         ####################################################

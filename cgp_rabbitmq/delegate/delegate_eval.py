@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import time
 import pika, sys, os
 from cgp_rabbitmq import get_rabbitmq_connection
 
@@ -26,8 +27,10 @@ def send_delegate_eval(message):
 
 
 def main():
-    sample_message = "I'm only a delegated evaluation sample"
-    send_delegate_eval(sample_message)
+    for i in range(10):
+        sample_message = f"I'm only a delegated evaluation sample {i}"
+        send_delegate_eval(sample_message)
+        time.sleep(60)
 
 if __name__ == '__main__':
     try:

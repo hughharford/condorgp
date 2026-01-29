@@ -20,9 +20,9 @@ FROM ghcr.io/nautechsystems/nautilus_trader:latest AS cgp-nt-again
 # # --no-install-recommends
 RUN apt-get update \
   && apt-get install -y  \
-    libbluetooth-dev \
-    tk-dev \
-    uuid-dev \
+    # libbluetooth-dev \
+    # tk-dev \
+    # uuid-dev \
     apt-transport-https \
     jq \
     unzip \
@@ -31,34 +31,34 @@ RUN apt-get update \
     git \
     vim \
     virtualenv \
-    python3-pip \
-    zsh \
-    tree \
-    gh \
-    libgdbm-dev \
-    libc6-dev \
-    libbz2-dev \
+    # python3-pip \
+    # zsh \
+    # tree \
+    # gh \
+    make \
     build-essential \
     net-tools \
     iproute2 \
     iputils-ping \
     direnv \
     # python support packages
-    make \
-    libssl-dev \
-    zlib1g-dev \
-    libbz2-dev \
-    libreadline-dev \
-    libsqlite3-dev \
-    llvm \
-    libncursesw5-dev \
+    # libgdbm-dev \
+    # libc6-dev \
+    # libbz2-dev \
+    # libssl-dev \
+    # zlib1g-dev \
+    # libbz2-dev \
+    # libreadline-dev \
+    # libsqlite3-dev \
+    # llvm \
+    # libncursesw5-dev \
     # xz-utils
-    tk-dev \
-    libxml2-dev \
-    libffi-dev \
-    liblzma-dev \
-    python3-dev \
-    libncurses5-dev \
+    # tk-dev \
+    # libxml2-dev \
+    # libffi-dev \
+    # liblzma-dev \
+    # python3-dev \
+    # libncurses5-dev \
   && apt-get clean
 
 RUN pip3 install numpy setuptools wheel six auditwheel poetry==1.8.4
@@ -86,8 +86,15 @@ COPY pyproject.toml poetry.lock ./
 # this just ran:
   # RUN poetry install --without api
 # rather than:
-RUN poetry install
-# --no-root --without api --without database --without cluster --without cloud --without test --without dev --without optional
+RUN poetry install \
+                    --no-root \
+                    --without api \
+                    --without database \
+                    --without cluster \
+                    --without cloud \
+                    --without test \
+                    --without dev \
+                    --without optional
 # --without primary \
 # --without evolution \
 # --without comms \
