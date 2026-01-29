@@ -11,12 +11,14 @@ class Cell:
     # CONSTANT class data types
     CELL_TYPES = ("PROTOTYPE", "ALIVE", "DEAD")
     CELL_STATUS = ("PERCENTAGE", "CONSTANT", "BELOW_THRESHOLD")
+    CELL_SCORE_STATUS = ("TO SCORE", "SCORED")
 
     def __init__(self
                  , new_cell_ref=888
                  , new_cell_type="PROTOTYPE"
                  , score=0
-                 , status="BELOW_THRESHOLD"):
+                 , status="BELOW_THRESHOLD"
+                 , score_status="TO SCORE"):
 
         '''
         input parameters:
@@ -36,8 +38,7 @@ class Cell:
             self.cell_type = new_cell_type
             self.score = score
             self.status = status
-
-
+            self.score_status = "TO SCORE"
 
 
 def main():

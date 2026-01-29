@@ -4,10 +4,14 @@ Feature: CondorGp's evolved cell code needs evaluation
   To allow evaluation via scoring.
 
   Scenario Outline: Evolved living cell code is run
-    Given CellEvaluator and no cells
+    Given CellEvaluator and <initial> cells
     When an evaluation is made
-    Then zero results are returned
+    Then the <results> are returned
     And this is handled
+
+    Examples:
+      | initial   |  results    |
+      | 0         |  0          |
 
 #  Scenario Outline: One living cell is run
 #    Given CellEvaluator and one cell

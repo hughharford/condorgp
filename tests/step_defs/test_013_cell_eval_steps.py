@@ -5,7 +5,7 @@ import pytest
 import logging
 from pytest_bdd import scenarios, given, when, then, parsers
 
-from tests.cell_fixtures import cell_factory, cells
+from tests.cell_fixtures import cells
 
 ''' FEATURE DESCRIPTION:
 Feature: CondorGp's evolved cell code needs evaluation

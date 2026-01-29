@@ -2,6 +2,7 @@
 from random import *
 import logging
 
+import pandas as pd
 
 from condorgp.cells.cell import Cell
 
@@ -20,6 +21,7 @@ class Cells:
 
     '''
     __cell_record = []
+    __cell_pd = pd.DataFrame()
 
     def __init__(self):
         pass
@@ -51,9 +53,7 @@ class Cells:
 
     def show_cell_dict_by_ref(self, cell_ref):
         temp_c = self.get_cell_by_ref(cell_ref)
-        out = temp_c.__dict__
-        # print(out)
-        logging.info(out)
+        logging.info(temp_c.__dict__)
         return temp_c.__dict__
 
     def get_cell_count(self):
@@ -63,15 +63,13 @@ class Cells:
         else:
             return len(self.__cell_record)
 
-    @classmethod
     def get_cell_types(cls):
-        '''class method to return class type, e.g. CELL_TYPES'''
+        '''returns class type, e.g. CELL_TYPES'''
         return Cell.CELL_TYPES
 
     def check_if_cell_ref_exists(self, cell_ref):
         '''confirms if cell is extant, by cell_ref'''
         for c in self.__cell_record:
-            # print(c.cell_ref)
             if cell_ref == c.cell_ref: return 1
         return 0
 
@@ -121,6 +119,9 @@ class Cells:
             c.score = r
             c.score_hist.append(c.score)
 
+    def get_cells_to_be_scored(self):
+        pass
+
 def main():
     # access the class type:
     c = Cells()
@@ -138,10 +139,6 @@ def main():
     c.simple_static_evaluation_score()
 
     c.show_cell_list()
-
-    # this = c.get_cell_by_index("1089")
-    # print(this)
-
 
 if __name__ == '__main__':
     main()
