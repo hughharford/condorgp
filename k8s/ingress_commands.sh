@@ -1,20 +1,21 @@
 #!/bin/bash
 
+
 # Function to check ingress status
 check_ingress() {
     echo "Checking Ingress Status..."
-    kubectl get ingress
+    microk8s kubectl get ingress --namespace cgp-system
     echo -e "\nDetailed Ingress Description:"
-    kubectl describe ingress cgp-ingress
+    microk8s kubectl describe ingress cgp-ingress --namespace cgp-system 
 }
 
 # Function to check ingress controller pods
 check_controller() {
     echo "Checking Ingress Controller Pods..."
-    kubectl get pods -l app.kubernetes.io/component=controller
+    microk8s kubectl get pods -l app.kubernetes.io/component=controller
     echo -e "\nIngress Controller Logs:"
-    CONTROLLER_POD=$(kubectl get pods -l app.kubernetes.io/component=controller -o jsonpath='{.items[0].metadata.name}')
-    kubectl logs $CONTROLLER_POD
+    CONTROLLER_POD=$(microk8s kubectl get pods -l app.kubernetes.io/component=controller -o jsonpath='{.items[0].metadata.name}')
+    microk8s kubectl logs $CONTROLLER_POD
 }
 
 # Function to create TLS secret
@@ -32,4 +33,4 @@ create_tls_secret() {
 echo "Available commands:"
 echo "1. check_ingress - Check status of Ingress resources"
 echo "2. check_controller - Check Ingress Controller status and logs"
-echo "3. create_tls_secret - Create TLS secret (requires key and cert files)" 
+echo "3. create_tls_secret - Create TLS secret (requires key and cert files)"

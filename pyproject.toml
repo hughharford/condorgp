@@ -54,6 +54,8 @@ google-cloud-compute = "^1.19.2"
 [tool.poetry.group.test.dependencies]
 pytest = "^9.0.2"
 coverage = "^7.6.4"
+kubernetes = "^35.0.0"
+pick = "^2.4.0"
 
 [tool.poetry.group.dev.dependencies]
 docker = "^7.1.0"
