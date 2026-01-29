@@ -26,9 +26,9 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 sudo snap install microk8s --classic
 
 # first attempt:
-+ current version: MicroK8s v1.31.5 revision 7661
++ current version: MicroK8s v1.32.9 revision 8511
 + therefore
-/snap/microk8s/7661/
+/snap/microk8s/8511/
 
 sudo microk8s start
 sudo microk8s status --wait-ready

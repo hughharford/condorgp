@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Update package list
-sudo apt update
+# sudo apt update
 
 # Install MicroK8s
 sudo snap install microk8s --classic
@@ -33,4 +33,4 @@ microk8s config > ~/.kube/config
 # Reload shell to apply group changes
 
 echo "NOW _______________________________________ reload shell to apply changes.."
-source ~/.zshrc
+# source ~/.zshrc

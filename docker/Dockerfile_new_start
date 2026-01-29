@@ -1,0 +1,112 @@
+# to build:
+#   cgp-nt-again
+# to
+#   -t cgp-nt-again
+ # DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile_new_start --target=cgp-nt-again -t cgp-nt-again .
+
+ # to run
+# docker run -it cgp-nt-again:latest /bin/bash
+
+
+ ## should be quick build and just adjust recently adjusted code
+
+
+
+
+FROM ghcr.io/nautechsystems/nautilus_trader:latest AS cgp-nt-again
+
+# extra dependencies
+## Q: is this all really required?
+# # --no-install-recommends
+RUN apt-get update \
+  && apt-get install -y  \
+    libbluetooth-dev \
+    tk-dev \
+    uuid-dev \
+    apt-transport-https \
+    jq \
+    unzip \
+    curl \
+    wget \
+    git \
+    vim \
+    virtualenv \
+    python3-pip \
+    zsh \
+    tree \
+    gh \
+    libgdbm-dev \
+    libc6-dev \
+    libbz2-dev \
+    build-essential \
+    net-tools \
+    iproute2 \
+    iputils-ping \
+    direnv \
+    # python support packages
+    make \
+    libssl-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    llvm \
+    libncursesw5-dev \
+    # xz-utils
+    tk-dev \
+    libxml2-dev \
+    libffi-dev \
+    liblzma-dev \
+    python3-dev \
+    libncurses5-dev \
+  && apt-get clean
+
+RUN pip3 install numpy setuptools wheel six auditwheel poetry==1.8.4
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry \
+    POETRY_HOME="/opt/poetry" \
+    VENV_PATH="/condorgp/.venv" \
+    CGP_PATH="/condorgp"
+
+ENV PATH="$POETRY_HOME/bin:$PATH"
+    # :$VENV_PATH/bin
+    # additionals
+
+# again (? it works) to go past issues:
+RUN pip3 install --ignore-installed six
+
+WORKDIR /condorgp
+
+COPY pyproject.toml poetry.lock ./
+
+# install runtime deps - uses $POETRY_VIRTUALENVS_IN_PROJECT internally
+# this just ran:
+  # RUN poetry install --without api
+# rather than:
+RUN poetry install
+# --no-root --without api --without database --without cluster --without cloud --without test --without dev --without optional
+# --without primary \
+# --without evolution \
+# --without comms \
+
+# get latest code in
+COPY ./ ./
+
+RUN touch /README.md
+# build as per Nautilus Trader dockerfile
+RUN poetry build -f wheel
+RUN python -m pip install ./dist/*whl --force --no-deps
+RUN find /usr/local/lib/python3.13/site-packages -name "*.pyc" -exec rm -f {} \;
+
+# tidy up
+RUN rm -rf /var/cache/apt/* \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean \
+&& rm -rf $POETRY_CACHE_DIR
+
+
+# CMD ["/bin/bash"]
+CMD ["sh", "scripts/run_listener.sh"]
