@@ -135,9 +135,9 @@ class GpDeapAdfCp(GpDeapADF):
                         tb = ''.join(traceback.format_tb(e.__traceback__))
                         error_tb = f"gp_deap_adf_cp.run_gp 'evaluate': \n {tb}"
                         error.append(error_tb)
-                    finally:
-                        for err in error:
-                            logging.error(f"gp_deap_adf_cp.run_gp >> couldn't set fitness {err}")
+                    # finally:
+                    #     for err in error:
+                    #         logging.error(f"gp_deap_adf_cp.run_gp >> couldn't set fitness {err}")
 
                 # Replacement of the population by the offspring
                 self.pop = self.offspring

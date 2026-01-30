@@ -97,6 +97,7 @@ class Params():
         NUM_LOG_BACKUPS = 3
 
         FITNESS_CRITERIA_SHARPE_RATIO = 'Sharpe Ratio (252 days)'
+        FITNESS_CRITERIA_SORTINO_RATIO = 'Sortino Ratio (252 days)'
         FITNESS_CRITERIA_RISK_RETURN_RATIO = 'Risk Return Ratio'
         FITNESS_CRITERIA_PNL_TOTAL = 'PnL (total)'
         FITNESS_CRITERIA_AVG_RETURN = 'Average (Return)'
@@ -112,7 +113,7 @@ class Params():
         NAUT_RAW_DATA_PATH = LOCAL_BASE_PATH + 'raw_data/'
 
         # These are critical to locate fitness in the log files
-        LOG_LINES_TO_CHECK = 3000 # keep above 3000
+        LOG_LINES_TO_CHECK = 7000 # keep above 3000
         MAX_LINES_DIFF = 400
 
 
@@ -132,6 +133,7 @@ class Params():
             'MAX_LINES_DIFF': MAX_LINES_DIFF,
 
             'FITNESS_CRITERIA_SHARPE_RATIO': FITNESS_CRITERIA_SHARPE_RATIO,
+            'FITNESS_CRITERIA_SORTINO_RATIO': FITNESS_CRITERIA_SORTINO_RATIO,
             'FITNESS_CRITERIA_RISK_RETURN_RATIO': FITNESS_CRITERIA_RISK_RETURN_RATIO,
             'FITNESS_CRITERIA_PNL_TOTAL': FITNESS_CRITERIA_PNL_TOTAL,
             'FITNESS_CRITERIA_AVG_RETURN': FITNESS_CRITERIA_AVG_RETURN,

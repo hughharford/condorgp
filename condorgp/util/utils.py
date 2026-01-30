@@ -8,7 +8,7 @@ import shutil
 from datetime import datetime
 import logging
 
-from file_read_backwards import FileReadBackwards
+# from file_read_backwards import FileReadBackwards
 
 from condorgp.params import Params
 
@@ -118,13 +118,24 @@ class Utils:
 
         list_lines = []
         count = 0
-        with FileReadBackwards(log_file_n_path, encoding="utf-8") as frb:
-            for l in frb:
+        with open(log_file_n_path) as frb:
+            for l in (frb.readlines() [-lines:]):
+                # print(l, end ='')
                 count += 1
                 if count > lines: break
-                # print(l)
                 list_lines.append(str(l))
         return list_lines
+
+    # def actually_get_last_x_lines() taking out FileReadBackwards
+    def last_n_lines(self, fname, N):
+        # opening file using with() method
+        # so that file get closed
+        # after completing work
+        with open(fname) as file:
+            # loop to read iterate
+            # last n lines and print it
+            for line in (file.readlines() [-N:]):
+                print(line, end ='')
 
     def confirm_ind_name_in_log_lines(self,output_ind, log_file_n_path = ""):
         '''
@@ -223,6 +234,7 @@ class Utils:
 
         '''
 
+        # use these defaults if not provided. See params.py
         if log_file_n_path == "":
             log_file_n_path = self.NAUT_DICT['NAUTILUS_LOG_FILE']
         if lines == 0:
@@ -239,7 +251,8 @@ class Utils:
             return "nope", -1
 
         # careful here: searching from far end of logs, end/start are switched
-        log_key_END_nb_start_point = "BACKTEST POST-RUN"
+        log_key_END_nb_start_point = '"BacktestEngine","message":" General Statistics"'
+        x = "BACKTEST POST-RUN"
         log_key_START_nb_end_point = f'{backtest_id}","message":"STOPPED'
 
         v = 1 # view_fitness_search_criteria
@@ -321,7 +334,7 @@ class Utils:
         os.remove(log_file_path)
         with open(log_file_path, "w") as renewed_log:
             for line in last_lines:
-                renewed_log.write(line + '\n')
+                renewed_log.write(line)
         renewed_log.close()
 
     def make_no_log_backups(self, log_file_path, no_backups=""):
@@ -406,9 +419,19 @@ class Utils:
         else:
             return False
 
+    def reset_logfile(self):
+        log_file_n_path = p.naut_dict['NAUTILUS_LOG_FILE']
+        print("resetting log")
+        with open(log_file_n_path, 'w'):
+            pass
+
+
 if __name__ == "__main__":
     pass
     print('Utils run going...')
+
+
+
     u = Utils()
     # base = "new"
     # # u.tidy_cp_files(base) # tidying cp files
@@ -431,34 +454,67 @@ if __name__ == "__main__":
 
     f = 0.0
 
+    # SUGGESTED NEW APPROACH FOR FITNESS FINDING
+
+
+
 
     # key_req = self.naut_dict['FITNESS_CRITERIA_AVG_RETURN']
-    key_req = p.naut_dict['FITNESS_CRITERIA_RISK_RETURN_RATIO']
+    # key_req = p.naut_dict['FITNESS_CRITERIA_RISK_RETURN_RATIO']
+    key_req = p.naut_dict['FITNESS_CRITERIA_SORTINO_RATIO']
     # key_req = self.naut_dict['FITNESS_CRITERIA_PNL_TOTAL']
     # key_req = self.naut_dict['FITNESS_CRITERIA_SHARPE_RATIO']
     # key_req = p.naut_dict['SPECIFIED_FITNESS']
 
     log_file_n_path = p.naut_dict['NAUTILUS_LOG_FILE']
 
-    backtest_id="naut-run-03"
+
+    # @@@@@@@@@@@@@@@@@@@@@@@@@
+    reset_logs = 1
+    if reset_logs:
+        u.reset_logfile()
+
+    # @@@@@@@@@@@@@@@@@@@@@@@@@
+
+    backtest_id="naut-run-04"
+
+    filelength = u.count_lines_in_file(log_file_n_path)
 
     lines_to_check = 7000 # CAREFUL: TOO MANY LINES AND FAILS, default = 400
-    max_lines_diff = 7000 # default 500
-    try:
-        got = u.find_fitness_with_matching_backtest(
-                key = key_req
-                , log_file_n_path = log_file_n_path # default: Nautilus log
-                , backtest_id = backtest_id
-                , lines = lines_to_check
-                , max_lines_diff = max_lines_diff
-                )
-        foundfit = "" # if poor, set v low as < bad algorithms getting <0
-        if got[1] != -1:
-            foundfit = u.get_last_chars(got[0],2)
-            f = -22000 # nan
-        else:
-            f = -111000 # not found
-        if len(foundfit) > 3:
-            f = float(u.get_last_chars(got[0],2))
-    except BaseException as e:
-        logging.error(f"ERROR {__name__}: {e}")
+    max_lines_diff = 500 # default 500
+
+    get_last_lines = 0
+    if get_last_lines:
+#        u.get_last_x_log_lines(10)
+
+        fname = log_file_n_path
+        print(log_file_n_path)
+        N = 3
+        try:
+            u.last_n_lines(fname, N)
+        except:
+            print('File not found')
+
+
+    find_fitness = 0
+    if find_fitness:
+        print("finding fitness with: >>>>> find_fitness_with_matching_backtest")
+        try:
+            got = u.find_fitness_with_matching_backtest(
+                    key = key_req
+                    , log_file_n_path = log_file_n_path # default: Nautilus log
+                    , backtest_id = backtest_id
+                    , lines = lines_to_check
+                    , max_lines_diff = max_lines_diff
+                    )
+            foundfit = "" # if poor, set v low as < bad algorithms getting <0
+            if got[1] != -1:
+                foundfit = u.get_last_chars(got[0],3)
+                f = -22000 # nan
+            else:
+                f = -111000 # not found
+            if len(foundfit) > 3:
+                f = float(u.get_last_chars(got[0],3))
+            print(f)
+        except BaseException as e:
+            logging.error(f"ERROR {__name__}: {e}")

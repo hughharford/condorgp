@@ -6,6 +6,8 @@ import glob
 import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 
+from gp_fixtures import gp_control, params
+
 EXTRA_TYPES = {
     'Number': int,
     'String': str,
@@ -37,28 +39,28 @@ Feature: GpControl's evolution improves fitness over time
     And the checkpoint is updated at generation 6
 """
 @given('gp_deap_adf.GpDeapAdfCp')
-def ability_to_checkpoint(gpc):
-    gpc.verbose = 0
-    gpc.use_adfs = 1
+def ability_to_checkpoint(gp_control):
+    gp_control.verbose = 0
+    gp_control.use_adfs = 1
     pset_used = 'naut_pset_02_adf'
     p = 2
     g = 7
     cp_freq = 3
 
-    gpc.set_gp_n_cp(freq=cp_freq, cp_file="test_011_6g_2cps__")
-    gpc.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
-    gpc.run_backtest = 0
+    gp_control.set_gp_n_cp(freq=cp_freq, cp_file="test_011_6g_2cps__")
+    gp_control.setup_gp(pset_spec=pset_used, pop_size=p, no_gens=g)
+    gp_control.run_backtest = 0
 
 @when('a 6 generation run with checkpoints every 3 is made')
-def six_gen_run_with_cps_every_three(gpc):
+def six_gen_run_with_cps_every_three(gp_control):
     eval_used = 'eval_nautilus'
-    gpc.set_test_evaluator(eval_used)
-    gpc.run_gp()
+    gp_control.set_test_evaluator(eval_used)
+    gp_control.initiate_gp_run()
 
 @then('the checkpoint file is created at generation 3')
-def first_new_checkpoint_file_created(gpc, params):
+def first_new_checkpoint_file_created(gp_control, params):
     now = time.time()
-    pytest.given_cp_file = gpc.gp.checkpointfile
+    pytest.given_cp_file = gp_control.gp.checkpointfile
     pytest.cp_path = params.naut_dict['CHECKPOINT_PATH']
     cp_path = pytest.cp_path + \
         pytest.given_cp_file.split('.')[0] + '_0003.pkl'
@@ -69,7 +71,7 @@ def first_new_checkpoint_file_created(gpc, params):
     assert (now - ti_c) < 60
 
 @then('the checkpoint is updated at generation 6')
-def second_new_checkpoint_file_created(gpc, params):
+def second_new_checkpoint_file_created():
     now = time.time()
     cp_path = pytest.cp_path + \
         pytest.given_cp_file.split('.')[0] + '_0006.pkl'
@@ -79,7 +81,7 @@ def second_new_checkpoint_file_created(gpc, params):
     assert (now - ti_m) < 60
 
     # tidy up
-def teardown_module(gpc):
+def teardown_module():
     p = pytest.cp_path
     f = pytest.given_cp_file.split('.')[0]
     for filename in glob.glob(f"{p}{f}*"):

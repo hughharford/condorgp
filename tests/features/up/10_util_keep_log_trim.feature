@@ -10,7 +10,7 @@ Feature: Usage of Nautilus by Deap, creates long logs
 
     Examples:
       |   no_lines   |  reduced_lines  |
-      |   20000      |  10001          |
+      |   20000      |  8501           |
 
 #  Scenario Outline: Deap runs Nautilus and logs are backed up
 #    Given a specified log file path "<logfilepath>"
@@ -21,6 +21,6 @@ Feature: Usage of Nautilus by Deap, creates long logs
 #
 #    Examples:
 #      |   no_lines   |  reduced_lines  |
-#      |   20000      |  10001          |
+#      |   20000      |  8501           |
 #
 # see tests/test_data/test_log_backup_orig.txt

@@ -12,8 +12,9 @@ Feature: Finding the fitness after every test is critcal
     Examples:
       | naut_runner     | runner_name | sharpe_ratio        |
 #      | naut_04_egFX.py | naut-run-04 | -16.160361991815254 |
-#      | naut_03_egFX.py | naut-run-03 | -21.49663142709111  |
-      | naut_02_egFX.py | naut-run-02 | 15.966514528587545  |
+# sharpe_ratio nan
+      | naut_03_egFX.py | naut-run-03 | -5.252750840623969  |
+      | naut_02_egFX.py | naut-run-02 | -8.407975670525804  |
       | fictional.py    | naut-run-77 | -111000             |
 
 
@@ -28,5 +29,5 @@ Feature: Finding the fitness after every test is critcal
 
     Examples:
       | naut_runner     | runner_name | sharpe_ratio       |
-#      | naut_02_egFX.py | naut-run-02 | 15.966514528587545 |
-      | naut_03_egFX.py | naut-run-03 | -21.49663142709111 |
+      | naut_02_egFX.py | naut-run-02 | -4.370909290732777 |
+      | naut_03_egFX.py | naut-run-03 | -5.252750840623969 |

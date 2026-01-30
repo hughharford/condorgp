@@ -49,7 +49,7 @@ if __name__ == "__main__":
     p = Params()
     # Configure backtest engine
     config = BacktestEngineConfig(
-        trader_id="BACKTESTER-001-naut-run-03",
+        trader_id="BACKTESTER-001-naut-run-02",
         logging=LoggingConfig(log_level="ERROR",
             log_level_file="INFO",
             log_file_format="json",
@@ -92,8 +92,8 @@ if __name__ == "__main__":
     config = EMACrossConfig(
         instrument_id=AUDUSD_SIM.id,
         bar_type=BarType.from_str("AUD/USD.SIM-100-TICK-MID-INTERNAL"),
-        fast_ema_period=12,
-        slow_ema_period=18,
+        fast_ema_period=7,
+        slow_ema_period=12,
         trade_size=Decimal(1_000_000),
     )
 

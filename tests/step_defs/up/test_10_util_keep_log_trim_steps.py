@@ -5,6 +5,8 @@ import pytest
 from pytest_bdd import scenarios, given, when, then, parsers
 import shutil
 
+from gp_fixtures import params, utils
+
 EXTRA_TYPES = {
     'Number': int,
     'String': str,
@@ -45,9 +47,10 @@ Feature: Usage of Nautilus by Deap, creates long logs
 def ensure_copy_of_long_file_available(params):
     ''' long log: tests/test_data/test_keep_logs_trim.json '''
     path = params.test_dict['CGP_TEST_DATA']
-    source = path+"test_keep_logs_trim.json"
+    source = path+"test_keep_logs_trim_to_keep.json"
     destination = path+"test_log_file_to_trim.json"
     pytest.logfile_n_path = shutil.copyfile(source, destination)
+    print(pytest.logfile_n_path)
 
 @when(parsers.cfparse('the log file is above "{no_lines:Number}"',
                        extra_types=EXTRA_TYPES), target_fixture='no_lines')
@@ -66,8 +69,8 @@ def find_results(reduced_lines, utils):
     log = pytest.logfile_n_path
     if pytest.tidy_logs == 1:
         utils.keep_x_lines_of_log(log, no_last_lines=reduced_lines-1)
-    now_lines = utils.count_lines_in_file(pytest.logfile_n_path)
-    assert reduced_lines >= now_lines
+    after_no_lines = utils.count_lines_in_file(pytest.logfile_n_path)
+    assert reduced_lines >= after_no_lines
 
     # tidy up
 def teardown_module():

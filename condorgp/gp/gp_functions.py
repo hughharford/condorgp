@@ -78,12 +78,12 @@ class GpFunctions():
                     )
             foundfit = "" # if poor, set v low as < bad algorithms getting <0
             if got[1] != -1:
-                foundfit = self.util.get_last_chars(got[0],2)
+                foundfit = self.util.get_last_chars(got[0],3)
                 f = -22000 # nan
             else:
                 f = -111000 # not found
             if len(foundfit) > 3:
-                f = float(self.util.get_last_chars(got[0],2))
+                f = float(self.util.get_last_chars(got[0],3))
         except BaseException as e:
             logging.error(f"ERROR {__name__}: {e}")
         return f

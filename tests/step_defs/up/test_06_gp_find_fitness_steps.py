@@ -31,26 +31,7 @@ scenarios('../../features/up/06_gp_find_fitness.feature')
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #             find_fitness correctly return fitness
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"""
-Feature: Finding the fitness after every test is critcal
-  As part of a gp system,
-  gp_functions.find_fitness needs to correct find fitness from logs,
-  To ensure evolution is effective.
 
-  Scenario Outline: find_fitness can correctly find fitness from logs
-    Given the test_find_fitness_1.json
-    When find_fitness gets fitness for "<naut_runner>"
-    And the runner name is "<runner_name>"
-    Then the fitness found is "<sharpe_ratio>"
-
-    Examples:
-      | naut_runner     | runner_name | sharpe_ratio        |
-      | naut_04_egFX.py | naut-run-04 | -16.160361991815254 |
-      | naut_03_egFX.py | naut-run-03 | -21.49663142709111  |
-      | naut_02_egFX.py | naut-run-02 | 15.966514528587545  |
-      | fictional.py    | naut-run-77 | -111000             |
-
-"""
 # SCENARIO 1
 # ===============================================================
 @given('the test_find_fitness_1.json')
@@ -90,20 +71,6 @@ def fitness_found_is_1(gpf, sharpe_ratio):
 
 # SCENARIO 2
 # ===============================================================
-'''
-Scenario Outline: find_fitness finds the latest fitness from logs
-    Given the test_find_fitness_2.json
-    When find_fitness gets the latest fitness for "<naut_runner>"
-    And checks the runner name is "<runner_name>"
-    Then the latest fitness found is "<sharpe_ratio>"
-    # i.e. doesn't get confused by earlier naut-run-04 entries x 2
-    # or other naut-run-02 entries with different earlier output3 x2
-
-    Examples:
-      | naut_runner     | runner_name | sharpe_ratio       |
-      | naut_02_egFX.py | naut-run-02 | 15.966514528587545 |
-      | naut_03_egFX.py | naut-run-03 | -21.49663142709111 |
-'''
 
 @given('the test_find_fitness_2.json')
 def check_json_in_test_data_2(utils, params):
