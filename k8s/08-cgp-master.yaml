@@ -43,12 +43,58 @@ spec:
               name: cgp-secrets
               key: rabbitmq-pass
         volumeMounts:
-        - name: condorgp-volume
-          mountPath: /condorgp
+        - name: condorgp-volume-alembic
+          mountPath: /condorgp/alembic
+        - name: condorgp-volume-cgp-db
+          mountPath: /condorgp/cgp_db
+        - name: condorgp-volume-cgp-rabbitmq
+          mountPath: /condorgp/cgp_rabbitmq
+        - name: condorgp-volume-condorgp
+          mountPath: /condorgp/condorgp
+        - name: condorgp-volume-data
+          mountPath: /condorgp/data
+        - name: condorgp-volume-raw-data
+          mountPath: /condorgp/raw_data
+        - name: condorgp-volume-scripts
+          mountPath: /condorgp/scripts
+        - name: condorgp-volume-tests
+          mountPath: /condorgp/tests
       volumes:
-      - name: condorgp-volume
+      - name: condorgp-volume-alembic
         hostPath:
-          path: /home/hsth/code/hughharford/condorgp  # Updated this path
+          path: /home/hsth/code/hughharford/condorgp/alembic
+
+      - name: condorgp-volume-cgp-db
+        hostPath:
+          path: /home/hsth/code/hughharford/condorgp/cgp_db
+
+      - name: condorgp-volume-cgp-rabbitmq
+        hostPath:
+          path: /home/hsth/code/hughharford/condorgp/cgp_rabbitmq
+
+      - name: condorgp-volume-condorgp
+        hostPath:
+          path: /home/hsth/code/hughharford/condorgp/condorgp
+
+      - name: condorgp-volume-data
+        hostPath:
+          path: /home/hsth/code/hughharford/condorgp/data
+
+      - name: condorgp-volume-raw-data
+        hostPath:
+          path: /home/hsth/code/hughharford/condorgp/raw-data
+
+      - name: condorgp-volume-scripts
+        hostPath:
+          path: /home/hsth/code/hughharford/condorgp/scripts
+          
+      - name: condorgp-volume-tests
+        hostPath:
+          path: /home/hsth/code/hughharford/condorgp/tests
+
+
+
+
 ---
 apiVersion: v1
 kind: Service

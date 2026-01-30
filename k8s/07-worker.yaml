@@ -49,6 +49,9 @@ spec:
       - name: condorgp-volume
         hostPath:
           path: /home/hsth/code/hughharford/condorgp  # Updated this path
+      - name: ignore-condorgp-volume-venv
+        hostPath:
+          path: /home/hsth/code/hughharford/condorgp/.venv
 ---
 apiVersion: v1
 kind: Service

@@ -61,14 +61,21 @@ RUN apt-get update \
     # libncurses5-dev \
   && apt-get clean
 
-RUN pip3 install numpy setuptools wheel six auditwheel poetry==1.8.4
+RUN pip3 install \
+            pika \
+            numpy \
+            setuptools \
+            wheel \
+            six \
+            auditwheel \
+            poetry==1.8.4
 
 ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR=/tmp/poetry \
     POETRY_HOME="/opt/poetry" \
-    VENV_PATH="/condorgp/.venv" \
+    # VENV_PATH="/condorgp/.venv" \
     CGP_PATH="/condorgp"
 
 ENV PATH="$POETRY_HOME/bin:$PATH"
@@ -113,7 +120,6 @@ RUN rm -rf /var/cache/apt/* \
 && rm -rf /var/lib/apt/lists/* \
 && apt-get clean \
 && rm -rf $POETRY_CACHE_DIR
-
 
 # CMD ["/bin/bash"]
 CMD ["sh", "scripts/run_listener.sh"]
