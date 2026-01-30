@@ -1,8 +1,7 @@
-#!/bin/bash 
+#!/bin/bash
 ## for use on CGP container to reclone code fast
-# moved in the dockerfile to the enclosing folder
 
-# get to code folder 
+# get to code folder
 cd ~/code
 # clear old repo
 rm -rf condorgp
@@ -14,4 +13,3 @@ cd condorgp
 make install
 
 cd ~/code/condorgp/
-

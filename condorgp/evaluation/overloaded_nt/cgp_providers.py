@@ -24,7 +24,7 @@ class CondorGPTestDataProvider(TestDataProvider):
         # override so next-door repo can use Nautilus Trader repo test data
         p = Params()
         test_data_dir = pathlib.Path(
-            p.test_dict['NAUTILUS_TEST_DATA_PATH'])
+            p.test_dict['CGP_TEST_DATA']) # was 'NAUTILUS_TEST_DATA_PATH'
         if test_data_dir.exists():
             return str(test_data_dir)
         else:

@@ -1,0 +1,61 @@
+import os
+import os.path
+
+import pytest
+from pytest_bdd import scenarios, given, when, then, parsers
+
+from gp_fixtures import gp_control
+
+EXTRA_TYPES = {
+    'Number': int,
+    'String': str,
+    'Float': float,
+}
+
+CONVERTERS = {
+    'initial': int,
+    'some': int,
+    'total': int,
+}
+
+pytest.gpc = None
+
+scenarios('../../features/up/009_gp_typed_adf.feature')
+
+"""
+Feature: GpControl's typed evolved code must be runnable
+  As a gp algorithm,
+  Evolved code must be typed, include ADFs, and be able to run,
+  To ensure the code is of use.
+
+  Scenario Outline: Evolved code can be run including ADFs
+    Given GpControl with "<pset_ADF>"
+    When a short ADF run is made with "<evaluator>"
+    Then the fitness is not zero
+
+    Examples:
+      | pset_ADF            |   evaluator          |
+      | naut_pset_02_adf    |   eval_nautilus      |
+"""
+@given(parsers.cfparse('GpControl with "{pset_ADF:String}"',
+                        extra_types=EXTRA_TYPES), target_fixture='pset_ADF')
+@given('GpControl with "<pset_ADF>"', target_fixture='<pset_ADF>')
+def gpcontrol_with_typed_ADF(gp_control, pset_ADF):
+    p = 1
+    g = 1
+    gp_control.use_adfs = 1
+    gp_control.select_gp_provider_for_ADFs()
+    gp_control.setup_gp(pset_spec=pset_ADF, pop_size=p, no_gens=g)
+    gp_control.run_backtest = 1
+
+@when(parsers.cfparse('a short ADF run is made with "{evaluator:String}"',
+                        extra_types=EXTRA_TYPES), target_fixture='evaluator')
+@when('a short ADF run is made with "<evaluator>"', target_fixture='<evaluator>')
+def first_ADF_run(gp_control, evaluator):
+    gp_control.set_test_evaluator(evaluator)
+    gp_control.initiate_gp_run()
+
+@then('the fitness is not zero')
+def adf_fitness_is_not_zero(gp_control):
+    max_fitness_found = gp_control.gp.logbook.select("max")[-1]
+    assert max_fitness_found != 0

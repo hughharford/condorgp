@@ -7,13 +7,14 @@ license = "Apache 2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.12,<3.13"
-pika = "^1.3.2"
+python = ">=3.12,<3.15"
 pytz = "^2025.1"
 pytest = "^9.0.2"
 pytest-bdd = "^8.1.0"
 pandas = "^2.3.3"
 nautilus-trader = "^1.222.0"
+time-uuid = "^0.2.0"
+pika = "^1.3.2"
 
 [tool.poetry.group.primary.dependencies]
 setuptools = ">=75"
@@ -22,7 +23,7 @@ twine = "^5.1.1"
 python-dotenv = "^0.21.0"
 
 [tool.poetry.group.evolution.dependencies]
-numpy = "<2"
+numpy = "2.4.1"
 deap = "^1.4.1"
 
 [tool.poetry.group.api.dependencies]
@@ -39,9 +40,6 @@ pydantic = "^2.10.6"
 # kubernetes = "^32.0.0" # taken out so doesn't build on the worker, for now
 net-tools = "^0.1.2"
 
-[tool.poetry.group.comms.dependencies]
-pika = ">=1.3.2"
-
 [tool.poetry.group.cloud.dependencies]
 google-api-core = "^2.20.0"
 gcloud = "^0.18.3"
@@ -53,6 +51,8 @@ google-cloud-compute = "^1.19.2"
 [tool.poetry.group.test.dependencies]
 pytest = "^9.0.2"
 coverage = "^7.6.4"
+kubernetes = "^35.0.0"
+pick = "^2.4.0"
 
 [tool.poetry.group.dev.dependencies]
 docker = "^7.1.0"

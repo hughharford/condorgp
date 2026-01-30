@@ -59,7 +59,7 @@ EOF
 ### Manual Method (Using existing certificates)
 ```bash
 # Using the create_tls_secret function from ingress-commands.sh
-source k8s/ingress-commands.sh
+source k8s/ingress_commands.sh
 create_tls_secret /path/to/tls.key /path/to/tls.crt
 ```
 
@@ -117,7 +117,7 @@ Note: `-k` flag skips certificate verification (useful for self-signed certs)
 3. Ingress TLS Configuration
    ```bash
    # Check ingress status
-   kubectl describe ingress cgp-ingress-tls -n cgp-system
+    kubectl describe ingress cgp-ingress-tls -n cgp-system
    ```
 
 ## Security Best Practices
@@ -156,4 +156,4 @@ Note: `-k` flag skips certificate verification (useful for self-signed certs)
 
 - [Kubernetes TLS Documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls)
 - [cert-manager Documentation](https://cert-manager.io/docs/)
-- [Let's Encrypt Documentation](https://letsencrypt.org/docs/) 
+- [Let's Encrypt Documentation](https://letsencrypt.org/docs/)

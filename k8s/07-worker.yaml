@@ -26,7 +26,7 @@ spec:
           requests:
             memory: "512Mi"
             cpu: "500m"
-        command: ["sh", "scripts/install_cgp_n_run_listener_4.sh"]
+        command: ["sh", "scripts/run_listener.sh"]
         env:
         - name: IN_DOCKER_COMPOSE
           value: "1"
@@ -49,6 +49,9 @@ spec:
       - name: condorgp-volume
         hostPath:
           path: /home/hsth/code/hughharford/condorgp  # Updated this path
+      - name: ignore-condorgp-volume-venv
+        hostPath:
+          path: /home/hsth/code/hughharford/condorgp/.venv
 ---
 apiVersion: v1
 kind: Service
