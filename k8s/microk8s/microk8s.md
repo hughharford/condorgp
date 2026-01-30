@@ -125,62 +125,6 @@ k delete -f kubernetes/2db/020-cgp-database-service.yaml -f kubernetes/2db/021-c
 
 k apply -f kubernetes/2db/020-cgp-database-service.yaml -f kubernetes/2db/021-cgp-database-statefulset.yaml -f kubernetes/2db/022-cgp-database-cm0-configmap.yaml -f kubernetes/2db/023-cgp-database-pv.yaml -f kubernetes/2db/024-cgp-database-pvc.yaml
 
-## lwb postgres...
-k apply -f kubernetes/2_db_lwb/postgres-pv.yaml
-k apply -f kubernetes/2_db_lwb/postgres-pvc.yaml
-k apply -f kubernetes/2_db_lwb/postgres-secret.yaml
-k apply -f kubernetes/2_db_lwb/postgres-service-cluster-ip.yaml
-k apply -f kubernetes/2_db_lwb/postgres-service-load-balancer.yaml
-k apply -f kubernetes/2_db_lwb/postgres-statefulset.yaml
-
-k apply -f kubernetes/2_db_lwb/postgres-pv.yaml
-k apply -f kubernetes/2_db_lwb/postgres-pvc.yaml
-k apply -f kubernetes/2_db_lwb/postgres-secret.yaml
-k apply -f kubernetes/2_db_lwb/postgres-service.yaml
-k apply -f kubernetes/2_db_lwb/postgres-statefulset.yaml
-
-k delete -f kubernetes/2_db_lwb/postgres-pv.yaml
-k delete -f kubernetes/2_db_lwb/postgres-pvc.yaml
-k delete -f kubernetes/2_db_lwb/postgres-secret.yaml
-k delete -f kubernetes/2_db_lwb/postgres-service.yaml
-k delete -f kubernetes/2_db_lwb/postgres-statefulset.yaml
-
-# CGP worker
-k apply -f kubernetes/010-cgp-worker-1-service.yaml
-k apply -f kubernetes/011-cgp-worker-1-cm0-configmap.yaml
-k apply -f kubernetes/012-cgp-worker-pv.yaml
-k apply -f kubernetes/013-cgp-worker-pvc.yaml
-k apply -f kubernetes/014-cgp-pod-vol-bind.yaml
-+ k apply -f kubernetes/015-cgp-pod-vol-bind_sample_c.yaml
-
-k delete -f kubernetes/010-cgp-worker-1-service.yaml
-k delete -f kubernetes/011-cgp-worker-1-cm0-configmap.yaml
-k delete -f kubernetes/012-cgp-worker-pv.yaml
-k delete -f kubernetes/013-cgp-worker-pvc.yaml
-k delete -f kubernetes/014-cgp-pod-vol-bind.yaml
-
-# Grafana
-k apply -f kubernetes/3graf/050-cgp-grafana-service.yaml -f kubernetes/3graf/051-cgp-grafana-deployment.yaml -f kubernetes/3graf/053-cgp-grafana-env-configmap.yaml -f kubernetes/3graf/054-cgp-grafana-cm0-configmap.yaml
-
-k delete -f kubernetes/3graf/050-cgp-grafana-service.yaml -f kubernetes/3graf/051-cgp-grafana-deployment.yaml -f kubernetes/3graf/053-cgp-grafana-env-configmap.yaml -f kubernetes/3graf/054-cgp-grafana-cm0-configmap.yaml
-
-# trying
-https://grafana.com/docs/grafana/latest/setup-grafana/installation/kubernetes/
-k create namespace cgp-grafana
-k get namespace cgp-grafana
-k apply -f grafana.yaml --namespace=cgp-grafana
-...
-k get all --namespace=cgp-grafana
-k port-forward service/grafana 3000:3000 --namespace=cgp-grafana
-k expose deployment grafana --type=LoadBalancer --name=grafana
-
-+ the above will timeout, can try this:
-while true; do <<YOUR COMMAND HERE>>; done
-with one of the commands above in the <<X>>
-+ have set in:
-  + /var/snap/microk8s/current/args/kubelet
-  + --streaming-connection-idle-timeout=30m
-
 
 + connections strings:
 rabbitmq:

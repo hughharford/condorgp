@@ -43,38 +43,27 @@ spec:
               name: cgp-secrets
               key: rabbitmq-pass
         volumeMounts:
-        - name: condorgp-volume-alembic
-          mountPath: /condorgp/alembic
-        - name: condorgp-volume-cgp-db
-          mountPath: /condorgp/cgp_db
-        - name: condorgp-volume-cgp-rabbitmq
-          mountPath: /condorgp/cgp_rabbitmq
-        - name: condorgp-volume-condorgp
-          mountPath: /condorgp/condorgp
-        - name: condorgp-volume-data
-          mountPath: /condorgp/data
-        - name: condorgp-volume-raw-data
-          mountPath: /condorgp/raw_data
         - name: condorgp-volume-scripts
           mountPath: /condorgp/scripts
-        - name: condorgp-volume-tests
-          mountPath: /condorgp/tests
+
+        - name: condorgp-volume-data
+          mountPath: /condorgp/data
+
+        - name: condorgp-volume-raw-data
+          mountPath: /condorgp/raw_data
+
+        - name: condorgp-volume-condorgp
+          mountPath: /condorgp/condorgp
+
       volumes:
-      - name: condorgp-volume-alembic
+      ### note ignore .venv by not adding it to volumeMounts
+      - name: ignore-condorgp-volume-venv
         hostPath:
-          path: /home/hsth/code/hughharford/condorgp/alembic
+          path: /home/hsth/code/hughharford/condorgp/.venv
 
-      - name: condorgp-volume-cgp-db
+      - name: condorgp-volume-scripts
         hostPath:
-          path: /home/hsth/code/hughharford/condorgp/cgp_db
-
-      - name: condorgp-volume-cgp-rabbitmq
-        hostPath:
-          path: /home/hsth/code/hughharford/condorgp/cgp_rabbitmq
-
-      - name: condorgp-volume-condorgp
-        hostPath:
-          path: /home/hsth/code/hughharford/condorgp/condorgp
+          path: /home/hsth/code/hughharford/condorgp/scripts
 
       - name: condorgp-volume-data
         hostPath:
@@ -82,15 +71,12 @@ spec:
 
       - name: condorgp-volume-raw-data
         hostPath:
-          path: /home/hsth/code/hughharford/condorgp/raw-data
+          path: /home/hsth/code/hughharford/condorgp/raw_data
 
-      - name: condorgp-volume-scripts
+      - name: condorgp-volume-condorgp
         hostPath:
-          path: /home/hsth/code/hughharford/condorgp/scripts
-          
-      - name: condorgp-volume-tests
-        hostPath:
-          path: /home/hsth/code/hughharford/condorgp/tests
+          path: /home/hsth/code/hughharford/condorgp/condorgp 
+
 
 
 

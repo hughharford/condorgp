@@ -2,7 +2,7 @@ import pika
 import sys, os
 import logging, time
 
-from cgp_rabbitmq import get_rabbitmq_connection
+from condorgp.cgp_rabbitmq import get_rabbitmq_connection
 from condorgp.evaluation.run_naut import RunNautilus
 
 QUEUE_DELEG_EVALS = 'cgp_delegated_eval'
