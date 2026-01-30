@@ -68,14 +68,14 @@ RUN pip3 install \
             wheel \
             six \
             auditwheel \
-            poetry==1.8.4
+            poetry==2.2.1
 
 ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR=/tmp/poetry \
     POETRY_HOME="/opt/poetry" \
-    # VENV_PATH="/condorgp/.venv" \
+    VENV_PATH="/condorgp/.venv" \
     CGP_PATH="/condorgp"
 
 ENV PATH="$POETRY_HOME/bin:$PATH"
@@ -91,7 +91,7 @@ COPY pyproject.toml poetry.lock ./
 
 # install runtime deps - uses $POETRY_VIRTUALENVS_IN_PROJECT internally
 # this just ran:
-  # RUN poetry install --without api
+  # RUN poetry install
 # rather than:
 RUN poetry install \
                     --no-root \
@@ -106,10 +106,10 @@ RUN poetry install \
 # --without evolution \
 # --without comms \
 
+# RUN touch /README.md
 # get latest code in
 COPY ./ ./
 
-RUN touch /README.md
 # build as per Nautilus Trader dockerfile
 RUN poetry build -f wheel
 RUN python -m pip install ./dist/*whl --force --no-deps
@@ -120,6 +120,7 @@ RUN rm -rf /var/cache/apt/* \
 && rm -rf /var/lib/apt/lists/* \
 && apt-get clean \
 && rm -rf $POETRY_CACHE_DIR
+
 
 # CMD ["/bin/bash"]
 CMD ["sh", "scripts/run_listener.sh"]

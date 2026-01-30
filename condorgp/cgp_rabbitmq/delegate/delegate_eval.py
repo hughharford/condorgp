@@ -2,7 +2,7 @@
 import time
 import pika
 import sys, os
-from cgp_rabbitmq import get_rabbitmq_connection
+from condorgp.cgp_rabbitmq import get_rabbitmq_connection
 
 QUEUE_DELEG_EVALS = 'cgp_delegated_eval'
 
@@ -27,11 +27,11 @@ def send_delegate_eval(message):
 
 
 def main():
-    for i in range(10):
+    for i in range(100):
         sample_message = f"I'm only a delegated evaluation sample {i}"
         send_delegate_eval(sample_message)
         # print(sample_message)
-        time.sleep(60)
+        time.sleep(10)
 
 if __name__ == '__main__':
     try:

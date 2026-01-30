@@ -6,7 +6,8 @@ microk8s status --wait-ready
 
 # Enable necessary addons
 microk8s enable dns
-microk8s enable storage
+microk8s disable storage
+microk8s enable hostpath-storage
 microk8s enable ingress
 microk8s enable registry
 microk8s enable dashboard
