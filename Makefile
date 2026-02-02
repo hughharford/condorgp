@@ -20,43 +20,63 @@ new_install:
 update_env:
 	@direnv allow
 
+# # ----------------------------------
+# #          Kubernetes - microk8s
+# # ----------------------------------
+
+# k8s_install_new:
+# 	@zsh k8s/install_microk8s.sh;
+
+# k8s_cgp_builds:
+# 	@sudo DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile_start_again --target=cgp-nt-again -t cgp-nt-again .
+
+# k8s_reset_cgp:
+# 	@sudo microk8s kubectl delete -f k8s/07-worker.yaml
+# 	@sudo microk8s kubectl apply -f k8s/07-worker.yaml
+
+# k8s_apply:
+# 	@sudo sh k8s/k8s_apply.sh;
+
+# k8s_delete:
+# 	@sudo sh k8s/k8s_delete.sh;
+
+# k8s_cgp_images:
+# 	@sudo sh k8s/k8s_images_push.sh;
+
+# k8s_forwarding:
+# 	@microk8s kubectl port-forward service/cgp-grafana 3000:3000  -n cgp-system --request-timeout='0' &
+# 	@microk8s kubectl port-forward service/cgp-rabbitmq 15672:15672  -n cgp-system --request-timeout='0' &
+# 	@microk8s kubectl port-forward service/cgp-rabbitmq 5672:5672  -n cgp-system --request-timeout='0' &
+# 	@microk8s kubectl port-forward service/cgp-database 5432:5432 -n cgp-system --request-timeout='0'  &
+
+# k8s_st_start:
+# 	@sudo sh k8s/reg_k8s_start.sh;
+
+# k8s_sp_stop:
+# 	@sudo microk8s stop;
+
 # ----------------------------------
-#          Kubernetes - microk8s
+#          K8S with K3d and K3S
 # ----------------------------------
+k3d_full_reset:
+	@sh k8s/k3d/w_registry_reg_start_k3d.sh
+	@sh k8s/k3d/images_push_k3d.sh
+	@sh k8s/k3d/apply_k3d.sh
+	@make k3d_dash
 
+k3d_del:
+	@sh k8s/k3d/cluster_delete_k3d.sh
 
+k3d_apply:
+	@sh k8s/k3d/apply_k3d.sh
 
-k8s_install_new:
-	@zsh k8s/install_microk8s.sh;
+k3d_dash:
+	@kubectl create token dashboard-admin
+	@kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8443:443 --address 0.0.0.0
 
-k8s_cgp_builds:
-	@sudo DOCKER_BUILDKIT=1 docker build -f docker/Dockerfile_start_again --target=cgp-nt-again -t cgp-nt-again .
-
-k8s_reset_cgp:
-	@sudo microk8s kubectl delete -f k8s/07-worker.yaml
-	@sudo microk8s kubectl apply -f k8s/07-worker.yaml
-
-k8s_apply:
-	@sudo sh k8s/k8s_apply.sh;
-
-k8s_delete:
-	@sudo sh k8s/k8s_delete.sh;
-
-k8s_cgp_images:
-	@sudo sh k8s/k8s_images_push.sh;
-
-k8s_forwarding:
-	@microk8s kubectl port-forward service/cgp-grafana 3000:3000  -n cgp-system --request-timeout='0' &
-	@microk8s kubectl port-forward service/cgp-rabbitmq 15672:15672  -n cgp-system --request-timeout='0' &
-	@microk8s kubectl port-forward service/cgp-rabbitmq 5672:5672  -n cgp-system --request-timeout='0' &
-	@microk8s kubectl port-forward service/cgp-database 5432:5432 -n cgp-system --request-timeout='0'  &
-
-k8s_st_start:
-	@sudo sh k8s/reg_k8s_start.sh;
-
-k8s_sp_stop:
-	@sudo microk8s stop;
-
+k3d_reset_cgp:
+	@sh k8s/k3d/reset_worker_k3d.sh
+	@sh k8s/k3d/reset_master_k3d.sh
 
 # ----------------------------------
 #          TEST

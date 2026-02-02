@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
       - name: master
-        image: k3d-cgp-registry.localhost:30123/cgp-nt-again:latest
+        # image: cgp-nt-again
+        image: k3d-cgp-registry.localhost:30123/cgp-nt-again
         # imagePullPolicy: Never
         ports:
         - containerPort: 2727
@@ -42,11 +43,11 @@ spec:
             secretKeyRef:
               name: cgp-secrets
               key: rabbitmq-pass
-        volumeMounts:
-          - name: data
-            mountPath: condorgp/data/
-      volumes:
-        - name: data
+      #   volumeMounts:
+      #     - name: data
+      #       mountPath: condorgp/data/
+      # volumes:
+      #   - name: data
 
 
 

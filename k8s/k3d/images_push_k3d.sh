@@ -5,15 +5,16 @@ export CGP_WORKER_IMAGE_NAME="cgp-nt-again"
 
 export CGP_REGISTRY_NAME="cgp-registry" # note k3d adds "k3d-"
 
+###### THIS WON'T WORK - HAVE TO RESET THE REGISTRY WHEN CLUSTER CREATED
 # DELETE
 #  microk8s ctr images rm docker.io/library/${CGP_WORKER_IMAGE_NAME}:latest
-# delete image (by deleting registry)
 
+
+# delete image (by deleting registry)
 # k3d registry delete k3d-cgp-registry.localhost
 # k3d registry delete k3d-${CGP_REGISTRY_NAME}.localhost
 
-###### THIS WON'T WORK - HAVE TO RESET THE REGISTRY WHEN CLUSTER CREATED
-
+# CREATE
 # k3d registry create cgp-registry.localhost --port 30123
 
 
@@ -34,10 +35,8 @@ docker push ${CGP_REGISTRY_NAME}.localhost:30123/${CGP_WORKER_IMAGE_NAME}:latest
 # CHECK
 #check images with
 # microk8s ctr images ls | grep cgp
-curl http://localhost:30123/v2/_catalog
+curl http://localhost:30123/v2/_catalog # only for registry
 
 
 # alternatively:
 # k3d image import -c cgp-cluster cgp-nt-again -k
-
-
