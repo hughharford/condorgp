@@ -95,16 +95,14 @@ COPY pyproject.toml poetry.lock ./
 # rather than:
 RUN poetry install \
                     --no-root \
-                    --without api \
+                    --without comms \
                     --without database \
                     --without cluster \
                     --without cloud \
                     --without test \
                     --without dev \
                     --without optional
-# --without primary \
 # --without evolution \
-# --without comms \
 
 # RUN touch /README.md
 # get latest code in
@@ -122,5 +120,7 @@ RUN rm -rf /var/cache/apt/* \
 && rm -rf $POETRY_CACHE_DIR
 
 
-# CMD ["/bin/bash"]
-CMD ["sh", "scripts/run_listener.sh"]
+CMD ["/bin/bash"]
+# CMD ["sh", "scripts/run_listener.sh"]
+# this caused issues in k3d not seen in microk8s
+# this might well not be the cause, but...

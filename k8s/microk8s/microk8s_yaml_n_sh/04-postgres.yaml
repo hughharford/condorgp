@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cgp-database
+  namespace: cgp-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cgp-database
+  template:
+    metadata:
+      labels:
+        app: cgp-database
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:14.2
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cgp-secrets
+              key: postgres-password
+        - name: APP_DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: cgp-config
+              key: APP_DB_USER
+        - name: APP_DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: cgp-secrets
+              key: app-db-pass
+        - name: APP_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: cgp-config
+              key: APP_DB_NAME
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+        - name: init-scripts
+          mountPath: /docker-entrypoint-initdb.d/
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-data
+      - name: init-scripts
+        hostPath:
+          path: /home/hsth/code/hughharford/condorgp/scripts/db_init  # Updated this path
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cgp-database
+  namespace: cgp-system
+spec:
+  selector:
+    app: cgp-database
+  ports:
+  - port: 5432
+    targetPort: 5432

@@ -22,3 +22,6 @@ else
     echo "checkpoints Directory does not exist, creating folder now."
     mkdir condorgp/util/checkpoints
 fi
+
+sudo chmod 777 -R condorgp/util/logs
+sudo chmod 777 -R condorgp/util/checkpoints
