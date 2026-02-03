@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cgp-rabbitmq
+  namespace: cgp-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cgp-rabbitmq
+  template:
+    metadata:
+      labels:
+        app: cgp-rabbitmq
+    spec:
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:3.13-management
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5672
+        - containerPort: 15672
+        env:
+        - name: RABBITMQ_DEFAULT_USER
+          valueFrom:
+            secretKeyRef:
+              name: cgp-secrets
+              key: rabbitmq-user
+        - name: RABBITMQ_DEFAULT_PASS
+          valueFrom:
+            secretKeyRef:
+              name: cgp-secrets
+              key: rabbitmq-pass
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cgp-rabbitmq
+  namespace: cgp-system
+spec:
+  selector:
+    app: cgp-rabbitmq
+  ports:
+  - name: amqp
+    port: 5672
+    targetPort: 5672
+  - name: management
+    port: 15672
+    targetPort: 15672

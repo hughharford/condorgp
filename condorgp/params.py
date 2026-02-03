@@ -50,7 +50,8 @@ class Params():
 
 
         LOCAL_BASE_PATH = f"{os.getcwd()}/"
-
+        os.environ['LOCAL_PATH'] = LOCAL_BASE_PATH
+        # print(os.getenv('NEW'))
 
         # print(LOCAL_BASE_PATH)
         # print(type(LOCAL_BASE_PATH))

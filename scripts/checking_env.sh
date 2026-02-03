@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if $LOCAL_PATH = ""; then
-	echo "local path set as: " $LOCAL_PATH
+if $LOCAL_BASE_PATH = ""; then
+	echo "local path set as: " $LOCAL_BASE_PATH
 	echo "path set ok, assuming environment variables setup."
 else
 	echo "Looks as though your environment variables aren't set up. Attempting now."
