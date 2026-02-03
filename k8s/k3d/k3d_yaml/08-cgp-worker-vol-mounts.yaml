@@ -1,107 +1,41 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: cgp-worker-2
-  namespace: cgp-system
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: cgp-worker-2
-  template:
-    metadata:
-      labels:
-        app: cgp-worker-2
-    spec:
-      containers:
-      - name: worker-2
-        image: k3d-cgp-registry.localhost:30123/cgp-nt-again
-        # imagePullPolicy: Never
-        ports:
-        - containerPort: 2727
-        resources:
-          limits:
-            memory: "1Gi"
-            cpu: "1000m"
-          requests:
-            memory: "512Mi"
-            cpu: "500m"
-        command: ["sh", "scripts/run_listener.sh"]
-        env:
-        - name: IN_DOCKER_COMPOSE
-          value: "1"
-        - name: WHERE_IS_RABBIT
-          value: "cgp-rabbitmq"
-        - name: RMQ_USER
-          valueFrom:
-            secretKeyRef:
-              name: cgp-secrets
-              key: rabbitmq-user
-        - name: RMQ_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: cgp-secrets
-              key: rabbitmq-pass
-      #   volumeMounts:
-      #     - name: cgp-data
-      #       mountPath: condorgp/data/
-      # volumes:
-      #   - name: cgp-data
-      #     directory: /home/hsth/code/hughharford/condorgp/data
-        volumeMounts:
-        - mountPath: /condorgp/data
-          name: cgp-data-volume
-          readOnly: False
-      volumes:
-      - name: cgp-data-volume
-        hostPath:
-          path: /home/hsth/code/hughharford/condorgp/data # directory location on host
-          # type: Directory # this field is optional
-
-      #   volumeMounts:
-      #   - name: condorgp-volume-scripts
-      #     mountPath: /condorgp/scripts
-
-      #   - name: condorgp-volume-data
-      #     mountPath: /condorgp/data
-
-      #   - name: condorgp-volume-raw-data
-      #     mountPath: /condorgp/raw_data
-
-      #   - name: condorgp-volume-condorgp
-      #     mountPath: /condorgp/condorgp
-
-      # volumes:
-      # ### note ignore .venv by not adding it to volumeMounts
-      # - name: ignore-condorgp-volume-venv
-      #   hostPath:
-      #     path: /home/hsth/code/hughharford/condorgp/.venv
-
-      # - name: condorgp-volume-scripts
-      #   hostPath:
-      #     path: /home/hsth/code/hughharford/condorgp/scripts
-
-      # - name: condorgp-volume-data
-      #   hostPath:
-      #     path: /home/hsth/code/hughharford/condorgp/data
-
-      # - name: condorgp-volume-raw-data
-      #   hostPath:
-      #     path: /home/hsth/code/hughharford/condorgp/raw_data
-
-      # - name: condorgp-volume-condorgp
-      #   hostPath:
-      #     path: /home/hsth/code/hughharford/condorgp/condorgp
-
----
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
   name: cgp-worker-2
   namespace: cgp-system
 spec:
-  selector:
-    app: cgp-worker-2
-  ports:
-  - port: 2727
-    targetPort: 2727
+  volumes:
+    - name: cgp-data-volume
+      hostPath:
+        path: /home/hsth/code/hughharford/condorgp/data # directory location on host
+  containers:
+    - name: worker-2
+      image: k3d-cgp-registry.localhost:30123/cgp-nt-again
+      ports:
+      - containerPort: 2727
+      resources:
+        limits:
+          memory: "1Gi"
+          cpu: "1000m"
+        requests:
+          memory: "512Mi"
+          cpu: "500m"
+      command: ["sh", "scripts/run_listener.sh"]
+      volumeMounts:
+        - name: cgp-data-volume
+          mountPath: /condorgp/data
+      env:
+      - name: IN_DOCKER_COMPOSE
+        value: "1"
+      - name: WHERE_IS_RABBIT
+        value: "cgp-rabbitmq"
+      - name: RMQ_USER
+        valueFrom:
+          secretKeyRef:
+            name: cgp-secrets
+            key: rabbitmq-user
+      - name: RMQ_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: cgp-secrets
+            key: rabbitmq-pass
