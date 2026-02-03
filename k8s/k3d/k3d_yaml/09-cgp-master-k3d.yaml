@@ -43,11 +43,6 @@ spec:
             secretKeyRef:
               name: cgp-secrets
               key: rabbitmq-pass
-      #   volumeMounts:
-      #     - name: data
-      #       mountPath: condorgp/data/
-      # volumes:
-      #   - name: data
 
 
 
