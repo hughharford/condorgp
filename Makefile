@@ -58,6 +58,10 @@ update_env:
 # ----------------------------------
 #          K8S with K3d and K3S
 # ----------------------------------
+
+k3d_out_config:
+	@k3d kubeconfig get cgp-cluster > k8s/k3d/output-kube-config.yaml
+
 k3d_full_reset:
 	@sh k8s/k3d/w_registry_reg_start_k3d.sh
 	@sh k8s/k3d/images_push_k3d.sh
