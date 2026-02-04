@@ -28,7 +28,7 @@ if [ $ready -eq 1 ]; then
 fi
 
 # SAVE FILES
-copy_files=1
+copy_files=0
 if [ $copy_files -eq 1 ]; then
   echo "copy_files read as $copy_files, current dir = $current_dir"
   echo "going to copy across to $to_path:"
@@ -68,7 +68,7 @@ else
 fi
 
 # COPY FILES BACK IN
-copy_files_back=1
+copy_files_back=0
 if [ $copy_files_back -eq 1 ]; then
 
   echo "copy_files read as $copy_files_back, copy from: $copy_from_saved_path to $copy_back_to_path "

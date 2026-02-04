@@ -71,6 +71,9 @@ k3d_full_reset:
 k3d_del:
 	@sh k8s/k3d/cluster_delete_k3d.sh
 
+k3d_stop:
+	@k3d cluster stop cgp-cluster
+
 k3d_apply:
 	@sh k8s/k3d/apply_k3d.sh
 

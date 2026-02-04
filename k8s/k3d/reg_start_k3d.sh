@@ -20,6 +20,8 @@ k3d cluster create $CLUSTER_NAME \
         --api-port 6550 \
         -p "8080:80@loadbalancer" --agents 2 \
         --registry-use k3d-cgp-registry.localhost:30123 \
+        --image rancher/k3s:v1.34.x-k3s1 \
+        --image cgp-nt-again
 #       --volume $LOCAL_PATH:/condorgp/
 
 # export KUBECONFIG="$(k3d kubeconfig get cgp-cluster)"                              [🐍 3.12.0]

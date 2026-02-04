@@ -14,6 +14,9 @@ Goes into a reasonable amount of detail, e.g. replacing ingress controller etc
 https://medium.com/@nklokanatha/getting-started-with-k3d-9e2228666ce7
 Likely useful
 
+on environment variables from a .env file
+https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-via-file/
+
 
 # API
 apiVersion: k3d.io/v1alpha3
