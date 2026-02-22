@@ -59,16 +59,41 @@ update_env:
 #          K8S with K3d and K3S
 # ----------------------------------
 
+k3d_shutdown:
+	@gefyra down
+	@k3d cluster stop cgp-cluster
+	@k3d registry delete k3d-cgp-registry.localhost
+	@k3d cluster delete cgp-cluster
+	@k3d cluster stop k3s-default
+	@k3d cluster delete k3s-default
+	@docker network rm k3d-cgp-cluster
+	@docker system prune -f
+	@rm -f $(docker ps -af label=k3d.io -q)
+	@sudo fuser -k 6550/tcp
+	@sudo fuser -k 8080/tcp
+	@sudo fuser -k 6443/tcp
+	@sudo fuser -k 8443/tcp
+
+k3d_gefyra:
+	@sh k8s/k3d/gefyra_setup.sh
+
+k3d_g_apply:
+	@sh k8s/k3d/apply_gefyra.sh
+
+
 k3d_out_config:
 	@k3d kubeconfig get cgp-cluster > k8s/k3d/output-kube-config.yaml
+	@export KUBECONFIG="$(k3d kubeconfig get cgpcluster-)"
+
 
 k3d_full_reset:
-	@sh k8s/k3d/w_registry_reg_start_k3d.sh
+	@sh k8s/k3d/w_reg_n_api_reg_start_k3d.sh
 	@sh k8s/k3d/images_push_k3d.sh
 	@sh k8s/k3d/apply_k3d.sh
 	@make k3d_dash
 
 k3d_del:
+	@k3d cluster stop cgp-cluster
 	@sh k8s/k3d/cluster_delete_k3d.sh
 
 k3d_stop:
@@ -78,8 +103,7 @@ k3d_apply:
 	@sh k8s/k3d/apply_k3d.sh
 
 k3d_dash:
-	@kubectl create token dashboard-admin
-	@kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8443:443 --address 0.0.0.0
+	@K3D_KUBECONFIG=/tmp/k3d-cgp-kubeconfig.yaml; sh k8s/k3d/dash_kubeconfig.sh
 
 k3d_reset_cgp:
 	@sh k8s/k3d/reset_worker_k3d.sh

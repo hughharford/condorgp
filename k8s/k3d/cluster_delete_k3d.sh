@@ -4,13 +4,17 @@ export REGISTRY_NAME=cgp-registry
 
 # delete pattern
 k3d cluster stop cgp-cluster
+k3d cluster stop k3s-default
 
-k3d registry delete k3d-cgp-registry.localhost
-# k3d registry delete k3d-$REGISTRY_NAME.localhost
+# k3d registry delete k3d-cgp-registry.localhost
+# this might not be required, and would speed up restart
+
 docker network rm k3d-cgp-cluster
+docker network rm k3d-k3s-default
 docker system prune
 
 k3d cluster delete cgp-cluster
+k3d cluster delete k3s-default
 
 sudo fuser -k 6550/tcp
 sudo fuser -k 8080/tcp
