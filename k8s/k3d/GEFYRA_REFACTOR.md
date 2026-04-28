@@ -118,8 +118,8 @@ Create a single script that encapsulates the full Gefyra setup:
 # k8s/k3d/gefyra_setup.sh - Full Gefyra setup for k3d
 set -e
 
-KUBECONFIG_FILE="/tmp/gefyra-kubeconfig.yaml"
-CLIENT_JSON="/tmp/gefyra-local.json"
+KUBECONFIG_FILE="$HOME/.kube/gefyra-kubeconfig.yaml"
+CLIENT_JSON="$HOME/.kube/gefyra-local.json"
 CLIENT_ID="local"
 NAMESPACE="cgp-system"
 

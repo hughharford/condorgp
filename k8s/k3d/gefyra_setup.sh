@@ -3,8 +3,8 @@
 # Requires: cluster created with -p 31820:31820/UDP@agent:1 and --api-port 6550
 set -e
 
-KUBECONFIG_FILE="/tmp/gefyra-kubeconfig.yaml"
-CLIENT_JSON="/tmp/gefyra-local.json"
+KUBECONFIG_FILE="$HOME/.kube/gefyra-kubeconfig.yaml"
+CLIENT_JSON="$HOME/.kube/gefyra-local.json"
 CLIENT_ID="local"
 NAMESPACE="${GEFYRA_NAMESPACE:-cgp-system}"   # K8s namespace to bridge (workloads in cgp-system)
 K8S_API_PORT=6550    # Kubernetes API - for kubectl/gefyra CLI
@@ -12,6 +12,7 @@ WIREGUARD_PORT=31820 # WireGuard UDP - for VPN tunnel (passed to clients config 
 
 # 1. Kubeconfig: must use K8s API port (6550), not WireGuard port (31820)
 #    Cluster must be created with --tls-san=127.0.0.1 so cert matches (see w_reg_n_api_reg_start_k3d.sh)
+mkdir -p "$HOME/.kube"
 kubectl config view --raw --minify > "$KUBECONFIG_FILE"
 kubectl config set-cluster k3d-cgp-cluster \
   --server="https://127.0.0.1:${K8S_API_PORT}" \

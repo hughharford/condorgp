@@ -7,11 +7,16 @@
 export CLUSTER_NAME=cgp-cluster
 export REGISTRY_NAME=cgp-registry
 
+export KUBECONFIG=$HOME/.kube/k3d-cgp-kubeconfig.yaml
+
 echo $LOCAL_PATH
+
+# Docker creates the DOCKER-ISOLATION chains when it starts. 
+# If they’re missing or broken, restart Docker so it recreates them:
+sudo systemctl restart docker
 
 echo "Ensuring ip forwarding is on..."
 echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
-
 
 # create
 k3d registry create $REGISTRY_NAME.localhost --port 30123
@@ -33,7 +38,8 @@ kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --
 
 # added to ensure server set:
 kubectl config set-cluster k3d-cgp-cluster --server=https://127.0.0.1:6550
-kubectl config view --raw --minify > /tmp/gefyra-kubeconfig.yaml
+mkdir -p "$HOME/.kube"
+kubectl config view --raw --minify > "$HOME/.kube/gefyra-kubeconfig.yaml"
 
 # sleep 30
 # kubectl port-forward -n kubernetes-dashboard service/kubernetes-dashboard 8443:443 --address 0.0.0.0

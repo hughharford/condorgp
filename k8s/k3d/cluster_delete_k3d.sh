@@ -3,10 +3,10 @@ export CLUSTER_NAME=cgp-cluster
 export REGISTRY_NAME=cgp-registry
 
 # delete pattern
-k3d cluster stop cgp-cluster
-k3d cluster stop k3s-default
+# k3d cluster stop cgp-cluster
+# k3d cluster stop k3s-default
 
-# k3d registry delete k3d-cgp-registry.localhost
+k3d registry delete k3d-cgp-registry.localhost
 # this might not be required, and would speed up restart
 
 docker network rm k3d-cgp-cluster
