@@ -8,13 +8,19 @@ from condorgp.ecosystem import (
     InMemoryEcosystemRepository,
     ParquetEcosystemRepository,
 )
+from condorgp.params import Params
 import pandas as pd
+
+
+def get_ecosystem_test_data_path():
+    test_dict = Params().get_params("test_dict")
+    return Path(test_dict["CGP_TEST_DATA"]) / "ecosystem"
 
 
 @pytest.fixture(scope="module", autouse=True)
 def teardown_parquet_test_artifacts():
     yield
-    ecosystem_root = Path("tests/test_data/ecosystem")
+    ecosystem_root = get_ecosystem_test_data_path()
     if not ecosystem_root.exists():
         return
 
@@ -182,7 +188,7 @@ def all_snapshots_share_same_ecosystem_id(one_snapshot_saved_each):
 
 @given("a Parquet ecosystem repository", target_fixture="parquet_context")
 def parquet_ecosystem_repository():
-    repository = ParquetEcosystemRepository(root_path="tests/test_data/ecosystem")
+    repository = ParquetEcosystemRepository(root_path=get_ecosystem_test_data_path())
     ecosystem = Ecosystem()
     return {"repository": repository, "ecosystem": ecosystem}
 
@@ -225,7 +231,7 @@ def postgres_not_required_phase_1(parquet_context):
 
 @then('persisted files are saved under "tests/test_data/ecosystem"')
 def persisted_files_saved_under_test_data(parquet_context):
-    expected_root = Path("tests/test_data/ecosystem").resolve()
+    expected_root = get_ecosystem_test_data_path().resolve()
     cells_path = parquet_context["saved"]["cells_path"].resolve()
     runs_path = parquet_context["saved"]["runs_path"].resolve()
     assert expected_root in cells_path.parents
@@ -239,7 +245,7 @@ def persisted_files_saved_under_test_data(parquet_context):
 def ecosystem_constructed_with_injected_repository():
     in_memory_repository = InMemoryEcosystemRepository()
     parquet_repository = ParquetEcosystemRepository(
-        root_path="tests/test_data/ecosystem"
+        root_path=get_ecosystem_test_data_path()
     )
     return {
         "in_memory": Ecosystem(repository=in_memory_repository),

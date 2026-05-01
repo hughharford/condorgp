@@ -1,25 +1,44 @@
 # ----------------------------------
 #          INSTALL
 # ----------------------------------
-install_requirements:
-	@sudo pip install poetry==1.8.4
-	@poetry install
 
 install:
-	@poetry install
-
-fresh_install:
+	@make maybe_update_env
 	@make install_requirements
 	@make new_install
 	@sh scripts/establish_logs_n_checkpoints.sh
+	@make k3d_bootstrap
+
+install_requirements:
+	@if command -v poetry >/dev/null 2>&1; then \
+		echo "poetry already installed"; \
+	elif command -v pipx >/dev/null 2>&1; then \
+		pipx install poetry==1.8.4; \
+	else \
+		python3 -m pip install --user poetry==1.8.4; \
+	fi
+	@poetry install
 
 new_install:
 	@echo checking paths
-	@sh scripts/checking_env.sh
+	@sh scripts/dependencies/checking_env.sh
 
 update_env:
 	@direnv allow
 
+maybe_update_env:
+	@if command -v direnv >/dev/null 2>&1 && [ -f .envrc ]; then \
+		direnv allow; \
+	else \
+		echo "direnv/.envrc not available, skipping direnv allow"; \
+	fi
+
+k3d_check:
+	@bash scripts/dependencies/check_k3d_deps.sh
+
+k3d_bootstrap:
+	@bash scripts/dependencies/install_k3d_deps.sh
+	@make k3d_check
 
 # ----------------------------------
 #          K8S with K3d and K3S
@@ -96,6 +115,7 @@ k3d_reset_cgp:
 	@sh k8s/k3d/reset_worker_k3d.sh
 	@sh k8s/k3d/reset_master_k3d.sh
 
+
 # ----------------------------------
 #          TEST
 # ----------------------------------
@@ -114,6 +134,9 @@ test:
 
 ftest:
 	@Write me
+
+test_k3d:
+	@PYTHONPATH=. poetry run pytest tests/step_defs/test_015_k3d_start_steps.py -q
 
 clean:
 	@rm -f */version.txt

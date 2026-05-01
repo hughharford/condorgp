@@ -5,6 +5,7 @@ data/*
 .vscode/*
 raw_data/*
 build/*
+tests/test_data/*
 
 # file types
 .zip
@@ -187,4 +188,3 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-

@@ -24,6 +24,11 @@ pipx install poetry==1.8.4
 git clone git@github.com:hughharford/condorgp.git
 ```
 
+- One-command full setup:
+```bash
+make install
+```
+
 # poetry install
 
 # This will fail, now
@@ -44,6 +49,30 @@ poetry run python ./condorgp/evaluation/run_naut.py
 make install test
 # OR
 pytest
+```
+
+# Platform dependencies for k3d tests (non-Python)
+- Poetry manages Python dependencies only.
+- k3d integration tooling must be installed separately: `docker`, `kubectl`, `k3d`.
+- Check local readiness:
+```bash
+make k3d_check
+```
+- Optional Ubuntu bootstrap helper:
+```bash
+make k3d_bootstrap
+```
+- Run only k3d integration tests:
+```bash
+make test_k3d
+```
+
+# DevContainer (recommended for consistency)
+- Open the repo in a DevContainer (Cursor/VS Code) to standardize Python + k3d tooling.
+- The container mounts host Docker socket, so `k3d` commands from inside the container control host Docker.
+- On first open, `postCreateCommand` runs:
+```bash
+make install
 ```
 
 # For contributors, do a -e installation to allow updates based on your changes

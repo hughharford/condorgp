@@ -16,6 +16,7 @@ class Params():
         self.add_dict_params(self.util_dict)
         self.add_dict_params(self.naut_dict)
         self.add_dict_params(self.test_dict)
+        self.add_dict_params(self.k3d_dict)
         self.add_dict_params(self.highlevel_config_dict)
 
     def add_dict_params(self, params_dict):
@@ -33,6 +34,8 @@ class Params():
             return self.util_dict
         elif requested_params == "test_dict":
             return self.test_dict
+        elif requested_params == "k3d_dict":
+            return self.k3d_dict
         elif requested_params == "naut_dict":
             return self.naut_dict
         elif requested_params == "highlevel_config_dict":
@@ -140,7 +143,6 @@ class Params():
         CGP_TEST_PATH = LOCAL_BASE_PATH + "tests/"
         NAUTILUS_TEST_DATA_PATH = NAUTILUS_BASE_PATH + 'tests/test_data/'
         CGP_TEST_DATA = CGP_TEST_PATH + 'test_data/'
-
         self.test_dict = {
             'REASONABLE_FITNESS_SECS': 60,
 
@@ -148,6 +150,34 @@ class Params():
             'NAUTILUS_TEST_DATA_PATH': NAUTILUS_TEST_DATA_PATH,
             'CGP_TEST_DATA': CGP_TEST_DATA,
             }
+
+        # ################################## ##################################
+        #           K3D PARAMS
+        # ################################## ##################################
+        K3D_CLUSTER_NAME = "cgp-cluster"
+        KUBECONFIG_FILE = os.path.join(os.path.expanduser("~"), ".kube", "config")
+        KUBECONFIG_CONTEXT = f"k3d-{K3D_CLUSTER_NAME}"
+        CONDORGP_NAMESPACES = ("cgp-system",)
+        K8S_DASHBOARD_NAMESPACE = "kubernetes-dashboard"
+        K8S_DASHBOARD_DEPLOYMENT = "kubernetes-dashboard"
+        K8S_DASHBOARD_SERVICE = "kubernetes-dashboard"
+        K3D_DASHBOARD_MANIFEST = LOCAL_BASE_PATH + "k8s/k3d/k3d_yaml/000-kubernetes-dashboard.yaml"
+        K3D_DASH_KUBECONFIG_SCRIPT = LOCAL_BASE_PATH + "k8s/k3d/dash_kubeconfig.sh"
+        # Same URL as k8s/k3d/dash_kubeconfig.sh (port-forward 8443 -> service 443).
+        K8S_DASHBOARD_URL = "https://127.0.0.1:8443/"
+
+        self.k3d_dict = {
+            'K3D_CLUSTER_NAME': K3D_CLUSTER_NAME,
+            'KUBECONFIG_FILE': KUBECONFIG_FILE,
+            'KUBECONFIG_CONTEXT': KUBECONFIG_CONTEXT,
+            'CONDORGP_NAMESPACES': CONDORGP_NAMESPACES,
+            'K8S_DASHBOARD_NAMESPACE': K8S_DASHBOARD_NAMESPACE,
+            'K8S_DASHBOARD_DEPLOYMENT': K8S_DASHBOARD_DEPLOYMENT,
+            'K8S_DASHBOARD_SERVICE': K8S_DASHBOARD_SERVICE,
+            'K3D_DASHBOARD_MANIFEST': K3D_DASHBOARD_MANIFEST,
+            'K3D_DASH_KUBECONFIG_SCRIPT': K3D_DASH_KUBECONFIG_SCRIPT,
+            'K8S_DASHBOARD_URL': K8S_DASHBOARD_URL,
+        }
 
         # ################################## ##################################
         #           UTIL PARAMS
