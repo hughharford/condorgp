@@ -1,4 +1,4 @@
-# DOCKER_BUILDKIT=1 docker build --target=runtime -f docker/Dockerfile . 
+# DOCKER_BUILDKIT=1 docker build --target=runtime -f docker/Dockerfile .
 
 # The builder image, used to build the virtual environment
 FROM python:3.12-bullseye as builder
@@ -30,7 +30,7 @@ COPY . ./condorgp
 
 WORKDIR /condorgp
 
-RUN pip install poetry 
+RUN pip install poetry
 RUN poetry install
 #  && pip uninstall poetry
 
@@ -40,7 +40,7 @@ RUN touch /condorgp/condorgp/util/logs/condor_log.txt
 
 # create checkpoint folder and empty checkpoint file, for ease
 # RUN mkdir /condorgp/condorgp/util/checkpoints/ && \
-RUN    touch /condorgp/condorgp/util/checkpoints/first_strat_done.pkl
+RUN  touch /condorgp/condorgp/util/checkpoints/first_strat_done.pkl
 
 
 CMD ["/bin/bash"]

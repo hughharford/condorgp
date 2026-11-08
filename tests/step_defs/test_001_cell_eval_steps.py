@@ -6,7 +6,7 @@ import logging
 from pytest_bdd import scenarios, given, when, then, parsers
 
 # from tests.cell_fixtures import *
-# from tests.cell_fixtures import CellEvaluator, UtilFactory
+from tests.cell_fixtures import CellEvaluator, UtilFactory
 
 ''' FEATURE DESCRIPTION:
 Feature: CondorGp's evolved cell code needs evaluation
@@ -42,7 +42,6 @@ scenarios('../features/001_cell_eval.feature')
 @given('CellEvaluator and no cells')
 def cell_eval_no_cells(cell_evaluator):
     # UtilFactory().start_logger()
-
     assert cell_evaluator.get_all_for_score()
 
 @when('an evaluation is made')

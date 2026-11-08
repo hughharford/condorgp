@@ -5,7 +5,7 @@ import logging
 from pytest_bdd import scenarios, given, when, then, parsers
 
 from condorgp.params import Params
-from condorgp.cell import Cell
+from condorgp.cell.cell import Cell
 # from tests.cell_fixtures import *
 # from tests.cell_fixtures import CellEvaluator, UtilFactory
 
@@ -50,7 +50,7 @@ def given_no_cells():
 @when('a cell is born')
 def when_a_cell_is_born():
     '''When a cell is born'''
-    c1 = Cell(new_cell_ref="001", new_cell_type="PROTOTYPE")
+    c1 = Cell(new_cell_ref=101, new_cell_type="PROTOTYPE")
     assert c1
     KEEPER.append(c1)
 
