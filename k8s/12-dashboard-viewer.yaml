@@ -1,0 +1,59 @@
+# Read-only login account for the Headlamp dashboard.
+#
+# Replaces the previous `dashboard-admin` ServiceAccount, which was bound to
+# cluster-admin: anyone who obtained its token (or reached the dashboard port)
+# owned the whole cluster, including every Secret.
+#
+# This user is bound to Kubernetes' built-in "view" ClusterRole, which can read
+# most namespaced objects but NOT Secrets, and cannot change anything, plus a
+# small extra read-only role so the Nodes / Volumes pages work.
+#
+# Log in with a short-lived token (valid 1h by default):
+#   kubectl -n headlamp create token dashboard-viewer
+# Need to make changes? Use `kubectl` directly, or the temporary-admin steps in
+# kubernetes/dashboard_headlamp.md. Do not make this account permanent cluster-admin.
+#
+# Apply after 11-headlamp.yaml (which creates the namespace).
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dashboard-viewer
+  namespace: headlamp
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: dashboard-viewer-extra
+rules:
+  - apiGroups: [""]
+    resources: ["nodes", "persistentvolumes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: dashboard-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view
+subjects:
+  - kind: ServiceAccount
+    name: dashboard-viewer
+    namespace: headlamp
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: dashboard-viewer-extra
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: dashboard-viewer-extra
+subjects:
+  - kind: ServiceAccount
+    name: dashboard-viewer
+    namespace: headlamp

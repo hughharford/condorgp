@@ -16,7 +16,7 @@ https://www.digitalocean.com/community/tutorials/how-to-setup-k3s-kubernetes-clu
 https://docs.k3s.io/quick-start
 
 on master:
-  curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
+  curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 600
 
 on node:
   curl -sfL https://get.k3s.io | K3S_URL=https://<PRIMARY_NODE_IP>:6443

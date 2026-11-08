@@ -32,7 +32,7 @@ k3_kubectl:
 k3_kapply:
 	k3s kubectl apply -f k8s/00-namespace.yaml
 	k3s kubectl apply -f k8s/01-configmap.yaml
-	k3s kubectl apply -f k8s/02-secrets.yaml
+	KUBECTL="k3s kubectl" bash k8s/secrets/secrets.sh apply   # needs your age key: see kubernetes/secrets_management.md
 	k3s kubectl apply -f k8s/03-persistent-volumes.yaml
 	k3s kubectl apply -f k8s/04-postgres.yaml
 	k3s kubectl apply -f k8s/05-rabbitmq.yaml
@@ -41,6 +41,14 @@ k3_kapply:
 	k3s kubectl apply -f k8s/08-ingress.yaml
 	k3s kubectl apply -f k8s/09-cgpstar.yaml
 	k3s kubectl apply -f k8s/10-dev-container.yaml
+	k3s kubectl apply -f k8s/11-headlamp.yaml
+	k3s kubectl apply -f k8s/12-dashboard-viewer.yaml
+
+# Headlamp on k3s: read-only 1h token, localhost only (see kubernetes/dashboard_headlamp.md)
+k3_dash:
+	@k3s kubectl -n headlamp create token dashboard-viewer
+	@echo "paste that token at http://localhost:4466"
+	@k3s kubectl -n headlamp port-forward service/headlamp 4466:80
 
 # K8S COMMANDS:
 # *****************************************************************************
@@ -66,16 +74,20 @@ k_reset_dev:
 	@sudo microk8s kubectl apply -f k8s/10-dev-container.yaml
 
 k_apply_2:
-	@sudo sh k8s/k8s_apply_2.sh;
+	@sudo SOPS_AGE_KEY_FILE=$(HOME)/.config/sops/age/keys.txt sh k8s/k8s_apply_2.sh;
 
 k_apply:
-	@sudo sh k8s/k8s_apply.sh;
+	@sudo SOPS_AGE_KEY_FILE=$(HOME)/.config/sops/age/keys.txt sh k8s/k8s_apply.sh;
 
 k_delete:
 	@sudo sh k8s/k8s_delete.sh;
 
-k_pdash:
-	@microk8s dashboard-proxy --token-ttl=43200
+# Headlamp (replaces the retired Kubernetes Dashboard). Read-only 1h token, localhost only.
+# See kubernetes/dashboard_headlamp.md. Do not add --address: that exposes it to the network.
+k_dash:
+	@microk8s kubectl -n headlamp create token dashboard-viewer
+	@echo "paste that token at http://localhost:4466"
+	@microk8s kubectl -n headlamp port-forward service/headlamp 4466:80
 
 k_f_graf:
 	@microk8s kubectl port-forward service/cgp-grafana 3000:3000  -n cgp-system --request-timeout='0'

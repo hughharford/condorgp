@@ -51,7 +51,7 @@ microk8s join 192.168.1.100:25000/<token> --worker
 
 
 ## already done, so not needed on startup:
-microk8s enable dashboard
+# microk8s enable dashboard   (retired v2.x dashboard: use Headlamp, see kubernetes/dashboard_headlamp.md)
 microk8s enable registry
 microk8s enable dns
 + https://microk8s.io/docs/addon-dns

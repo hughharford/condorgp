@@ -57,7 +57,7 @@ microk8s join 192.168.1.100:25000/<token> --worker
 
 ## already done, so not needed on startup
 
-microk8s enable dashboard
+microk8s enable dashboard   # NOTE: installs the retired Kubernetes Dashboard v2.x. Use Headlamp instead: kubernetes/dashboard_headlamp.md
 microk8s enable registry
 
 ## useful commands now K3S up and running
@@ -92,7 +92,7 @@ microk8s ctr image import ../00_LOCAL_IMAGES/cgp-nt-again.tar
 ## daily, to get started
 
 + provide proxy for dashboard
-microk8s dashboard-proxy --request-timeout='0'
+microk8s dashboard-proxy --request-timeout='0'   # NOTE: retired dashboard; use `make k_dash` (Headlamp)
 
 + check services:
 k get service cgp-database -n cgp-system

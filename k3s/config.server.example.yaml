@@ -1,0 +1,24 @@
+# k3s HUB (server) config. Copy to /etc/rancher/k3s/config.yaml BEFORE installing k3s,
+# replace every <PLACEHOLDER>, then run the install command in kubernetes/k3s_again/k3s_hub_spoke.md.
+# This file holds no secrets: the join token lives in a root-only file (token-file below).
+
+# Kubeconfig readable by root only. The default is 0600; setting it keeps it explicit.
+# Never use 644: any local user could read cluster-admin credentials.
+write-kubeconfig-mode: "0600"
+
+# Spokes reach the hub over the internet, so the overlay must be encrypted.
+# wireguard-native encrypts pod traffic; never open 8472/udp (unencrypted VXLAN).
+flannel-backend: wireguard-native
+flannel-external-ip: true
+
+node-ip: <HUB_PRIVATE_OR_PUBLIC_IP>
+node-external-ip: <HUB_PUBLIC_IP>
+tls-san:
+  - <HUB_PUBLIC_IP_OR_DNS_NAME>
+
+# Token read from a file (mode 600, owned by root) instead of being typed on a command line.
+token-file: /etc/rancher/k3s/server-token
+# Spokes join with this separate agent token, which cannot join servers or read the API.
+agent-token-file: /etc/rancher/k3s/agent-token
+
+secrets-encryption: true

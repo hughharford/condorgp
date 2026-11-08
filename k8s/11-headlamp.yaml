@@ -1,0 +1,121 @@
+# Headlamp: web UI for the cluster.
+#
+# Replaces the Kubernetes Dashboard v2.7.0, which is retired (no further fixes).
+# Kubernetes now points people to Headlamp: https://headlamp.dev
+#
+# Hardening choices (checked by tests/features/020_k8s_dashboard.feature):
+#  - Plain manifests rather than the Helm chart: the chart's defaults bind the
+#    Headlamp pod's account to cluster-admin. Here that account has NO permissions.
+#  - Headlamp (in-cluster mode) calls the Kubernetes API with the token YOU paste at
+#    login, so what you can do in the UI is exactly what that token may do. Log in
+#    with the read-only account in 12-dashboard-viewer.yaml.
+#  - Version pinned; non-root, no capabilities, read-only filesystem, default seccomp.
+#  - The namespace enforces the "restricted" Pod Security level, so a future edit that
+#    weakens the pod is refused by the cluster rather than silently accepted.
+#  - ClusterIP Service only: no NodePort, LoadBalancer or Ingress. Reach it from your own
+#    machine with a port-forward bound to localhost (see `make k_dash` on microk8s, `make k3_dash` on k3s).
+#
+# Apply this file first (it creates the namespace), then 12-dashboard-viewer.yaml.
+# To upgrade, change the image tag below after reading the Headlamp release notes.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: headlamp
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/warn: restricted
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: headlamp
+  namespace: headlamp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: headlamp
+  namespace: headlamp
+  labels:
+    app.kubernetes.io/name: headlamp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: headlamp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: headlamp
+    spec:
+      serviceAccountName: headlamp
+      # Needed so in-cluster mode can find the API server and its CA. The account
+      # itself is granted nothing (no RoleBinding / ClusterRoleBinding mentions it).
+      automountServiceAccountToken: true
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: headlamp
+          image: ghcr.io/headlamp-k8s/headlamp:v0.46.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - "-in-cluster"
+            - "-in-cluster-context-name=main"
+            - "-session-ttl=3600"
+          ports:
+            - name: http
+              containerPort: 4466
+              protocol: TCP
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 100
+            runAsGroup: 101
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: headlamp
+  namespace: headlamp
+  labels:
+    app.kubernetes.io/name: headlamp
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: headlamp
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP

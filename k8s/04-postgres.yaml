@@ -1,3 +1,60 @@
+# First-boot database initialisation script.
+# This is a COPY of scripts/db_init/01-init.sh (also used by Docker Compose).
+# If you change one, change the other. It runs only when the data volume is
+# empty; see the header of the script for details.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cgp-db-init
+  namespace: cgp-system
+data:
+  01-init.sh: |
+    #!/bin/bash
+    # Postgres first-boot initialisation.
+    #
+    # Mounted at /docker-entrypoint-initdb.d/ by:
+    #   - Kubernetes: ConfigMap "cgp-db-init" in k8s/04-postgres.yaml
+    #   - Docker Compose: docker_compose/docker-compose-db-graf-rmq.yml
+    # KEEP THE TWO IN SYNC: the ConfigMap holds a copy of this file.
+    #
+    # The official postgres image runs these scripts ONLY when the data directory
+    # is empty (first start of a fresh volume). Changing this file does not alter an
+    # existing database; to re-run it, delete the PVC / volume (this destroys data).
+    #
+    # Required environment (supplied from the cgp-secrets Secret / cgp-config):
+    #   APP_DB_USER  application role to create
+    #   APP_DB_PASS  its password
+    #   APP_DB_NAME  application database (created if missing, owned by that role)
+    #
+    # The image creates $POSTGRES_DB itself before running this script. In this repo
+    # POSTGRES_DB and APP_DB_NAME are the same name, so the database usually EXISTS by
+    # now: the script creates it only if it is missing, and then hands it to the
+    # application role either way.
+    #
+    # Values are passed to psql as variables and quoted by psql itself
+    # (:"x" as an identifier, :'x' as a literal), so odd characters in a password
+    # cannot break or inject into the SQL.
+
+    set -euo pipefail
+
+    : "${APP_DB_USER:?APP_DB_USER must be set}"
+    : "${APP_DB_PASS:?APP_DB_PASS must be set}"
+    : "${APP_DB_NAME:?APP_DB_NAME must be set}"
+
+    psql -v ON_ERROR_STOP=1 \
+         --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" \
+         -v app_user="$APP_DB_USER" \
+         -v app_pass="$APP_DB_PASS" \
+         -v app_db="$APP_DB_NAME" <<'EOSQL'
+    CREATE ROLE :"app_user" WITH LOGIN PASSWORD :'app_pass';
+
+    SELECT format('CREATE DATABASE %I', :'app_db')
+    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = :'app_db')
+    \gexec
+
+    ALTER DATABASE :"app_db" OWNER TO :"app_user";
+    EOSQL
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -44,13 +101,13 @@ spec:
           valueFrom:
             secretKeyRef:
               name: cgp-secrets
-              key: postgres-password # postgres-password: cG9zdGdyZXM=  # 'postgres' in base64 cf 02-secrets.yaml
+              key: postgres-password  # value lives in the SOPS-encrypted k8s/02-secrets.enc.yaml
         # APP_DB_PASS
         - name: APP_DB_PASS
           valueFrom:
             secretKeyRef:
               name: cgp-secrets
-              key: app-db-pass #  app-db-pass: Y2dwLXBhc3M=        # 'cgp-pass' in base64 cf 02-secrets.yaml
+              key: app-db-pass  # value lives in the SOPS-encrypted k8s/02-secrets.enc.yaml
         # APP_DB_USER
         - name: APP_DB_USER         # cgp-config set in 01-configmap
           valueFrom:
@@ -86,8 +143,9 @@ spec:
         persistentVolumeClaim:
           claimName: postgres-data
       - name: init-scripts
-        hostPath:
-          path: /home/hsth/code/hughharford/condorgp/scripts/db_init  # Updated this path
+        configMap:
+          name: cgp-db-init
+          defaultMode: 0555
 
 ---
 apiVersion: v1

@@ -51,17 +51,18 @@ from the following:
 docker swarm init --advertise-addr 2a02:6b6f:e6ba:f100:cf19:6d36:d780:bc40
 
 ### got the following:
+(Join token redacted. A real one was committed to this public repo by mistake, so treat it as leaked and rotate it: `docker swarm join-token --rotate worker`.)
 Swarm initialized: current node (zphubsw0txqvzh4g9o8tsgy6o) is now a manager.
 
 To add a worker to this swarm, run the following command:
 
-    docker swarm join --token SWMTKN-1-05hcib7uiear72cl41cpbp77n6r0m4rops32718a4jiizpgm1e-2pcl6a15226lk8bqf7vx12j5m [2a02:6b6f:e6ba:f100:cf19:6d36:d780:bc40]:2377
+    docker swarm join --token <WORKER_JOIN_TOKEN> [2a02:6b6f:e6ba:f100:cf19:6d36:d780:bc40]:2377
 
 To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
 
 ### this initially failed, but took out square brackets:
 
-    docker swarm join --token SWMTKN-1-05hcib7uiear72cl41cpbp77n6r0m4rops32718a4jiizpgm1e-2pcl6a15226lk8bqf7vx12j5m 2a02:6b6f:e6ba:f100:cf19:6d36:d780:bc40:2377
+    docker swarm join --token <WORKER_JOIN_TOKEN> 2a02:6b6f:e6ba:f100:cf19:6d36:d780:bc40:2377
 
 ### AND THEN WORKED
 

@@ -1,0 +1,20 @@
+# SOPS configuration for CondorGP Kubernetes secrets.
+#
+# This file holds PUBLIC keys only, so it is safe to commit. Private (age
+# identity) keys must never be committed; see kubernetes/secrets_management.md.
+#
+# Run `bash k8s/secrets/secrets.sh init` to replace the placeholder below with
+# your own age public key (it starts with "age1...").
+#
+# To allow more than one person/machine to decrypt (recommended: add an offline
+# backup key), list several recipients, comma separated, then run
+# `sops updatekeys <file>` on each encrypted file:
+#   age: >-
+#     age1firstkey...,
+#     age1secondkey...
+creation_rules:
+  - path_regex: .*\.enc\.ya?ml$
+    # Only the values under data/stringData are encrypted; names, namespace and
+    # key names stay readable so diffs and code review still make sense.
+    encrypted_regex: ^(data|stringData)$
+    age: AGE_PUBLIC_KEY_NOT_SET

@@ -1,87 +1,38 @@
 # Microk8s Networking notes
 
 ### do this on master and all nodes:
-sudo ufw allow 53
-sudo ufw allow 9153
-sudo ufw allow 5432
-sudo ufw allow 42102
-sudo ufw allow 47371
-
+# These ports were found while getting microk8s + istio running. They are node-to-node
+# ports, so they are opened ONLY to the other cluster machines, never to "anywhere".
+# (A rule with no "from <address>" part opens the port to the whole internet.)
+# For k3s hub-and-spoke use k3s/ufw_rules.sh instead; it is dry-run by default.
+#
+#   export NODE_IPS="<ip of each other cluster node>" first, then paste this block
+: "${NODE_IPS:?set NODE_IPS to the other nodes public IPs, space separated}"
+open_to_nodes() {   # usage: open_to_nodes <port> [<port> ...]
+  for ip in $NODE_IPS; do
+    for port in "$@"; do sudo ufw allow from "$ip" to any port "$port"; done
+  done
+}
+# base (dns, postgres, misc)
+open_to_nodes 53 9153 5432 42102 47371
 # kube-prom-stack
-sudo ufw allow 9095
-sudo ufw allow 45008
-
-# istio
-
+open_to_nodes 9095 45008
 # istio sidecar (Envoy)
-sudo ufw allow 15000
-sudo ufw allow 15001
-sudo ufw allow 15004
-sudo ufw allow 15006
-sudo ufw allow 15008
-sudo ufw allow 15020
-sudo ufw allow 15021
-sudo ufw allow 15053
-sudo ufw allow 15090
-
+open_to_nodes 15000 15001 15004 15006 15008 15020 15021 15053 15090
 # istiod
-sudo ufw allow 443
-sudo ufw allow 8080
-sudo ufw allow 15010
-sudo ufw allow 15012
-sudo ufw allow 15014
-sudo ufw allow 15017
-
+open_to_nodes 443 8080 15010 15012 15014 15017
 # istio ztunnel
-sudo ufw allow 15080
-
+open_to_nodes 15080
 # other around istio
-sudo ufw allow 3101
-sudo ufw allow 31322
-sudo ufw allow 80
-sudo ufw allow 31482
-sudo ufw allow 31549
-sudo ufw allow 31633
-sudo ufw allow 30550
-
+open_to_nodes 3101 31322 80 31482 31549 31633 30550
 # istio egressgateway
-sudo ufw allow 80
-sudo ufw allow 443
-
+open_to_nodes 80 443
 # kiali
-sudo ufw allow 20001
-sudo ufw allow 9090
-
-
+open_to_nodes 20001 9090
 # istio ingressgateway
-sudo ufw allow 80
-sudo ufw allow 443
-sudo ufw allow 8080
-sudo ufw allow 8443
-sudo ufw allow 15021
-sudo ufw allow 15090
-sudo ufw allow 15443
-sudo ufw allow 31400
-
-
-sudo ufw allow 1338
-sudo ufw allow 2380
-sudo ufw allow 12379
-sudo ufw allow 16443
-sudo ufw allow 19001
-sudo ufw allow 25000
-sudo ufw allow 10248
-sudo ufw allow 10249
-sudo ufw allow 10250
-sudo ufw allow 10251
-sudo ufw allow 10252
-sudo ufw allow 10253
-sudo ufw allow 10254
-sudo ufw allow 10255
-sudo ufw allow 10256
-sudo ufw allow 10257
-sudo ufw allow 10258
-sudo ufw allow 10259
+open_to_nodes 80 443 8080 8443 15021 15090 15443 31400 1338 2380 12379 16443 19001 25000 10248 10249 10250 10251 10252 10253 10254 10255 10256 10257 10258 10259
+# Above, 80/443 are opened to the nodes only. Letting the public reach the ingress gateway
+# is a separate, deliberate decision; it is not part of this block.
 
 sudo ufw status
 

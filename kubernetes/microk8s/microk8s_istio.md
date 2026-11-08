@@ -6,8 +6,8 @@ sudo microk8s enable istio (having enabled community first)
 
 ### adjusted:
 #### istio & loki, prom stack
-sudo ufw allow 15021
-sudo ufw allow 3101
+# only to the other cluster nodes (see microk8s_networking.md, open_to_nodes):
+open_to_nodes 15021 3101
 
 ### restarted
 sudo microk8s stop; sudo microk8s start

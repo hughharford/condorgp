@@ -197,3 +197,25 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# Kubernetes secrets: only SOPS-encrypted *.enc.yaml may be committed.
+# Never commit decrypted copies or age private keys.
+# See kubernetes/secrets_management.md
+*.dec.yaml
+*.dec.yml
+*.plain.yaml
+*.plain.yml
+age-key*.txt
+keys.txt
+*.agekey
+# cluster join tokens and control-plane admin credentials (k3s, kubeadm)
+node-token
+agent-token
+*.token
+admin.conf
+super-admin.conf
+join-command*.txt
+# kubeconfigs are credentials
+*.kubeconfig
+kubeconfig
+k3s.yaml

@@ -22,7 +22,7 @@ microk8s enable dns
 microk8s enable hostpath-storage
 microk8s enable ingress
 microk8s enable registry
-microk8s enable dashboard
+# (dashboard addon removed: it installs the retired Kubernetes Dashboard v2.x. Use Headlamp: make k_dash)
 
 # Configure kubectl alias (optional)
 echo "alias k='sudo microk8s kubectl'" >> ~/.zshrc

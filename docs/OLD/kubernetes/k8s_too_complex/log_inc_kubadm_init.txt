@@ -44,7 +44,7 @@ W0124 22:04:23.520917  470827 checks.go:846] detected that the sandbox image "re
 [upload-certs] Skipping phase. Please see --upload-certs
 [mark-control-plane] Marking the node star.local as control-plane by adding the labels: [node-role.kubernetes.io/control-plane node.kubernetes.io/exclude-from-external-load-balancers]
 [mark-control-plane] Marking the node star.local as control-plane by adding the taints [node-role.kubernetes.io/control-plane:NoSchedule]
-[bootstrap-token] Using token: w1a6nw.9h6yjew3fugt4ykm
+[bootstrap-token] Using token: REDACTED
 [bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
 [bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to get nodes
 [bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials

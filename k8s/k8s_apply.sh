@@ -5,7 +5,7 @@
 
 microk8s kubectl apply -f k8s/00-namespace.yaml
 microk8s kubectl apply -f k8s/01-configmap.yaml
-microk8s kubectl apply -f k8s/02-secrets.yaml
+KUBECTL="microk8s kubectl" bash k8s/secrets/secrets.sh apply   # decrypts k8s/02-secrets.enc.yaml, see kubernetes/secrets_management.md
 microk8s kubectl apply -f k8s/03-persistent-volumes.yaml
 microk8s kubectl apply -f k8s/04-postgres.yaml
 microk8s kubectl apply -f k8s/05-rabbitmq.yaml
@@ -13,4 +13,6 @@ microk8s kubectl apply -f k8s/06-grafana.yaml
 microk8s kubectl apply -f k8s/07-worker.yaml
 microk8s kubectl apply -f k8s/08-ingress.yaml
 microk8s kubectl apply -f k8s/09-cgpstar.yaml
+microk8s kubectl apply -f k8s/11-headlamp.yaml
+microk8s kubectl apply -f k8s/12-dashboard-viewer.yaml
 # 2782

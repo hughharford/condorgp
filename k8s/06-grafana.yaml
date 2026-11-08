@@ -35,6 +35,14 @@ spec:
               key: POSTGRES_DATABASE_URL
         - name: GF_SECURITY_ADMIN_USER
           value: "admin"
+        # Only takes effect when Grafana first initialises its database. For an
+        # existing grafana-data volume see "Rotating credentials" in
+        # kubernetes/secrets_management.md.
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cgp-secrets
+              key: grafana-admin-password
         volumeMounts:
         - name: grafana-data
           mountPath: host-data-grafana

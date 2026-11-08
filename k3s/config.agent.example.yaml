@@ -1,0 +1,8 @@
+# k3s SPOKE (agent) config. Copy to /etc/rancher/k3s/config.yaml on each spoke BEFORE installing.
+# No secrets here: the agent token is read from a root-only file.
+
+server: https://<HUB_PUBLIC_IP_OR_DNS_NAME>:6443
+token-file: /etc/rancher/k3s/agent-token   # contents: the hub's agent token; mode 600
+
+node-ip: <SPOKE_IP>
+node-external-ip: <SPOKE_PUBLIC_IP>
