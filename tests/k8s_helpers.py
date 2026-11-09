@@ -11,30 +11,47 @@ The tests/ directory itself is never scanned: it holds example "bad" values on p
 import os
 import re
 import subprocess
+from collections.abc import Collection, Iterable, Sequence
 from pathlib import Path
+from typing import Any
 
 import yaml
 
-REPO_ROOT = Path(os.environ.get("CGP_REPO_ROOT") or Path(__file__).resolve().parents[1]).resolve()
+_DEFAULT_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(os.environ.get("CGP_REPO_ROOT") or _DEFAULT_ROOT).resolve()
 
 _SKIP_TOP_DIRS = {"tests", ".git", ".venv", "node_modules"}
 _SKIP_NAMES = {"poetry.lock", "package-lock.json"}
 _MAX_BYTES = 1_000_000
 
+# (relative path, 1-based line number, line text)
+Hit = tuple[str, int, str]
 
-def run(cmd, cwd=None, env=None, input=None, timeout=120):
+
+def run(
+    cmd: Sequence[str],
+    cwd: str | os.PathLike[str] | None = None,
+    env: dict[str, str] | None = None,
+    input: str | None = None,
+    timeout: int = 120,
+) -> subprocess.CompletedProcess[str]:
     """subprocess.run with text output; never raises on a non-zero exit."""
     return subprocess.run(
         cmd, cwd=cwd, env=env, input=input, capture_output=True, text=True, timeout=timeout
     )
 
 
-def repo_files():
+def repo_files() -> list[Path]:
     """Files that are part of the repo: tracked + untracked-but-not-git-ignored.
 
     Untracked files are included on purpose, so a leak is caught BEFORE `git add`.
     """
-    res = run(["git", "-C", str(REPO_ROOT), "ls-files", "-z", "--cached", "--others", "--exclude-standard"])
+    res = run(
+        [
+            "git", "-C", str(REPO_ROOT), "ls-files", "-z",
+            "--cached", "--others", "--exclude-standard",
+        ]
+    )
     if res.returncode == 0:
         rels = [p for p in res.stdout.split("\0") if p]
     else:  # not a git checkout: walk the tree
@@ -43,7 +60,7 @@ def repo_files():
             for p in REPO_ROOT.rglob("*")
             if p.is_file() and ".git" not in p.parts
         ]
-    files = []
+    files: list[Path] = []
     for rel in sorted(set(rels)):
         path = Path(rel)
         if path.parts[0] in _SKIP_TOP_DIRS or path.name in _SKIP_NAMES:
@@ -54,7 +71,7 @@ def repo_files():
     return files
 
 
-def read_text(rel):
+def read_text(rel: str | os.PathLike[str]) -> str | None:
     """Text of a repo file, or None if it is missing or binary."""
     try:
         return (REPO_ROOT / rel).read_text(encoding="utf-8")
@@ -62,10 +79,19 @@ def read_text(rel):
         return None
 
 
-def find_lines(files, regex, suffixes=None):
-    """[(rel, line_no, line)] for every line matching regex in the given files."""
+def require_text(rel: str | os.PathLike[str]) -> str:
+    """Return the text of a repo file, failing the test with a clear message if it is absent."""
+    text = read_text(rel)
+    assert text is not None, f"{rel} does not exist (or is not a text file)"
+    return text
+
+
+def find_lines(
+    files: Iterable[str | Path], regex: str, suffixes: Collection[str] | None = None
+) -> list[Hit]:
+    """Every line matching regex in the given files, as (rel, line_no, line)."""
     pattern = re.compile(regex)
-    hits = []
+    hits: list[Hit] = []
     for rel in files:
         if suffixes and Path(rel).suffix not in suffixes and Path(rel).name not in suffixes:
             continue
@@ -78,9 +104,11 @@ def find_lines(files, regex, suffixes=None):
     return hits
 
 
-def logical_lines(files, suffixes=None):
-    """[(rel, first_line_no, command)] with backslash-continued lines joined into one command."""
-    found = []
+def logical_lines(
+    files: Iterable[str | Path], suffixes: Collection[str] | None = None
+) -> list[Hit]:
+    """Commands as (rel, first_line_no, command), with backslash-continued lines joined."""
+    found: list[Hit] = []
     for rel in files:
         if suffixes and Path(rel).suffix not in suffixes and Path(rel).name not in suffixes:
             continue
@@ -101,7 +129,7 @@ def logical_lines(files, suffixes=None):
     return found
 
 
-def yaml_docs(rel):
+def yaml_docs(rel: str | Path) -> list[dict[str, Any]]:
     """All mapping documents in a YAML file ([] if unreadable or not valid YAML)."""
     text = read_text(rel)
     if text is None:
@@ -112,10 +140,12 @@ def yaml_docs(rel):
         return []
 
 
-def is_git_ignored(rel):
-    """True if the .gitignore rules would ignore this path (even if it is tracked)."""
-    return run(["git", "-C", str(REPO_ROOT), "check-ignore", "-q", "--no-index", rel]).returncode == 0
+def is_git_ignored(rel: str) -> bool:
+    """Return True if .gitignore would ignore this path (even if it is tracked)."""
+    result = run(["git", "-C", str(REPO_ROOT), "check-ignore", "-q", "--no-index", rel])
+    return result.returncode == 0
 
 
-def fmt_hits(hits):
+def fmt_hits(hits: Iterable[Hit]) -> str:
+    """Format hits as indented `path:line: text` lines for an assertion message."""
     return "\n".join(f"  {rel}:{n}: {line}" for rel, n, line in hits)
