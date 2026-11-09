@@ -3,6 +3,7 @@
 Each topic's feature carries a tag, which pytest-bdd turns into a marker, so one topic
 can be run on its own:  python -m pytest -m A_secrets   (or B_tokens, D_postgres_init, ...)
 """
+
 from pathlib import Path
 
 import pytest

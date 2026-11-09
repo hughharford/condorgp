@@ -46,3 +46,20 @@ Feature: Cluster secrets are never committed in readable form
   Scenario: The real encrypted cluster Secret is committed for a real recipient
     Given the repository files
     Then the encrypted cluster Secret exists for a real age recipient
+
+  Scenario: A known-bad canary Secret proves the checks can fail
+    Given the canary Secret kept in the test data
+    Then it is a readable, unencrypted Kubernetes Secret with only fake values
+    And the plaintext check classifies it as PLAINTEXT
+    And the default-password check flags the default credentials in it
+
+  Scenario: The checks notice when the canary stops being bad
+    Given the canary Secret kept in the test data
+    When I encrypt or empty the values of a copy of the canary
+    Then the canary guard rejects that copy
+
+  Scenario: The canary never reaches the real checks
+    Given the canary Secret kept in the test data
+    Then the repository scan skips it
+    And the repository's own secrets check ignores it
+

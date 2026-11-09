@@ -1,4 +1,5 @@
 """Topic G: the k3s kubeconfig is written with mode 600 (feature 022)."""
+
 import re
 from pathlib import Path
 
@@ -75,8 +76,7 @@ def read_config(files: list[Path]) -> str:
 def sets_0600(config: str) -> None:
     """Require the quoted string "0600", so YAML cannot read it as a number."""
     assert re.search(r'^write-kubeconfig-mode:\s*"0600"\s*$', config, re.M), (
-        'config must contain: write-kubeconfig-mode: "0600" '
-        "(quoted, so YAML keeps it a string)"
+        'config must contain: write-kubeconfig-mode: "0600" ' "(quoted, so YAML keeps it a string)"
     )
 
 

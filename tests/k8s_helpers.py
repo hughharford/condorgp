@@ -8,6 +8,7 @@ GREEN on the fix, point CGP_REPO_ROOT at another checkout, e.g. a worktree of ma
 
 The tests/ directory itself is never scanned: it holds example "bad" values on purpose.
 """
+
 import os
 import re
 import subprocess
@@ -48,8 +49,14 @@ def repo_files() -> list[Path]:
     """
     res = run(
         [
-            "git", "-C", str(REPO_ROOT), "ls-files", "-z",
-            "--cached", "--others", "--exclude-standard",
+            "git",
+            "-C",
+            str(REPO_ROOT),
+            "ls-files",
+            "-z",
+            "--cached",
+            "--others",
+            "--exclude-standard",
         ]
     )
     if res.returncode == 0:

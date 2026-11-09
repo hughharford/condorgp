@@ -1,4 +1,5 @@
 """Topic A: cluster secrets are encrypted in the repo (feature 017)."""
+
 import base64
 import os
 import re
@@ -16,6 +17,7 @@ from tests.k8s_helpers import (
     REPO_ROOT,
     is_git_ignored,
     read_text,
+    repo_files,
     run,
     yaml_docs,
 )
@@ -35,6 +37,11 @@ SECRET_KEYS_RANDOM = (
     "grafana-admin-password",
 )
 SECRETS_SCRIPT = ["bash", "k8s/secrets/secrets.sh"]
+# A deliberately bad Secret kept so the checks can always be seen to fail. It is named
+# *.example.yaml so that `secrets.sh check` skips it, and it lives under tests/, which the
+# repository scan never reads. Every value in it is fake.
+CANARY_FILE = "tests/test_data/k8s/canary-plaintext-secret.example.yaml"
+CANARY_FAKE_PREFIX = "FAKE-NOT-A-REAL-SECRET"
 GITIGNORE_MUST_HIDE = (
     "keys.txt",
     "k8s/secrets/age-key.txt",
@@ -133,6 +140,11 @@ def list_secret_manifests(files: list[Path]) -> list[SecretDoc]:
     return found
 
 
+def _by_kind(docs: list[dict[str, Any]], kind: str) -> list[dict[str, Any]]:
+    """Return the documents of the given Kubernetes kind."""
+    return [doc for doc in docs if doc.get("kind") == kind]
+
+
 def _classify(doc: dict[str, Any]) -> str:
     """Say whether a Secret is encrypted, an empty shell, a template or PLAINTEXT."""
     if doc.get("_unparseable"):
@@ -157,6 +169,29 @@ def secrets_are_safe(secrets: list[SecretDoc]) -> None:
     assert not bad, "Committed Secret manifests with readable values:\n" + "\n".join(bad)
 
 
+def _decoded_values(rel: str, doc: dict[str, Any]) -> list[tuple[str, str, str]]:
+    """Return (path, key, value) for a Secret, decoding base64 `data` values."""
+    decoded: list[tuple[str, str, str]] = []
+    for key, value in (doc.get("data") or {}).items():
+        try:
+            value = base64.b64decode(str(value), validate=True).decode("utf-8")
+        except ValueError:  # not base64 or not UTF-8: compare the raw text
+            value = str(value)
+        decoded.append((rel, key, value))
+    for key, value in (doc.get("stringData") or {}).items():
+        decoded.append((rel, key, str(value)))
+    return decoded
+
+
+def _default_password_findings(decoded: list[tuple[str, str, str]]) -> list[str]:
+    """Describe every decoded value that is a well-known default password."""
+    return [
+        f"  {rel}: {key}"
+        for rel, key, value in decoded
+        if value.strip().lower() in WELL_KNOWN_DEFAULTS
+    ]
+
+
 @when("I decode the values of every Secret manifest", target_fixture="decoded")
 def decode_secret_values(files: list[Path]) -> list[tuple[str, str, str]]:
     """Decode every Secret value (base64 for `data`, as-is for `stringData`)."""
@@ -164,28 +199,15 @@ def decode_secret_values(files: list[Path]) -> list[tuple[str, str, str]]:
     for rel in files:
         if rel.suffix not in (".yaml", ".yml"):
             continue
-        for doc in yaml_docs(rel):
-            if doc.get("kind") != "Secret":
-                continue
-            for key, value in (doc.get("data") or {}).items():
-                try:
-                    value = base64.b64decode(str(value), validate=True).decode("utf-8")
-                except ValueError:  # not base64 or not UTF-8: compare the raw text
-                    value = str(value)
-                decoded.append((str(rel), key, value))
-            for key, value in (doc.get("stringData") or {}).items():
-                decoded.append((str(rel), key, str(value)))
+        for doc in _by_kind(yaml_docs(rel), "Secret"):
+            decoded += _decoded_values(str(rel), doc)
     return decoded
 
 
 @then("none of them is a well-known default password")
 def no_default_passwords(decoded: list[tuple[str, str, str]]) -> None:
     """Fail on any Secret value that is a well-known default password."""
-    bad = [
-        f"  {rel}: {key}"
-        for rel, key, value in decoded
-        if value.strip().lower() in WELL_KNOWN_DEFAULTS
-    ]
+    bad = _default_password_findings(decoded)
     assert not bad, (
         "Secrets still hold default credentials "
         "(these are in the public git history, so rotate them):\n" + "\n".join(bad)
@@ -316,9 +338,9 @@ def nothing_readable(vault: Vault) -> None:
 def owner_can_decrypt(vault: Vault) -> None:
     """Require the owner's key to yield distinct random 48-character passwords."""
     values = [_decrypt_value(vault.root, vault.env, key) for key in SECRET_KEYS_RANDOM]
-    assert all(re.fullmatch(r"[0-9a-f]{48}", value) for value in values), (
-        "passwords are not 48 hex characters"
-    )
+    assert all(
+        re.fullmatch(r"[0-9a-f]{48}", value) for value in values
+    ), "passwords are not 48 hex characters"
     assert len(set(values)) == len(values), "two secrets share the same password"
     user = _decrypt_value(vault.root, vault.env, "rabbitmq-user")
     assert user and user.lower() not in WELL_KNOWN_DEFAULTS
@@ -414,9 +436,120 @@ def real_secret_committed(files: list[Path]) -> None:
         for doc in yaml_docs(ENC_FILE)
         for entry in (doc.get("sops") or {}).get("age", [])
     ]
-    assert recipients and all(r.startswith("age1") for r in recipients), (
-        f"bad recipients: {recipients}"
+    assert recipients and all(
+        r.startswith("age1") for r in recipients
+    ), f"bad recipients: {recipients}"
+    assert any(
+        r in config for r in recipients
+    ), "k8s/.sops.yaml does not list the recipient the file is encrypted for"
+
+
+# ---------------------------------------------------------------- canary scenarios
+
+
+def _canary_secret() -> dict[str, Any]:
+    """Load the canary Secret document, failing clearly if it has been removed."""
+    docs = _by_kind(yaml_docs(CANARY_FILE), "Secret")
+    assert len(docs) == 1, (
+        f"{CANARY_FILE} must hold exactly one Secret: it is the known-bad example that "
+        "proves the checks can fail. Do not delete it."
     )
-    assert any(r in config for r in recipients), (
-        "k8s/.sops.yaml does not list the recipient the file is encrypted for"
-    )
+    return docs[0]
+
+
+def _assert_canary_still_bad(doc: dict[str, Any]) -> None:
+    """Fail unless the canary is still plaintext AND still holds a default credential."""
+    verdict = _classify(doc)
+    assert verdict.startswith(
+        "PLAINTEXT"
+    ), f"the canary is classified as {verdict!r}: the plaintext check could no longer fail"
+    findings = _default_password_findings(_decoded_values(CANARY_FILE, doc))
+    assert findings, "the canary holds no default credential: that check could no longer fail"
+
+
+@given("the canary Secret kept in the test data", target_fixture="canary")
+def canary_secret() -> dict[str, Any]:
+    """Load the canary Secret."""
+    return _canary_secret()
+
+
+@then("it is a readable, unencrypted Kubernetes Secret with only fake values")
+def canary_is_fake_and_readable(canary: dict[str, Any]) -> None:
+    """Check the canary is readable, carries no sops block, and is clearly fake."""
+    assert "sops" not in canary, "the canary must stay unencrypted"
+    values = _values(canary)
+    assert values, "the canary has no values"
+    decoded = _decoded_values(CANARY_FILE, canary)
+    for _, key, value in decoded:
+        is_default = value.strip().lower() in WELL_KNOWN_DEFAULTS
+        assert is_default or value.startswith(CANARY_FAKE_PREFIX), (
+            f"canary value '{key}' is neither a well-known default nor marked "
+            f"{CANARY_FAKE_PREFIX}: it must not look like a real credential"
+        )
+    assert _default_password_findings(decoded), "the canary needs a default password"
+
+
+@then("the plaintext check classifies it as PLAINTEXT")
+def canary_is_plaintext(canary: dict[str, Any]) -> None:
+    """Check the plaintext check flags the canary."""
+    assert _classify(canary).startswith("PLAINTEXT")
+
+
+@then("the default-password check flags the default credentials in it")
+def canary_has_defaults(canary: dict[str, Any]) -> None:
+    """Check the default-password check flags the canary."""
+    assert _default_password_findings(_decoded_values(CANARY_FILE, canary))
+
+
+@when(
+    "I encrypt or empty the values of a copy of the canary",
+    target_fixture="sanitised_copies",
+)
+def sanitise_canary_copies(canary: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Make copies of the canary that someone has 'fixed': encrypted, emptied, or CHANGEME."""
+    keys = list(_values(canary))
+    base = {k: v for k, v in canary.items() if k not in ("data", "stringData")}
+    return {
+        "encrypted": {
+            **base,
+            "stringData": {key: "ENC[AES256_GCM,data:x,tag:y]" for key in keys},
+            "sops": {"age": [{"recipient": "age1x"}], "mac": "m"},
+        },
+        "emptied": {**base, "stringData": {key: "" for key in keys}},
+        "template": {**base, "stringData": {key: PLACEHOLDER for key in keys}},
+        "removed": {**base, "stringData": {}},
+    }
+
+
+@then("the canary guard rejects that copy")
+def canary_guard_rejects(sanitised_copies: dict[str, dict[str, Any]]) -> None:
+    """Check the guard raises for every sanitised copy and accepts the real canary."""
+    _assert_canary_still_bad(_canary_secret())  # the real one passes the guard
+    accepted: list[str] = []
+    for name, copy in sanitised_copies.items():
+        try:
+            _assert_canary_still_bad(copy)
+        except AssertionError:
+            continue  # rejected, as it should be
+        accepted.append(name)
+    assert not accepted, f"the canary guard wrongly accepted these safe copies: {accepted}"
+
+
+@then("the repository scan skips it")
+def scan_skips_canary(canary: dict[str, Any]) -> None:
+    """Check the real scan never reads tests/, or the canary would fail it."""
+    scanned = {str(path) for path in repo_files()}
+    assert CANARY_FILE not in scanned
+    assert not [path for path in scanned if path.startswith("tests/")]
+
+
+@then("the repository's own secrets check ignores it")
+def secrets_check_ignores_canary(canary: dict[str, Any], tmp_path: Path) -> None:
+    """`secrets.sh check` must pass with the canary present, because it is *.example.yaml."""
+    root = _scratch_tooling(tmp_path)
+    assert run(["git", "init", "-q"], cwd=root).returncode == 0
+    target = root / CANARY_FILE
+    target.parent.mkdir(parents=True)
+    shutil.copy(REPO_ROOT / CANARY_FILE, target)
+    result = run([*SECRETS_SCRIPT, "check"], cwd=root)
+    assert result.returncode == 0, result.stdout + result.stderr

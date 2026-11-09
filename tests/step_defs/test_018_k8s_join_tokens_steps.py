@@ -1,4 +1,5 @@
 """Topic B: kubeadm, k3s and Swarm join tokens are never committed (feature 018)."""
+
 import re
 from pathlib import Path
 
@@ -77,10 +78,9 @@ def search_kubeadm_tokens(files: list[Path]) -> list[Hit]:
 @then("none is found")
 def none_found(hits: list[Hit]) -> None:
     """Fail, listing every credential found."""
-    assert not hits, (
-        "Credentials found in committed files (rotate/delete them, then redact):\n"
-        + fmt_hits(hits)
-    )
+    assert (
+        not hits
+    ), "Credentials found in committed files (rotate/delete them, then redact):\n" + fmt_hits(hits)
 
 
 # ---------------------------------------------------------------- scenario 2
@@ -116,13 +116,9 @@ def read_join_arguments(files: list[Path]) -> list[JoinArg]:
 def join_args_are_placeholders(join_args: list[JoinArg]) -> None:
     """Fail on any join value that is not a placeholder."""
     bad: list[Hit] = [
-        (rel, number, line)
-        for rel, number, line, value in join_args
-        if not _is_placeholder(value)
+        (rel, number, line) for rel, number, line, value in join_args if not _is_placeholder(value)
     ]
-    assert not bad, (
-        "Real join values committed (use <PLACEHOLDER> or REDACTED):\n" + fmt_hits(bad)
-    )
+    assert not bad, "Real join values committed (use <PLACEHOLDER> or REDACTED):\n" + fmt_hits(bad)
 
 
 # ---------------------------------------------------------------- scenario 4

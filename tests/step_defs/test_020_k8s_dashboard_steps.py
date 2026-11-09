@@ -1,4 +1,5 @@
 """Topic E: a maintained dashboard, read-only login and loopback-only addresses (feature 020)."""
+
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -128,8 +129,8 @@ def search_retired_dashboard(files: list[Path]) -> list[Hit]:
 @then("it is not installed anywhere")
 def not_installed(hits: list[Hit]) -> None:
     """Fail, listing every reference to the retired dashboard."""
-    assert not hits, (
-        "The retired Kubernetes Dashboard (v2.x) is still referenced:\n" + fmt_hits(hits)
+    assert not hits, "The retired Kubernetes Dashboard (v2.x) is still referenced:\n" + fmt_hits(
+        hits
     )
 
 
@@ -245,9 +246,9 @@ def service_wired(dash: Dashboard) -> None:
         assert selector.items() <= labels.items(), "Service selector does not match the pods"
         for port in service["spec"]["ports"]:
             target = port["targetPort"]
-            assert target in ports or target in ports.values(), (
-                f"targetPort {target!r} is not a container port {ports}"
-            )
+            assert (
+                target in ports or target in ports.values()
+            ), f"targetPort {target!r} is not a container port {ports}"
     account = dash.pod["serviceAccountName"]
     defined = {doc["metadata"]["name"] for doc in _by_kind(dash.docs, "ServiceAccount")}
     assert account in defined, f"ServiceAccount '{account}' is not defined in the manifest"
@@ -263,14 +264,14 @@ def viewer_in_namespace(dash: Dashboard) -> None:
         for doc in _by_kind(docs, "ServiceAccount")
         if doc["metadata"]["name"] == "dashboard-viewer"
     ]
-    assert viewers and viewers[0]["metadata"]["namespace"] == dash.namespace, (
-        f"dashboard-viewer is not in '{dash.namespace}'"
-    )
+    assert (
+        viewers and viewers[0]["metadata"]["namespace"] == dash.namespace
+    ), f"dashboard-viewer is not in '{dash.namespace}'"
     for binding in (doc for doc in docs if doc.get("kind") in BINDINGS):
         for subject in _subjects(binding):
-            assert subject.get("namespace") == dash.namespace, (
-                f"{binding['metadata']['name']} points at namespace {subject.get('namespace')!r}"
-            )
+            assert (
+                subject.get("namespace") == dash.namespace
+            ), f"{binding['metadata']['name']} points at namespace {subject.get('namespace')!r}"
 
 
 # ---------------------------------------------------------------- RBAC scenarios

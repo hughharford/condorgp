@@ -1,4 +1,5 @@
 """Topic D: the Postgres init script is delivered by ConfigMap and works (feature 019)."""
+
 import os
 import shutil
 import socket
@@ -66,9 +67,9 @@ def init_volume(pg_docs: list[Doc]) -> Doc:
 @then("they come from a ConfigMap that exists in the same namespace")
 def init_from_configmap(init_volume: Doc, pg_docs: list[Doc]) -> None:
     """Require the init volume to be a ConfigMap defined in the Deployment's namespace."""
-    assert "configMap" in init_volume, (
-        f"init-scripts is not a ConfigMap volume: {sorted(init_volume)}"
-    )
+    assert (
+        "configMap" in init_volume
+    ), f"init-scripts is not a ConfigMap volume: {sorted(init_volume)}"
     name = init_volume["configMap"]["name"]
     deployment_ns = _by_kind(pg_docs, "Deployment")[0]["metadata"].get("namespace")
     maps = [doc for doc in _by_kind(pg_docs, "ConfigMap") if doc["metadata"]["name"] == name]
@@ -88,15 +89,13 @@ def no_host_path(pg_docs: list[Doc]) -> None:
 def configmap_matches_source(pg_docs: list[Doc]) -> None:
     """Require the ConfigMap copy to equal the script Docker Compose mounts."""
     maps = [
-        doc
-        for doc in _by_kind(pg_docs, "ConfigMap")
-        if "01-init.sh" in (doc.get("data") or {})
+        doc for doc in _by_kind(pg_docs, "ConfigMap") if "01-init.sh" in (doc.get("data") or {})
     ]
     assert maps, "no ConfigMap in the manifest carries 01-init.sh"
     source = require_text(INIT_SCRIPT)
-    assert maps[0]["data"]["01-init.sh"].strip() == source.strip(), (
-        f"ConfigMap copy differs from {INIT_SCRIPT}: update both together"
-    )
+    assert (
+        maps[0]["data"]["01-init.sh"].strip() == source.strip()
+    ), f"ConfigMap copy differs from {INIT_SCRIPT}: update both together"
 
 
 @then("the init volume is mounted with an executable mode")
@@ -105,9 +104,9 @@ def init_volume_executable(pg_docs: list[Doc]) -> None:
     volume = next((v for v in _database_volumes(pg_docs) if v.get("name") == "init-scripts"), None)
     assert volume and "configMap" in volume, "init-scripts is not a ConfigMap volume"
     mode = volume["configMap"].get("defaultMode")
-    assert mode is not None and mode & 0o111, (
-        f"defaultMode {mode!r} leaves the script non-executable"
-    )
+    assert (
+        mode is not None and mode & 0o111
+    ), f"defaultMode {mode!r} leaves the script non-executable"
 
 
 @then("the database container receives the Postgres password and the application role settings")
@@ -232,16 +231,31 @@ class ThrowawayPostgres:
         """Create the data directory and start the server."""
         res = self.run(
             [
-                str(self.bindir / "initdb"), "-D", str(self.data), "-U", "postgres",
-                "--auth-local=trust", "--auth-host=scram-sha-256", "-E", "UTF8", "--no-sync",
+                str(self.bindir / "initdb"),
+                "-D",
+                str(self.data),
+                "-U",
+                "postgres",
+                "--auth-local=trust",
+                "--auth-host=scram-sha-256",
+                "-E",
+                "UTF8",
+                "--no-sync",
             ]
         )
         assert res.returncode == 0, res.stderr
         options = f"-p {self.port} -k {self.sock} -c listen_addresses=127.0.0.1 -c fsync=off"
         res = self.run(
             [
-                str(self.bindir / "pg_ctl"), "-D", str(self.data), "-w",
-                "-l", str(self.root / "pg.log"), "-o", options, "start",
+                str(self.bindir / "pg_ctl"),
+                "-D",
+                str(self.data),
+                "-w",
+                "-l",
+                str(self.root / "pg.log"),
+                "-o",
+                options,
+                "start",
             ]
         )
         assert res.returncode == 0, res.stderr + (self.root / "pg.log").read_text()
@@ -310,9 +324,9 @@ def app_db_precreated(pg: ThrowawayPostgres) -> None:
 def run_init_script_existing_db(pg: ThrowawayPostgres) -> None:
     """Run the script when the application database already exists."""
     res = _run_init_script(pg, postgres_db="cgpbackbone")
-    assert res.returncode == 0, (
-        f"init script failed when the database already existed:\n{res.stderr}"
-    )
+    assert (
+        res.returncode == 0
+    ), f"init script failed when the database already existed:\n{res.stderr}"
 
 
 @when("I run the init script with an awkward password")
@@ -326,8 +340,16 @@ def _login(pg: ThrowawayPostgres, password: str) -> subprocess.CompletedProcess[
     """Try to log in as the application role over TCP with the given password."""
     return pg.run(
         [
-            str(pg.bindir / "psql"), "-XtA", "-h", "127.0.0.1", "-U", "cgp",
-            "-d", "cgpbackbone", "-c", "select current_user",
+            str(pg.bindir / "psql"),
+            "-XtA",
+            "-h",
+            "127.0.0.1",
+            "-U",
+            "cgp",
+            "-d",
+            "cgpbackbone",
+            "-c",
+            "select current_user",
         ],
         PGPASSWORD=password,
     )

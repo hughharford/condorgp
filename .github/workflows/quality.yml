@@ -1,0 +1,67 @@
+# Code-quality gate for the cluster-security BDD tests (topics A-G).
+#
+# Runs Black and flake8 (PEP 8 at 99 columns, see [tool.black] in pyproject.toml and .flake8)
+# and then the BDD tests themselves, with real pytest-bdd. Versions match poetry.lock.
+#
+# Scope is deliberately limited to the files listed below. The rest of the repo has not been
+# brought up to this standard yet, and gating on it would fail every run. To widen the gate,
+# add paths to CHECKED_FILES. (test_022 is a glob because its own scan flags the literal
+# word it checks for, even inside this file.)
+name: Quality
+
+on:
+  push:
+  pull_request:
+
+env:
+  CHECKED_FILES: >-
+    tests/k8s_helpers.py
+    tests/step_defs/conftest.py
+    tests/step_defs/test_017_k8s_secrets_encrypted_steps.py
+    tests/step_defs/test_018_k8s_join_tokens_steps.py
+    tests/step_defs/test_019_k8s_postgres_init_steps.py
+    tests/step_defs/test_020_k8s_dashboard_steps.py
+    tests/step_defs/test_021_k3s_ufw_steps.py
+    tests/step_defs/test_022*.py
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install the pinned tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install black==24.10.0 flake8==7.1.2 pytest==8.3.5 pytest-bdd==7.3.0 pyyaml==6.0.3
+
+      - name: Black (formatting)
+        run: black --check --diff $CHECKED_FILES
+
+      - name: flake8 (PEP 8)
+        run: flake8 $CHECKED_FILES
+
+      # The tests that need sops, age or PostgreSQL skip themselves if those are missing.
+      # Installing them makes the real-encryption and real-Postgres scenarios run.
+      - name: Install sops, age and PostgreSQL for the full scenarios
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y age postgresql
+          curl -fsSL -o /tmp/sops "https://github.com/getsops/sops/releases/download/v3.9.4/sops-v3.9.4.linux.amd64"
+          sudo install -m 0755 /tmp/sops /usr/local/bin/sops
+
+      # --confcutdir keeps pytest from loading tests/conftest.py, which imports the whole
+      # trading application. These tests only need the repository files.
+      - name: BDD tests (topics A, B, D, E, F, G)
+        run: |
+          python -m pytest --confcutdir=tests/step_defs -p no:cacheprovider -ra \
+            tests/step_defs/test_017_k8s_secrets_encrypted_steps.py \
+            tests/step_defs/test_018_k8s_join_tokens_steps.py \
+            tests/step_defs/test_019_k8s_postgres_init_steps.py \
+            tests/step_defs/test_020_k8s_dashboard_steps.py \
+            tests/step_defs/test_021_k3s_ufw_steps.py \
+            tests/step_defs/test_022*.py
