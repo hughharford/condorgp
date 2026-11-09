@@ -31,3 +31,17 @@ Feature: Cluster join tokens are never committed
   Scenario: The guide explains how to handle tokens going forward
     Given the secrets management guide
     Then it covers separate agent tokens, token files, rotation, deleting kubeadm tokens and shell history
+
+  Scenario: A known-bad canary proves the token checks can fail
+    Given the token canary kept in the test data
+    Then it says plainly that every value in it is fake
+    And every kind of join credential the checks look for is found in it
+
+  Scenario: The checks notice when the canary stops being bad
+    Given the token canary kept in the test data
+    When I redact, empty or strip one kind of credential from a copy
+    Then the canary guard rejects that copy
+
+  Scenario: The canary never reaches the real checks
+    Given the token canary kept in the test data
+    Then the repository scan skips it

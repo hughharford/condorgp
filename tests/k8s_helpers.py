@@ -175,3 +175,15 @@ def is_git_ignored(rel: str) -> bool:
 def fmt_hits(hits: Iterable[Hit]) -> str:
     """Format hits as indented `path:line: text` lines."""
     return "\n".join(f"  {rel}:{n}: {line}" for rel, n, line in hits)
+
+
+def assert_scan_skips(canary_rel: str) -> None:
+    """Fail if the repository scan would read a canary or anything in tests/.
+
+    A canary is bad on purpose, so the real checks must never see it.
+    """
+    scanned = {str(path) for path in repo_files()}
+    assert canary_rel not in scanned, f"the scan reads the canary {canary_rel}"
+    assert not [
+        path for path in scanned if path.startswith("tests/")
+    ], "the scan reads files under tests/"

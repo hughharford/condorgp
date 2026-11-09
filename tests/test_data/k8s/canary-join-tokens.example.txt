@@ -1,0 +1,20 @@
+# CANARY (topic B): deliberately BAD join credentials that must stay in the repo.
+#
+# Tests 018 use this file to prove the token checks can FAIL: each kind of
+# credential below must be flagged. If someone redacts, empties or deletes any
+# of them, a test fails and says which check could no longer fail.
+#
+# Every value is FAKE. Do not replace them with real ones.
+# It lives under tests/, which the repository scan never reads, so it does not
+# trip the real checks.
+
+kubeadm bootstrap token: abcdef.0123456789abcdef
+K10deadbeefdeadbeefdeadbeefdeadbeef::server:FAKE-NOT-A-REAL-TOKEN
+SWMTKN-1-FAKEFAKEFAKEFAKEFAKEFAKE-FAKEFAKEFAKEFAKE
+K3S_TOKEN=fake-k3s-token-value
+kubeadm join 10.0.0.1:6443 --token fake-join-token-value
+--discovery-token-ca-cert-hash sha256:fakecahashfakecahashfakecahash
+--certificate-key fake-certificate-key-value
+microk8s join 10.0.0.1:25000/fakefakefake/fakefakefake
+certificate key:
+0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef

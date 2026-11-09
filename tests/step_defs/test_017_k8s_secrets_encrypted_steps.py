@@ -15,9 +15,9 @@ from pytest_bdd import given, scenarios, then, when
 
 from tests.k8s_helpers import (
     REPO_ROOT,
+    assert_scan_skips,
     is_git_ignored,
     read_text,
-    repo_files,
     run,
     yaml_docs,
 )
@@ -621,9 +621,7 @@ def canary_guard_rejects(sanitised_copies: dict[str, dict[str, Any]]) -> None:
 @then("the repository scan skips it")
 def scan_skips_canary(canary: dict[str, Any]) -> None:
     """Check the real scan never reads tests/, or the canary would fail it."""
-    scanned = {str(path) for path in repo_files()}
-    assert CANARY_FILE not in scanned
-    assert not [path for path in scanned if path.startswith("tests/")]
+    assert_scan_skips(CANARY_FILE)
 
 
 @then("the repository's own secrets check ignores it")
