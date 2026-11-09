@@ -29,25 +29,25 @@ FROM_SRC = re.compile(r"\bfrom\s+(\S+)")
 RULE_FROM = re.compile(r"^ufw (allow|limit) from (\S+) to any(?: port (\d+) proto (tcp|udp))?$")
 
 
-def _rules(stdout):
+def rules(stdout) -> list:
     """The `ufw ...` lines the script printed, in order."""
     return [line.strip() for line in stdout.splitlines() if line.startswith("ufw ")]
 
 
-def _env(**extra):
+def env(**extra) -> dict:
     env = {"PATH": os.environ["PATH"], "HOME": os.environ.get("HOME", "/tmp")}
     env.update(extra)
     return env
 
 
-def _run_script(env, extra_path=None):
+def run_script(env, extra_path=None) -> None:
     assert SCRIPT.is_file(), f"{SCRIPT.relative_to(REPO_ROOT)} does not exist"
     if extra_path:
         env["PATH"] = f"{extra_path}:{env['PATH']}"
     return run(["bash", str(SCRIPT)], env=env, cwd=str(REPO_ROOT))
 
 
-def _parsed(rules):
+def parsed(rules) -> list:
     """Each allow rule as (source, port, proto); anything unparseable fails the test."""
     out = []
     for rule in rules:
@@ -63,7 +63,7 @@ def _parsed(rules):
     return out
 
 
-def _by_source(rules):
+def by_source(rules) -> dict:
     result = {}
     for source, port, proto in _parsed(rules):
         result.setdefault(source, set()).add((port, proto))
@@ -74,7 +74,7 @@ def _by_source(rules):
 
 
 @when("I read every ufw allow or limit rule", target_fixture="open_rules")
-def read_ufw_rules(files):
+def read_ufw_rules(files) -> list:
     bad = []
     for hit in find_lines(files, UFW_OPEN.pattern):
         src = FROM_SRC.search(hit[2])
@@ -85,7 +85,7 @@ def read_ufw_rules(files):
 
 
 @then("each one is limited to a source address")
-def all_limited(open_rules):
+def all_limited(open_rules) -> None:
     assert not open_rules, "ufw rules that open a port to every source:\n" + fmt_hits(open_rules)
 
 
@@ -93,43 +93,43 @@ def all_limited(open_rules):
 
 
 @given("the firewall script")
-def firewall_script():
+def firewall_script() -> None:
     assert SCRIPT.is_file(), f"{SCRIPT.relative_to(REPO_ROOT)} does not exist"
 
 
 @when("I generate the rules for a hub with two spokes", target_fixture="out")
-def hub_rules():
+def hub_rules() -> None:
     res = _run_script(_env(ROLE="hub", ADMIN_IP=ADMIN, NODE_IPS=f"{SPOKE_1} {SPOKE_2}"))
     assert res.returncode == 0, res.stderr
     return res.stdout
 
 
 @when("I generate the rules for a spoke with a hub and one other spoke", target_fixture="out")
-def spoke_rules():
+def spoke_rules() -> None:
     res = _run_script(_env(ROLE="spoke", ADMIN_IP=ADMIN, NODE_IPS=f"{HUB} {SPOKE_2}"))
     assert res.returncode == 0, res.stderr
     return res.stdout
 
 
 @then("SSH is allowed from the admin address only")
-def ssh_admin_only(out):
+def ssh_admin_only(out) -> None:
     ssh = [(s, p, pr) for s, p, pr in _parsed(_rules(out)) if p == "22"]
     assert ssh == [(ADMIN, "22", "tcp")], f"SSH rules: {ssh}"
 
 
 @then("the API port is allowed from the admin and each node only")
-def api_hub(out):
+def api_hub(out) -> None:
     sources = {s for s, p, pr in _parsed(_rules(out)) if p == API}
     assert sources == {ADMIN, SPOKE_1, SPOKE_2}, f"6443 allowed from: {sources}"
 
 
 @then("the API port is not opened")
-def api_spoke(out):
+def api_spoke(out) -> None:
     assert [r for r in _rules(out) if API in r.split()] == []
 
 
 @then("WireGuard and kubelet ports are allowed from each node only")
-def node_ports(out):
+def node_ports(out) -> None:
     by_source = _by_source(_rules(out))
     peers = {s for s in by_source if s not in {ADMIN} | CLUSTER_CIDRS}
     assert peers, "no node rules at all"
@@ -142,7 +142,7 @@ def node_ports(out):
 
 
 @then("nothing else is opened, and in particular not the Flannel VXLAN port")
-def nothing_else(out):
+def nothing_else(out) -> None:
     allowed_ports = {"22", API, KUBELET} | WIREGUARD
     for source, port, proto in _parsed(_rules(out)):
         assert port in allowed_ports, f"unexpected port {port}/{proto} for {source}"
@@ -153,13 +153,13 @@ def nothing_else(out):
 
 
 @then("incoming traffic is denied by default")
-def default_deny(out):
+def default_deny(out) -> None:
     assert "ufw default deny incoming" in _rules(out)
     assert "ufw default allow outgoing" in _rules(out)
 
 
 @then("the SSH rule comes before the default policy and before the firewall is enabled")
-def ssh_first(out):
+def ssh_first(out) -> None:
     rules = _rules(out)
     ssh = next(i for i, r in enumerate(rules) if " port 22 " in r)
     deny = rules.index("ufw default deny incoming")
@@ -179,7 +179,7 @@ def ssh_first(out):
     "no admin address, an unknown role, a node address of 0.0.0.0 and an unusable SSH port, "
     "and prints no rules for any of them"
 )
-def rejects_unsafe():
+def rejects_unsafe() -> None:
     good = dict(ROLE="hub", ADMIN_IP=ADMIN, NODE_IPS=f"{SPOKE_1} {SPOKE_2}")
     cases = {
         "admin 0.0.0.0/0": {"ADMIN_IP": "0.0.0.0/0"},
@@ -206,7 +206,7 @@ def rejects_unsafe():
 
 
 @pytest.fixture
-def fake_ufw(tmp_path):
+def fake_ufw(tmp_path) -> tuple:
     """A `ufw` on PATH that only records its arguments, so nothing real is ever changed."""
     bindir = tmp_path / "bin"
     bindir.mkdir()
@@ -218,7 +218,7 @@ def fake_ufw(tmp_path):
 
 
 @given("the firewall script with a recording fake ufw", target_fixture="fake")
-def script_with_fake(fake_ufw):
+def script_with_fake(fake_ufw) -> None:
     assert SCRIPT.is_file(), f"{SCRIPT.relative_to(REPO_ROOT)} does not exist"
     return fake_ufw
 
@@ -227,13 +227,13 @@ _HUB_ENV = dict(ROLE="hub", ADMIN_IP=ADMIN, NODE_IPS=f"{SPOKE_1} {SPOKE_2}")
 
 
 @when("I run it without APPLY", target_fixture="result")
-def run_dry(fake):
+def run_dry(fake) -> None:
     bindir, log = fake
     return _run_script(_env(**_HUB_ENV), extra_path=str(bindir))
 
 
 @then("ufw was never called and it says it is a dry run")
-def dry_run(fake, result):
+def dry_run(fake, result) -> None:
     _, log = fake
     assert result.returncode == 0, result.stderr
     assert not log.exists(), f"ufw was called in a dry run:\n{log.read_text()}"
@@ -242,13 +242,13 @@ def dry_run(fake, result):
 
 
 @when("I run it with APPLY=1", target_fixture="result")
-def run_apply(fake):
+def run_apply(fake) -> None:
     bindir, log = fake
     return _run_script(_env(APPLY="1", **_HUB_ENV), extra_path=str(bindir))
 
 
 @then("ufw was called with exactly the printed rules, in the same order")
-def applied(fake, result):
+def applied(fake, result) -> None:
     _, log = fake
     assert result.returncode == 0, result.stderr
     assert log.exists(), "ufw was never called"
