@@ -78,7 +78,7 @@ memoized-property = "^1.0.3"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-# --- code style (PEP 8 at 99 columns, as agreed). Black and flake8 must agree on the width.
+# --- code style: PEP 8 at 79 columns. Black and flake8 must agree on width.
 # `.flake8` holds the flake8 side, because flake8 does not read pyproject.toml.
 [tool.black]
 line-length = 79
