@@ -1,4 +1,4 @@
-"""Topic F: ufw rules are limited to the cluster's own machines (feature 021)."""
+"""Topic F: ufw rules only admit the cluster's machines (feature 021)."""
 
 import os
 import re
@@ -20,10 +20,14 @@ ADMIN = "203.0.113.10"
 HUB = "198.51.100.1"
 SPOKE_1 = "198.51.100.2"
 SPOKE_2 = "198.51.100.3"
-CLUSTER_CIDRS = {"10.42.0.0/16", "10.43.0.0/16"}  # k3s default pod + service networks
+CLUSTER_CIDRS = {
+    "10.42.0.0/16",
+    "10.43.0.0/16",
+}  # k3s default pod + service networks
 WORLD = {"any", "anywhere", "0.0.0.0", "0.0.0.0/0", "::/0", "::"}
 
-# Ports the script is allowed to open, and nothing else (k3s docs, "Inbound rules").
+# Ports the script is allowed to open, and nothing else (k3s docs, "Inbound
+# rules").
 SSH = "22"
 API = "6443"
 WIREGUARD = {"51820", "51821"}
@@ -32,14 +36,24 @@ VXLAN = "8472"
 
 UFW_OPEN = re.compile(r"\bufw\s+(?:allow|limit)\b")
 FROM_SRC = re.compile(r"\bfrom\s+(\S+)")
-RULE_FROM = re.compile(r"^ufw (allow|limit) from (\S+) to any(?: port (\d+) proto (tcp|udp))?$")
+RULE_FROM = re.compile(
+    r"^ufw (allow|limit) from (\S+) to any(?: port (\d+) proto (tcp|udp))?$"
+)
 POLICY_RULES = ("ufw default", "ufw --force enable")
 DENY_INCOMING = "ufw default deny incoming"
 ALLOW_OUTGOING = "ufw default allow outgoing"
 ENABLE = "ufw --force enable"
 
-HUB_ENV = {"ROLE": "hub", "ADMIN_IP": ADMIN, "NODE_IPS": f"{SPOKE_1} {SPOKE_2}"}
-SPOKE_ENV = {"ROLE": "spoke", "ADMIN_IP": ADMIN, "NODE_IPS": f"{HUB} {SPOKE_2}"}
+HUB_ENV = {
+    "ROLE": "hub",
+    "ADMIN_IP": ADMIN,
+    "NODE_IPS": f"{SPOKE_1} {SPOKE_2}",
+}
+SPOKE_ENV = {
+    "ROLE": "spoke",
+    "ADMIN_IP": ADMIN,
+    "NODE_IPS": f"{HUB} {SPOKE_2}",
+}
 # Inputs the script must refuse, with a name for the failure message.
 UNSAFE_INPUTS = {
     "admin 0.0.0.0/0": {"ADMIN_IP": "0.0.0.0/0"},
@@ -59,7 +73,7 @@ Allow = tuple[str, str, str]
 
 @dataclass
 class FakeUfw:
-    """A `ufw` that only records its arguments, so nothing real is ever changed."""
+    """A `ufw` that only records its arguments."""
 
     bindir: Path
     log: Path
@@ -67,11 +81,13 @@ class FakeUfw:
 
 def _rules(stdout: str) -> list[str]:
     """Return the `ufw ...` lines the script printed, in order."""
-    return [line.strip() for line in stdout.splitlines() if line.startswith("ufw ")]
+    return [
+        line.strip() for line in stdout.splitlines() if line.startswith("ufw ")
+    ]
 
 
 def _env(**extra: str) -> dict[str, str]:
-    """Return a minimal environment for the script, plus the given variables."""
+    """Return a minimal environment for the script plus extra variables."""
     env = {"PATH": os.environ["PATH"], "HOME": os.environ.get("HOME", "/tmp")}
     env.update(extra)
     return env
@@ -80,7 +96,7 @@ def _env(**extra: str) -> dict[str, str]:
 def _run_script(
     env: dict[str, str], extra_path: str | None = None
 ) -> subprocess.CompletedProcess[str]:
-    """Run the firewall script with env, optionally putting extra_path first on PATH."""
+    """Run the firewall script, optionally with extra_path first on PATH."""
     assert SCRIPT.is_file(), f"{SCRIPT.relative_to(REPO_ROOT)} does not exist"
     env = dict(env)  # never change the caller's copy
     if extra_path:
@@ -89,30 +105,37 @@ def _run_script(
 
 
 def _generate(role_env: dict[str, str]) -> str:
-    """Run the script in dry-run mode for the given role and return what it printed."""
+    """Run the script in dry-run mode for a role and return its output."""
     result = _run_script(_env(**role_env))
     assert result.returncode == 0, result.stderr
     return result.stdout
 
 
 def _parsed(rules: list[str]) -> list[Allow]:
-    """Return each allow rule as (source, port, proto); anything unparseable fails the test."""
+    """Return allow rules as (source, port, proto); unparseable ones fail."""
     allows: list[Allow] = []
     for rule in rules:
         if rule.startswith(POLICY_RULES):
             continue
         match = RULE_FROM.match(rule)
-        assert match, f"rule is not a 'from <source> to any [port <n> proto <p>]' rule: {rule!r}"
+        assert match, (
+            "rule is not a 'from <source> to any [port <n> proto <p>]' rule: "
+            f"{rule!r}"
+        )
         source, port, proto = match.group(2), match.group(3), match.group(4)
-        if port is None:  # portless rule: only the k3s pod/service networks may have one
-            assert source in CLUSTER_CIDRS, f"portless rule for a non-cluster source: {rule!r}"
+        if (
+            port is None
+        ):  # portless rule: only the k3s pod/service networks may have one
+            assert (
+                source in CLUSTER_CIDRS
+            ), f"portless rule for a non-cluster source: {rule!r}"
             continue
         allows.append((source, port, proto))
     return allows
 
 
 def _by_source(rules: list[str]) -> dict[str, set[tuple[str, str]]]:
-    """Group the allowed (port, proto) pairs by the source they are allowed from."""
+    """Group the allowed (port, proto) pairs by their source."""
     grouped: dict[str, set[tuple[str, str]]] = {}
     for source, port, proto in _parsed(rules):
         grouped.setdefault(source, set()).add((port, proto))
@@ -124,7 +147,7 @@ def _by_source(rules: list[str]) -> dict[str, set[tuple[str, str]]]:
 
 @when("I read every ufw allow or limit rule", target_fixture="open_rules")
 def read_ufw_rules(files: list[Path]) -> list[Hit]:
-    """Find every ufw allow/limit line that names no source, or names the whole world."""
+    """Find ufw allow/limit lines with no source or the whole world."""
     bad: list[Hit] = []
     for hit in find_lines(files, UFW_OPEN.pattern):
         source = FROM_SRC.search(hit[2])
@@ -137,10 +160,13 @@ def read_ufw_rules(files: list[Path]) -> list[Hit]:
 @then("each one is limited to a source address")
 def all_limited(open_rules: list[Hit]) -> None:
     """Fail, listing every rule that opens a port to every source."""
-    assert not open_rules, "ufw rules that open a port to every source:\n" + fmt_hits(open_rules)
+    assert (
+        not open_rules
+    ), "ufw rules that open a port to every source:\n" + fmt_hits(open_rules)
 
 
-# ---------------------------------------------------------------- scenarios 2-4
+# ---------------------------------------------------------------- scenarios
+# 2-4
 
 
 @given("the firewall script")
@@ -155,7 +181,10 @@ def hub_rules() -> str:
     return _generate(HUB_ENV)
 
 
-@when("I generate the rules for a spoke with a hub and one other spoke", target_fixture="out")
+@when(
+    "I generate the rules for a spoke with a hub and one other spoke",
+    target_fixture="out",
+)
 def spoke_rules() -> str:
     """Generate the rules for a spoke."""
     return _generate(SPOKE_ENV)
@@ -170,9 +199,15 @@ def ssh_admin_only(out: str) -> None:
 
 @then("the API port is allowed from the admin and each node only")
 def api_hub(out: str) -> None:
-    """Require the API port to be open to the admin and each spoke, and no one else."""
-    sources = {source for source, port, _ in _parsed(_rules(out)) if port == API}
-    assert sources == {ADMIN, SPOKE_1, SPOKE_2}, f"6443 allowed from: {sources}"
+    """Require the API port open to the admin and each spoke only."""
+    sources = {
+        source for source, port, _ in _parsed(_rules(out)) if port == API
+    }
+    assert sources == {
+        ADMIN,
+        SPOKE_1,
+        SPOKE_2,
+    }, f"6443 allowed from: {sources}"
 
 
 @then("the API port is not opened")
@@ -183,25 +218,35 @@ def api_spoke(out: str) -> None:
 
 @then("WireGuard and kubelet ports are allowed from each node only")
 def node_ports(out: str) -> None:
-    """Every peer node gets WireGuard and kubelet access; the admin gets neither."""
+    """Every peer gets WireGuard and kubelet access; the admin gets neither."""
     by_source = _by_source(_rules(out))
-    peers = {source for source in by_source if source not in {ADMIN} | CLUSTER_CIDRS}
+    peers = {
+        source for source in by_source if source not in {ADMIN} | CLUSTER_CIDRS
+    }
     assert peers, "no node rules at all"
     for peer in peers:
         ports = {port for port, _ in by_source[peer]}
-        assert KUBELET in ports and ports >= WIREGUARD, f"{peer} gets {sorted(ports)}"
+        assert (
+            KUBELET in ports and ports >= WIREGUARD
+        ), f"{peer} gets {sorted(ports)}"
     # the admin gets SSH (+ the API on a hub), never node-to-node traffic
     admin_ports = {port for port, _ in by_source.get(ADMIN, set())}
-    assert not admin_ports & (WIREGUARD | {KUBELET}), f"admin was given node ports: {admin_ports}"
+    assert not admin_ports & (
+        WIREGUARD | {KUBELET}
+    ), f"admin was given node ports: {admin_ports}"
 
 
 @then("nothing else is opened, and in particular not the Flannel VXLAN port")
 def nothing_else(out: str) -> None:
-    """Only the expected ports are open, to known sources, and never 8472/udp."""
+    """Only the expected ports are open, to known sources, never 8472."""
     allowed_ports = {SSH, API, KUBELET} | WIREGUARD
     for source, port, proto in _parsed(_rules(out)):
-        assert port in allowed_ports, f"unexpected port {port}/{proto} for {source}"
-        assert port != VXLAN, "8472/udp (unencrypted VXLAN) must never be opened"
+        assert (
+            port in allowed_ports
+        ), f"unexpected port {port}/{proto} for {source}"
+        assert (
+            port != VXLAN
+        ), "8472/udp (unencrypted VXLAN) must never be opened"
         assert source not in WORLD, f"{port} opened to {source}"
     sources = set(_by_source(_rules(out)))
     known = {ADMIN, SPOKE_1, SPOKE_2, HUB} | CLUSTER_CIDRS
@@ -215,16 +260,27 @@ def default_deny(out: str) -> None:
     assert ALLOW_OUTGOING in _rules(out)
 
 
-@then("the SSH rule comes before the default policy and before the firewall is enabled")
+@then(
+    "the SSH rule comes before the default policy "
+    "and before the firewall is enabled"
+)
 def ssh_first(out: str) -> None:
-    """Require SSH to be the first rule, before default-deny, with enable last."""
+    """Require SSH first, before default-deny, with enable last."""
     rules = _rules(out)
-    ssh = next(index for index, rule in enumerate(rules) if f" port {SSH} " in rule)
+    ssh = next(
+        index for index, rule in enumerate(rules) if f" port {SSH} " in rule
+    )
     assert ssh < rules.index(
         DENY_INCOMING
     ), "default deny is applied before SSH is allowed: that can lock you out"
-    assert rules.index(ENABLE) == len(rules) - 1, "enable must be the last step"
-    earlier_allows = [rule for rule in rules[:ssh] if rule.startswith(("ufw allow", "ufw limit"))]
+    assert (
+        rules.index(ENABLE) == len(rules) - 1
+    ), "enable must be the last step"
+    earlier_allows = [
+        rule
+        for rule in rules[:ssh]
+        if rule.startswith(("ufw allow", "ufw limit"))
+    ]
     assert not earlier_allows, "another rule precedes the SSH rule"
 
 
@@ -232,29 +288,37 @@ def ssh_first(out: str) -> None:
 
 
 @then(
-    "it rejects an admin address of 0.0.0.0/0, an admin address of any, a huge admin range, "
-    "no admin address, an unknown role, a node address of 0.0.0.0 and an unusable SSH port, "
+    "it rejects an admin address of 0.0.0.0/0, an admin address of any, "
+    "a huge admin range, no admin address, an unknown role, "
+    "a node address of 0.0.0.0 and an unusable SSH port, "
     "and prints no rules for any of them"
 )
 def rejects_unsafe() -> None:
-    """Every unsafe input must make the script exit non-zero, explain why, and print no rules."""
+    """Every unsafe input must exit non-zero, explain, and print no rules."""
     failures: list[str] = []
     for name, override in UNSAFE_INPUTS.items():
         result = _run_script(_env(**{**HUB_ENV, **override}))
         printed = len(_rules(result.stdout))
         if result.returncode == 0 or printed:
-            failures.append(f"{name}: exit={result.returncode}, printed {printed} rules")
+            failures.append(
+                f"{name}: exit={result.returncode}, printed {printed} rules"
+            )
         elif not result.stderr.strip():
-            failures.append(f"{name}: rejected silently (no explanation on stderr)")
-    assert not failures, "Unsafe input was accepted:\n  " + "\n  ".join(failures)
+            failures.append(
+                f"{name}: rejected silently (no explanation on stderr)"
+            )
+    assert not failures, "Unsafe input was accepted:\n  " + "\n  ".join(
+        failures
+    )
 
 
-# ---------------------------------------------------------------- scenarios 6-7
+# ---------------------------------------------------------------- scenarios
+# 6-7
 
 
 @pytest.fixture
 def fake_ufw(tmp_path: Path) -> FakeUfw:
-    """Create a `ufw` that records its arguments to a log instead of changing the firewall."""
+    """Create a `ufw` that logs its arguments instead of acting."""
     bindir = tmp_path / "bin"
     bindir.mkdir()
     log = tmp_path / "ufw.log"
@@ -281,7 +345,9 @@ def run_dry(fake: FakeUfw) -> subprocess.CompletedProcess[str]:
 def dry_run(fake: FakeUfw, result: subprocess.CompletedProcess[str]) -> None:
     """Require no ufw calls, a dry-run notice, and the rules still printed."""
     assert result.returncode == 0, result.stderr
-    assert not fake.log.exists(), f"ufw was called in a dry run:\n{fake.log.read_text()}"
+    assert (
+        not fake.log.exists()
+    ), f"ufw was called in a dry run:\n{fake.log.read_text()}"
     assert "dry run" in (result.stdout + result.stderr).lower()
     assert _rules(result.stdout), "a dry run must still print the rules"
 
@@ -294,7 +360,7 @@ def run_apply(fake: FakeUfw) -> subprocess.CompletedProcess[str]:
 
 @then("ufw was called with exactly the printed rules, in the same order")
 def applied(fake: FakeUfw, result: subprocess.CompletedProcess[str]) -> None:
-    """Require the fake ufw to have received exactly the printed rules, in order."""
+    """Require the fake ufw to have received exactly the printed rules."""
     assert result.returncode == 0, result.stderr
     assert fake.log.exists(), "ufw was never called"
     called = fake.log.read_text().splitlines()

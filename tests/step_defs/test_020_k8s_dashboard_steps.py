@@ -1,4 +1,4 @@
-"""Topic E: a maintained dashboard, read-only login and loopback-only addresses (feature 020)."""
+"""Topic E: maintained dashboard, loopback only (feature 020)."""
 
 import re
 from dataclasses import dataclass
@@ -21,11 +21,17 @@ scenarios("../features/020_k8s_dashboard.feature")
 
 DASHBOARD_MANIFEST = "k8s/11-headlamp.yaml"
 VIEWER_MANIFEST = "k8s/12-dashboard-viewer.yaml"
-# Things that run. Notes (.md) are checked separately, as they may mention old commands.
+# Things that run. Notes (.md) are checked separately, as they may mention old
+# commands.
 EXECUTABLE_FILES = {".yaml", ".yml", ".sh", "Makefile"}
 SCRIPT_FILES = {".sh", "Makefile"}
 LOOPBACK = {"127.0.0.1", "localhost", "::1", "[::1]"}
-DASHBOARD_ACCOUNTS = {"dashboard-viewer", "dashboard-admin", "headlamp", "kubernetes-dashboard"}
+DASHBOARD_ACCOUNTS = {
+    "dashboard-viewer",
+    "dashboard-admin",
+    "headlamp",
+    "kubernetes-dashboard",
+}
 DASHBOARD_NAMESPACES = {"headlamp", "kubernetes-dashboard"}
 BINDINGS = ("RoleBinding", "ClusterRoleBinding")
 PRIVILEGED_ROLES = ("cluster-admin", "admin", "edit")
@@ -37,16 +43,21 @@ RETIRED_DASHBOARD = (
     r"|kubernetes/dashboard/"
     r"|kubernetes-dashboard/kubernetes-dashboard"
     r"|kubernetes\.github\.io/dashboard"
-    r"|microk8s\s+enable\s+dashboard"  # the MicroK8s addon installs the retired v2.x dashboard
+    # the MicroK8s addon installs the retired v2.x dashboard
+    r"|microk8s\s+enable\s+dashboard"
     r"|microk8s\s+dashboard-proxy"
 )
-PORT_FORWARD_OR_PROXY = re.compile(r"(?:kubectl|\bk)\s+(?:\S+\s+)*?(?:port-forward|proxy)\b")
+PORT_FORWARD_OR_PROXY = re.compile(
+    r"(?:kubectl|\bk)\s+(?:\S+\s+)*?(?:port-forward|proxy)\b"
+)
 ROLEBINDING_COMMAND = re.compile(r"kubectl\s+create\s+(?:cluster)?rolebinding")
 DASHBOARD_TARGET = re.compile(r"^k(?:_|3_)dash\w*:\s*\n((?:\t.*\n?)+)", re.M)
 
 Doc = dict[str, Any]  # one parsed YAML document
 Subject = dict[str, Any]  # one `subjects` entry of a binding
-Binding = tuple[str, Doc, Subject]  # (path, binding document, the dashboard subject)
+Binding = tuple[
+    str, Doc, Subject
+]  # (path, binding document, the dashboard subject)
 
 
 @dataclass
@@ -75,7 +86,7 @@ class Dashboard:
 
 @dataclass
 class Rbac:
-    """Every binding that names a dashboard account, plus the roles defined in the repo."""
+    """Return dashboard bindings plus the roles defined in the repo."""
 
     bindings: list[Binding]
     roles: dict[str, Doc]
@@ -98,7 +109,11 @@ def _by_kind(docs: list[Doc], kind: str) -> list[Doc]:
 
 def _subjects(binding: Doc) -> list[Subject]:
     """Return the ServiceAccount subjects of a binding."""
-    return [s for s in binding.get("subjects") or [] if s.get("kind") == "ServiceAccount"]
+    return [
+        s
+        for s in binding.get("subjects") or []
+        if s.get("kind") == "ServiceAccount"
+    ]
 
 
 def _is_dashboard_subject(subject: Subject) -> bool:
@@ -129,12 +144,14 @@ def search_retired_dashboard(files: list[Path]) -> list[Hit]:
 @then("it is not installed anywhere")
 def not_installed(hits: list[Hit]) -> None:
     """Fail, listing every reference to the retired dashboard."""
-    assert not hits, "The retired Kubernetes Dashboard (v2.x) is still referenced:\n" + fmt_hits(
-        hits
+    assert not hits, (
+        "The retired Kubernetes Dashboard (v2.x) is still referenced:\n"
+        + fmt_hits(hits)
     )
 
 
-# ---------------------------------------------------------------- manifest scenarios
+# ---------------------------------------------------------------- manifest
+# scenarios
 
 
 @given("the dashboard manifest", target_fixture="dash")
@@ -143,8 +160,14 @@ def dashboard_manifest() -> Dashboard:
     docs = yaml_docs(DASHBOARD_MANIFEST)
     assert docs, f"{DASHBOARD_MANIFEST} is missing or is not valid YAML"
     deployments = _by_kind(docs, "Deployment")
-    assert len(deployments) == 1, "expected exactly one Deployment (the dashboard)"
-    return Dashboard(docs=docs, deployment=deployments[0], services=_by_kind(docs, "Service"))
+    assert (
+        len(deployments) == 1
+    ), "expected exactly one Deployment (the dashboard)"
+    return Dashboard(
+        docs=docs,
+        deployment=deployments[0],
+        services=_by_kind(docs, "Service"),
+    )
 
 
 @then("its image has an explicit version tag and is not latest")
@@ -154,11 +177,14 @@ def image_pinned(dash: Dashboard) -> None:
     name = image.split("/")[-1]
     has_digest = "@sha256:" in image
     tag = name.split(":", 1)[1] if ":" in name else ""
-    assert has_digest or (tag and tag != "latest"), f"image '{image}' is not pinned to a version"
+    assert has_digest or (
+        tag and tag != "latest"
+    ), f"image '{image}' is not pinned to a version"
 
 
 @then(
-    "the container runs non-root, without privilege escalation or capabilities, "
+    "the container runs non-root, without privilege escalation "
+    "or capabilities, "
     "on a read-only filesystem with the default seccomp profile"
 )
 def container_hardened(dash: Dashboard) -> None:
@@ -166,7 +192,10 @@ def container_hardened(dash: Dashboard) -> None:
     sc = dash.container.get("securityContext") or {}
     pod_sc = dash.pod.get("securityContext") or {}
     problems: list[str] = []
-    if sc.get("runAsNonRoot") is not True and pod_sc.get("runAsNonRoot") is not True:
+    if (
+        sc.get("runAsNonRoot") is not True
+        and pod_sc.get("runAsNonRoot") is not True
+    ):
         problems.append("runAsNonRoot is not true")
     if sc.get("allowPrivilegeEscalation") is not False:
         problems.append("allowPrivilegeEscalation is not false")
@@ -176,7 +205,9 @@ def container_hardened(dash: Dashboard) -> None:
         problems.append("readOnlyRootFilesystem is not true")
     if "ALL" not in ((sc.get("capabilities") or {}).get("drop") or []):
         problems.append("capabilities are not dropped (drop: [ALL])")
-    seccomp = (sc.get("seccompProfile") or pod_sc.get("seccompProfile") or {}).get("type")
+    seccomp = (
+        sc.get("seccompProfile") or pod_sc.get("seccompProfile") or {}
+    ).get("type")
     if seccomp != "RuntimeDefault":
         problems.append(f"seccompProfile is {seccomp!r}, not RuntimeDefault")
     assert not problems, "; ".join(problems)
@@ -187,14 +218,16 @@ def limits_and_no_hostpath(dash: Dashboard) -> None:
     """Require CPU and memory limits and no access to the host."""
     limits = (dash.container.get("resources") or {}).get("limits") or {}
     assert {"cpu", "memory"} <= set(limits), f"limits are {limits}"
-    host_paths = [vol["name"] for vol in dash.pod.get("volumes", []) if "hostPath" in vol]
+    host_paths = [
+        vol["name"] for vol in dash.pod.get("volumes", []) if "hostPath" in vol
+    ]
     assert not host_paths, f"host paths mounted: {host_paths}"
     for flag in HOST_NAMESPACES:
         assert not dash.pod.get(flag), f"{flag} is enabled"
 
 
 def _ingresses_exposing(service_names: set[str]) -> list[str]:
-    """Return the paths of Ingress manifests that route to any of the given Services."""
+    """Return Ingress manifests that route to any of the Services."""
     exposed: list[str] = []
     for rel, doc in _all_docs(repo_files()):
         if doc.get("kind") != "Ingress":
@@ -206,14 +239,19 @@ def _ingresses_exposing(service_names: set[str]) -> list[str]:
     return exposed
 
 
-@then("its Service is ClusterIP and nothing in the manifests exposes it through an Ingress")
+@then(
+    "its Service is ClusterIP and nothing in the manifests "
+    "exposes it through an Ingress"
+)
 def only_inside_cluster(dash: Dashboard) -> None:
     """Require a ClusterIP Service that no Ingress routes to."""
     assert dash.services, "the dashboard has no Service"
     for service in dash.services:
         service_type = service["spec"].get("type", "ClusterIP")
         assert service_type == "ClusterIP", f"Service type is {service_type}"
-    exposed = _ingresses_exposing({service["metadata"]["name"] for service in dash.services})
+    exposed = _ingresses_exposing(
+        {service["metadata"]["name"] for service in dash.services}
+    )
     assert not exposed, f"Ingress objects expose the dashboard: {exposed}"
 
 
@@ -229,34 +267,55 @@ def pod_account_has_no_permissions(dash: Dashboard) -> None:
             same_account = subject.get("name") == account
             same_namespace = subject.get("namespace") in (None, dash.namespace)
             if same_account and same_namespace:
-                granted.append(f"{rel}: {doc['metadata']['name']} -> {doc['roleRef']['name']}")
-    assert not granted, "the dashboard pod's own account has permissions:\n  " + "\n  ".join(
+                granted.append(
+                    f"{rel}: {doc['metadata']['name']} -> "
+                    f"{doc['roleRef']['name']}"
+                )
+    assert (
+        not granted
+    ), "the dashboard pod's own account has permissions:\n  " + "\n  ".join(
         granted
     )
 
 
-@then("the Service selects the Deployment's pods and targets its named container port")
+@then(
+    "the Service selects the Deployment's pods and targets "
+    "its named container port"
+)
 def service_wired(dash: Dashboard) -> None:
-    """Service selector and targetPort must match the Deployment, and its account must exist."""
+    """Service selector and targetPort must match the Deployment."""
     labels = dash.deployment["spec"]["template"]["metadata"]["labels"]
-    assert dash.deployment["spec"]["selector"]["matchLabels"].items() <= labels.items()
-    ports = {port.get("name"): port["containerPort"] for port in dash.container.get("ports", [])}
+    assert (
+        dash.deployment["spec"]["selector"]["matchLabels"].items()
+        <= labels.items()
+    )
+    ports = {
+        port.get("name"): port["containerPort"]
+        for port in dash.container.get("ports", [])
+    }
     for service in dash.services:
         selector = service["spec"]["selector"]
-        assert selector.items() <= labels.items(), "Service selector does not match the pods"
+        assert (
+            selector.items() <= labels.items()
+        ), "Service selector does not match the pods"
         for port in service["spec"]["ports"]:
             target = port["targetPort"]
             assert (
                 target in ports or target in ports.values()
             ), f"targetPort {target!r} is not a container port {ports}"
     account = dash.pod["serviceAccountName"]
-    defined = {doc["metadata"]["name"] for doc in _by_kind(dash.docs, "ServiceAccount")}
-    assert account in defined, f"ServiceAccount '{account}' is not defined in the manifest"
+    defined = {
+        doc["metadata"]["name"]
+        for doc in _by_kind(dash.docs, "ServiceAccount")
+    }
+    assert (
+        account in defined
+    ), f"ServiceAccount '{account}' is not defined in the manifest"
 
 
 @then("the viewer account lives in the dashboard's namespace")
 def viewer_in_namespace(dash: Dashboard) -> None:
-    """Require the viewer account and its binding subjects to be in the dashboard's namespace."""
+    """Require the viewer account and its subjects to share a namespace."""
     docs = yaml_docs(VIEWER_MANIFEST)
     assert docs, f"{VIEWER_MANIFEST} is missing or is not valid YAML"
     viewers = [
@@ -269,17 +328,22 @@ def viewer_in_namespace(dash: Dashboard) -> None:
     ), f"dashboard-viewer is not in '{dash.namespace}'"
     for binding in (doc for doc in docs if doc.get("kind") in BINDINGS):
         for subject in _subjects(binding):
-            assert (
-                subject.get("namespace") == dash.namespace
-            ), f"{binding['metadata']['name']} points at namespace {subject.get('namespace')!r}"
+            assert subject.get("namespace") == dash.namespace, (
+                f"{binding['metadata']['name']} points at namespace "
+                f"{subject.get('namespace')!r}"
+            )
 
 
-# ---------------------------------------------------------------- RBAC scenarios
+# ---------------------------------------------------------------- RBAC
+# scenarios
 
 
-@when("I read every RBAC object that mentions a dashboard account", target_fixture="rbac")
+@when(
+    "I read every RBAC object that mentions a dashboard account",
+    target_fixture="rbac",
+)
 def read_rbac(files: list[Path]) -> Rbac:
-    """Collect every binding for a dashboard account and every role defined in the repo."""
+    """Collect every dashboard binding and every role in the repo."""
     docs = _all_docs(files)
     bindings: list[Binding] = [
         (rel, doc, subject)
@@ -300,7 +364,8 @@ def read_rbac(files: list[Path]) -> Rbac:
 def not_privileged(rbac: Rbac) -> None:
     """Fail if any dashboard account is bound to a write-capable role."""
     bad = [
-        f"{rel}: {doc['metadata']['name']} binds {subject['name']} to {doc['roleRef']['name']}"
+        f"{rel}: {doc['metadata']['name']} binds {subject['name']} "
+        f"to {doc['roleRef']['name']}"
         for rel, doc, subject in rbac.bindings
         if doc["roleRef"]["name"] in PRIVILEGED_ROLES
     ]
@@ -311,14 +376,15 @@ def not_privileged(rbac: Rbac) -> None:
 def viewer_is_view(rbac: Rbac) -> None:
     """Require a binding that gives dashboard-viewer the built-in view role."""
     assert any(
-        subject["name"] == "dashboard-viewer" and doc["roleRef"]["name"] == "view"
+        subject["name"] == "dashboard-viewer"
+        and doc["roleRef"]["name"] == "view"
         for _, doc, subject in rbac.bindings
     ), "no binding gives dashboard-viewer the built-in 'view' role"
 
 
 @then("every extra rule it has is get, list or watch and none touches Secrets")
 def extras_are_read_only(rbac: Rbac) -> None:
-    """Any role besides `view` bound to the viewer must be read-only and exclude Secrets."""
+    """Any extra role bound to the viewer must be read-only, no Secrets."""
     problems: list[str] = []
     for _, doc, subject in rbac.bindings:
         role_name = doc["roleRef"]["name"]
@@ -326,13 +392,18 @@ def extras_are_read_only(rbac: Rbac) -> None:
             continue
         role = rbac.roles.get(role_name)
         if role is None:
-            problems.append(f"{role_name}: role is not defined in the repo, cannot be checked")
+            problems.append(
+                f"{role_name}: role is not defined in the repo, "
+                "cannot be checked"
+            )
             continue
         for rule in role.get("rules") or []:
             if not set(rule.get("verbs") or []) <= READ_ONLY_VERBS:
                 problems.append(f"{role_name}: verbs {rule.get('verbs')}")
             if {"secrets", "*"} & set(rule.get("resources") or []):
-                problems.append(f"{role_name}: resources {rule.get('resources')}")
+                problems.append(
+                    f"{role_name}: resources {rule.get('resources')}"
+                )
     assert not problems, "\n".join(problems)
 
 
@@ -356,7 +427,8 @@ def none_bind_admin(binding_commands: list[Hit]) -> None:
     assert not bad, "scripts create a cluster-admin binding:\n" + fmt_hits(bad)
 
 
-# ---------------------------------------------------------------- address scenarios
+# ---------------------------------------------------------------- address
+# scenarios
 
 
 @when(
@@ -364,7 +436,7 @@ def none_bind_admin(binding_commands: list[Hit]) -> None:
     target_fixture="forwards",
 )
 def read_port_forwards(files: list[Path]) -> list[Hit]:
-    """Find every kubectl port-forward and kubectl proxy command (comments excluded)."""
+    """Find every kubectl port-forward and proxy command."""
     return [
         hit
         for hit in logical_lines(files)
@@ -374,19 +446,24 @@ def read_port_forwards(files: list[Path]) -> list[Hit]:
 
 @then("none binds an address other than 127.0.0.1, localhost or ::1")
 def forwards_on_loopback(forwards: list[Hit]) -> None:
-    """Fail if any --address option names something other than a loopback address."""
+    """Fail if any --address option is not a loopback address."""
     bad: list[Hit] = []
     for rel, number, command in forwards:
         for match in re.finditer(r"--address(?:\s+|=)(\S+)", command):
             if not set(match.group(1).strip("'\"").split(",")) <= LOOPBACK:
                 bad.append((rel, number, command))
-    assert not bad, "port-forward is exposed beyond this machine:\n" + fmt_hits(bad)
+    assert (
+        not bad
+    ), "port-forward is exposed beyond this machine:\n" + fmt_hits(bad)
 
 
-# ---------------------------------------------------------------- Makefile target
+# ---------------------------------------------------------------- Makefile
+# target
 
 
-@when("I read the dashboard commands in the Makefile", target_fixture="makefile")
+@when(
+    "I read the dashboard commands in the Makefile", target_fixture="makefile"
+)
 def read_makefile(files: list[Path]) -> str:
     """Load the Makefile."""
     return require_text("Makefile")
@@ -397,10 +474,12 @@ def read_makefile(files: list[Path]) -> str:
     "and logs in with a short-lived token"
 )
 def dashboard_target(makefile: str) -> None:
-    """Require a target that mints a short-lived token and port-forwards to Headlamp."""
+    """Require a target that mints a short-lived token for Headlamp."""
     recipe = DASHBOARD_TARGET.search(makefile)
     assert recipe, "no dashboard target (k_dash or k3_dash) in the Makefile"
     body = recipe.group(1)
-    assert re.search(r"-n\s+headlamp\s+create\s+token\s+dashboard-viewer", body), body
+    assert re.search(
+        r"-n\s+headlamp\s+create\s+token\s+dashboard-viewer", body
+    ), body
     assert re.search(r"port-forward\s+service/headlamp\s+4466:80", body), body
     assert "dashboard-proxy" not in body

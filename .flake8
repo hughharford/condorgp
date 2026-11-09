@@ -1,6 +1,6 @@
 # flake8 does not read pyproject.toml, so its settings live here.
 # Keep max-line-length in step with [tool.black] line-length in pyproject.toml.
 [flake8]
-max-line-length = 99
+max-line-length = 79
 # E203 and W503 contradict Black's formatting and PEP 8 itself says to ignore them for it.
 extend-ignore = E203, W503

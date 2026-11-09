@@ -1,6 +1,7 @@
+# PARKED: not active. Move to .github/workflows/ to enable.
 # Code-quality gate for the cluster-security BDD tests (topics A-G).
 #
-# Runs Black and flake8 (PEP 8 at 99 columns, see [tool.black] in pyproject.toml and .flake8)
+# Runs Black and flake8 (PEP 8 at 79 columns, see [tool.black] in pyproject.toml and .flake8)
 # and then the BDD tests themselves, with real pytest-bdd. Versions match poetry.lock.
 #
 # Scope is deliberately limited to the files listed below. The rest of the repo has not been

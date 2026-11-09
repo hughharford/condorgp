@@ -26,7 +26,14 @@ scenarios("../features/017_k8s_secrets_encrypted.feature")
 
 SECRET_KIND = re.compile(r"(?m)^kind:\s*Secret\s*$")
 PLACEHOLDER = "CHANGEME"
-WELL_KNOWN_DEFAULTS = {"postgres", "cgp-pass", "cgp_pass", "guest", "admin", "password"}
+WELL_KNOWN_DEFAULTS = {
+    "postgres",
+    "cgp-pass",
+    "cgp_pass",
+    "guest",
+    "admin",
+    "password",
+}
 ENC_FILE = "k8s/02-secrets.enc.yaml"
 TEMPLATE_FILE = "k8s/02-secrets.example.yaml"
 SOPS_PLACEHOLDER = "AGE_PUBLIC_KEY_NOT_SET"
@@ -37,8 +44,10 @@ SECRET_KEYS_RANDOM = (
     "grafana-admin-password",
 )
 SECRETS_SCRIPT = ["bash", "k8s/secrets/secrets.sh"]
-# A deliberately bad Secret kept so the checks can always be seen to fail. It is named
-# *.example.yaml so that `secrets.sh check` skips it, and it lives under tests/, which the
+# A deliberately bad Secret kept so the checks can always be seen to fail. It
+# is named
+# *.example.yaml so that `secrets.sh check` skips it, and it lives under
+# tests/, which the
 # repository scan never reads. Every value in it is fake.
 CANARY_FILE = "tests/test_data/k8s/canary-plaintext-secret.example.yaml"
 CANARY_FAKE_PREFIX = "FAKE-NOT-A-REAL-SECRET"
@@ -59,13 +68,15 @@ SecretDoc = tuple[str, dict[str, Any]]
 
 @dataclass
 class Vault:
-    """A throwaway copy of the secrets tooling plus a key that only it knows."""
+    """A throwaway copy of the secrets tooling and its own key."""
 
     root: Path
     env: dict[str, str]
     key: Path
     enc: Path
-    capture: Path | None = None  # where the fake kubectl records what it was given
+    capture: Path | None = (
+        None  # where the fake kubectl records what it was given
+    )
 
 
 def _values(doc: dict[str, Any]) -> dict[str, Any]:
@@ -79,7 +90,7 @@ def _is_enc(value: object) -> bool:
 
 
 def _need(*tools: str) -> None:
-    """Skip the test if any of the given command-line tools is not installed."""
+    """Skip the test if any of the given tools is not installed."""
     missing = [tool for tool in tools if not shutil.which(tool)]
     if missing:
         pytest.skip(
@@ -89,7 +100,7 @@ def _need(*tools: str) -> None:
 
 
 def _scratch_tooling(tmp_path: Path) -> Path:
-    """Copy the secrets script and sops config into an empty dir, never touching the repo."""
+    """Copy the secrets script and sops config into an empty dir."""
     script = REPO_ROOT / "k8s/secrets/secrets.sh"
     assert script.is_file(), "k8s/secrets/secrets.sh is missing"
     (tmp_path / "k8s/secrets").mkdir(parents=True)
@@ -101,8 +112,12 @@ def _scratch_tooling(tmp_path: Path) -> Path:
 
 
 def _isolated_env(tmp_path: Path, key_file: Path) -> dict[str, str]:
-    """Environment that can only ever see the throwaway key, never the user's real one."""
-    env = {name: value for name, value in os.environ.items() if not name.startswith("SOPS_")}
+    """Return an environment that sees only the throwaway key."""
+    env = {
+        name: value
+        for name, value in os.environ.items()
+        if not name.startswith("SOPS_")
+    }
     env["HOME"] = str(tmp_path)
     env["SOPS_AGE_KEY_FILE"] = str(key_file)
     return env
@@ -122,12 +137,13 @@ def _decrypt_value(root: Path, env: dict[str, str], key: str) -> str:
     return res.stdout.strip()
 
 
-# ---------------------------------------------------------------- scenarios 1-2
+# ---------------------------------------------------------------- scenarios
+# 1-2
 
 
 @when("I list the Kubernetes Secret manifests", target_fixture="secrets")
 def list_secret_manifests(files: list[Path]) -> list[SecretDoc]:
-    """Find every YAML document of kind Secret (or flag files that cannot be parsed)."""
+    """Find every Secret document (or flag files that cannot be parsed)."""
     found: list[SecretDoc] = []
     for rel in files:
         if rel.suffix not in (".yaml", ".yml"):
@@ -136,7 +152,9 @@ def list_secret_manifests(files: list[Path]) -> list[SecretDoc]:
         if not text or not SECRET_KIND.search(text):
             continue
         docs = [d for d in yaml_docs(rel) if d.get("kind") == "Secret"]
-        found += [(str(rel), d) for d in docs] or [(str(rel), {"_unparseable": True})]
+        found += [(str(rel), d) for d in docs] or [
+            (str(rel), {"_unparseable": True})
+        ]
     return found
 
 
@@ -146,16 +164,19 @@ def _by_kind(docs: list[dict[str, Any]], kind: str) -> list[dict[str, Any]]:
 
 
 def _classify(doc: dict[str, Any]) -> str:
-    """Say whether a Secret is encrypted, an empty shell, a template or PLAINTEXT."""
+    """Say if a Secret is encrypted, empty, a template or PLAINTEXT."""
     if doc.get("_unparseable"):
-        return "PLAINTEXT? (YAML could not be parsed, so it cannot be shown safe)"
+        return (
+            "PLAINTEXT? (YAML could not be parsed, so it cannot be shown safe)"
+        )
     values = _values(doc)
     if "sops" in doc:
         if all(_is_enc(value) for value in values.values()):
             return "encrypted"
         return "PLAINTEXT (sops block but readable values)"
     if all(str(value).strip() == "" for value in values.values()):
-        return "empty shell"  # e.g. the Dashboard's own Secrets, which it fills in itself
+        # e.g. the Dashboard's own Secrets, which it fills in itself
+        return "empty shell"
     if all(str(value).strip() == PLACEHOLDER for value in values.values()):
         return "template"
     return "PLAINTEXT"
@@ -165,12 +186,20 @@ def _classify(doc: dict[str, Any]) -> str:
 def secrets_are_safe(secrets: list[SecretDoc]) -> None:
     """Fail on any Secret whose values can be read."""
     verdicts = [(rel, _classify(doc)) for rel, doc in secrets]
-    bad = [f"  {rel}: {verdict}" for rel, verdict in verdicts if verdict.startswith("PLAINTEXT")]
-    assert not bad, "Committed Secret manifests with readable values:\n" + "\n".join(bad)
+    bad = [
+        f"  {rel}: {verdict}"
+        for rel, verdict in verdicts
+        if verdict.startswith("PLAINTEXT")
+    ]
+    assert (
+        not bad
+    ), "Committed Secret manifests with readable values:\n" + "\n".join(bad)
 
 
-def _decoded_values(rel: str, doc: dict[str, Any]) -> list[tuple[str, str, str]]:
-    """Return (path, key, value) for a Secret, decoding base64 `data` values."""
+def _decoded_values(
+    rel: str, doc: dict[str, Any]
+) -> list[tuple[str, str, str]]:
+    """Return (path, key, value) for a Secret, decoding base64 `data`."""
     decoded: list[tuple[str, str, str]] = []
     for key, value in (doc.get("data") or {}).items():
         try:
@@ -183,7 +212,9 @@ def _decoded_values(rel: str, doc: dict[str, Any]) -> list[tuple[str, str, str]]
     return decoded
 
 
-def _default_password_findings(decoded: list[tuple[str, str, str]]) -> list[str]:
+def _default_password_findings(
+    decoded: list[tuple[str, str, str]],
+) -> list[str]:
     """Describe every decoded value that is a well-known default password."""
     return [
         f"  {rel}: {key}"
@@ -194,7 +225,7 @@ def _default_password_findings(decoded: list[tuple[str, str, str]]) -> list[str]
 
 @when("I decode the values of every Secret manifest", target_fixture="decoded")
 def decode_secret_values(files: list[Path]) -> list[tuple[str, str, str]]:
-    """Decode every Secret value (base64 for `data`, as-is for `stringData`)."""
+    """Decode every Secret value (base64 for `data`, raw otherwise)."""
     decoded: list[tuple[str, str, str]] = []
     for rel in files:
         if rel.suffix not in (".yaml", ".yml"):
@@ -210,7 +241,8 @@ def no_default_passwords(decoded: list[tuple[str, str, str]]) -> None:
     bad = _default_password_findings(decoded)
     assert not bad, (
         "Secrets still hold default credentials "
-        "(these are in the public git history, so rotate them):\n" + "\n".join(bad)
+        "(these are in the public git history, so rotate them):\n"
+        + "\n".join(bad)
     )
 
 
@@ -238,7 +270,9 @@ def encrypted_files_are_encrypted(enc_files: list[Path]) -> None:
                 problems.append(f"  {rel}: missing sops age recipients / mac")
             for key, value in _values(doc).items():
                 if not _is_enc(value):
-                    problems.append(f"  {rel}: value of '{key}' is not an ENC[...] token")
+                    problems.append(
+                        f"  {rel}: value of '{key}' is not an ENC[...] token"
+                    )
     assert not problems, "\n".join(problems)
 
 
@@ -253,22 +287,33 @@ def ignore_rules() -> None:
 
 @then("age keys, decrypted copies and kubeconfigs are ignored")
 def secrets_paths_ignored() -> None:
-    """Fail if .gitignore would let a key, decrypted copy or kubeconfig be committed."""
-    leaking = [path for path in GITIGNORE_MUST_HIDE if not is_git_ignored(path)]
-    assert not leaking, f".gitignore would NOT stop these being committed: {leaking}"
+    """Fail if .gitignore would let a key or kubeconfig be committed."""
+    leaking = [
+        path for path in GITIGNORE_MUST_HIDE if not is_git_ignored(path)
+    ]
+    assert (
+        not leaking
+    ), f".gitignore would NOT stop these being committed: {leaking}"
 
 
 @then("the encrypted Secret and the CHANGEME template are not ignored")
 def encrypted_and_template_not_ignored() -> None:
     """Fail if .gitignore would hide the files that must be committed."""
-    wrongly = [path for path in (ENC_FILE, TEMPLATE_FILE) if is_git_ignored(path)]
-    assert not wrongly, f".gitignore would hide files that must be committed: {wrongly}"
+    wrongly = [
+        path for path in (ENC_FILE, TEMPLATE_FILE) if is_git_ignored(path)
+    ]
+    assert (
+        not wrongly
+    ), f".gitignore would hide files that must be committed: {wrongly}"
 
 
 # ---------------------------------------------------------------- scenario 5
 
 
-@given("a scratch git repository using the repo's secrets script", target_fixture="scratch")
+@given(
+    "a scratch git repository using the repo's secrets script",
+    target_fixture="scratch",
+)
 def scratch_repo(tmp_path: Path) -> Path:
     """Create an empty git repo holding only a copy of the secrets script."""
     root = _scratch_tooling(tmp_path)
@@ -276,11 +321,15 @@ def scratch_repo(tmp_path: Path) -> Path:
     return root
 
 
-@when("I add a plaintext Secret manifest and run the secrets check", target_fixture="check_result")
+@when(
+    "I add a plaintext Secret manifest and run the secrets check",
+    target_fixture="check_result",
+)
 def add_plaintext_and_check(scratch: Path) -> subprocess.CompletedProcess[str]:
     """Add a plaintext Secret and run `secrets.sh check`."""
     (scratch / "oops.yaml").write_text(
-        "apiVersion: v1\nkind: Secret\nmetadata:\n  name: x\nstringData:\n  password: hunter2\n"
+        "apiVersion: v1\nkind: Secret\nmetadata:\n  name: x\n"
+        "stringData:\n  password: hunter2\n"
     )
     return run([*SECRETS_SCRIPT, "check"], cwd=scratch)
 
@@ -288,7 +337,9 @@ def add_plaintext_and_check(scratch: Path) -> subprocess.CompletedProcess[str]:
 @then("the check fails and names the plaintext file")
 def check_fails(check_result: subprocess.CompletedProcess[str]) -> None:
     """Require the check to exit non-zero and name oops.yaml."""
-    assert check_result.returncode != 0, "check passed although a plaintext Secret is present"
+    assert (
+        check_result.returncode != 0
+    ), "check passed although a plaintext Secret is present"
     assert "oops.yaml" in check_result.stdout + check_result.stderr
 
 
@@ -303,9 +354,12 @@ def check_passes_after_removal(scratch: Path) -> None:
 # ---------------------------------------------------------------- scenario 6
 
 
-@given("a scratch copy of the secrets tooling and a throwaway age key", target_fixture="vault")
+@given(
+    "a scratch copy of the secrets tooling and a throwaway age key",
+    target_fixture="vault",
+)
 def scratch_vault(tmp_path: Path) -> Vault:
-    """Copy the tooling to a scratch dir and initialise it with a throwaway age key."""
+    """Copy the tooling to a scratch dir and make a throwaway age key."""
     _need("sops", "age-keygen", "openssl")
     root = _scratch_tooling(tmp_path)
     key = tmp_path / "owner-key.txt"
@@ -336,12 +390,17 @@ def nothing_readable(vault: Vault) -> None:
 
 @then("the owner's key decrypts it to random 48-character passwords")
 def owner_can_decrypt(vault: Vault) -> None:
-    """Require the owner's key to yield distinct random 48-character passwords."""
-    values = [_decrypt_value(vault.root, vault.env, key) for key in SECRET_KEYS_RANDOM]
+    """Require distinct random 48-character passwords from the owner's key."""
+    values = [
+        _decrypt_value(vault.root, vault.env, key)
+        for key in SECRET_KEYS_RANDOM
+    ]
     assert all(
         re.fullmatch(r"[0-9a-f]{48}", value) for value in values
     ), "passwords are not 48 hex characters"
-    assert len(set(values)) == len(values), "two secrets share the same password"
+    assert len(set(values)) == len(
+        values
+    ), "two secrets share the same password"
     user = _decrypt_value(vault.root, vault.env, "rabbitmq-user")
     assert user and user.lower() not in WELL_KNOWN_DEFAULTS
 
@@ -363,18 +422,21 @@ def stranger_cannot_decrypt(vault: Vault, tmp_path: Path) -> None:
 
 
 @given(
-    "a scratch copy of the secrets tooling with a generated Secret and a fake kubectl",
+    "a scratch copy of the secrets tooling with a generated Secret "
+    "and a fake kubectl",
     target_fixture="applying",
 )
 def vault_with_fake_kubectl(tmp_path: Path) -> Vault:
-    """Generate a vault and put a fake `kubectl` on PATH that records what it is given."""
+    """Generate a vault and put a recording fake `kubectl` on PATH."""
     vault = scratch_vault(tmp_path)
     generate_secret(vault)
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
     capture = tmp_path / "kubectl.stdin"
     fake = bin_dir / "kubectl"
-    fake.write_text(f'#!/bin/sh\necho "$@" > "{capture}.args"\ncat > "{capture}"\n')
+    fake.write_text(
+        f'#!/bin/sh\necho "$@" > "{capture}.args"\ncat > "{capture}"\n'
+    )
     fake.chmod(fake.stat().st_mode | stat.S_IXUSR)
     vault.env["PATH"] = f"{bin_dir}{os.pathsep}{vault.env['PATH']}"
     vault.capture = capture
@@ -390,23 +452,29 @@ def run_apply(applying: Vault) -> None:
 
 @then("kubectl receives the decrypted Secret on stdin")
 def kubectl_gets_secret(applying: Vault) -> None:
-    """Require kubectl to be called as `apply -f -` and fed the decrypted manifest."""
+    """Require `kubectl apply -f -` to be fed the decrypted manifest."""
     assert applying.capture is not None
     sent = applying.capture.read_text()
     args = applying.capture.with_name("kubectl.stdin.args").read_text().strip()
     assert args == "apply -f -"
     assert "kind: Secret" in sent and "name: cgp-secrets" in sent
-    assert "ENC[AES256_GCM" not in sent, "kubectl was given the ENCRYPTED manifest"
+    assert (
+        "ENC[AES256_GCM" not in sent
+    ), "kubectl was given the ENCRYPTED manifest"
     assert re.search(r"postgres-password: [0-9a-f]{48}", sent)
 
 
 @then("no decrypted copy is left on disk")
 def no_plaintext_on_disk(applying: Vault) -> None:
-    """Apart from the key and kubectl's own capture, no file may contain the password."""
+    """Apart from the key and kubectl's capture, no file holds the password."""
     secret = _decrypt_value(applying.root, applying.env, "postgres-password")
     leaks: list[str] = []
     for path in applying.root.rglob("*"):
-        if not path.is_file() or path == applying.key or path.name.startswith("kubectl.stdin"):
+        if (
+            not path.is_file()
+            or path == applying.key
+            or path.name.startswith("kubectl.stdin")
+        ):
             continue
         try:
             found = secret in path.read_text(errors="ignore")
@@ -422,13 +490,14 @@ def no_plaintext_on_disk(applying: Vault) -> None:
 
 @then("the encrypted cluster Secret exists for a real age recipient")
 def real_secret_committed(files: list[Path]) -> None:
-    """Once the user has created their key, the committed Secret must be real and consistent."""
+    """Once the owner has a key, the committed Secret must be real."""
     enc = REPO_ROOT / ENC_FILE
     config = read_text("k8s/.sops.yaml") or ""
     if not enc.is_file() or SOPS_PLACEHOLDER in config:
         pytest.skip(
-            "PENDING (needs your private key, so it cannot be done for you): run "
-            "`bash k8s/secrets/secrets.sh init && bash k8s/secrets/secrets.sh generate`, "
+            "PENDING (needs your private key, so it cannot be done for you): "
+            "run `bash k8s/secrets/secrets.sh init && "
+            "bash k8s/secrets/secrets.sh generate`, "
             "then commit k8s/.sops.yaml and " + ENC_FILE
         )
     recipients = [
@@ -444,27 +513,33 @@ def real_secret_committed(files: list[Path]) -> None:
     ), "k8s/.sops.yaml does not list the recipient the file is encrypted for"
 
 
-# ---------------------------------------------------------------- canary scenarios
+# ---------------------------------------------------------------- canary
+# scenarios
 
 
 def _canary_secret() -> dict[str, Any]:
-    """Load the canary Secret document, failing clearly if it has been removed."""
+    """Load the canary Secret, failing clearly if it was removed."""
     docs = _by_kind(yaml_docs(CANARY_FILE), "Secret")
     assert len(docs) == 1, (
-        f"{CANARY_FILE} must hold exactly one Secret: it is the known-bad example that "
+        f"{CANARY_FILE} must hold exactly one Secret: it is the known-bad "
+        "example that "
         "proves the checks can fail. Do not delete it."
     )
     return docs[0]
 
 
 def _assert_canary_still_bad(doc: dict[str, Any]) -> None:
-    """Fail unless the canary is still plaintext AND still holds a default credential."""
+    """Fail unless the canary is still plaintext with a default credential."""
     verdict = _classify(doc)
-    assert verdict.startswith(
-        "PLAINTEXT"
-    ), f"the canary is classified as {verdict!r}: the plaintext check could no longer fail"
+    assert verdict.startswith("PLAINTEXT"), (
+        f"the canary is classified as {verdict!r}: "
+        "the plaintext check could no longer fail"
+    )
     findings = _default_password_findings(_decoded_values(CANARY_FILE, doc))
-    assert findings, "the canary holds no default credential: that check could no longer fail"
+    assert findings, (
+        "the canary holds no default credential: "
+        "that check could no longer fail"
+    )
 
 
 @given("the canary Secret kept in the test data", target_fixture="canary")
@@ -475,7 +550,7 @@ def canary_secret() -> dict[str, Any]:
 
 @then("it is a readable, unencrypted Kubernetes Secret with only fake values")
 def canary_is_fake_and_readable(canary: dict[str, Any]) -> None:
-    """Check the canary is readable, carries no sops block, and is clearly fake."""
+    """Check the canary is readable, unencrypted and clearly fake."""
     assert "sops" not in canary, "the canary must stay unencrypted"
     values = _values(canary)
     assert values, "the canary has no values"
@@ -486,7 +561,9 @@ def canary_is_fake_and_readable(canary: dict[str, Any]) -> None:
             f"canary value '{key}' is neither a well-known default nor marked "
             f"{CANARY_FAKE_PREFIX}: it must not look like a real credential"
         )
-    assert _default_password_findings(decoded), "the canary needs a default password"
+    assert _default_password_findings(
+        decoded
+    ), "the canary needs a default password"
 
 
 @then("the plaintext check classifies it as PLAINTEXT")
@@ -505,14 +582,18 @@ def canary_has_defaults(canary: dict[str, Any]) -> None:
     "I encrypt or empty the values of a copy of the canary",
     target_fixture="sanitised_copies",
 )
-def sanitise_canary_copies(canary: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    """Make copies of the canary that someone has 'fixed': encrypted, emptied, or CHANGEME."""
+def sanitise_canary_copies(
+    canary: dict[str, Any],
+) -> dict[str, dict[str, Any]]:
+    """Make copies of the canary that someone has 'fixed'."""
     keys = list(_values(canary))
     base = {k: v for k, v in canary.items() if k not in ("data", "stringData")}
     return {
         "encrypted": {
             **base,
-            "stringData": {key: "ENC[AES256_GCM,data:x,tag:y]" for key in keys},
+            "stringData": {
+                key: "ENC[AES256_GCM,data:x,tag:y]" for key in keys
+            },
             "sops": {"age": [{"recipient": "age1x"}], "mac": "m"},
         },
         "emptied": {**base, "stringData": {key: "" for key in keys}},
@@ -523,7 +604,7 @@ def sanitise_canary_copies(canary: dict[str, Any]) -> dict[str, dict[str, Any]]:
 
 @then("the canary guard rejects that copy")
 def canary_guard_rejects(sanitised_copies: dict[str, dict[str, Any]]) -> None:
-    """Check the guard raises for every sanitised copy and accepts the real canary."""
+    """Check the guard rejects every sanitised copy, accepts the real one."""
     _assert_canary_still_bad(_canary_secret())  # the real one passes the guard
     accepted: list[str] = []
     for name, copy in sanitised_copies.items():
@@ -532,7 +613,9 @@ def canary_guard_rejects(sanitised_copies: dict[str, dict[str, Any]]) -> None:
         except AssertionError:
             continue  # rejected, as it should be
         accepted.append(name)
-    assert not accepted, f"the canary guard wrongly accepted these safe copies: {accepted}"
+    assert (
+        not accepted
+    ), f"the canary guard wrongly accepted these safe copies: {accepted}"
 
 
 @then("the repository scan skips it")
@@ -544,8 +627,10 @@ def scan_skips_canary(canary: dict[str, Any]) -> None:
 
 
 @then("the repository's own secrets check ignores it")
-def secrets_check_ignores_canary(canary: dict[str, Any], tmp_path: Path) -> None:
-    """`secrets.sh check` must pass with the canary present, because it is *.example.yaml."""
+def secrets_check_ignores_canary(
+    canary: dict[str, Any], tmp_path: Path
+) -> None:
+    """`secrets.sh check` must pass with the canary present (*.example)."""
     root = _scratch_tooling(tmp_path)
     assert run(["git", "init", "-q"], cwd=root).returncode == 0
     target = root / CANARY_FILE

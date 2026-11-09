@@ -1,4 +1,4 @@
-"""Topic D: the Postgres init script is delivered by ConfigMap and works (feature 019)."""
+"""Topic D: Postgres init is delivered by ConfigMap (feature 019)."""
 
 import os
 import shutil
@@ -20,7 +20,8 @@ POSTGRES_MANIFEST = "k8s/04-postgres.yaml"
 COMPOSE_FILE = "docker_compose/docker-compose-db-graf-rmq.yml"
 INIT_SCRIPT = "scripts/db_init/01-init.sh"
 APP_VARS = {"APP_DB_USER", "APP_DB_PASS", "APP_DB_NAME"}
-AWKWARD_PASSWORD = "p'a\"s$s;--\\x #{}"  # quotes, $, ;, SQL comment, backslash: all must survive
+# quotes, $, ;, SQL comment, backslash: all must survive
+AWKWARD_PASSWORD = "p'a\"s$s;--\\x #{}"
 
 
 Doc = dict[str, Any]  # one parsed YAML document
@@ -41,7 +42,8 @@ def _database_volumes(pg_docs: list[Doc]) -> list[Doc]:
     return _pod_spec(_by_kind(pg_docs, "Deployment")[0]).get("volumes", [])
 
 
-# ---------------------------------------------------------------- manifest scenarios
+# ---------------------------------------------------------------- manifest
+# scenarios
 
 
 @given("the Postgres manifest", target_fixture="pg_docs")
@@ -49,7 +51,9 @@ def postgres_manifest() -> list[Doc]:
     """Load the Postgres manifest and require a Deployment in it."""
     docs = yaml_docs(POSTGRES_MANIFEST)
     assert docs, f"{POSTGRES_MANIFEST} is missing or is not valid YAML"
-    assert _by_kind(docs, "Deployment"), "no Deployment in the Postgres manifest"
+    assert _by_kind(
+        docs, "Deployment"
+    ), "no Deployment in the Postgres manifest"
     return docs
 
 
@@ -59,21 +63,34 @@ def postgres_manifest() -> list[Doc]:
 )
 def init_volume(pg_docs: list[Doc]) -> Doc:
     """Find the volume the init scripts are mounted from."""
-    found = [vol for vol in _database_volumes(pg_docs) if vol.get("name") == "init-scripts"]
+    found = [
+        vol
+        for vol in _database_volumes(pg_docs)
+        if vol.get("name") == "init-scripts"
+    ]
     assert found, "the Deployment has no 'init-scripts' volume"
     return found[0]
 
 
 @then("they come from a ConfigMap that exists in the same namespace")
 def init_from_configmap(init_volume: Doc, pg_docs: list[Doc]) -> None:
-    """Require the init volume to be a ConfigMap defined in the Deployment's namespace."""
+    """Require the init volume to be a ConfigMap in the same namespace."""
     assert (
         "configMap" in init_volume
     ), f"init-scripts is not a ConfigMap volume: {sorted(init_volume)}"
     name = init_volume["configMap"]["name"]
-    deployment_ns = _by_kind(pg_docs, "Deployment")[0]["metadata"].get("namespace")
-    maps = [doc for doc in _by_kind(pg_docs, "ConfigMap") if doc["metadata"]["name"] == name]
-    assert maps, f"the volume refers to ConfigMap '{name}' but the manifest does not define it"
+    deployment_ns = _by_kind(pg_docs, "Deployment")[0]["metadata"].get(
+        "namespace"
+    )
+    maps = [
+        doc
+        for doc in _by_kind(pg_docs, "ConfigMap")
+        if doc["metadata"]["name"] == name
+    ]
+    assert maps, (
+        f"the volume refers to ConfigMap '{name}' "
+        "but the manifest does not define it"
+    )
     assert maps[0]["metadata"].get("namespace") == deployment_ns
     assert "01-init.sh" in maps[0]["data"]
 
@@ -81,15 +98,21 @@ def init_from_configmap(init_volume: Doc, pg_docs: list[Doc]) -> None:
 @then("the Postgres pod mounts no host path")
 def no_host_path(pg_docs: list[Doc]) -> None:
     """Fail if any volume still points at a path on one machine's disk."""
-    host_paths = [vol["name"] for vol in _database_volumes(pg_docs) if "hostPath" in vol]
-    assert not host_paths, f"volumes still use a path on one machine's disk: {host_paths}"
+    host_paths = [
+        vol["name"] for vol in _database_volumes(pg_docs) if "hostPath" in vol
+    ]
+    assert (
+        not host_paths
+    ), f"volumes still use a path on one machine's disk: {host_paths}"
 
 
 @then("the ConfigMap script is identical to scripts/db_init/01-init.sh")
 def configmap_matches_source(pg_docs: list[Doc]) -> None:
     """Require the ConfigMap copy to equal the script Docker Compose mounts."""
     maps = [
-        doc for doc in _by_kind(pg_docs, "ConfigMap") if "01-init.sh" in (doc.get("data") or {})
+        doc
+        for doc in _by_kind(pg_docs, "ConfigMap")
+        if "01-init.sh" in (doc.get("data") or {})
     ]
     assert maps, "no ConfigMap in the manifest carries 01-init.sh"
     source = require_text(INIT_SCRIPT)
@@ -100,18 +123,30 @@ def configmap_matches_source(pg_docs: list[Doc]) -> None:
 
 @then("the init volume is mounted with an executable mode")
 def init_volume_executable(pg_docs: list[Doc]) -> None:
-    """Require an executable defaultMode, without which the image skips the script."""
-    volume = next((v for v in _database_volumes(pg_docs) if v.get("name") == "init-scripts"), None)
-    assert volume and "configMap" in volume, "init-scripts is not a ConfigMap volume"
+    """Require an executable defaultMode, or the image skips the script."""
+    volume = next(
+        (
+            v
+            for v in _database_volumes(pg_docs)
+            if v.get("name") == "init-scripts"
+        ),
+        None,
+    )
+    assert (
+        volume and "configMap" in volume
+    ), "init-scripts is not a ConfigMap volume"
     mode = volume["configMap"].get("defaultMode")
     assert (
         mode is not None and mode & 0o111
     ), f"defaultMode {mode!r} leaves the script non-executable"
 
 
-@then("the database container receives the Postgres password and the application role settings")
+@then(
+    "the database container receives the Postgres password "
+    "and the application role settings"
+)
 def pod_gets_variables(pg_docs: list[Doc]) -> None:
-    """Require the database container to receive every variable the script reads."""
+    """Require the container to receive every variable the script reads."""
     container = _pod_spec(_by_kind(pg_docs, "Deployment")[0])["containers"][0]
     names = {entry["name"] for entry in container.get("env", [])}
     missing = ({"POSTGRES_PASSWORD"} | APP_VARS) - names
@@ -127,7 +162,9 @@ def compose_service() -> Doc:
     mounting = [
         service
         for service in services
-        if any("db_init" in str(volume) for volume in service.get("volumes", []))
+        if any(
+            "db_init" in str(volume) for volume in service.get("volumes", [])
+        )
     ]
     assert mounting, "no Compose service mounts scripts/db_init"
     return mounting[0]
@@ -137,11 +174,18 @@ def compose_service() -> Doc:
 def compose_passes_variables(compose_service: Doc) -> None:
     """Compose must pass the same application role variables as Kubernetes."""
     env = compose_service.get("environment", [])
-    names = set(env) if isinstance(env, dict) else {str(item).split("=", 1)[0] for item in env}
-    assert names >= APP_VARS, f"Compose does not pass: {sorted(APP_VARS - names)}"
+    names = (
+        set(env)
+        if isinstance(env, dict)
+        else {str(item).split("=", 1)[0] for item in env}
+    )
+    assert (
+        names >= APP_VARS
+    ), f"Compose does not pass: {sorted(APP_VARS - names)}"
 
 
-# ---------------------------------------------------------------- script behaviour
+# ---------------------------------------------------------------- script
+# behaviour
 
 
 @given("the init script")
@@ -150,7 +194,10 @@ def init_script_exists() -> None:
     assert (REPO_ROOT / INIT_SCRIPT).is_file(), f"{INIT_SCRIPT} is missing"
 
 
-@when("I run it with the application database password missing", target_fixture="result")
+@when(
+    "I run it with the application database password missing",
+    target_fixture="result",
+)
 def run_without_password() -> subprocess.CompletedProcess[str]:
     """Run the script with APP_DB_PASS unset."""
     env = {
@@ -170,26 +217,31 @@ def stops_naming_variable(result: subprocess.CompletedProcess[str]) -> None:
     assert "APP_DB_PASS" in result.stderr, result.stderr
 
 
-# ---------------------------------------------------------------- real Postgres
+# ---------------------------------------------------------------- real
+# Postgres
 
 
 def _pg_bin_dir() -> Path | None:
-    """Locate the directory holding initdb, pg_ctl and psql (newest installed version)."""
+    """Locate the directory holding initdb, pg_ctl and psql."""
     found = shutil.which("initdb")
     if found:
         return Path(found).parent
     candidates = sorted(
         Path("/usr/lib/postgresql").glob("*/bin/initdb"),
-        key=lambda path: int(path.parent.parent.name) if path.parent.parent.name.isdigit() else 0,
+        key=lambda path: (
+            int(path.parent.parent.name)
+            if path.parent.parent.name.isdigit()
+            else 0
+        ),
     )
     return candidates[-1].parent if candidates else None
 
 
 class ThrowawayPostgres:
-    """A real Postgres in a temp dir. Runs as the 'postgres' OS user when the tests run as root."""
+    """A real Postgres in a temp dir (as 'postgres' when run as root)."""
 
     def __init__(self, bindir: Path) -> None:
-        """Prepare (but do not start) a server whose files live under a new temp dir."""
+        """Prepare, but do not start, a server under a new temp dir."""
         self.bindir = bindir
         self.root = Path(tempfile.mkdtemp(prefix="cgp-pgtest-"))
         self.sock = self.root / "sock"
@@ -210,7 +262,7 @@ class ThrowawayPostgres:
             return sock.getsockname()[1]
 
     def env(self, **extra: str) -> dict[str, str]:
-        """Return a minimal environment pointing client tools at this server."""
+        """Return a minimal environment pointing client tools here."""
         base = {
             "PATH": f"{self.bindir}:/usr/bin:/bin",
             "PGHOST": str(self.sock),
@@ -218,12 +270,23 @@ class ThrowawayPostgres:
         }
         return {**base, **extra}
 
-    def run(self, cmd: list[str], **extra_env: str) -> subprocess.CompletedProcess[str]:
-        """Run a command against this server, as the postgres OS user when started as root."""
+    def run(
+        self, cmd: list[str], **extra_env: str
+    ) -> subprocess.CompletedProcess[str]:
+        """Run a command against this server (as postgres if root)."""
         env = self.env(**extra_env)
         if self.as_root:
             assignments = [f"{name}={value}" for name, value in env.items()]
-            cmd = ["runuser", "-u", "postgres", "--", "env", "-i", *assignments, *cmd]
+            cmd = [
+                "runuser",
+                "-u",
+                "postgres",
+                "--",
+                "env",
+                "-i",
+                *assignments,
+                *cmd,
+            ]
             return run(cmd)
         return run(cmd, env=env)
 
@@ -244,7 +307,10 @@ class ThrowawayPostgres:
             ]
         )
         assert res.returncode == 0, res.stderr
-        options = f"-p {self.port} -k {self.sock} -c listen_addresses=127.0.0.1 -c fsync=off"
+        options = (
+            f"-p {self.port} -k {self.sock} "
+            "-c listen_addresses=127.0.0.1 -c fsync=off"
+        )
         res = self.run(
             [
                 str(self.bindir / "pg_ctl"),
@@ -258,16 +324,40 @@ class ThrowawayPostgres:
                 "start",
             ]
         )
-        assert res.returncode == 0, res.stderr + (self.root / "pg.log").read_text()
+        assert res.returncode == 0, (
+            res.stderr + (self.root / "pg.log").read_text()
+        )
 
     def stop(self) -> None:
         """Stop the server and delete its files."""
-        self.run([str(self.bindir / "pg_ctl"), "-D", str(self.data), "-m", "immediate", "stop"])
+        self.run(
+            [
+                str(self.bindir / "pg_ctl"),
+                "-D",
+                str(self.data),
+                "-m",
+                "immediate",
+                "stop",
+            ]
+        )
         shutil.rmtree(self.root, ignore_errors=True)
 
-    def sql(self, query: str, user: str = "postgres", dbname: str = "postgres") -> str:
+    def sql(
+        self, query: str, user: str = "postgres", dbname: str = "postgres"
+    ) -> str:
         """Run one SQL statement and return its trimmed output."""
-        res = self.run([str(self.bindir / "psql"), "-XtA", "-U", user, "-d", dbname, "-c", query])
+        res = self.run(
+            [
+                str(self.bindir / "psql"),
+                "-XtA",
+                "-U",
+                user,
+                "-d",
+                dbname,
+                "-c",
+                query,
+            ]
+        )
         assert res.returncode == 0, res.stderr
         return res.stdout.strip()
 
@@ -276,7 +366,11 @@ class ThrowawayPostgres:
 def throwaway_pg() -> Iterator[ThrowawayPostgres]:
     """Start a real Postgres for one test and always stop it afterwards."""
     bindir = _pg_bin_dir()
-    if bindir is None or not (bindir / "pg_ctl").exists() or not (bindir / "psql").exists():
+    if (
+        bindir is None
+        or not (bindir / "pg_ctl").exists()
+        or not (bindir / "psql").exists()
+    ):
         pytest.skip(
             "needs a local PostgreSQL server (initdb, pg_ctl, psql); "
             "e.g. `sudo apt install postgresql`"
@@ -295,8 +389,10 @@ def throwaway_postgres(throwaway_pg: ThrowawayPostgres) -> ThrowawayPostgres:
     return throwaway_pg
 
 
-def _run_init_script(pg: ThrowawayPostgres, postgres_db: str) -> subprocess.CompletedProcess[str]:
-    """Run the repo's init script against the throwaway server, the way the image would."""
+def _run_init_script(
+    pg: ThrowawayPostgres, postgres_db: str
+) -> subprocess.CompletedProcess[str]:
+    """Run the repo's init script against the throwaway server."""
     script = pg.root / "01-init.sh"
     script.write_text(require_text(INIT_SCRIPT))
     script.chmod(0o755)
@@ -331,13 +427,15 @@ def run_init_script_existing_db(pg: ThrowawayPostgres) -> None:
 
 @when("I run the init script with an awkward password")
 def run_init_script(pg: ThrowawayPostgres) -> None:
-    """Run the script with a password full of quotes and shell/SQL metacharacters."""
+    """Run the script with a password full of metacharacters."""
     res = _run_init_script(pg, postgres_db="postgres")
     assert res.returncode == 0, f"init script failed:\n{res.stderr}"
 
 
-def _login(pg: ThrowawayPostgres, password: str) -> subprocess.CompletedProcess[str]:
-    """Try to log in as the application role over TCP with the given password."""
+def _login(
+    pg: ThrowawayPostgres, password: str
+) -> subprocess.CompletedProcess[str]:
+    """Try to log in as the application role over TCP."""
     return pg.run(
         [
             str(pg.bindir / "psql"),
@@ -357,8 +455,10 @@ def _login(pg: ThrowawayPostgres, password: str) -> subprocess.CompletedProcess[
 
 @then("the application role can log in with that password")
 def role_can_log_in(pg: ThrowawayPostgres) -> None:
-    """Require the role to exist, be able to log in, and accept the awkward password."""
-    assert pg.sql("select rolcanlogin from pg_roles where rolname = 'cgp'") == "t"
+    """Require the role to exist, log in and accept the awkward password."""
+    assert (
+        pg.sql("select rolcanlogin from pg_roles where rolname = 'cgp'") == "t"
+    )
     res = _login(pg, AWKWARD_PASSWORD)
     assert res.returncode == 0 and res.stdout.strip() == "cgp", res.stderr
 
@@ -366,11 +466,16 @@ def role_can_log_in(pg: ThrowawayPostgres) -> None:
 @then("the application database exists and is owned by that role")
 def database_owned_by_role(pg: ThrowawayPostgres) -> None:
     """Require the database to exist and belong to the application role."""
-    owner = pg.sql("select pg_get_userbyid(datdba) from pg_database where datname = 'cgpbackbone'")
-    assert owner == "cgp", f"database 'cgpbackbone' is missing or owned by {owner!r}"
+    owner = pg.sql(
+        "select pg_get_userbyid(datdba) from pg_database "
+        "where datname = 'cgpbackbone'"
+    )
+    assert (
+        owner == "cgp"
+    ), f"database 'cgpbackbone' is missing or owned by {owner!r}"
 
 
 @then("a wrong password is rejected")
 def wrong_password_rejected(pg: ThrowawayPostgres) -> None:
-    """Require a wrong password to be refused, proving real password authentication."""
+    """Require a wrong password to be refused (real authentication)."""
     assert _login(pg, "not-the-password").returncode != 0

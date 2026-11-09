@@ -1,12 +1,13 @@
-"""Shared helpers for the cluster-security BDD tests (features 017-022, topics A-G).
+"""Shared helpers for the cluster-security BDD tests (017-022, topics A-G).
 
-Every check reads files from REPO_ROOT. To prove a test goes RED on the old code and
-GREEN on the fix, point CGP_REPO_ROOT at another checkout, e.g. a worktree of master:
+Every check reads files from REPO_ROOT. To prove a test goes RED on the old
+code and GREEN on the fix, point CGP_REPO_ROOT at another checkout, e.g. a
+worktree of master:
 
     git worktree add ../condorgp_master master
-    CGP_REPO_ROOT=../condorgp_master python -m pytest -m A_secrets   # expect failures
+    CGP_REPO_ROOT=../condorgp_master python -m pytest -m A_secrets  # red
 
-The tests/ directory itself is never scanned: it holds example "bad" values on purpose.
+The tests/ directory is never scanned: it holds example "bad" values.
 """
 
 import os
@@ -38,14 +39,20 @@ def run(
 ) -> subprocess.CompletedProcess[str]:
     """subprocess.run with text output; never raises on a non-zero exit."""
     return subprocess.run(
-        cmd, cwd=cwd, env=env, input=input, capture_output=True, text=True, timeout=timeout
+        cmd,
+        cwd=cwd,
+        env=env,
+        input=input,
+        capture_output=True,
+        text=True,
+        timeout=timeout,
     )
 
 
 def repo_files() -> list[Path]:
-    """Files that are part of the repo: tracked + untracked-but-not-git-ignored.
+    """Return repo files: tracked plus untracked-but-not-ignored.
 
-    Untracked files are included on purpose, so a leak is caught BEFORE `git add`.
+    Untracked files are included so a leak is caught BEFORE `git add`.
     """
     res = run(
         [
@@ -87,20 +94,26 @@ def read_text(rel: str | os.PathLike[str]) -> str | None:
 
 
 def require_text(rel: str | os.PathLike[str]) -> str:
-    """Return the text of a repo file, failing the test with a clear message if it is absent."""
+    """Return a repo file's text, or fail the test if it is absent."""
     text = read_text(rel)
     assert text is not None, f"{rel} does not exist (or is not a text file)"
     return text
 
 
 def find_lines(
-    files: Iterable[str | Path], regex: str, suffixes: Collection[str] | None = None
+    files: Iterable[str | Path],
+    regex: str,
+    suffixes: Collection[str] | None = None,
 ) -> list[Hit]:
-    """Every line matching regex in the given files, as (rel, line_no, line)."""
+    """Return (rel, line_no, line) for lines matching regex."""
     pattern = re.compile(regex)
     hits: list[Hit] = []
     for rel in files:
-        if suffixes and Path(rel).suffix not in suffixes and Path(rel).name not in suffixes:
+        if (
+            suffixes
+            and Path(rel).suffix not in suffixes
+            and Path(rel).name not in suffixes
+        ):
             continue
         text = read_text(rel)
         if text is None:
@@ -114,10 +127,14 @@ def find_lines(
 def logical_lines(
     files: Iterable[str | Path], suffixes: Collection[str] | None = None
 ) -> list[Hit]:
-    """Commands as (rel, first_line_no, command), with backslash-continued lines joined."""
+    """Return (rel, line_no, command), joining backslash continuations."""
     found: list[Hit] = []
     for rel in files:
-        if suffixes and Path(rel).suffix not in suffixes and Path(rel).name not in suffixes:
+        if (
+            suffixes
+            and Path(rel).suffix not in suffixes
+            and Path(rel).name not in suffixes
+        ):
             continue
         text = read_text(rel)
         if text is None:
@@ -137,7 +154,7 @@ def logical_lines(
 
 
 def yaml_docs(rel: str | Path) -> list[dict[str, Any]]:
-    """All mapping documents in a YAML file ([] if unreadable or not valid YAML)."""
+    """Return the mapping documents in a YAML file ([] if unreadable)."""
     text = read_text(rel)
     if text is None:
         return []
@@ -148,11 +165,13 @@ def yaml_docs(rel: str | Path) -> list[dict[str, Any]]:
 
 
 def is_git_ignored(rel: str) -> bool:
-    """Return True if .gitignore would ignore this path (even if it is tracked)."""
-    result = run(["git", "-C", str(REPO_ROOT), "check-ignore", "-q", "--no-index", rel])
+    """Return True if .gitignore would ignore this path."""
+    result = run(
+        ["git", "-C", str(REPO_ROOT), "check-ignore", "-q", "--no-index", rel]
+    )
     return result.returncode == 0
 
 
 def fmt_hits(hits: Iterable[Hit]) -> str:
-    """Format hits as indented `path:line: text` lines for an assertion message."""
+    """Format hits as indented `path:line: text` lines."""
     return "\n".join(f"  {rel}:{n}: {line}" for rel, n, line in hits)
