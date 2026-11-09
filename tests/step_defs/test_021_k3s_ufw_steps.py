@@ -1,6 +1,7 @@
 import os
 import re
 import stat
+import subprocess
 
 import pytest
 from pytest_bdd import scenarios, given, when, then
@@ -29,25 +30,25 @@ FROM_SRC = re.compile(r"\bfrom\s+(\S+)")
 RULE_FROM = re.compile(r"^ufw (allow|limit) from (\S+) to any(?: port (\d+) proto (tcp|udp))?$")
 
 
-def rules(stdout) -> list:
+def _rules(stdout) -> list:
     """The `ufw ...` lines the script printed, in order."""
     return [line.strip() for line in stdout.splitlines() if line.startswith("ufw ")]
 
 
-def env(**extra) -> dict:
+def _env(**extra) -> dict:
     env = {"PATH": os.environ["PATH"], "HOME": os.environ.get("HOME", "/tmp")}
     env.update(extra)
     return env
 
 
-def run_script(env, extra_path=None) -> None:
+def _run_script(env, extra_path=None) -> subprocess.CompletedProcess[str]:
     assert SCRIPT.is_file(), f"{SCRIPT.relative_to(REPO_ROOT)} does not exist"
     if extra_path:
         env["PATH"] = f"{extra_path}:{env['PATH']}"
     return run(["bash", str(SCRIPT)], env=env, cwd=str(REPO_ROOT))
 
 
-def parsed(rules) -> list:
+def _parsed(rules) -> list:
     """Each allow rule as (source, port, proto); anything unparseable fails the test."""
     out = []
     for rule in rules:
@@ -63,7 +64,7 @@ def parsed(rules) -> list:
     return out
 
 
-def by_source(rules) -> dict:
+def _by_source(rules) -> dict:
     result = {}
     for source, port, proto in _parsed(rules):
         result.setdefault(source, set()).add((port, proto))
@@ -98,14 +99,14 @@ def firewall_script() -> None:
 
 
 @when("I generate the rules for a hub with two spokes", target_fixture="out")
-def hub_rules() -> None:
+def hub_rules() -> str:
     res = _run_script(_env(ROLE="hub", ADMIN_IP=ADMIN, NODE_IPS=f"{SPOKE_1} {SPOKE_2}"))
     assert res.returncode == 0, res.stderr
     return res.stdout
 
 
 @when("I generate the rules for a spoke with a hub and one other spoke", target_fixture="out")
-def spoke_rules() -> None:
+def spoke_rules() -> str:
     res = _run_script(_env(ROLE="spoke", ADMIN_IP=ADMIN, NODE_IPS=f"{HUB} {SPOKE_2}"))
     assert res.returncode == 0, res.stderr
     return res.stdout
@@ -227,7 +228,7 @@ _HUB_ENV = dict(ROLE="hub", ADMIN_IP=ADMIN, NODE_IPS=f"{SPOKE_1} {SPOKE_2}")
 
 
 @when("I run it without APPLY", target_fixture="result")
-def run_dry(fake) -> None:
+def run_dry(fake) -> subprocess.CompletedProcess[str]:
     bindir, log = fake
     return _run_script(_env(**_HUB_ENV), extra_path=str(bindir))
 
@@ -242,7 +243,7 @@ def dry_run(fake, result) -> None:
 
 
 @when("I run it with APPLY=1", target_fixture="result")
-def run_apply(fake) -> None:
+def run_apply(fake) -> subprocess.CompletedProcess[str]:
     bindir, log = fake
     return _run_script(_env(APPLY="1", **_HUB_ENV), extra_path=str(bindir))
 
