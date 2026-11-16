@@ -4,17 +4,29 @@ import os
 import re
 import stat
 import subprocess
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
 from pytest_bdd import given, scenarios, then, when
 
-from tests.k8s_helpers import REPO_ROOT, Hit, find_lines, fmt_hits, run
+from tests.k8s_helpers import (
+    REPO_ROOT,
+    Hit,
+    assert_all_checks_fail,
+    assert_scan_skips,
+    find_lines,
+    find_lines_in_text,
+    fmt_hits,
+    run,
+)
 
 scenarios("../features/021_k3s_ufw.feature")
 
 SCRIPT = REPO_ROOT / "k3s/ufw_rules.sh"
+CANARY_SCRIPT_REL = "tests/test_data/k8s/canary-ufw-bad.example.sh"
+CANARY_SCRIPT = REPO_ROOT / CANARY_SCRIPT_REL
 
 ADMIN = "203.0.113.10"
 HUB = "198.51.100.1"
@@ -94,19 +106,21 @@ def _env(**extra: str) -> dict[str, str]:
 
 
 def _run_script(
-    env: dict[str, str], extra_path: str | None = None
+    env: dict[str, str],
+    extra_path: str | None = None,
+    script: Path = SCRIPT,
 ) -> subprocess.CompletedProcess[str]:
-    """Run the firewall script, optionally with extra_path first on PATH."""
-    assert SCRIPT.is_file(), f"{SCRIPT.relative_to(REPO_ROOT)} does not exist"
+    """Run a firewall script (the real one by default), extra_path first."""
+    assert script.is_file(), f"{script} does not exist"
     env = dict(env)  # never change the caller's copy
     if extra_path:
         env["PATH"] = f"{extra_path}:{env['PATH']}"
-    return run(["bash", str(SCRIPT)], env=env, cwd=str(REPO_ROOT))
+    return run(["bash", str(script)], env=env, cwd=str(REPO_ROOT))
 
 
-def _generate(role_env: dict[str, str]) -> str:
+def _generate(role_env: dict[str, str], script: Path = SCRIPT) -> str:
     """Run the script in dry-run mode for a role and return its output."""
-    result = _run_script(_env(**role_env))
+    result = _run_script(_env(**role_env), script=script)
     assert result.returncode == 0, result.stderr
     return result.stdout
 
@@ -148,8 +162,13 @@ def _by_source(rules: list[str]) -> dict[str, set[tuple[str, str]]]:
 @when("I read every ufw allow or limit rule", target_fixture="open_rules")
 def read_ufw_rules(files: list[Path]) -> list[Hit]:
     """Find ufw allow/limit lines with no source or the whole world."""
+    return _open_to_everyone(find_lines(files, UFW_OPEN.pattern))
+
+
+def _open_to_everyone(rule_lines: list[Hit]) -> list[Hit]:
+    """Keep the ufw rule lines that name no source or the whole world."""
     bad: list[Hit] = []
-    for hit in find_lines(files, UFW_OPEN.pattern):
+    for hit in rule_lines:
         source = FROM_SRC.search(hit[2])
         value = source.group(1).strip("\"'") if source else None
         if value is None or value.lower() in WORLD:
@@ -268,8 +287,12 @@ def ssh_first(out: str) -> None:
     """Require SSH first, before default-deny, with enable last."""
     rules = _rules(out)
     ssh = next(
-        index for index, rule in enumerate(rules) if f" port {SSH} " in rule
+        (index for index, rule in enumerate(rules) if f" port {SSH} " in rule),
+        None,
     )
+    assert ssh is not None, "there is no SSH rule at all"
+    assert DENY_INCOMING in rules, "there is no default-deny rule"
+    assert ENABLE in rules, "the firewall is never enabled"
     assert ssh < rules.index(
         DENY_INCOMING
     ), "default deny is applied before SSH is allowed: that can lock you out"
@@ -295,9 +318,14 @@ def ssh_first(out: str) -> None:
 )
 def rejects_unsafe() -> None:
     """Every unsafe input must exit non-zero, explain, and print no rules."""
+    _check_rejects_unsafe(SCRIPT)
+
+
+def _check_rejects_unsafe(script: Path) -> None:
+    """Fail unless the script refuses every unsafe input, with a reason."""
     failures: list[str] = []
     for name, override in UNSAFE_INPUTS.items():
-        result = _run_script(_env(**{**HUB_ENV, **override}))
+        result = _run_script(_env(**{**HUB_ENV, **override}), script=script)
         printed = len(_rules(result.stdout))
         if result.returncode == 0 or printed:
             failures.append(
@@ -316,16 +344,21 @@ def rejects_unsafe() -> None:
 # 6-7
 
 
-@pytest.fixture
-def fake_ufw(tmp_path: Path) -> FakeUfw:
-    """Create a `ufw` that logs its arguments instead of acting."""
-    bindir = tmp_path / "bin"
-    bindir.mkdir()
-    log = tmp_path / "ufw.log"
+def _make_fake_ufw(root: Path) -> FakeUfw:
+    """Create a `ufw` under root that logs its arguments instead of acting."""
+    bindir = root / "bin"
+    bindir.mkdir(parents=True)
+    log = root / "ufw.log"
     exe = bindir / "ufw"
     exe.write_text(f'#!/bin/sh\necho "ufw $*" >> "{log}"\n')
     exe.chmod(exe.stat().st_mode | stat.S_IXUSR)
     return FakeUfw(bindir=bindir, log=log)
+
+
+@pytest.fixture
+def fake_ufw(tmp_path: Path) -> FakeUfw:
+    """Create a `ufw` that logs its arguments instead of acting."""
+    return _make_fake_ufw(tmp_path)
 
 
 @given("the firewall script with a recording fake ufw", target_fixture="fake")
@@ -366,3 +399,133 @@ def applied(fake: FakeUfw, result: subprocess.CompletedProcess[str]) -> None:
     called = fake.log.read_text().splitlines()
     assert called == _rules(result.stdout)
     assert len(called) > 5
+
+
+# ---------------------------------------------------------------- canary
+
+
+def _canary_checks(
+    script: Path, workdir: Path
+) -> dict[str, Callable[[], None]]:
+    """Return every firewall check, ready to run on a (bad) script."""
+
+    def dry_run_check() -> None:
+        fake = _make_fake_ufw(workdir / "dry")
+        result = _run_script(
+            _env(CANARY_UFW=str(fake.bindir / "ufw"), **HUB_ENV),
+            extra_path=str(fake.bindir),
+            script=script,
+        )
+        dry_run(fake, result)
+
+    def apply_check() -> None:
+        fake = _make_fake_ufw(workdir / "apply")
+        result = _run_script(
+            _env(APPLY="1", CANARY_UFW=str(fake.bindir / "ufw"), **HUB_ENV),
+            extra_path=str(fake.bindir),
+            script=script,
+        )
+        applied(fake, result)
+
+    def hub(check: Callable[[str], None]) -> Callable[[], None]:
+        return lambda: check(_generate(HUB_ENV, script))
+
+    return {
+        "no rule opens a port to everyone": lambda: all_limited(
+            _open_to_everyone(
+                find_lines_in_text(
+                    script.name, script.read_text(), UFW_OPEN.pattern
+                )
+            )
+        ),
+        "SSH from the admin only": hub(ssh_admin_only),
+        "API from the admin and nodes only": hub(api_hub),
+        "a spoke opens no API port": lambda: api_spoke(
+            _generate(SPOKE_ENV, script)
+        ),
+        "WireGuard and kubelet from nodes only": hub(node_ports),
+        "nothing else is opened": hub(nothing_else),
+        "incoming is denied by default": hub(default_deny),
+        "SSH comes first": hub(ssh_first),
+        "unsafe input is refused": lambda: _check_rejects_unsafe(script),
+        "a dry run never calls ufw": dry_run_check,
+        "applying runs the printed rules": apply_check,
+    }
+
+
+def _assert_canary_still_bad(script: Path, workdir: Path) -> None:
+    """Fail unless every check still rejects the script, for real reasons.
+
+    An empty or broken script fails every check too, so first require that
+    it still prints firewall rules: a failing check must mean a defect, not
+    a missing script.
+    """
+    assert script.is_file(), f"{script} is missing: it must stay in the repo"
+    assert _rules(_generate(HUB_ENV, script)), "the canary prints no rules"
+    assert_all_checks_fail(_canary_checks(script, workdir), CANARY_SCRIPT_REL)
+
+
+@given("the bad firewall script kept in the test data")
+def bad_firewall_canary() -> None:
+    """Require the canary script."""
+    assert CANARY_SCRIPT.is_file(), f"{CANARY_SCRIPT_REL} is missing"
+
+
+@then("it says plainly that it is a fake, deliberately bad example")
+def canary_is_marked_fake() -> None:
+    """Check the canary announces that it is fake and must stay bad."""
+    text = CANARY_SCRIPT.read_text()
+    assert "CANARY" in text and "FAKE" in text, (
+        f"{CANARY_SCRIPT_REL} must say it is a fake, deliberately bad "
+        "example (CANARY, FAKE) so nobody mistakes it for the real script"
+    )
+
+
+@then("every firewall check fails on it")
+def every_check_fails_on_canary(tmp_path: Path) -> None:
+    """Check every firewall check rejects the canary."""
+    _assert_canary_still_bad(CANARY_SCRIPT, tmp_path)
+
+
+@when(
+    "I fix, strip or empty a copy of the canary",
+    target_fixture="sanitised_copies",
+)
+def sanitise_canary_copies(tmp_path: Path) -> dict[str, Path]:
+    """Make copies of the canary script that someone has 'fixed'."""
+    text = CANARY_SCRIPT.read_text()
+    bad_rule = re.compile(r"^.*(?:from any |0\.0\.0\.0/0|8472).*$", re.M)
+    contents = {
+        "the real script": SCRIPT.read_text(),
+        "bad rules removed": bad_rule.sub("", text),
+        "emptied": "",
+    }
+    copies: dict[str, Path] = {}
+    for index, (name, body) in enumerate(contents.items()):
+        copies[name] = tmp_path / f"copy{index}.sh"
+        copies[name].write_text(body)
+    return copies
+
+
+@then("the canary guard rejects that copy")
+def canary_guard_rejects(
+    tmp_path: Path, sanitised_copies: dict[str, Path]
+) -> None:
+    """Check the guard rejects every fixed copy and accepts the real canary."""
+    _assert_canary_still_bad(CANARY_SCRIPT, tmp_path / "real")
+    accepted: list[str] = []
+    for name, copy_path in sanitised_copies.items():
+        try:
+            _assert_canary_still_bad(copy_path, tmp_path / f"try-{name}")
+        except AssertionError:
+            continue  # rejected, as it should be
+        accepted.append(name)
+    assert (
+        not accepted
+    ), f"the canary guard wrongly accepted these good copies: {accepted}"
+
+
+@then("the repository scan skips it")
+def scan_skips_canary() -> None:
+    """Check the real scan never reads tests/, or the canary would fail it."""
+    assert_scan_skips(CANARY_SCRIPT_REL)

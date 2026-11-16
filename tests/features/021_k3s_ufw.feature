@@ -43,3 +43,17 @@ Feature: Firewall rules only let the cluster's own machines in
     Given the firewall script with a recording fake ufw
     When I run it with APPLY=1
     Then ufw was called with exactly the printed rules, in the same order
+
+  Scenario: A known-bad firewall script proves the firewall checks can fail
+    Given the bad firewall script kept in the test data
+    Then it says plainly that it is a fake, deliberately bad example
+    And every firewall check fails on it
+
+  Scenario: The checks notice when the canary stops being bad
+    Given the bad firewall script kept in the test data
+    When I fix, strip or empty a copy of the canary
+    Then the canary guard rejects that copy
+
+  Scenario: The canary never reaches the real checks
+    Given the bad firewall script kept in the test data
+    Then the repository scan skips it
