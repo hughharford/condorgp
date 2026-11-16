@@ -1,0 +1,15 @@
+# CANARY (topic D): a deliberately BAD Docker Compose file that must stay in
+# the repo.
+#
+# Tests 019 use it to prove the Compose check can FAIL: the database service
+# mounts the init scripts but is not given the application role variables.
+#
+# Every value is FAKE. Do not fix this file. It lives under tests/, which the
+# repository scan never reads, so it does not trip the real checks.
+services:
+  canary-db:
+    image: postgres:16
+    volumes:
+      - ./scripts/db_init:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_PASSWORD=FAKE-NOT-A-REAL-SECRET-0000

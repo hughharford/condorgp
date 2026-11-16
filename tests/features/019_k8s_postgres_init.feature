@@ -44,3 +44,17 @@ Feature: The database initialises itself from a ConfigMap
     When I run the init script with POSTGRES_DB set to that same database
     Then the application role can log in with that password
     And the application database exists and is owned by that role
+
+  Scenario: A known-bad manifest and Compose file prove the checks can fail
+    Given the bad Postgres manifest and Compose file kept in the test data
+    Then they say plainly that they are fake, deliberately bad examples
+    And every manifest check and the Compose check fails on them
+
+  Scenario: The checks notice when the canary stops being bad
+    Given the bad Postgres manifest and Compose file kept in the test data
+    When I fix, sync or empty a copy of the canary manifest
+    Then the canary guard rejects that copy
+
+  Scenario: The canary never reaches the real checks
+    Given the bad Postgres manifest and Compose file kept in the test data
+    Then the repository scan skips both

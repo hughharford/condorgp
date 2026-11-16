@@ -1,0 +1,49 @@
+# CANARY (topic D): a deliberately BAD Postgres manifest that must stay in the
+# repo.
+#
+# Tests 019 use it to prove the manifest checks can FAIL. It breaks every
+# check on purpose:
+#   - the init scripts come from a host path, not a ConfigMap
+#   - the ConfigMap script is a stale copy, not the real init script
+#   - there is no executable defaultMode
+#   - the container is not given the application role variables
+#
+# Every value is FAKE. Do not fix this file. It lives under tests/, which the
+# repository scan never reads, so it does not trip the real checks.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cgp-db-init
+  namespace: canary
+data:
+  01-init.sh: |
+    #!/bin/bash
+    echo "FAKE stale copy of the init script"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: canary-postgres
+  namespace: canary
+spec:
+  selector:
+    matchLabels:
+      app: canary-postgres
+  template:
+    metadata:
+      labels:
+        app: canary-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16
+          env:
+            - name: POSTGRES_PASSWORD
+              value: FAKE-NOT-A-REAL-SECRET-0000
+          volumeMounts:
+            - name: init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: init-scripts
+          hostPath:
+            path: /home/FAKE-USER/db_init

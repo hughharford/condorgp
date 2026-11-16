@@ -13,7 +13,7 @@ The tests/ directory is never scanned: it holds example "bad" values.
 import os
 import re
 import subprocess
-from collections.abc import Collection, Iterable, Sequence
+from collections.abc import Callable, Collection, Iterable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -187,3 +187,30 @@ def assert_scan_skips(canary_rel: str) -> None:
     assert not [
         path for path in scanned if path.startswith("tests/")
     ], "the scan reads files under tests/"
+
+
+def checks_that_pass(checks: Mapping[str, Callable[[], None]]) -> list[str]:
+    """Return the names of the checks that do NOT raise AssertionError."""
+    passing: list[str] = []
+    for name, check in checks.items():
+        try:
+            check()
+        except AssertionError:
+            continue
+        passing.append(name)
+    return passing
+
+
+def assert_all_checks_fail(
+    checks: Mapping[str, Callable[[], None]], canary_rel: str
+) -> None:
+    """Fail unless every check rejects the canary.
+
+    A canary is bad on purpose. If a check passes on it, that check can no
+    longer fail, so it proves nothing.
+    """
+    passing = checks_that_pass(checks)
+    assert not passing, (
+        f"{canary_rel} no longer fails these checks, so they could no "
+        f"longer fail: {passing}"
+    )
