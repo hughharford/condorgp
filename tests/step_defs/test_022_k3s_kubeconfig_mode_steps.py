@@ -1,16 +1,29 @@
 """Topic G: the k3s kubeconfig is written with mode 600 (feature 022)."""
 
 import re
+from collections.abc import Callable
+from dataclasses import dataclass
 from pathlib import Path
 
-from pytest_bdd import scenarios, then, when
+from pytest_bdd import given, scenarios, then, when
 
-from tests.k8s_helpers import Hit, find_lines, fmt_hits, require_text
+from tests.k8s_helpers import (
+    Hit,
+    assert_all_checks_fail,
+    assert_scan_skips,
+    find_lines_in_text,
+    fmt_hits,
+    read_text,
+    require_text,
+)
 
 scenarios("../features/022_k3s_kubeconfig_mode.feature")
 
 SERVER_CONFIG = "k3s/config.server.example.yaml"
 GUIDE = "kubernetes/k3s_again/k3s_hub_spoke.md"
+CANARY_CONFIG = "tests/test_data/k8s/canary-k3s-config-bad.example.yaml"
+CANARY_INSTALL = "tests/test_data/k8s/canary-k3s-install-bad.example.sh"
+CANARY_GUIDE = "tests/test_data/k8s/canary-k3s-guide-bad.example.md"
 
 # CLI flag (--write-kubeconfig-mode 644 / =644), YAML key (write-kubeconfig-
 # mode: "0644"),
@@ -38,14 +51,24 @@ WARNING_AGAINST_644 = re.compile(r"(?i)(never|do not|don't).{0,60}644")
 ModeHit = tuple[str, int, str, str | None]
 
 
-def _mode_hits(files: list[Path]) -> list[ModeHit]:
-    """Return lines naming the kubeconfig mode, with the mode they set."""
+def _mode_hits_in_text(rel: str, text: str) -> list[ModeHit]:
+    """Return lines of one text naming the kubeconfig mode, and its mode."""
     hits: list[ModeHit] = []
-    for rel, number, line in find_lines(files, MENTION):
+    for _, number, line in find_lines_in_text(rel, text, MENTION):
         if rel.endswith(".md") and ADVICE.search(line):
             continue
         match = SETTING.search(line)
         hits.append((rel, number, line, match.group(1) if match else None))
+    return hits
+
+
+def _mode_hits(files: list[Path]) -> list[ModeHit]:
+    """Return lines naming the kubeconfig mode, with the mode they set."""
+    hits: list[ModeHit] = []
+    for rel in files:
+        text = read_text(rel)
+        if text is not None:
+            hits += _mode_hits_in_text(str(rel), text)
     return hits
 
 
@@ -109,3 +132,135 @@ def explains_0600(guide: str) -> None:
     missing = [phrase for phrase in GUIDE_MUST_MENTION if phrase not in guide]
     assert not missing, f"guide is missing: {missing}"
     assert WARNING_AGAINST_644.search(guide), "guide must warn against 644"
+
+
+# ---------------------------------------------------------------- canary
+
+
+@dataclass
+class Canary:
+    """The three kinds of input the kubeconfig checks look at."""
+
+    config: str  # the k3s server config
+    install: str  # an install command
+    guide: str  # the hub-and-spoke notes
+
+
+def _canary_checks(canary: Canary) -> dict[str, Callable[[], None]]:
+    """Return every kubeconfig check, ready to run on the canary."""
+    return {
+        "every config setting is 600 or 0600": lambda: each_is_600(
+            _mode_hits_in_text(CANARY_CONFIG, canary.config)
+        ),
+        "every install setting is 600 or 0600": lambda: each_is_600(
+            _mode_hits_in_text(CANARY_INSTALL, canary.install)
+        ),
+        "every guide setting is 600 or 0600": lambda: each_is_600(
+            _mode_hits_in_text(CANARY_GUIDE, canary.guide)
+        ),
+        'the config sets "0600"': lambda: sets_0600(canary.config),
+        "the config has no other value": lambda: has_no_other_value(
+            canary.config
+        ),
+        "the guide explains 0600 and warns against 644": lambda: (
+            explains_0600(canary.guide)
+        ),
+    }
+
+
+def _load_canary() -> Canary:
+    """Load the three canary files, failing clearly if any is gone."""
+    return Canary(
+        config=require_text(CANARY_CONFIG),
+        install=require_text(CANARY_INSTALL),
+        guide=require_text(CANARY_GUIDE),
+    )
+
+
+def _assert_canary_still_bad(canary: Canary) -> None:
+    """Fail unless every check still rejects the canary, for real reasons.
+
+    An empty or broken file fails every check too, so first require that
+    each file still talks about the kubeconfig mode: a failing check must
+    mean a defect, not a missing file.
+    """
+    for rel, text in (
+        (CANARY_CONFIG, canary.config),
+        (CANARY_INSTALL, canary.install),
+        (CANARY_GUIDE, canary.guide),
+    ):
+        assert _mode_hits_in_text(
+            rel, text
+        ), f"{rel} no longer mentions the kubeconfig mode at all"
+    assert_all_checks_fail(
+        _canary_checks(canary),
+        f"{CANARY_CONFIG}, {CANARY_INSTALL} and {CANARY_GUIDE}",
+    )
+
+
+@given(
+    "the bad k3s config, install command and guide kept in the test data",
+    target_fixture="canary",
+)
+def bad_k3s_canary() -> Canary:
+    """Load the canary config, install command and guide."""
+    return _load_canary()
+
+
+@then("they say plainly that they are fake, deliberately bad examples")
+def canary_is_marked_fake() -> None:
+    """Check every canary file announces that it is fake and must stay bad."""
+    for rel in (CANARY_CONFIG, CANARY_INSTALL, CANARY_GUIDE):
+        text = require_text(rel)
+        assert "CANARY" in text and "FAKE" in text, (
+            f"{rel} must say it is a fake, deliberately bad example "
+            "(CANARY, FAKE) so nobody mistakes it for a real file"
+        )
+
+
+@then("every kubeconfig check fails on them")
+def every_check_fails_on_canary(canary: Canary) -> None:
+    """Check every kubeconfig check rejects the canary."""
+    _assert_canary_still_bad(canary)
+
+
+@when("I fix or empty a copy of the canary", target_fixture="sanitised_copies")
+def sanitise_canary_copies(canary: Canary) -> dict[str, Canary]:
+    """Make copies of the canary that someone has 'fixed'."""
+    real_config = require_text(SERVER_CONFIG)
+    real_guide = require_text(GUIDE)
+    clean_install = (
+        "curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 600\n"
+    )
+    return {
+        "the real files": Canary(real_config, clean_install, real_guide),
+        "config fixed": Canary(real_config, canary.install, canary.guide),
+        "install fixed": Canary(canary.config, clean_install, canary.guide),
+        "guide fixed": Canary(canary.config, canary.install, real_guide),
+        "emptied": Canary("", "", ""),
+    }
+
+
+@then("the canary guard rejects that copy")
+def canary_guard_rejects(
+    canary: Canary, sanitised_copies: dict[str, Canary]
+) -> None:
+    """Check the guard rejects every fixed copy and accepts the real canary."""
+    _assert_canary_still_bad(canary)  # the real canary passes the guard
+    accepted: list[str] = []
+    for name, copied in sanitised_copies.items():
+        try:
+            _assert_canary_still_bad(copied)
+        except AssertionError:
+            continue  # rejected, as it should be
+        accepted.append(name)
+    assert (
+        not accepted
+    ), f"the canary guard wrongly accepted these good copies: {accepted}"
+
+
+@then("the repository scan skips all three")
+def scan_skips_canaries() -> None:
+    """Check the real scan never reads tests/, or the canary would fail it."""
+    for rel in (CANARY_CONFIG, CANARY_INSTALL, CANARY_GUIDE):
+        assert_scan_skips(rel)

@@ -1,0 +1,10 @@
+# CANARY (topic G): a deliberately BAD k3s server config that must stay in the
+# repo.
+#
+# Tests 022 use it to prove the config checks can FAIL: it writes the admin
+# kubeconfig readable by every user, and as an unquoted number.
+#
+# Every value is FAKE. Do not fix this file. It lives under tests/, which the
+# repository scan never reads, so it does not trip the real checks.
+write-kubeconfig-mode: 0644
+token-file: /etc/rancher/k3s/FAKE-token

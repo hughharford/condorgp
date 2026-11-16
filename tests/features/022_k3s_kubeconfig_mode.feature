@@ -19,3 +19,17 @@ Feature: The k3s kubeconfig is readable by its owner only
     Given the repository files
     When I read the k3s hub-and-spoke guide
     Then it explains how to use a 0600 kubeconfig and why 644 must not be used
+
+  Scenario: A known-bad k3s setup proves the kubeconfig checks can fail
+    Given the bad k3s config, install command and guide kept in the test data
+    Then they say plainly that they are fake, deliberately bad examples
+    And every kubeconfig check fails on them
+
+  Scenario: The checks notice when the canary stops being bad
+    Given the bad k3s config, install command and guide kept in the test data
+    When I fix or empty a copy of the canary
+    Then the canary guard rejects that copy
+
+  Scenario: The canary never reaches the real checks
+    Given the bad k3s config, install command and guide kept in the test data
+    Then the repository scan skips all three
