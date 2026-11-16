@@ -100,28 +100,54 @@ def require_text(rel: str | os.PathLike[str]) -> str:
     return text
 
 
+def _wanted(rel: str | Path, suffixes: Collection[str] | None) -> bool:
+    """Return True if the file's suffix or name is one of the suffixes."""
+    return (
+        not suffixes
+        or Path(rel).suffix in suffixes
+        or Path(rel).name in suffixes
+    )
+
+
+def find_lines_in_text(rel: str | Path, text: str, regex: str) -> list[Hit]:
+    """Return (rel, line_no, line) for lines of the text matching regex."""
+    pattern = re.compile(regex)
+    return [
+        (str(rel), number, line.strip())
+        for number, line in enumerate(text.splitlines(), 1)
+        if pattern.search(line)
+    ]
+
+
 def find_lines(
     files: Iterable[str | Path],
     regex: str,
     suffixes: Collection[str] | None = None,
 ) -> list[Hit]:
     """Return (rel, line_no, line) for lines matching regex."""
-    pattern = re.compile(regex)
     hits: list[Hit] = []
     for rel in files:
-        if (
-            suffixes
-            and Path(rel).suffix not in suffixes
-            and Path(rel).name not in suffixes
-        ):
-            continue
-        text = read_text(rel)
-        if text is None:
-            continue
-        for number, line in enumerate(text.splitlines(), 1):
-            if pattern.search(line):
-                hits.append((str(rel), number, line.strip()))
+        text = read_text(rel) if _wanted(rel, suffixes) else None
+        if text is not None:
+            hits += find_lines_in_text(rel, text, regex)
     return hits
+
+
+def logical_lines_in_text(rel: str | Path, text: str) -> list[Hit]:
+    """Return (rel, line_no, command), joining backslash continuations."""
+    found: list[Hit] = []
+    buffer, start = "", 0
+    for number, raw in enumerate(text.splitlines(), 1):
+        if not buffer:
+            start = number
+        if raw.rstrip().endswith("\\"):
+            buffer += raw.rstrip()[:-1] + " "
+            continue
+        found.append((str(rel), start, (buffer + raw).strip()))
+        buffer = ""
+    if buffer:
+        found.append((str(rel), start, buffer.strip()))
+    return found
 
 
 def logical_lines(
@@ -130,26 +156,9 @@ def logical_lines(
     """Return (rel, line_no, command), joining backslash continuations."""
     found: list[Hit] = []
     for rel in files:
-        if (
-            suffixes
-            and Path(rel).suffix not in suffixes
-            and Path(rel).name not in suffixes
-        ):
-            continue
-        text = read_text(rel)
-        if text is None:
-            continue
-        buffer, start = "", 0
-        for number, raw in enumerate(text.splitlines(), 1):
-            if not buffer:
-                start = number
-            if raw.rstrip().endswith("\\"):
-                buffer += raw.rstrip()[:-1] + " "
-                continue
-            found.append((str(rel), start, (buffer + raw).strip()))
-            buffer = ""
-        if buffer:
-            found.append((str(rel), start, buffer.strip()))
+        text = read_text(rel) if _wanted(rel, suffixes) else None
+        if text is not None:
+            found += logical_lines_in_text(rel, text)
     return found
 
 

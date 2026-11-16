@@ -52,3 +52,17 @@ Feature: The cluster dashboard is maintained, read-only and not exposed
     Given the dashboard manifest
     Then the Service selects the Deployment's pods and targets its named container port
     And the viewer account lives in the dashboard's namespace
+
+  Scenario: A known-bad dashboard setup proves the dashboard checks can fail
+    Given the bad dashboard manifest, commands and Makefile kept in the test data
+    Then they say plainly that they are fake, deliberately bad examples
+    And every dashboard check fails on them
+
+  Scenario: The checks notice when the canary stops being bad
+    Given the bad dashboard manifest, commands and Makefile kept in the test data
+    When I fix, clean or empty a copy of the canary
+    Then the canary guard rejects that copy
+
+  Scenario: The canary never reaches the real checks
+    Given the bad dashboard manifest, commands and Makefile kept in the test data
+    Then the repository scan skips all three

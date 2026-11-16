@@ -1,0 +1,119 @@
+# CANARY (topic E): a deliberately BAD dashboard setup that must stay in the
+# repo.
+#
+# Tests 020 use it to prove the dashboard checks can FAIL. It breaks every
+# manifest check on purpose: unpinned image, no hardening, no limits, a host
+# path and host network, a NodePort Service behind an Ingress, a Service that
+# does not match the pods, an admin account bound to cluster-admin (which is
+# also the pod's own account), a viewer in the wrong namespace and a viewer
+# role that can do anything to Secrets.
+#
+# Every value is FAKE. Do not fix this file. It lives under tests/, which the
+# repository scan never reads, so it does not trip the real checks.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dashboard-admin
+  namespace: canary-ui
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dashboard-viewer
+  namespace: elsewhere
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: canary-too-much
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: canary-admin
+subjects:
+  - kind: ServiceAccount
+    name: dashboard-admin
+    namespace: canary-ui
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: canary-viewer-too-much
+subjects:
+  - kind: ServiceAccount
+    name: dashboard-viewer
+    namespace: canary-ui
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: canary-too-much
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: canary-dash
+  namespace: canary-ui
+spec:
+  selector:
+    matchLabels:
+      app: canary-dash
+  template:
+    metadata:
+      labels:
+        app: canary-dash
+    spec:
+      serviceAccountName: dashboard-admin
+      hostNetwork: true
+      containers:
+        - name: dash
+          image: example.invalid/dashboard:latest
+          ports:
+            - name: http
+              containerPort: 4466
+          volumeMounts:
+            - name: host
+              mountPath: /host
+      volumes:
+        - name: host
+          hostPath:
+            path: /
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: canary-dash
+  namespace: canary-ui
+spec:
+  type: NodePort
+  selector:
+    app: FAKE-wrong-label
+  ports:
+    - port: 80
+      targetPort: 9999
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: canary-dash
+  namespace: canary-ui
+spec:
+  rules:
+    - host: dash.example.invalid
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: canary-dash
+                port:
+                  number: 80

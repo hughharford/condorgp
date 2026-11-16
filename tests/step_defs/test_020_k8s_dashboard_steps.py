@@ -1,6 +1,8 @@
 """Topic E: maintained dashboard, loopback only (feature 020)."""
 
+import copy
 import re
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -9,9 +11,13 @@ from pytest_bdd import given, scenarios, then, when
 
 from tests.k8s_helpers import (
     Hit,
+    assert_all_checks_fail,
+    assert_scan_skips,
     find_lines,
+    find_lines_in_text,
     fmt_hits,
     logical_lines,
+    logical_lines_in_text,
     repo_files,
     require_text,
     yaml_docs,
@@ -21,6 +27,9 @@ scenarios("../features/020_k8s_dashboard.feature")
 
 DASHBOARD_MANIFEST = "k8s/11-headlamp.yaml"
 VIEWER_MANIFEST = "k8s/12-dashboard-viewer.yaml"
+CANARY_MANIFEST = "tests/test_data/k8s/canary-dashboard-bad.example.yaml"
+CANARY_COMMANDS = "tests/test_data/k8s/canary-dashboard-commands.example.sh"
+CANARY_MAKEFILE = "tests/test_data/k8s/canary-dashboard-makefile.example.mk"
 # Things that run. Notes (.md) are checked separately, as they may mention old
 # commands.
 EXECUTABLE_FILES = {".yaml", ".yml", ".sh", "Makefile"}
@@ -54,6 +63,7 @@ ROLEBINDING_COMMAND = re.compile(r"kubectl\s+create\s+(?:cluster)?rolebinding")
 DASHBOARD_TARGET = re.compile(r"^k(?:_|3_)dash\w*:\s*\n((?:\t.*\n?)+)", re.M)
 
 Doc = dict[str, Any]  # one parsed YAML document
+World = list[tuple[str, Doc]]  # (path, document) for every YAML document
 Subject = dict[str, Any]  # one `subjects` entry of a binding
 Binding = tuple[
     str, Doc, Subject
@@ -154,11 +164,9 @@ def not_installed(hits: list[Hit]) -> None:
 # scenarios
 
 
-@given("the dashboard manifest", target_fixture="dash")
-def dashboard_manifest() -> Dashboard:
-    """Load the dashboard manifest, which must hold exactly one Deployment."""
-    docs = yaml_docs(DASHBOARD_MANIFEST)
-    assert docs, f"{DASHBOARD_MANIFEST} is missing or is not valid YAML"
+def _dashboard_from(docs: list[Doc]) -> Dashboard:
+    """Build a Dashboard, which must hold exactly one Deployment."""
+    assert docs, "the dashboard manifest is missing or is not valid YAML"
     deployments = _by_kind(docs, "Deployment")
     assert (
         len(deployments) == 1
@@ -168,6 +176,12 @@ def dashboard_manifest() -> Dashboard:
         deployment=deployments[0],
         services=_by_kind(docs, "Service"),
     )
+
+
+@given("the dashboard manifest", target_fixture="dash")
+def dashboard_manifest() -> Dashboard:
+    """Load the dashboard manifest, which must hold exactly one Deployment."""
+    return _dashboard_from(yaml_docs(DASHBOARD_MANIFEST))
 
 
 @then("its image has an explicit version tag and is not latest")
@@ -226,10 +240,10 @@ def limits_and_no_hostpath(dash: Dashboard) -> None:
         assert not dash.pod.get(flag), f"{flag} is enabled"
 
 
-def _ingresses_exposing(service_names: set[str]) -> list[str]:
+def _ingresses_exposing(service_names: set[str], world: World) -> list[str]:
     """Return Ingress manifests that route to any of the Services."""
     exposed: list[str] = []
-    for rel, doc in _all_docs(repo_files()):
+    for rel, doc in world:
         if doc.get("kind") != "Ingress":
             continue
         for rule in (doc.get("spec") or {}).get("rules") or []:
@@ -239,28 +253,34 @@ def _ingresses_exposing(service_names: set[str]) -> list[str]:
     return exposed
 
 
-@then(
-    "its Service is ClusterIP and nothing in the manifests "
-    "exposes it through an Ingress"
-)
-def only_inside_cluster(dash: Dashboard) -> None:
+def _check_only_inside_cluster(dash: Dashboard, world: World) -> None:
     """Require a ClusterIP Service that no Ingress routes to."""
     assert dash.services, "the dashboard has no Service"
     for service in dash.services:
         service_type = service["spec"].get("type", "ClusterIP")
         assert service_type == "ClusterIP", f"Service type is {service_type}"
     exposed = _ingresses_exposing(
-        {service["metadata"]["name"] for service in dash.services}
+        {service["metadata"]["name"] for service in dash.services}, world
     )
     assert not exposed, f"Ingress objects expose the dashboard: {exposed}"
 
 
-@then("no binding anywhere grants anything to the dashboard's service account")
-def pod_account_has_no_permissions(dash: Dashboard) -> None:
+@then(
+    "its Service is ClusterIP and nothing in the manifests "
+    "exposes it through an Ingress"
+)
+def only_inside_cluster(dash: Dashboard) -> None:
+    """Require a ClusterIP Service that no Ingress routes to."""
+    _check_only_inside_cluster(dash, _all_docs(repo_files()))
+
+
+def _check_pod_account_has_no_permissions(
+    dash: Dashboard, world: World
+) -> None:
     """Require that the pod's own account has no RBAC bindings at all."""
     account = dash.pod["serviceAccountName"]
     granted: list[str] = []
-    for rel, doc in _all_docs(repo_files()):
+    for rel, doc in world:
         if doc.get("kind") not in BINDINGS:
             continue
         for subject in _subjects(doc):
@@ -278,11 +298,13 @@ def pod_account_has_no_permissions(dash: Dashboard) -> None:
     )
 
 
-@then(
-    "the Service selects the Deployment's pods and targets "
-    "its named container port"
-)
-def service_wired(dash: Dashboard) -> None:
+@then("no binding anywhere grants anything to the dashboard's service account")
+def pod_account_has_no_permissions(dash: Dashboard) -> None:
+    """Require that the pod's own account has no RBAC bindings at all."""
+    _check_pod_account_has_no_permissions(dash, _all_docs(repo_files()))
+
+
+def _check_service_wired(dash: Dashboard) -> None:
     """Service selector and targetPort must match the Deployment."""
     labels = dash.deployment["spec"]["template"]["metadata"]["labels"]
     assert (
@@ -313,11 +335,18 @@ def service_wired(dash: Dashboard) -> None:
     ), f"ServiceAccount '{account}' is not defined in the manifest"
 
 
-@then("the viewer account lives in the dashboard's namespace")
-def viewer_in_namespace(dash: Dashboard) -> None:
+@then(
+    "the Service selects the Deployment's pods and targets "
+    "its named container port"
+)
+def service_wired(dash: Dashboard) -> None:
+    """Service selector and targetPort must match the Deployment."""
+    _check_service_wired(dash)
+
+
+def _check_viewer_in_namespace(dash: Dashboard, docs: list[Doc]) -> None:
     """Require the viewer account and its subjects to share a namespace."""
-    docs = yaml_docs(VIEWER_MANIFEST)
-    assert docs, f"{VIEWER_MANIFEST} is missing or is not valid YAML"
+    assert docs, "the viewer manifest is missing or is not valid YAML"
     viewers = [
         doc
         for doc in _by_kind(docs, "ServiceAccount")
@@ -334,6 +363,12 @@ def viewer_in_namespace(dash: Dashboard) -> None:
             )
 
 
+@then("the viewer account lives in the dashboard's namespace")
+def viewer_in_namespace(dash: Dashboard) -> None:
+    """Require the viewer account and its subjects to share a namespace."""
+    _check_viewer_in_namespace(dash, yaml_docs(VIEWER_MANIFEST))
+
+
 # ---------------------------------------------------------------- RBAC
 # scenarios
 
@@ -344,7 +379,11 @@ def viewer_in_namespace(dash: Dashboard) -> None:
 )
 def read_rbac(files: list[Path]) -> Rbac:
     """Collect every dashboard binding and every role in the repo."""
-    docs = _all_docs(files)
+    return _rbac_from(_all_docs(files))
+
+
+def _rbac_from(docs: World) -> Rbac:
+    """Collect every dashboard binding and every role in the documents."""
     bindings: list[Binding] = [
         (rel, doc, subject)
         for rel, doc in docs
@@ -413,9 +452,14 @@ def extras_are_read_only(rbac: Rbac) -> None:
 )
 def read_binding_commands(files: list[Path]) -> list[Hit]:
     """Find every script command that creates a (cluster) role binding."""
+    return _binding_commands(logical_lines(files, SCRIPT_FILES))
+
+
+def _binding_commands(lines: list[Hit]) -> list[Hit]:
+    """Keep the commands that create a (cluster) role binding."""
     return [
         hit
-        for hit in logical_lines(files, SCRIPT_FILES)
+        for hit in lines
         if ROLEBINDING_COMMAND.search(hit[2]) and not _is_comment(hit[2])
     ]
 
@@ -437,9 +481,14 @@ def none_bind_admin(binding_commands: list[Hit]) -> None:
 )
 def read_port_forwards(files: list[Path]) -> list[Hit]:
     """Find every kubectl port-forward and proxy command."""
+    return _port_forwards(logical_lines(files))
+
+
+def _port_forwards(lines: list[Hit]) -> list[Hit]:
+    """Keep the kubectl port-forward and proxy commands."""
     return [
         hit
-        for hit in logical_lines(files)
+        for hit in lines
         if PORT_FORWARD_OR_PROXY.search(hit[2]) and not _is_comment(hit[2])
     ]
 
@@ -483,3 +532,183 @@ def dashboard_target(makefile: str) -> None:
     ), body
     assert re.search(r"port-forward\s+service/headlamp\s+4466:80", body), body
     assert "dashboard-proxy" not in body
+
+
+# ---------------------------------------------------------------- canary
+
+
+@dataclass
+class Canary:
+    """The three kinds of input the dashboard checks look at."""
+
+    docs: list[Doc]  # Kubernetes manifests
+    commands: str  # shell commands
+    makefile: str  # the Makefile text
+
+
+def _canary_checks(canary: Canary) -> dict[str, Callable[[], None]]:
+    """Return every dashboard check, ready to run on the canary."""
+    world: World = [(CANARY_MANIFEST, doc) for doc in canary.docs]
+    lines = logical_lines_in_text(CANARY_COMMANDS, canary.commands)
+    return {
+        "the retired dashboard is not installed": lambda: not_installed(
+            find_lines_in_text(
+                CANARY_COMMANDS, canary.commands, RETIRED_DASHBOARD
+            )
+        ),
+        "image is pinned": lambda: image_pinned(_dashboard_from(canary.docs)),
+        "container is hardened": lambda: container_hardened(
+            _dashboard_from(canary.docs)
+        ),
+        "limits and no host path": lambda: limits_and_no_hostpath(
+            _dashboard_from(canary.docs)
+        ),
+        "only reachable inside the cluster": lambda: (
+            _check_only_inside_cluster(_dashboard_from(canary.docs), world)
+        ),
+        "pod account has no permissions": lambda: (
+            _check_pod_account_has_no_permissions(
+                _dashboard_from(canary.docs), world
+            )
+        ),
+        "manifests are wired together": lambda: _check_service_wired(
+            _dashboard_from(canary.docs)
+        ),
+        "viewer is in the dashboard namespace": lambda: (
+            _check_viewer_in_namespace(
+                _dashboard_from(canary.docs), canary.docs
+            )
+        ),
+        "no account is privileged": lambda: not_privileged(_rbac_from(world)),
+        "viewer is bound to view": lambda: viewer_is_view(_rbac_from(world)),
+        "extra rules are read-only": lambda: extras_are_read_only(
+            _rbac_from(world)
+        ),
+        "no command binds cluster-admin": lambda: none_bind_admin(
+            _binding_commands(lines)
+        ),
+        "forwards are on loopback": lambda: forwards_on_loopback(
+            _port_forwards(lines)
+        ),
+        "Makefile target is right": lambda: dashboard_target(canary.makefile),
+    }
+
+
+def _load_canary() -> Canary:
+    """Load the three canary files, failing clearly if any is gone."""
+    return Canary(
+        docs=yaml_docs(CANARY_MANIFEST),
+        commands=require_text(CANARY_COMMANDS),
+        makefile=require_text(CANARY_MAKEFILE),
+    )
+
+
+def _assert_canary_still_bad(canary: Canary) -> None:
+    """Fail unless every check still rejects the canary, for real reasons.
+
+    An empty or broken file fails every check too, so first require the
+    structures the checks look at: a failing check must mean a defect, not
+    a missing file.
+    """
+    assert canary.docs, f"{CANARY_MANIFEST} is missing or not valid YAML"
+    _dashboard_from(canary.docs)
+    for kind in ("Service", "Ingress", "ServiceAccount"):
+        assert _by_kind(canary.docs, kind), f"the canary has no {kind}"
+    assert [
+        doc for doc in canary.docs if doc.get("kind") in BINDINGS
+    ], "the canary has no role binding"
+    assert _binding_commands(
+        logical_lines_in_text(CANARY_COMMANDS, canary.commands)
+    ), "the canary commands create no role binding"
+    assert DASHBOARD_TARGET.search(
+        canary.makefile
+    ), "the canary Makefile has no dashboard target"
+    assert_all_checks_fail(
+        _canary_checks(canary),
+        f"{CANARY_MANIFEST}, {CANARY_COMMANDS} and {CANARY_MAKEFILE}",
+    )
+
+
+@given(
+    "the bad dashboard manifest, commands and Makefile "
+    "kept in the test data",
+    target_fixture="canary",
+)
+def bad_dashboard_canary() -> Canary:
+    """Load the canary manifest, commands and Makefile."""
+    return _load_canary()
+
+
+@then("they say plainly that they are fake, deliberately bad examples")
+def canary_is_marked_fake() -> None:
+    """Check every canary file announces that it is fake and must stay bad."""
+    for rel in (CANARY_MANIFEST, CANARY_COMMANDS, CANARY_MAKEFILE):
+        text = require_text(rel)
+        assert "CANARY" in text and "FAKE" in text, (
+            f"{rel} must say it is a fake, deliberately bad example "
+            "(CANARY, FAKE) so nobody mistakes it for a real file"
+        )
+
+
+@then("every dashboard check fails on them")
+def every_check_fails_on_canary(canary: Canary) -> None:
+    """Check every dashboard check rejects the canary."""
+    _assert_canary_still_bad(canary)
+
+
+_CLEAN_COMMAND = (
+    "kubectl -n headlamp port-forward service/headlamp 4466:80 "
+    "--address 127.0.0.1"
+)
+
+
+@when(
+    "I fix, clean or empty a copy of the canary",
+    target_fixture="sanitised_copies",
+)
+def sanitise_canary_copies(canary: Canary) -> dict[str, Canary]:
+    """Make copies of the canary that someone has 'fixed'."""
+    real_docs = yaml_docs(DASHBOARD_MANIFEST) + yaml_docs(VIEWER_MANIFEST)
+    real_makefile = require_text("Makefile")
+    return {
+        "the real dashboard files": Canary(
+            real_docs, _CLEAN_COMMAND, real_makefile
+        ),
+        "bindings removed": Canary(
+            [d for d in canary.docs if d.get("kind") not in BINDINGS],
+            canary.commands,
+            canary.makefile,
+        ),
+        "commands cleaned": Canary(
+            copy.deepcopy(canary.docs), _CLEAN_COMMAND, canary.makefile
+        ),
+        "Makefile fixed": Canary(
+            copy.deepcopy(canary.docs), canary.commands, real_makefile
+        ),
+        "emptied": Canary([], "", ""),
+    }
+
+
+@then("the canary guard rejects that copy")
+def canary_guard_rejects(
+    canary: Canary, sanitised_copies: dict[str, Canary]
+) -> None:
+    """Check the guard rejects every fixed copy and accepts the real canary."""
+    _assert_canary_still_bad(canary)  # the real canary passes the guard
+    accepted: list[str] = []
+    for name, copied in sanitised_copies.items():
+        try:
+            _assert_canary_still_bad(copied)
+        except AssertionError:
+            continue  # rejected, as it should be
+        accepted.append(name)
+    assert (
+        not accepted
+    ), f"the canary guard wrongly accepted these good copies: {accepted}"
+
+
+@then("the repository scan skips all three")
+def scan_skips_canaries() -> None:
+    """Check the real scan never reads tests/, or the canary would fail it."""
+    for rel in (CANARY_MANIFEST, CANARY_COMMANDS, CANARY_MAKEFILE):
+        assert_scan_skips(rel)
